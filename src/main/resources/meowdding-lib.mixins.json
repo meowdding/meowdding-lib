@@ -1,0 +1,7 @@
+{
+  "package": "tech.thatgravyboat.lib.mixins",
+  "mixins": [
+    "ComponentMixin",
+    "LanguageMixin"
+  ]
+}
