@@ -1,7 +1,6 @@
 package tech.thatgravyboat.lib.displays
 
 import earth.terrarium.olympus.client.components.buttons.Button
-import eu.pb4.placeholders.api.ParserContext
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import tech.thatgravyboat.lib.builder.TooltipBuilder
