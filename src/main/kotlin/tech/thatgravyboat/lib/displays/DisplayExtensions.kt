@@ -73,15 +73,6 @@ fun Display.withTooltip(builder: TooltipBuilder.() -> Unit): Display = TooltipBu
     ?.let { Displays.tooltip(this, it.build()) } ?: this
 
 fun Display.withTooltip(vararg tooltip: Any?): Display = Displays.tooltip(this, Text.multiline(*tooltip))
-/*fun Display.withTranslatedTooltip(key: String, vararg args: Any?): Display {
-    var raw = I18nAccessor.getLanguage().getOrDefault(key)
-    args.forEachIndexed { index, any ->
-        raw = raw.replace("<$index>", any.toString())
-    }
-
-    val text = TagParser.QUICK_TEXT_SAFE.parseText(raw, ParserContext.of())
-    return Displays.tooltip(this, text)
-}*/
 
 fun Display.asButton(action: (Button) -> Unit): Button {
     val button = Button()

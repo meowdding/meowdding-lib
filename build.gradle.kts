@@ -11,6 +11,7 @@ repositories {
     maven(url = "https://repo.hypixel.net/repository/Hypixel/")
     maven(url = "https://api.modrinth.com/maven")
     maven(url = "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
+    maven(url = "https://maven.nucleoid.xyz")
     mavenCentral()
     mavenLocal()
 }
@@ -29,11 +30,13 @@ dependencies {
     modImplementation(libs.skyblockapi)
     modImplementation(libs.rlib)
     modImplementation(libs.olympus)
+    modImplementation(libs.placeholders)
 
     include(libs.hypixelapi)
     include(libs.skyblockapi)
     include(libs.rlib)
     include(libs.olympus)
+    include(libs.placeholders)
 
     modRuntimeOnly(libs.devauth)
     modRuntimeOnly(libs.modmenu)
@@ -66,6 +69,10 @@ tasks {
         }
     }
 
+    withType<JavaCompile>().configureEach {
+        options.encoding = "UTF-8"
+        options.release.set(21)
+    }
 }
 
 java {
