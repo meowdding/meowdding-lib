@@ -1,6 +1,7 @@
 package tech.thatgravyboat.lib.displays
 
 import net.minecraft.client.gui.GuiGraphics
+import tech.thatgravyboat.lib.extensions.translated
 
 interface Display {
 
