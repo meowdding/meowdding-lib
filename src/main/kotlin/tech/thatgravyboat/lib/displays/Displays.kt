@@ -20,12 +20,12 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.ItemLike
 import org.joml.Quaternionf
 import org.joml.Vector3f
-import tech.thatgravyboat.lib.extensions.pushPop
-import tech.thatgravyboat.lib.extensions.scissor
-import tech.thatgravyboat.lib.extensions.translate
-import tech.thatgravyboat.lib.extensions.translated
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
+import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
+import tech.thatgravyboat.skyblockapi.utils.extentions.scissor
+import tech.thatgravyboat.skyblockapi.utils.extentions.translate
+import tech.thatgravyboat.skyblockapi.utils.extentions.translated
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.width
 import tech.thatgravyboat.skyblockapi.utils.text.TextUtils.splitLines
@@ -94,7 +94,7 @@ object Displays {
                     0,
                     display.getWidth(),
                     display.getHeight(),
-                    color.and(0xFFFFFF).or(-0xF000000)
+                    color.and(0xFFFFFF).or(-0xF000000),
                 )
                 display.render(graphics)
             }
@@ -348,7 +348,7 @@ object Displays {
     }
 
     fun <T> renderable(renderable: T, width: Int = -1, height: Int = -1): Display
-            where T : Renderable, T : LayoutElement {
+        where T : Renderable, T : LayoutElement {
         return object : Display {
             override fun getWidth(): Int = if (width == -1) renderable.width else width
             override fun getHeight(): Int = if (height == -1) renderable.height else height
@@ -504,7 +504,7 @@ object Displays {
         val yRange = translation.y().toInt()..(translation.y() + display.getHeight())
         return mouseX.toInt() in xRange && mouseY.toInt() in yRange && graphics.containsPointInScissor(
             mouseX.toInt(),
-            mouseY.toInt()
+            mouseY.toInt(),
         ) && showTooltips
     }
 }
