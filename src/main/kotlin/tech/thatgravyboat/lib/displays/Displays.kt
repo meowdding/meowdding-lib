@@ -497,7 +497,7 @@ object Displays {
         showTooltips = true
     }
 
-    private fun isMouseOver(display: Display, graphics: GuiGraphics): Boolean {
+    fun isMouseOver(display: Display, graphics: GuiGraphics): Boolean {
         val translation = RenderUtils.getTranslation(graphics.pose())
         val (mouseX, mouseY) = McClient.mouse
         val xRange = translation.x().toInt()..(translation.x() + display.getWidth())
