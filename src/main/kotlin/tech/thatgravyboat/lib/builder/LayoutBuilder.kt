@@ -1,4 +1,4 @@
-package tech.thatgravyboat.lib.layout
+package tech.thatgravyboat.lib.builder
 
 import earth.terrarium.olympus.client.components.Widgets
 import net.minecraft.client.gui.layouts.*
