@@ -4,6 +4,7 @@ plugins {
     java
     kotlin("jvm") version "2.0.0"
     alias(libs.plugins.loom)
+    id("maven-publish")
 }
 
 repositories {
@@ -42,14 +43,6 @@ dependencies {
     modRuntimeOnly(libs.modmenu)
 }
 
-loom {
-    runs {
-        getByName("client") {
-            property("devauth.configDir", rootProject.file(".devauth").absolutePath)
-        }
-    }
-}
-
 tasks {
     processResources {
         inputs.property("version", project.version)
@@ -77,4 +70,33 @@ tasks {
 
 java {
     withSourcesJar()
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            artifactId = "meowdding-lib-${libs.versions.minecraft.get()}"
+            from(components["java"])
+
+            pom {
+                name.set("MeowddingLib")
+                url.set("https://github.com/meowdding/meowdding-lib")
+
+                scm {
+                    connection.set("git:https://github.com/meowdding/meowdding-lib.git")
+                    developerConnection.set("git:https://github.com/meowdding/meowdding-lib.git")
+                    url.set("https://github.com/meowdding/meowdding-lib")
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            setUrl("https://maven.teamresourceful.com/repository/thatgravyboat/")
+            credentials {
+                username = System.getenv("MAVEN_USER") ?: providers.gradleProperty("maven_username").orNull
+                password = System.getenv("MAVEN_PASS") ?: providers.gradleProperty("maven_password").orNull
+            }
+        }
+    }
 }
