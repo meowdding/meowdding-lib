@@ -16,7 +16,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import tech.thatgravyboat.lib.internal.LanguageHelper;
 import tech.thatgravyboat.lib.internal.LanguageMetadata;
 
-import java.util.*;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -122,7 +124,7 @@ public class LanguageMixin {
         if (element.isJsonPrimitive()) {
             return element.getAsString();
         } else if (element.isJsonObject() && languageMetadata.getReferences() != null) {
-            return languageMetadata.getReferences().get(element.getAsJsonObject().get("@id").getAsString()).getAsString();
+            return resolve(languageMetadata.getReferences().get(element.getAsJsonObject().get("@id").getAsString()), languageMetadata);
         } else if (element.isJsonArray() && languageMetadata.getAllowMultiline()) {
             return element.getAsJsonArray()
                 .asList()
