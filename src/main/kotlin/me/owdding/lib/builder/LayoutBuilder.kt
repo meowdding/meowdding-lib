@@ -1,11 +1,11 @@
-package tech.thatgravyboat.lib.builder
+package me.owdding.lib.builder
 
 import earth.terrarium.olympus.client.components.Widgets
+import me.owdding.lib.displays.Display
+import me.owdding.lib.displays.asWidget
 import net.minecraft.client.gui.layouts.*
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
-import tech.thatgravyboat.lib.displays.Display
-import tech.thatgravyboat.lib.displays.asWidget
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
 object LayoutBuild {

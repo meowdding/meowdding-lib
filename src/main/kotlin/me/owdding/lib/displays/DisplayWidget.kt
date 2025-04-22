@@ -1,4 +1,4 @@
-package tech.thatgravyboat.lib.displays
+package me.owdding.lib.displays
 
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen
 import earth.terrarium.olympus.client.components.base.BaseWidget

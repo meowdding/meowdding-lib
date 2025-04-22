@@ -1,4 +1,4 @@
-package tech.thatgravyboat.lib.extensions
+package me.owdding.lib.extensions
 
 import java.text.DecimalFormat
 import java.text.NumberFormat

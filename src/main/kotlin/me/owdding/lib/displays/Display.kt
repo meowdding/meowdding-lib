@@ -1,4 +1,4 @@
-package tech.thatgravyboat.lib.displays
+package me.owdding.lib.displays
 
 import net.minecraft.client.gui.GuiGraphics
 import tech.thatgravyboat.skyblockapi.utils.extentions.translated

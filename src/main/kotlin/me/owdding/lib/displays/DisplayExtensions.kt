@@ -1,9 +1,9 @@
-package tech.thatgravyboat.lib.displays
+package me.owdding.lib.displays
 
 import earth.terrarium.olympus.client.components.buttons.Button
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
-import tech.thatgravyboat.lib.builder.TooltipBuilder
+import tech.thatgravyboat.skyblockapi.utils.builders.TooltipBuilder
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
 fun List<Any>.toColumn(spacing: Int = 0, alignment: Alignment = Alignment.START): Display {

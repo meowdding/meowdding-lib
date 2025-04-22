@@ -1,8 +1,9 @@
-package tech.thatgravyboat.lib.builder
+package me.owdding.lib.builder
 
+import me.owdding.lib.extensions.withTooltip
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.ItemLike
-import tech.thatgravyboat.lib.extensions.withTooltip
+import tech.thatgravyboat.skyblockapi.utils.builders.TooltipBuilder
 
 class InventoryBuilder(val maxSize: Int = 54) {
 

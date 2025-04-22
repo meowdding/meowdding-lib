@@ -1,4 +1,4 @@
-package tech.thatgravyboat.lib.mixins;
+package me.owdding.lib.mixins;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -7,14 +7,14 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
+import me.owdding.lib.internal.LanguageHelper;
+import me.owdding.lib.internal.LanguageMetadata;
 import net.minecraft.locale.Language;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import tech.thatgravyboat.lib.internal.LanguageHelper;
-import tech.thatgravyboat.lib.internal.LanguageMetadata;
 
 import java.util.Deque;
 import java.util.LinkedList;

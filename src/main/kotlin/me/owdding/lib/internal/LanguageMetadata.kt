@@ -1,4 +1,4 @@
-package tech.thatgravyboat.lib.internal
+package me.owdding.lib.internal
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject

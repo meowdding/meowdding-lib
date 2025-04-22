@@ -1,23 +1,22 @@
-package tech.thatgravyboat.lib.extensions
+package me.owdding.lib.extensions
 
 import com.mojang.authlib.GameProfile
 import com.mojang.authlib.properties.Property
 import it.unimi.dsi.fastutil.objects.ObjectSortedSets
 import net.minecraft.core.component.DataComponents
-import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.ItemLore
 import net.minecraft.world.item.component.ResolvableProfile
 import net.minecraft.world.item.component.TooltipDisplay
-import tech.thatgravyboat.lib.builder.TooltipBuilder
+import tech.thatgravyboat.skyblockapi.utils.builders.TooltipBuilder
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
-import java.util.UUID
+import java.util.*
 
 fun ItemStack.withoutTooltip() = withTooltip()
 
 fun ItemStack.withTooltip(init: TooltipBuilder.() -> Unit = {}): ItemStack {
-    val builder = TooltipBuilder().apply(init).lines().filterIsInstance<Component>()
+    val builder = TooltipBuilder().apply(init).lines()
     when {
         builder.isEmpty() -> this.set(DataComponents.TOOLTIP_DISPLAY, TooltipDisplay(true, ObjectSortedSets.emptySet()))
         builder.size == 1 -> this.set(

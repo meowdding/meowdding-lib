@@ -1,7 +1,8 @@
-package tech.thatgravyboat.lib.mixins;
+package me.owdding.lib.mixins;
 
 import eu.pb4.placeholders.api.ParserContext;
 import eu.pb4.placeholders.api.parsers.TagParser;
+import me.owdding.lib.internal.LanguageHelper;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -11,7 +12,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import tech.thatgravyboat.lib.internal.LanguageHelper;
 
 @Mixin(Component.class)
 public interface ComponentMixin {
