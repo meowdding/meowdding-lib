@@ -1,6 +1,8 @@
 package me.owdding.lib.extensions
 
+import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
+import tech.thatgravyboat.skyblockapi.utils.builders.TooltipBuilder
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
 fun MutableList<in MutableComponent>.add(number: Number, init: MutableComponent.() -> Unit = {}) = this.add(Text.of(number.toString(), init))
@@ -32,4 +34,43 @@ fun <T> List<List<T>>.transpose(): List<List<T>> {
         }
     }
     return list
+}
+
+fun ListMerger<out Component>.applyToTooltip(builder: TooltipBuilder) {
+    destination.forEach { builder.add(it) }
+}
+
+data class ListMerger<T>(val original: List<T>, var index: Int = 0) {
+    val destination: MutableList<T> = mutableListOf()
+
+    fun peek() = original[index]
+    fun read() = original[index++]
+    fun copy() = destination.add(read())
+    fun add(item: T) = destination.add(item)
+
+
+    fun addAfterNext(predicate: (T) -> Boolean, provider: MutableList<T>.() -> Unit) {
+        addUntil(predicate)
+        copy()
+        destination.provider()
+    }
+
+    fun addUntil(predicate: (T) -> Boolean) {
+        while (index + 1 < original.size && !predicate(peek())) {
+            copy()
+        }
+    }
+
+    fun addBeforeNext(predicate: (T) -> Boolean, provider: MutableList<T>.() -> Unit) {
+        addUntil(predicate)
+        destination.provider()
+        copy()
+    }
+
+    fun addRemaining() {
+        if (index >= original.size) {
+            return
+        }
+        destination.addAll(original.subList(index, original.size))
+    }
 }
