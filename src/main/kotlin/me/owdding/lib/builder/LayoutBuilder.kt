@@ -2,12 +2,14 @@ package me.owdding.lib.builder
 
 import earth.terrarium.olympus.client.components.Widgets
 import me.owdding.lib.displays.Display
+import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.asWidget
 import net.minecraft.client.gui.layouts.*
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
+@Deprecated(message = "Deprecated in favour of Layout")
 object LayoutBuild {
     fun vertical(spacing: Int = 0, alignment: Float = 0f, builder: VerticalLayoutBuilder.() -> Unit): LinearLayout {
         val builder = VerticalLayoutBuilder()
@@ -22,6 +24,26 @@ object LayoutBuild {
     }
 
     fun frame(width: Int = 0, height: Int = 0, builder: FrameLayoutBuilder.() -> Unit): FrameLayout {
+        val builder = FrameLayoutBuilder(width, height)
+        builder.builder()
+        return builder.build()
+    }
+}
+
+object Layouts {
+    fun vertical(spacing: Int = 0, alignment: Float = 0f, builder: LayoutBuilder.() -> Unit): Layout {
+        val builder = VerticalLayoutBuilder()
+        builder.builder()
+        return builder.build(spacing, alignment)
+    }
+
+    fun horizontal(spacing: Int = 0, alignment: Float = 0f, builder: LayoutBuilder.() -> Unit): Layout {
+        val builder = HorizontalLayoutBuilder()
+        builder.builder()
+        return builder.build(spacing, alignment)
+    }
+
+    fun frame(width: Int = 0, height: Int = 0, builder: LayoutBuilder.() -> Unit): Layout {
         val builder = FrameLayoutBuilder(width, height)
         builder.builder()
         return builder.build()
@@ -67,6 +89,20 @@ abstract class LayoutBuilder {
 
     fun spacer(width: Int = 0, height: Int = 0) {
         widgets.add(SpacerElement(width, height))
+    }
+
+    fun textDisplay(
+        text: String = "",
+        color: UInt = 0x555555u,
+        shadow: Boolean = false,
+        displayModifier: Display.() -> Display = { this },
+        init: MutableComponent.() -> Unit,
+    ) {
+        Displays.text(Text.of(text, init), { color }, shadow = shadow).displayModifier().let { display(it) }
+    }
+
+    fun textDisplay(text: String = "", color: UInt = 0x555555u, shadow: Boolean = false, init: MutableComponent.() -> Unit) {
+        textDisplay(text, color, shadow, { this }, init)
     }
 
     fun vertical(spacing: Int = 0, alignment: Float = 0f, builder: VerticalLayoutBuilder.() -> Unit) {
