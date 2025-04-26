@@ -9,7 +9,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
-@Deprecated(message = "Deprecated in favour of Layout")
+@Deprecated(message = "Deprecated in favour of LayoutFactory", replaceWith = ReplaceWith("LayoutFactory"))
 object LayoutBuild {
     fun vertical(spacing: Int = 0, alignment: Float = 0f, builder: VerticalLayoutBuilder.() -> Unit): LinearLayout {
         val builder = VerticalLayoutBuilder()
@@ -30,7 +30,7 @@ object LayoutBuild {
     }
 }
 
-object Layouts {
+object LayoutFactory {
     fun vertical(spacing: Int = 0, alignment: Float = 0f, builder: LayoutBuilder.() -> Unit): Layout {
         val builder = VerticalLayoutBuilder()
         builder.builder()
