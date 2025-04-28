@@ -79,13 +79,13 @@ abstract class DisplayBuilder {
 
 class VerticalDisplayBuilder : DisplayBuilder() {
     override fun build(spacing: Int, alignment: Alignment): Display {
-        return displays.toRow(spacing, alignment)
+        return displays.toColumn(spacing, alignment)
     }
 }
 
 class HorizontalDisplayBuilder : DisplayBuilder() {
     override fun build(spacing: Int, alignment: Alignment): Display {
-        return displays.toColumn(spacing, alignment)
+        return displays.toRow(spacing, alignment)
     }
 }
 
