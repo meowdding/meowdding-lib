@@ -90,6 +90,9 @@ class HorizontalDisplayBuilder : DisplayBuilder() {
 }
 
 class LayeredDisplayBuilder : DisplayBuilder() {
+    /**
+     * Doesn't use spacing or alignment.
+     */
     override fun build(spacing: Int, alignment: Alignment): Display {
         return displays.asLayer()
     }
