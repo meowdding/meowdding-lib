@@ -79,6 +79,24 @@ abstract class LayoutBuilder {
         widgets.add(display.asWidget())
     }
 
+    fun verticalDisplay(builder: DisplayBuilder.() -> Unit) {
+        val display = VerticalDisplayBuilder()
+        display.builder()
+        display(display.build())
+    }
+
+    fun horizontalDisplay(builder: DisplayBuilder.() -> Unit) {
+        val display = HorizontalDisplayBuilder()
+        display.builder()
+        display(display.build())
+    }
+
+    fun layeredDisplay(builder: DisplayBuilder.() -> Unit) {
+        val display = LayeredDisplayBuilder()
+        display.builder()
+        display(display.build())
+    }
+
     fun string(component: Component) {
         widgets.add(Widgets.text(component))
     }
