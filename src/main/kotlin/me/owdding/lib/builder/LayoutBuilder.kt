@@ -1,6 +1,7 @@
 package me.owdding.lib.builder
 
 import earth.terrarium.olympus.client.components.Widgets
+import earth.terrarium.olympus.client.utils.ListenableState
 import me.owdding.lib.displays.Display
 import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.asWidget
@@ -135,6 +136,28 @@ abstract class LayoutBuilder {
         val builder = HorizontalLayoutBuilder()
         builder.builder()
         widgets.add(builder.build(spacing, alignment))
+    }
+
+    fun textInput(
+        state: ListenableState<String>,
+        placeholder: String = "",
+        width: Int,
+        height: Int = 20,
+        onChange: (String) -> Unit = {},
+        onEnter: (String) -> Unit = {},
+    ) {
+        val input = Widgets.textInput(state) { box ->
+            box.withEnterCallback {
+                onEnter(box.value)
+            }
+            box.withChangeCallback {
+                onChange(it)
+            }
+        }
+        input.withPlaceholder(placeholder)
+        input.withSize(width, height)
+
+        widget(input)
     }
 
     abstract fun build(spacing: Int = 0, alignment: Float = 0.0f): Layout
