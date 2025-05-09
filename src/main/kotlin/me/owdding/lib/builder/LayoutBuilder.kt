@@ -48,6 +48,8 @@ object LayoutFactory {
         builder.builder()
         return builder.build()
     }
+
+    fun empty() = frame {}
 }
 
 data class LayoutElements(val element: LayoutElement, val settings: LayoutSettings.() -> Unit)
