@@ -46,3 +46,14 @@ private val DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("uuuu/MM/dd HH:mm:
 fun Instant.toReadableString(zoneId: ZoneId = ZoneOffset.systemDefault()): String {
     return DATE_TIME_FORMATTER.format(LocalDateTime.ofInstant(this, zoneId))
 }
+
+fun Number.ordinal(): String {
+    val value = this.toLong()
+    if (value % 100 in 11..13) return "th"
+    return when (value % 10) {
+        1L -> "st"
+        2L -> "nd"
+        3L -> "rd"
+        else -> "th"
+    }
+}
