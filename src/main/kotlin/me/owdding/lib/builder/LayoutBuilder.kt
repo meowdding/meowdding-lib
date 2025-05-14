@@ -55,7 +55,12 @@ object LayoutFactory {
 
 data class LayoutElements(val element: LayoutElement, val settings: LayoutSettings.() -> Unit)
 
+const val LEFT = 0f
+const val MIDDLE = 0.5f
+const val RIGHT = 1f
+
 abstract class LayoutBuilder {
+
     protected val widgets = mutableListOf<LayoutElements>()
 
     private fun MutableList<LayoutElements>.add(element: LayoutElement) {
