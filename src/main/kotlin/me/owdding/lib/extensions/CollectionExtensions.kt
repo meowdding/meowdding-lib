@@ -10,7 +10,9 @@ fun MutableList<in MutableComponent>.add(boolean: Boolean, init: MutableComponen
 fun MutableList<in MutableComponent>.add(text: String, init: MutableComponent.() -> Unit = {}) = this.add(Text.of(text, init))
 fun MutableList<in MutableComponent>.add(init: MutableComponent.() -> Unit) = this.add(Text.of("", init))
 
-fun <T> Map<out Number, T>.sortByKey(): Map<Number, T> = this.entries.sortedBy { it.key.toLong() }.associate { it.toPair() }
+@Deprecated("Use .sortedByKeys() instead", ReplaceWith("sortedByKeys()"))
+fun <T> Map<out Number, T>.sortByKey(): Map<Number, T> = toList().sortedBy { it.first.toLong() }.toMap()
+fun <K : Number, V> Map<out K, V>.sortedByKeys(): Map<K, V> = toList().sortedBy { it.first.toLong() }.toMap()
 
 fun <T> List<T>.rightPad(size: Int, element: T): MutableList<T> {
     if (this !is MutableList<T>) {
