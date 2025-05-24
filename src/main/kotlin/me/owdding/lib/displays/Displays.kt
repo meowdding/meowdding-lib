@@ -502,8 +502,8 @@ object Displays {
     fun isMouseOver(display: Display, graphics: GuiGraphics): Boolean {
         val translation = RenderUtils.getTranslation(graphics.pose())
         val (mouseX, mouseY) = McClient.mouse
-        val xRange = translation.x()..(translation.x() + (display.getWidth() * ScalableWidget.currentScale).floor())
-        val yRange = translation.y()..(translation.y() + (display.getHeight() * ScalableWidget.currentScale).floor())
+        val xRange = translation.x()..(translation.x() + (display.getWidth() * ScalableWidget.getCurrentScale()).floor())
+        val yRange = translation.y()..(translation.y() + (display.getHeight() * ScalableWidget.getCurrentScale()).floor())
         return mouseX.toInt() in xRange && mouseY.toInt() in yRange && graphics.containsPointInScissor(
             mouseX.toInt(),
             mouseY.toInt(),

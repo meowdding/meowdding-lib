@@ -8,6 +8,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.client.gui.navigation.ScreenDirection
 import net.minecraft.client.gui.navigation.ScreenRectangle
 import tech.thatgravyboat.skyblockapi.utils.extentions.scaled
+import java.util.*
 import kotlin.properties.Delegates.observable
 
 
@@ -32,10 +33,9 @@ class ScalableWidget(val original: AbstractWidget) :
         guiGraphics.scaled(scale, scale, 1) {
             original.x = (this@ScalableWidget.x / scale).floor()
             original.y = (this@ScalableWidget.y / scale).floor()
-            val previousScale = currentScale
-            currentScale = currentScale * scale
+            currentScale.addLast(scale)
             original.render(guiGraphics, (mouseX / scale).floor(), (mouseY / scale).floor(), partialTick)
-            currentScale = previousScale
+            currentScale.removeLast()
         }
     }
 
@@ -86,6 +86,7 @@ class ScalableWidget(val original: AbstractWidget) :
     }
 
     companion object {
-        var currentScale: Double = 1.0
+        private val currentScale: Deque<Double> = LinkedList<Double>()
+        fun getCurrentScale(): Double = currentScale.reduce { first, second -> first * second }
     }
 }
