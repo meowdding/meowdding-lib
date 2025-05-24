@@ -5,6 +5,11 @@ import earth.terrarium.olympus.client.utils.ListenableState
 import me.owdding.lib.displays.Display
 import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.asWidget
+import me.owdding.lib.extensions.floor
+import me.owdding.lib.layouts.Scalable
+import me.owdding.lib.layouts.ScalableLayout
+import me.owdding.lib.layouts.ScalableWidget
+import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.*
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
@@ -64,6 +69,10 @@ abstract class LayoutBuilder {
     protected val widgets = mutableListOf<LayoutElements>()
 
     private fun MutableList<LayoutElements>.add(element: LayoutElement) {
+        if (element is AbstractWidget) {
+            add(LayoutElements(ScalableWidget(element)) {})
+            return
+        }
         add(LayoutElements(element) {})
     }
 
@@ -76,6 +85,10 @@ abstract class LayoutBuilder {
     }
 
     fun widget(widget: LayoutElement, settings: LayoutSettings.() -> Unit) {
+        if (widget is AbstractWidget) {
+            widgets.add(LayoutElements(ScalableWidget(widget), settings))
+            return
+        }
         widgets.add(LayoutElements(widget, settings))
     }
 
@@ -175,9 +188,43 @@ abstract class LayoutBuilder {
     }
 }
 
+class ScalableLinearLayout(orientation: Orientation, val spacing: Int, width: Int = 0, height: Int = 0) : LinearLayout(width, height, orientation),
+    ScalableLayout {
+
+    init {
+        spacing(spacing)
+    }
+
+    override fun scale(scale: Double) {
+        super.spacing((spacing * scale).floor())
+        this.visitChildren {
+            if (it is Scalable) {
+                it.scale(scale)
+            }
+        }
+        this.arrangeElements()
+    }
+
+    companion object {
+        fun vertical(spacing: Int) = ScalableLinearLayout(Orientation.VERTICAL, spacing)
+        fun horizontal(spacing: Int) = ScalableLinearLayout(Orientation.HORIZONTAL, spacing)
+    }
+}
+
+class ScalableFrameLayout(width: Int, height: Int) : FrameLayout(width, height), ScalableLayout {
+    override fun scale(scale: Double) {
+        this.visitChildren {
+            if (it is Scalable) {
+                it.scale(scale)
+            }
+        }
+        this.arrangeElements()
+    }
+}
+
 class FrameLayoutBuilder(val width: Int, val height: Int) : LayoutBuilder() {
     override fun build(spacing: Int, alignment: Float): FrameLayout {
-        val layout = FrameLayout(width, height)
+        val layout = ScalableFrameLayout(width, height)
         widgets.forEach { layout.addChild(it.element, it.settings) }
         layout.arrangeElements()
         return layout
@@ -186,7 +233,7 @@ class FrameLayoutBuilder(val width: Int, val height: Int) : LayoutBuilder() {
 
 class VerticalLayoutBuilder : LayoutBuilder() {
     override fun build(spacing: Int, alignment: Float): LinearLayout {
-        val layout = LinearLayout.vertical().spacing(spacing)
+        val layout = ScalableLinearLayout.vertical(spacing)
         widgets.forEach { layout.addChild(it.element, layout.newCellSettings().alignHorizontally(alignment).apply(it.settings)) }
         layout.arrangeElements()
         return layout
@@ -195,7 +242,7 @@ class VerticalLayoutBuilder : LayoutBuilder() {
 
 class HorizontalLayoutBuilder : LayoutBuilder() {
     override fun build(spacing: Int, alignment: Float): LinearLayout {
-        val layout = LinearLayout.horizontal().spacing(spacing)
+        val layout = ScalableLinearLayout.horizontal(spacing)
         widgets.forEach { layout.addChild(it.element, layout.newCellSettings().alignVertically(alignment).apply(it.settings)) }
         layout.arrangeElements()
         return layout
