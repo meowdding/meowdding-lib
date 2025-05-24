@@ -33,6 +33,8 @@ dependencies {
     modImplementation(libs.olympus)
     modImplementation(libs.placeholders)
 
+    modCompileOnly(libs.rconfig)
+
     include(libs.hypixelapi)
     include(libs.skyblockapi)
     include(libs.rlib)
