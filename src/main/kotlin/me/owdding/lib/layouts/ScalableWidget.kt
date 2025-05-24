@@ -87,6 +87,6 @@ class ScalableWidget(val original: AbstractWidget) :
 
     companion object {
         private val currentScale: Deque<Double> = LinkedList<Double>()
-        fun getCurrentScale(): Double = currentScale.reduce { first, second -> first * second }
+        fun getCurrentScale(): Double = if (currentScale.isEmpty()) 1.0 else currentScale.reduce { first, second -> first * second }
     }
 }
