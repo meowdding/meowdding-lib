@@ -18,6 +18,8 @@ placeholders = "2.6.1+1.21.5"
 devauth = "1.2.1"
 modmenu = "14.0.0-rc.2"
 
+meowdding-patches = "1.0.2"
+
 [libraries]
 
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
@@ -29,6 +31,8 @@ hypixelapi = { module = "maven.modrinth:hypixel-mod-api", version.ref = "hypixel
 olympus = { module = "earth.terrarium.olympus:olympus-fabric-1.21.5", version.ref = "olympus" }
 rlib = { module = "com.teamresourceful.resourcefullib:resourcefullib-fabric-1.21.5", version.ref = "rlib" }
 placeholders = { module = "eu.pb4:placeholder-api", version.ref = "placeholders" }
+
+meowdding-patches = { module = "me.owdding.patches:patches", version.ref = "meowdding-patches" }
 
 devauth = { module = "me.djtheredstoner:DevAuth-fabric", version.ref = "devauth" }
 modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
