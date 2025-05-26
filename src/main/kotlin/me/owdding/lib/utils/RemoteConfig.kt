@@ -1,4 +1,4 @@
-package me.owdding.lib.config
+package me.owdding.lib.utils
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
@@ -8,11 +8,29 @@ import com.teamresourceful.resourcefulconfig.api.types.elements.ResourcefulConfi
 import com.teamresourceful.resourcefulconfig.api.types.elements.ResourcefulConfigObjectEntryElement
 import com.teamresourceful.resourcefulconfig.api.types.entries.ResourcefulConfigValueEntry
 import com.teamresourceful.resourcefulconfig.api.types.options.EntryType
+import kotlinx.coroutines.runBlocking
+import me.owdding.patches.utils.VersionIntervalParser
+import net.fabricmc.loader.api.ModContainer
 import tech.thatgravyboat.skyblockapi.utils.extentions.asList
-import java.util.function.Predicate
+import tech.thatgravyboat.skyblockapi.utils.extentions.asMap
+import tech.thatgravyboat.skyblockapi.utils.http.Http
 
-fun ResourcefulConfig.lock(partialConfig: JsonObject) {
-    lockConfig(this, partialConfig)
+object RemoteConfig {
+    fun lockConfig(config: ResourcefulConfig, url: String, mod: ModContainer) {
+        runCatching {
+            runBlocking {
+                val data = Http.getResult<JsonObject>(url).getOrNull() ?: return@runBlocking
+                val patches = data.asMap { string, element -> VersionIntervalParser.parse(string) to element as? JsonObject }
+
+                for ((version, data) in patches) {
+                    if (data == null) continue
+                    if (!version.test(mod.metadata.version)) continue
+
+                    lockConfig(config, data)
+                }
+            }
+        }
+    }
 }
 
 private fun lockConfig(config: ResourcefulConfig, data: JsonObject) {
@@ -25,26 +43,24 @@ private fun lockConfig(config: ResourcefulConfig, data: JsonObject) {
 }
 
 private fun lockElements(entries: MutableList<ResourcefulConfigElement>, data: JsonObject) {
-    entries.replaceAll { element ->
+    entries.removeIf { element ->
         when {
             element is ResourcefulConfigObjectEntryElement -> {
                 (data.get(element.id()) as? JsonObject)?.let { data ->
                     lockElements(element.entry().elements(), data)
                 }
             }
-            element is ResourcefulConfigEntryElement && element.entry() is ResourcefulConfigValueEntry -> {
-                return@replaceAll data.get(element.id())?.let { data ->
-                    lockEntry(element.entry() as ResourcefulConfigValueEntry, data)
 
-                    object : ResourcefulConfigElement {
-                        override fun search(predicate: Predicate<String>): Boolean = false
-                        override fun isHidden(): Boolean = true
-                    }
-                } ?: element
+            element is ResourcefulConfigEntryElement && element.entry() is ResourcefulConfigValueEntry -> {
+                val data = data.get(element.id())
+                if (data != null) {
+                    lockEntry(element.entry() as ResourcefulConfigValueEntry, data)
+                    return@removeIf true
+                }
             }
         }
 
-        element
+        false
     }
 }
 
