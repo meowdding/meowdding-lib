@@ -2,6 +2,8 @@ package me.owdding.lib.utils
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigElementRenderer
+import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigUI
 import com.teamresourceful.resourcefulconfig.api.types.ResourcefulConfig
 import com.teamresourceful.resourcefulconfig.api.types.ResourcefulConfigElement
 import com.teamresourceful.resourcefulconfig.api.types.elements.ResourcefulConfigEntryElement
@@ -11,9 +13,18 @@ import com.teamresourceful.resourcefulconfig.api.types.options.EntryType
 import kotlinx.coroutines.runBlocking
 import me.owdding.patches.utils.VersionIntervalParser
 import net.fabricmc.loader.api.ModContainer
+import net.minecraft.client.gui.components.AbstractWidget
+import net.minecraft.client.gui.components.Tooltip
+import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceLocation
 import tech.thatgravyboat.skyblockapi.utils.extentions.asList
 import tech.thatgravyboat.skyblockapi.utils.extentions.asMap
 import tech.thatgravyboat.skyblockapi.utils.http.Http
+import tech.thatgravyboat.skyblockapi.utils.text.CommonText
+import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
+import java.util.function.Predicate
 
 object RemoteConfig {
     fun lockConfig(config: ResourcefulConfig, url: String, mod: ModContainer) {
@@ -33,6 +44,46 @@ object RemoteConfig {
     }
 }
 
+internal class HiddenElement(val title: Component, val description: Component) : ResourcefulConfigElement {
+    override fun search(p0: Predicate<String>): Boolean = false
+    override fun renderer(): ResourceLocation = HiddenElementRenderer.ID
+}
+
+internal class HiddenElementRenderer(element: ResourcefulConfigElement) : ResourcefulConfigElementRenderer {
+
+    private val entry: HiddenElement? = (element as? HiddenElement)
+
+    override fun title(): Component = this.entry?.title ?: CommonText.EMPTY
+    override fun description(): Component = this.entry?.description ?: CommonText.EMPTY
+
+    override fun widgets(): List<AbstractWidget> {
+        val button = ResourcefulConfigUI.button(
+            0, 0, 96, 12,
+            Text.of("Disabled") { this.color = TextColor.RED },
+            { }
+        )
+
+        button.tooltip = Tooltip.create(
+            Text.of("This config element is disabled.") { this.color = TextColor.RED },
+            Text.of("This config element is not available in this version of the mod.") { this.color = TextColor.GRAY }
+        )
+
+        return listOf(button)
+    }
+
+    companion object {
+
+        val ID = ResourceLocation.fromNamespaceAndPath("mlib", "hidden_element_renderer")
+
+        fun register() {
+            ResourcefulConfigUI.registerElementRenderer(
+                ID,
+                ::HiddenElementRenderer
+            )
+        }
+    }
+}
+
 private fun lockConfig(config: ResourcefulConfig, data: JsonObject) {
     lockElements(config.elements(), data)
     for ((id, config) in config.categories()) {
@@ -43,7 +94,7 @@ private fun lockConfig(config: ResourcefulConfig, data: JsonObject) {
 }
 
 private fun lockElements(entries: MutableList<ResourcefulConfigElement>, data: JsonObject) {
-    entries.removeIf { element ->
+    entries.replaceAll { element ->
         when {
             element is ResourcefulConfigObjectEntryElement -> {
                 (data.get(element.id()) as? JsonObject)?.let { data ->
@@ -55,12 +106,16 @@ private fun lockElements(entries: MutableList<ResourcefulConfigElement>, data: J
                 val data = data.get(element.id())
                 if (data != null) {
                     lockEntry(element.entry() as ResourcefulConfigValueEntry, data)
-                    return@removeIf true
+
+                    return@replaceAll HiddenElement(
+                        element.entry().options().title.toComponent(),
+                        element.entry().options().comment.toComponent()
+                    )
                 }
             }
         }
 
-        false
+        element
     }
 }
 
