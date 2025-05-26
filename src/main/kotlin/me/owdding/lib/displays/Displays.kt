@@ -3,6 +3,8 @@ package me.owdding.lib.displays
 import com.mojang.blaze3d.vertex.PoseStack
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils
 import com.teamresourceful.resourcefullib.client.utils.ScreenUtils
+import me.owdding.lib.extensions.floor
+import me.owdding.lib.layouts.ScalableWidget
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.PlayerFaceRenderer
 import net.minecraft.client.gui.components.Renderable
@@ -500,8 +502,8 @@ object Displays {
     fun isMouseOver(display: Display, graphics: GuiGraphics): Boolean {
         val translation = RenderUtils.getTranslation(graphics.pose())
         val (mouseX, mouseY) = McClient.mouse
-        val xRange = translation.x().toInt()..(translation.x() + display.getWidth())
-        val yRange = translation.y().toInt()..(translation.y() + display.getHeight())
+        val xRange = translation.x()..(translation.x() + (display.getWidth() * ScalableWidget.getCurrentScale()).floor())
+        val yRange = translation.y()..(translation.y() + (display.getHeight() * ScalableWidget.getCurrentScale()).floor())
         return mouseX.toInt() in xRange && mouseY.toInt() in yRange && graphics.containsPointInScissor(
             mouseX.toInt(),
             mouseY.toInt(),

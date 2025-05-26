@@ -32,6 +32,7 @@ dependencies {
     modImplementation(libs.rlib)
     modImplementation(libs.olympus)
     modImplementation(libs.placeholders)
+    modImplementation(libs.meowdding.patches)
 
     modCompileOnly(libs.rconfig)
 
@@ -40,6 +41,7 @@ dependencies {
     include(libs.rlib)
     include(libs.olympus)
     include(libs.placeholders)
+    include(libs.meowdding.patches)
 
     modRuntimeOnly(libs.devauth)
     modRuntimeOnly(libs.modmenu)
