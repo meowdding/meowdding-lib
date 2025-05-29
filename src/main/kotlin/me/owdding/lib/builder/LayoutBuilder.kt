@@ -80,8 +80,16 @@ abstract class LayoutBuilder {
         widgets.add(widget)
     }
 
+    fun LayoutElement.add() {
+        this@LayoutBuilder.widget(this)
+    }
+
     fun widget(widget: List<LayoutElement>) {
         widget.forEach(this::widget)
+    }
+
+    fun List<LayoutElement>.add() {
+        this@LayoutBuilder.widget(this)
     }
 
     fun widget(widget: LayoutElement, settings: LayoutSettings.() -> Unit) {
@@ -92,12 +100,20 @@ abstract class LayoutBuilder {
         widgets.add(LayoutElements(widget, settings))
     }
 
+    fun LayoutElement.add(settings: LayoutSettings.() -> Unit) {
+        this@LayoutBuilder.widget(this, settings)
+    }
+
     fun string(text: String) {
         widgets.add(Widgets.text(text))
     }
 
     fun display(display: Display) {
         widgets.add(display.asWidget())
+    }
+
+    fun Display.add() {
+        this@LayoutBuilder.display(this)
     }
 
     fun verticalDisplay(builder: DisplayBuilder.() -> Unit) {
