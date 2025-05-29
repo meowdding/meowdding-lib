@@ -1,5 +1,7 @@
 package me.owdding.lib.layouts
 
+import com.teamresourceful.resourcefullib.client.components.CursorWidget
+import earth.terrarium.olympus.client.components.base.BaseParentWidget
 import me.owdding.lib.extensions.floor
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
@@ -12,16 +14,15 @@ import java.util.*
 import kotlin.properties.Delegates.observable
 
 
-class ScalableWidget(val original: AbstractWidget) :
-    AbstractWidget(original.x, original.y, original.width, original.height, original.message), Scalable {
-
-    fun <T> MutableList<T>.add(t: T) {
-        add(t)
-    }
+class ScalableWidget(val original: AbstractWidget) : BaseParentWidget(original.width, original.height), Scalable, CursorWidget {
 
     init {
+        x = original.x
+        y = original.y
         width = original.width
         height = original.height
+        message = original.message
+        addRenderableWidget(original)
     }
 
     private var scale by observable(1.0) { _, _, scale ->
@@ -34,7 +35,7 @@ class ScalableWidget(val original: AbstractWidget) :
             original.x = (this@ScalableWidget.x / scale).floor()
             original.y = (this@ScalableWidget.y / scale).floor()
             currentScale.addLast(scale)
-            original.render(guiGraphics, (mouseX / scale).floor(), (mouseY / scale).floor(), partialTick)
+            super.renderWidget(guiGraphics, (mouseX / scale).floor(), (mouseY / scale).floor(), partialTick)
             currentScale.removeLast()
         }
     }
@@ -48,29 +49,32 @@ class ScalableWidget(val original: AbstractWidget) :
         return consumer(originalMouseX / scale, originalMouseY / scale)
     }
 
-
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int) = translated(mouseX, mouseY) { x, y ->
-        original.mouseClicked(x, y, button)
+        super.mouseClicked(x, y, button)
     }
 
     override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int) = translated(mouseX, mouseY) { x, y ->
-        original.mouseReleased(x, y, button)
+        super.mouseReleased(x, y, button)
     }
 
     override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, dragX: Double, dragY: Double) = translated(mouseX, mouseY) { x, y ->
-        original.mouseDragged(x, y, button, dragX / scale, dragY / scale)
+        super.mouseDragged(x, y, button, dragX / scale, dragY / scale)
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, scrollX: Double, scrollY: Double) = translated(mouseX, mouseY) { x, y ->
-        original.mouseScrolled(x, y, scrollX * scale, scrollY * scale)
+        super.mouseScrolled(x, y, scrollX * scale, scrollY * scale)
+    }
+
+    override fun mouseMoved(mouseX: Double, mouseY: Double) = translated(mouseX, mouseY) { x, y ->
+        super.mouseMoved(x, y)
     }
 
     override fun isMouseOver(mouseX: Double, mouseY: Double) = translated(mouseX, mouseY) { x, y ->
-        original.isMouseOver(x, y)
+        super.isMouseOver(x, y)
     }
 
     override fun getRectangle(): ScreenRectangle? {
-        val original = super.getRectangle() ?: return null
+        val original = super<BaseParentWidget>.rectangle ?: return null
         return ScreenRectangle(original.left(), original.top(), (original.width() * scale).floor(), (original.height() * scale).floor())
     }
 
