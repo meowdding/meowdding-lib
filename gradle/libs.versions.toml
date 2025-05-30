@@ -5,6 +5,8 @@ minecraft = "1.21.5"
 loom = "1.10-SNAPSHOT"
 loader = "0.16.10"
 
+ksp = "2.1.20-2.0.0"
+
 # Dependencies
 fabric = "0.119.5+1.21.5"
 fabrickotlin = "1.13.0+kotlin.2.1.0"
@@ -18,7 +20,9 @@ placeholders = "2.6.1+1.21.5"
 devauth = "1.2.1"
 modmenu = "14.0.0-rc.2"
 
+meowdding-ktmodules = "1.0.3"
 meowdding-patches = "1.0.2"
+meowdding-ktcodecs = "1.0.11"
 
 [libraries]
 
@@ -32,6 +36,8 @@ olympus = { module = "earth.terrarium.olympus:olympus-fabric-1.21.5", version.re
 rlib = { module = "com.teamresourceful.resourcefullib:resourcefullib-fabric-1.21.5", version.ref = "rlib" }
 placeholders = { module = "eu.pb4:placeholder-api", version.ref = "placeholders" }
 
+meowdding-ktmodules = { module = "me.owdding.ktmodules:KtModules", version.ref = "meowdding-ktmodules" }
+meowdding-ktcodecs = { module = "me.owdding.ktcodecs:KtCodecs", version.ref = "meowdding-ktcodecs" }
 meowdding-patches = { module = "me.owdding.patches:patches", version.ref = "meowdding-patches" }
 
 devauth = { module = "me.djtheredstoner:DevAuth-fabric", version.ref = "devauth" }
@@ -40,3 +46,4 @@ modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
 [plugins]
 
 loom = { id = "fabric-loom", version.ref = "loom" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

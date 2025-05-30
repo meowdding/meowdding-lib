@@ -5,6 +5,7 @@ plugins {
     kotlin("jvm") version "2.0.0"
     alias(libs.plugins.loom)
     id("maven-publish")
+    alias(libs.plugins.ksp)
 }
 
 repositories {
@@ -18,6 +19,11 @@ repositories {
 }
 
 dependencies {
+    compileOnly(libs.meowdding.ktmodules)
+    ksp(libs.meowdding.ktmodules)
+    compileOnly(libs.meowdding.ktcodecs)
+    ksp(libs.meowdding.ktcodecs)
+
     minecraft(libs.minecraft)
     mappings(loom.layered {
         officialMojangMappings()
@@ -72,6 +78,13 @@ tasks {
 
 java {
     withSourcesJar()
+}
+
+ksp {
+    arg("meowdding.modules.project_name", "MeowddingLib")
+    arg("meowdding.modules.package", "me.owdding.lib.generated")
+    arg("meowdding.codecs.project_name", "MeowddingLib")
+    arg("meowdding.codecs.package", "me.owdding.lib.generated")
 }
 
 publishing {

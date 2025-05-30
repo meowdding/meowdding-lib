@@ -8,7 +8,14 @@
   "contact": {},
   "license": "",
   "environment": "client",
-  "entrypoints": {},
+  "entrypoints": {
+    "main": [
+      {
+        "adapter": "kotlin",
+        "value": "me.owdding.lib.Meowdding"
+      }
+    ]
+  },
   "depends": {
     "fabricloader": ">=0.16.10",
     "fabric": "*",
