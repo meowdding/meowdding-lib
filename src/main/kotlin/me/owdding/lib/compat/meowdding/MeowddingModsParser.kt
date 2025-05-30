@@ -7,6 +7,7 @@ import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktmodules.Module
 import me.owdding.lib.generated.MeowddingLibCodecs
 import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.resources.ResourceLocation
 import tech.thatgravyboat.skyblockapi.utils.http.Http
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 
@@ -38,4 +39,5 @@ data class MeowddingMod(
     val icon: String,
 ) {
     val isInstalled by lazy { FabricLoader.getInstance().isModLoaded(modId) }
+    val iconImage by lazy { ResourceLocation.withDefaultNamespace("dirt") } // todo: use olympus thing
 }
