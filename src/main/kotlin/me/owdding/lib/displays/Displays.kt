@@ -24,10 +24,7 @@ import org.joml.Quaternionf
 import org.joml.Vector3f
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
-import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
-import tech.thatgravyboat.skyblockapi.utils.extentions.scissor
-import tech.thatgravyboat.skyblockapi.utils.extentions.translate
-import tech.thatgravyboat.skyblockapi.utils.extentions.translated
+import tech.thatgravyboat.skyblockapi.utils.extentions.*
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.width
 import tech.thatgravyboat.skyblockapi.utils.text.TextUtils.splitLines
@@ -236,6 +233,24 @@ object Displays {
         shadow: Boolean = true,
     ) = text(Language.getInstance().getVisualOrder(text), color, shadow)
 
+    fun wrappedText(
+        text: FormattedText,
+        maxWidth: Int,
+        color: () -> UInt = { 0xFFFFFFFFu },
+        shadow: Boolean = true,
+    ): Display {
+        val lines = McFont.self.split(text, maxWidth)
+        return object : Display {
+            override fun getWidth() = maxWidth
+            override fun getHeight() = lines.size * McFont.height
+            override fun render(graphics: GuiGraphics) {
+                lines.forEachIndexed { index, line ->
+                    graphics.drawString(McFont.self, line, 0, index * McFont.height, color().toInt(), shadow)
+                }
+            }
+        }
+    }
+
     fun row(
         vararg displays: Display,
         spacing: Int = 0,
@@ -328,21 +343,26 @@ object Displays {
 
                     val stackSize = item.count
                     if ((showStackSize && stackSize > 1) || customStackText != null) {
-                        translate(1, 2, 200)
                         val component = when (customStackText) {
                             null -> Text.of(stackSize.toString())
                             is Component -> customStackText
                             is String -> Text.of(customStackText)
                             else -> Text.of(customStackText.toString())
                         }
-                        graphics.drawString(
-                            McFont.self,
-                            component,
-                            width - McFont.width(component),
-                            height - McFont.height,
-                            0xFFFFFFFF.toInt(),
-                            true,
-                        )
+
+                        val scale = (width.toFloat() / McFont.width(component)).coerceAtMost(1f)
+
+                        translate(1 + width - McFont.width(component) * scale, 2 + height - McFont.height * scale, 200)
+                        scaled(scale, scale) {
+                            graphics.drawString(
+                                McFont.self,
+                                component,
+                                0,
+                                0,
+                                0xFFFFFF00.toInt(),
+                                true,
+                            )
+                        }
                     }
                 }
             }
