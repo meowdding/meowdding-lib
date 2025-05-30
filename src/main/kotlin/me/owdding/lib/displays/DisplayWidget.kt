@@ -6,7 +6,7 @@ import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
-import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
+import tech.thatgravyboat.skyblockapi.utils.extentions.translated
 
 class DisplayWidget(private val display: Display): BaseWidget() {
     private var renderer: WidgetRenderer<DisplayWidget?> = WidgetRenderer.empty()
@@ -35,9 +35,9 @@ class DisplayWidget(private val display: Display): BaseWidget() {
 
     companion object {
         fun <T : AbstractWidget> displayRenderer(display: Display) = WidgetRenderer<T> { graphics, context, partialTicks ->
-            graphics.pushPop {
+            graphics.translated(context.x, context.y) {
                 scale(context.width.toFloat() / display.getWidth().toFloat(), context.height.toFloat() / display.getHeight().toFloat(), 0f)
-                display.render(graphics, context.x, context.y)
+                display.render(graphics, 0, 0)
             }
         }
     }
