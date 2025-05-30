@@ -33,17 +33,17 @@ class MeowddingModsScreen : Screen(Text.of("Meowdding Mods")) {
     }
 
     private fun createElement(mod: MeowddingMod): AbstractWidget {
+        val height = (McClient.window.guiScaledHeight / 5).coerceIn(50, 100)
+
         val main = DisplayFactory.vertical {
+            // TODO: multiline text based on width
             textDisplay(shadow = true) {
                 append(mod.name)
                 color = TextColor.PINK
             }
         }
 
-        val layered = listOf(
-            main,
-            Displays.empty(200, 200),
-        ).asLayer()
+        val layered = listOf(main, Displays.empty(height, height)).asLayer()
 
         val button = Displays.background(mod.iconImage, layered).asButton {
             if (mod.isInstalled) {
