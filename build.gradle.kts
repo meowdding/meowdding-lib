@@ -34,6 +34,8 @@ dependencies {
     modImplementation(libs.placeholders)
     modImplementation(libs.meowdding.patches)
 
+    modCompileOnly(libs.rconfig)
+
     include(libs.hypixelapi)
     include(libs.skyblockapi)
     include(libs.rlib)
