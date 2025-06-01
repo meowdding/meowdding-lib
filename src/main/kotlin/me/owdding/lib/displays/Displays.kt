@@ -359,7 +359,7 @@ object Displays {
                                 component,
                                 0,
                                 0,
-                                0xFFFFFF00.toInt(),
+                                0xFFFFFFFFu.toInt(),
                                 true,
                             )
                         }
