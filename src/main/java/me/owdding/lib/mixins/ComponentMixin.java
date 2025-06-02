@@ -22,6 +22,11 @@ public interface ComponentMixin {
         }
 
         String translation = Language.getInstance().getOrDefault(key, fallback);
+
+        for (int i = 0; i < args.length; i++) {
+            translation = translation.replaceAll("<!" + i + ">", String.valueOf(args[i]));
+        }
+
         cir.setReturnValue(PlaceholderLanguageProvider.INSTANCE.parse(translation, args).copy());
     }
 
