@@ -16,7 +16,8 @@ private val knownPaths = mapOf(
     "earth.terrarium.olympus" to "olympus",
     "com.google.gson" to "gson",
     "net.fabricmc" to "fabric",
-).mapKeys { Regex("(?:knot//)?$it") }
+    "net.minecraft" to "mc",
+).mapKeys { (k) -> Regex("(?:knot//)?$k") }
 
 private fun String.applyAllReplacements(): String {
     var result = this
