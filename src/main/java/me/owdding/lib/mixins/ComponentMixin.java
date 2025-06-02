@@ -1,8 +1,7 @@
 package me.owdding.lib.mixins;
 
-import eu.pb4.placeholders.api.ParserContext;
-import eu.pb4.placeholders.api.parsers.TagParser;
 import me.owdding.lib.internal.LanguageHelper;
+import me.owdding.lib.internal.PlaceholderLanguageProvider;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -22,13 +21,8 @@ public interface ComponentMixin {
             return;
         }
 
-        String orDefault = Language.getInstance().getOrDefault(key, fallback);
-        for (int i = 0; i < args.length; i++) {
-            Object arg = args[i];
-            orDefault = orDefault.replaceAll("<" + i + ">", String.valueOf(arg));
-        }
-        final Component component = TagParser.QUICK_TEXT_SAFE.parseText(orDefault, ParserContext.of());
-        cir.setReturnValue((MutableComponent) component);
+        String translation = Language.getInstance().getOrDefault(key, fallback);
+        cir.setReturnValue(PlaceholderLanguageProvider.INSTANCE.parse(translation, args).copy());
     }
 
     @Inject(method = "translatable(Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;", at = @At("HEAD"), cancellable = true)
