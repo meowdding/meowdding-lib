@@ -21,7 +21,7 @@ private val knownPaths = mapOf(
 private fun String.applyAllReplacements(): String {
     var result = this
     knownPaths.forEach { (path, replacement) ->
-        result = this.replace(path, replacement.uppercase())
+        result = result.replace(path, replacement.uppercase())
     }
     return result
 }
