@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefullib.client.utils.RenderUtils
 import com.teamresourceful.resourcefullib.client.utils.ScreenUtils
 import me.owdding.lib.extensions.floor
 import me.owdding.lib.layouts.ScalableWidget
+import net.minecraft.Util
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.PlayerFaceRenderer
 import net.minecraft.client.gui.components.Renderable
@@ -17,6 +18,7 @@ import net.minecraft.network.chat.FormattedText
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.FormattedCharSequence
+import net.minecraft.util.Mth
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.ItemLike
@@ -29,6 +31,9 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.width
 import tech.thatgravyboat.skyblockapi.utils.text.TextUtils.splitLines
 import kotlin.math.atan
+import kotlin.math.cos
+import kotlin.math.max
+import kotlin.math.sin
 
 private const val NO_SPLIT = -1
 
@@ -508,6 +513,29 @@ object Displays {
 
                 if (isMouseOver(display, graphics)) {
                     ScreenUtils.setTooltip(component.splitLines())
+                }
+            }
+        }
+    }
+
+    fun fixedWidth(original: Display, maxWidth: Int? = null): Display {
+        return object : Display {
+            override fun getWidth() = maxWidth ?: original.getWidth()
+            override fun getHeight() = original.getHeight()
+
+            override fun render(graphics: GuiGraphics) {
+                graphics.pushPop {
+                    val seconds = Util.getMillis().toDouble() / 1000.0
+                    graphics.scissor(0, 0, getWidth(), getHeight()) {
+                        if (maxWidth != null && maxWidth < original.getWidth()) {
+                            val overhang: Int = original.getWidth() - maxWidth
+                            val e = max(overhang.toDouble() * 0.5, 3.0)
+                            val f = sin(Mth.HALF_PI * cos(Mth.TWO_PI * seconds / e)) / 2.0 + 0.5
+                            val g = Mth.lerp(f, 0.0, overhang.toDouble())
+                            translate(-g, 0, 0)
+                        }
+                        original.render(graphics)
+                    }
                 }
             }
         }
