@@ -93,7 +93,7 @@ object Displays {
                     0,
                     display.getWidth(),
                     display.getHeight(),
-                    color.and(0xFFFFFF).or(-0xF000000),
+                    color.and(0xFFFFFF).or(0xFF000000u.toInt()),
                 )
                 display.render(graphics)
             }
