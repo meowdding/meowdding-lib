@@ -3,6 +3,7 @@ package me.owdding.lib.displays
 import com.mojang.blaze3d.vertex.PoseStack
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils
 import com.teamresourceful.resourcefullib.client.utils.ScreenUtils
+import earth.terrarium.olympus.client.images.BuiltinImageProviders
 import me.owdding.lib.extensions.floor
 import me.owdding.lib.layouts.ScalableWidget
 import net.minecraft.client.gui.GuiGraphics
@@ -28,7 +29,9 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.*
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.width
 import tech.thatgravyboat.skyblockapi.utils.text.TextUtils.splitLines
+import java.net.URI
 import kotlin.math.atan
+
 
 private const val NO_SPLIT = -1
 
@@ -95,6 +98,26 @@ object Displays {
                     display.getHeight(),
                     color.and(0xFFFFFF).or(-0xF000000),
                 )
+                display.render(graphics)
+            }
+        }
+    }
+
+    fun image(uri: URI, display: Display): Display {
+        return object : Display {
+            override fun getWidth() = display.getWidth()
+            override fun getHeight() = display.getHeight()
+            override fun render(graphics: GuiGraphics) {
+                val matrix = graphics.pose().last().pose()
+                graphics.drawSpecial { source ->
+                    val width = display.getWidth().toFloat()
+                    val height = display.getHeight().toFloat()
+                    val buffer = source.getBuffer(RenderType.guiTextured(BuiltinImageProviders.URL.get(uri)))
+                    buffer.addVertex(matrix, 0f, 0f, 0f).setColor(-1).setUv(0f, 0f)
+                    buffer.addVertex(matrix, 0f, height, 0f).setColor(-1).setUv(0f, 1f)
+                    buffer.addVertex(matrix, width, height, 0f).setColor(-1).setUv(1f, 1f)
+                    buffer.addVertex(matrix, width, 0f, 0f).setColor(-1).setUv(1f, 0f)
+                }
                 display.render(graphics)
             }
         }

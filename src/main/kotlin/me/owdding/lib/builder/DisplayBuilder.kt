@@ -42,6 +42,10 @@ abstract class DisplayBuilder {
         displays.add(Displays.empty(width, height))
     }
 
+    fun supplied(supplier: () -> Display) {
+        displays.add(Displays.supplied(supplier))
+    }
+
     fun textDisplay(
         text: String = "",
         color: UInt = 0x555555u,
@@ -54,6 +58,10 @@ abstract class DisplayBuilder {
 
     fun textDisplay(text: String = "", color: UInt = 0x555555u, shadow: Boolean = false, init: MutableComponent.() -> Unit) {
         textDisplay(text, color, shadow, { this }, init)
+    }
+
+    fun wrappedText(text: String, width: Int, color: UInt = 0x555555u, shadow: Boolean = false) {
+        displays.add(Displays.wrappedText(Text.of(text), width, { color }, shadow))
     }
 
     fun vertical(spacing: Int = 0, alignment: Alignment = Alignment.START, builder: VerticalDisplayBuilder.() -> Unit) {
