@@ -30,10 +30,26 @@ class ScalableWidget(val original: AbstractWidget) : BaseParentWidget(original.w
         super.height = (original.height * scale).floor()
     }
 
+    override fun getWidth(): Int {
+        updateWidthHeight()
+        return super.getWidth()
+    }
+
+    override fun getHeight(): Int {
+        updateWidthHeight()
+        return super.getHeight()
+    }
+
+    private fun updateWidthHeight() {
+        width = original.width
+        height = original.height
+    }
+
     override fun renderWidget(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
         guiGraphics.scaled(scale, scale, 1) {
             original.x = (this@ScalableWidget.x / scale).floor()
             original.y = (this@ScalableWidget.y / scale).floor()
+            this@ScalableWidget.updateWidthHeight()
             currentScale.addLast(scale)
             super.renderWidget(guiGraphics, (mouseX / scale).floor(), (mouseY / scale).floor(), partialTick)
             currentScale.removeLast()
