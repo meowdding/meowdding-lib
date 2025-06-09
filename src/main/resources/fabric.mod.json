@@ -14,6 +14,12 @@
         "adapter": "kotlin",
         "value": "me.owdding.lib.MeowddingLib"
       }
+    ],
+    "rei_client": [
+      {
+        "adapter": "kotlin",
+        "value": "me.owdding.lib.compat.REICompatability"
+      }
     ]
   },
   "depends": {

@@ -13,6 +13,7 @@ repositories {
     maven(url = "https://api.modrinth.com/maven")
     maven(url = "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
     maven(url = "https://maven.nucleoid.xyz")
+    maven(url = "https://maven.shedaniel.me/")
     mavenCentral()
     mavenLocal()
 }
@@ -35,6 +36,8 @@ dependencies {
     modImplementation(libs.meowdding.patches)
 
     modCompileOnly(libs.rconfig)
+
+    modCompileOnly(libs.rei)
 
     include(libs.hypixelapi)
     include(libs.skyblockapi)
