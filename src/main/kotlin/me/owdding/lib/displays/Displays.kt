@@ -336,6 +336,13 @@ object Displays {
             override fun getHeight() = height
 
             override fun render(graphics: GuiGraphics) {
+                val x = graphics.pose().last().pose().m30().toInt()
+                val y = graphics.pose().last().pose().m31().toInt()
+                if (
+                    !graphics.containsPointInScissor(x, y) && !graphics.containsPointInScissor(x + 16, y) &&
+                    !graphics.containsPointInScissor(x + 16, y + 16) && !graphics.containsPointInScissor(x, y + 16)
+                ) return
+
                 if (showTooltip && !item.isEmpty) {
                     if (isMouseOver(this, graphics)) {
                         ScreenUtils.setTooltip(item)
