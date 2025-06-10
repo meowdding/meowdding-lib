@@ -197,6 +197,7 @@ abstract class LayoutBuilder {
     abstract fun build(spacing: Int = 0, alignment: Float = 0.0f): Layout
 
     companion object {
+        @Deprecated("Use the .setPos() in layouts/LayoutExtension.kt instead")
         fun Layout.setPos(x: Int, y: Int): Layout {
             this.setPosition(x, y)
             return this

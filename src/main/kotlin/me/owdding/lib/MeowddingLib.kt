@@ -3,6 +3,7 @@ package me.owdding.lib
 import me.owdding.lib.utils.HiddenElementRenderer
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.resources.ResourceLocation
 
 object MeowddingLib : ClientModInitializer {
 
@@ -11,4 +12,6 @@ object MeowddingLib : ClientModInitializer {
             HiddenElementRenderer.register()
         }
     }
+
+    fun id(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath("meowdding-lib", path)
 }
