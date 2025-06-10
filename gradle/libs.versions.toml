@@ -19,7 +19,7 @@ rei = "19.0.806"
 devauth = "1.2.1"
 modmenu = "14.0.0-rc.2"
 
-meowdding-patches = "1.0.2"
+meowdding-patches = "1.0.3"
 rconfig = "3.5.6"
 
 [libraries]
