@@ -12,7 +12,7 @@ import net.minecraft.client.gui.layouts.LayoutElement
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import kotlin.math.max
 
-class ClickToExpandWidget(title: LayoutElement, body: LayoutElement, val callback: () -> Unit, val bodyOffset: Int = 7) : BaseParentWidget() {
+class ClickToExpandWidget(title: LayoutElement, body: LayoutElement, val onClick: () -> Unit, val bodyOffset: Int = 7) : BaseParentWidget() {
     val title = LayoutFactory.horizontal(alignment = MIDDLE) {
         display(
             Displays.supplied {
@@ -40,7 +40,7 @@ class ClickToExpandWidget(title: LayoutElement, body: LayoutElement, val callbac
             title.isFocused = expanded
             body.visible = expanded
             body.isFocused = expanded
-            callback()
+            onClick()
             return true
         }
 
