@@ -13,6 +13,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import kotlin.math.max
 
 class ClickToExpandWidget(title: LayoutElement, body: LayoutElement, val onClick: () -> Unit, val bodyOffset: Int = 7) : BaseParentWidget() {
+    var allowBodyClick = true
+
     val title = LayoutFactory.horizontal(alignment = MIDDLE) {
         display(
             Displays.supplied {
@@ -35,7 +37,7 @@ class ClickToExpandWidget(title: LayoutElement, body: LayoutElement, val onClick
     override fun getHeight() = title.height + if (expanded) body.height else 0
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if ((title.isMouseOver(mouseX, mouseY) || body.isMouseOver(mouseX, mouseY)) && button == 0) {
+        if ((title.isMouseOver(mouseX, mouseY) || (allowBodyClick && body.isMouseOver(mouseX, mouseY))) && button == 0) {
             expanded = !expanded
             title.isFocused = expanded
             body.visible = expanded
