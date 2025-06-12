@@ -9,10 +9,16 @@
   "license": "",
   "environment": "client",
   "entrypoints": {
-    "main": [
+    "client": [
       {
         "adapter": "kotlin",
-        "value": "me.owdding.lib.Meowdding"
+        "value": "me.owdding.lib.MeowddingLib"
+      }
+    ],
+    "rei_client": [
+      {
+        "adapter": "kotlin",
+        "value": "me.owdding.lib.compat.REICompatability"
       }
     ]
   },
