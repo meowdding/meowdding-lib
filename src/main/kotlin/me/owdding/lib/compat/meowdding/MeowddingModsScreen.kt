@@ -6,7 +6,6 @@ import me.owdding.lib.builder.DisplayFactory
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.displays.*
 import me.owdding.lib.layouts.ExpandingWidget
-import net.minecraft.Util
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.FrameLayout
 import net.minecraft.client.gui.screens.Screen
@@ -15,6 +14,7 @@ import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import java.net.URI
 
 class MeowddingModsScreen : Screen(Text.of("Meowdding Mods")) {
 
@@ -47,7 +47,7 @@ class MeowddingModsScreen : Screen(Text.of("Meowdding Mods")) {
             if (mod.isInstalled) {
                 McClient.setScreenAsync(ResourcefulConfigScreen.getFactory(mod.configId).apply(this))
             } else {
-                Util.getPlatform().openUri("https://modrinth.com/mod/${mod.modrinthSlug}")
+                McClient.openUri(URI("https://modrinth.com/mod/${mod.modrinthSlug}"))
             }
         }
         return ExpandingWidget(button, 5)
@@ -59,7 +59,9 @@ class MeowddingModsScreen : Screen(Text.of("Meowdding Mods")) {
         @Subscription
         fun onCommand(event: RegisterCommandsEvent) {
             event.registerWithCallback("meowdding") {
-                McClient.setScreenAsync(MeowddingModsScreen())
+                McClient.tell {
+                    McClient.setScreen(MeowddingModsScreen())
+                }
             }
         }
     }
