@@ -3,5 +3,8 @@
   "mixins": [
     "ComponentMixin",
     "LanguageMixin"
+  ],
+  "client": [
+    "AbstractContainerScreenMixin"
   ]
 }
