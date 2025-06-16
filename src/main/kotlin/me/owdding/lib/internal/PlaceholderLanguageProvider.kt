@@ -17,7 +17,7 @@ import java.util.function.Function
 object PlaceholderLanguageProvider : TagLikeParser.Provider {
 
     private val KEY = ParserContext.Key.of<Function<String, Component>>("meowdding:translation_args")
-    private val SAFEISH_TAGs = setOf(
+    private val SAFEISH_TAGS = setOf(
         "keybind", "key",
         "run_command", "run_cmd",
         "suggest_command", "cmd",
@@ -28,7 +28,7 @@ object PlaceholderLanguageProvider : TagLikeParser.Provider {
     private var PARSER = SingleTagLikeParser(TagLikeParser.TAGS, PlaceholderLanguageProvider)
 
     private fun getTag(id: String): TextTag? {
-        return if (SAFEISH_TAGs.contains(id)) {
+        return if (SAFEISH_TAGS.contains(id)) {
             TagRegistry.DEFAULT.getTag(id)
         } else {
             TagRegistry.SAFE.getTag(id)
