@@ -1,22 +1,32 @@
 package me.owdding.lib.compat.meowdding
 
 import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
+import earth.terrarium.olympus.client.components.base.ListWidget
+import earth.terrarium.olympus.client.utils.ListenableState
 import me.owdding.ktmodules.Module
+import me.owdding.lib.MeowddingLib
 import me.owdding.lib.builder.DisplayFactory
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.displays.*
+import me.owdding.lib.layouts.BackgroundWidget
 import me.owdding.lib.layouts.ExpandingWidget
+import me.owdding.lib.layouts.asWidget
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.FrameLayout
 import net.minecraft.client.gui.screens.Screen
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.net.URI
 
 class MeowddingModsScreen : Screen(Text.of("Meowdding Mods")) {
+
+    val background = MeowddingLib.id("background")
+    val maxFeatureWidth by lazy { MeowddingFeatures.features.flatMap { it.value }.maxOf { McFont.width(it) } + 5 }
 
     override fun init() {
         val elements = MeowddingModsParser.mods.sortedByDescending { it.isInstalled }.map(::createElement)
@@ -25,6 +35,10 @@ class MeowddingModsScreen : Screen(Text.of("Meowdding Mods")) {
             horizontal { elements.forEach { widget(it) } }
         }.apply {
             FrameLayout.centerInRectangle(this, 0, 0, this@MeowddingModsScreen.width, this@MeowddingModsScreen.height)
+        }.visitWidgets(this::addRenderableWidget)
+
+        featureList().apply {
+            setPosition(0, 0)
         }.visitWidgets(this::addRenderableWidget)
     }
 
@@ -51,6 +65,55 @@ class MeowddingModsScreen : Screen(Text.of("Meowdding Mods")) {
             }
         }
         return ExpandingWidget(button, 5)
+    }
+
+    private val state: ListenableState<String> = ListenableState.of("")
+    private lateinit var list: ListWidget
+
+    private fun featureList() = BackgroundWidget(
+        background,
+        LayoutFactory.vertical {
+            fun updateList(input: String = "") = LayoutFactory.vertical(5, 0.5f) {
+                val features = MeowddingFeatures.features.filter { (mod, features) ->
+                    input.isBlank() || mod.name.contains(input, ignoreCase = true) || features.any { it.contains(input, ignoreCase = true) }
+                }
+
+                spacer(2)
+                features.forEach { (mod, features) ->
+                    vertical(3, 0.5f) {
+                        string(mod.name) {
+                            color = TextColor.PINK
+                        }
+
+                        features.forEach { feature ->
+                            if (!feature.contains(input, ignoreCase = true)) return@forEach
+                            string(feature) {
+                                color = TextColor.GRAY
+                            }
+                        }
+                        spacer(maxFeatureWidth)
+                    }
+                }
+            }.apply {
+                list.clear()
+                list.add(this.asWidget())
+                list.setSize(this.width, this@MeowddingModsScreen.height - 24)
+            }
+
+            textInput(
+                state = state,
+                placeholder = "Search...",
+                width = if (this@MeowddingModsScreen::list.isInitialized) list.width else 100,
+                onChange = { updateList(it) },
+            )
+
+            list = ListWidget(width, height)
+            widget(list)
+            updateList()
+        },
+        padding = 2,
+    ).apply {
+        setSize(this.width, this@MeowddingModsScreen.height)
     }
 
 
