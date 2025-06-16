@@ -7,6 +7,7 @@ import eu.pb4.placeholders.api.node.TextNode
 import eu.pb4.placeholders.api.node.parent.ColorNode
 import eu.pb4.placeholders.api.parsers.TagLikeParser
 import eu.pb4.placeholders.api.parsers.tag.TagRegistry
+import eu.pb4.placeholders.api.parsers.tag.TextTag
 import eu.pb4.placeholders.impl.textparser.SingleTagLikeParser
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.TextColor
@@ -16,12 +17,28 @@ import java.util.function.Function
 object PlaceholderLanguageProvider : TagLikeParser.Provider {
 
     private val KEY = ParserContext.Key.of<Function<String, Component>>("meowdding:translation_args")
+    private val SAFEISH_TAGs = setOf(
+        "keybind", "key",
+        "run_command", "run_cmd",
+        "suggest_command", "cmd",
+        "copy_to_clipboard", "copy",
+        "insert", "insertion",
+    )
+
     private var PARSER = SingleTagLikeParser(TagLikeParser.TAGS, PlaceholderLanguageProvider)
+
+    private fun getTag(id: String): TextTag? {
+        return if (SAFEISH_TAGs.contains(id)) {
+            TagRegistry.DEFAULT.getTag(id)
+        } else {
+            TagRegistry.SAFE.getTag(id)
+        }
+    }
 
     override fun isValidTag(tag: String, context: TagLikeParser.Context): Boolean {
         return tag == "/*"
             || tag.startsWith("#")
-            || TagRegistry.SAFE.getTag(tag) != null
+            || getTag(tag) != null
             || StringUtils.isNumeric(tag)
             || tag == "/"
             || (tag.length > 1 && tag[0] == '/' && context.contains(tag.substring(1)))
@@ -47,7 +64,7 @@ object PlaceholderLanguageProvider : TagLikeParser.Provider {
         } else if (StringUtils.isNumeric(id)) {
             context.addNode(DynamicTextNode.of(id, KEY))
         } else {
-            var tag = TagRegistry.SAFE.getTag(id)!!
+            var tag = getTag(id)!!
 
             var args = StringArgs.full(argument, ' ', ':')
 
