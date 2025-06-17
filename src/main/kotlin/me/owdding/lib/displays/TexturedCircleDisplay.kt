@@ -8,6 +8,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.Tesselator
 import com.mojang.blaze3d.vertex.VertexFormat
 import earth.terrarium.olympus.client.pipelines.PipelineRenderer
+import me.owdding.lib.MeowddingLib.id
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.client.renderer.texture.AbstractTexture
@@ -23,14 +24,10 @@ class TexturedCircleDisplay(@JvmField val width: Int, @JvmField val height: Int,
         val matrix = graphics.pose().last().pose()
         val buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX)
 
-        buffer.addVertex(matrix, 0f, 0f, 0f)
-            .setUv(-1f, -1f)
-        buffer.addVertex(matrix, 0f, height.toFloat(), 0f)
-            .setUv(-1f, 1f)
-        buffer.addVertex(matrix, width.toFloat(), height.toFloat(), 0f)
-            .setUv(1f, 1f)
-        buffer.addVertex(matrix, width.toFloat(), 0f, 0f)
-            .setUv(1f, -1f)
+        buffer.addVertex(matrix, 0f, 0f, 0f).setUv(-1f, -1f)
+        buffer.addVertex(matrix, 0f, height.toFloat(), 0f).setUv(-1f, 1f)
+        buffer.addVertex(matrix, width.toFloat(), height.toFloat(), 0f).setUv(1f, 1f)
+        buffer.addVertex(matrix, width.toFloat(), 0f, 0f).setUv(1f, -1f)
 
         val sprite = McClient.self.guiSprites.getSprite(texture)
 
@@ -41,15 +38,14 @@ class TexturedCircleDisplay(@JvmField val width: Int, @JvmField val height: Int,
         RenderSystem.setShaderTexture(0, abstractTexture.texture)
 
         PipelineRenderer.draw(renderPipeline, buffer.buildOrThrow()) {
-            it.bindSampler("Sampler0", abstractTexture.texture)
             it.setUniform("uvs", sprite.u0, sprite.u1, sprite.v0, sprite.v1)
         }
     }
 
     private val renderPipeline: RenderPipeline = RenderPipelines.register(
         RenderPipeline.builder(RenderPipelines.GUI_TEXTURED_SNIPPET)
-            .withLocation("pipeline/circle_tex.fsh")
-            .withFragmentShader(ResourceLocation.fromNamespaceAndPath("meowdding-lib", "circle_tex"))
+            .withLocation(id("pipeline/circle_tex.fsh"))
+            .withFragmentShader(id("circle_tex"))
             .withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST)
             .withUniform("uvs", UniformType.VEC4)
             .withDepthWrite(false)
