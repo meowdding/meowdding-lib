@@ -46,6 +46,7 @@ class TexturedCircleDisplay(@JvmField val width: Int, @JvmField val height: Int,
         RenderPipeline.builder(RenderPipelines.GUI_TEXTURED_SNIPPET)
             .withLocation(id("pipeline/circle_tex.fsh"))
             .withFragmentShader(id("circle_tex"))
+            .withVertexFormat(DefaultVertexFormat.POSITION_TEX, VertexFormat.Mode.QUADS)
             .withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST)
             .withUniform("uvs", UniformType.VEC4)
             .withDepthWrite(false)
