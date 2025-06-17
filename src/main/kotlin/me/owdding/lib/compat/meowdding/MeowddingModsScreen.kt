@@ -7,6 +7,7 @@ import me.owdding.ktmodules.Module
 import me.owdding.lib.MeowddingLib
 import me.owdding.lib.builder.DisplayFactory
 import me.owdding.lib.builder.LayoutFactory
+import me.owdding.lib.builder.MIDDLE
 import me.owdding.lib.displays.*
 import me.owdding.lib.layouts.BackgroundWidget
 import me.owdding.lib.layouts.ExpandingWidget
@@ -27,18 +28,27 @@ class MeowddingModsScreen : Screen(Text.of("Meowdding Mods")) {
 
     val background = MeowddingLib.id("background")
     val maxFeatureWidth by lazy { MeowddingFeatures.features.flatMap { it.value }.maxOf { McFont.width(it) } + 5 }
+    val modElementsWidth by lazy { width - maxFeatureWidth - 10 }
 
     override fun init() {
         val elements = MeowddingModsParser.mods.sortedByDescending { it.isInstalled }.map(::createElement)
-
-        LayoutFactory.vertical(3, 0.5f) {
-            horizontal { elements.forEach { widget(it) } }
-        }.apply {
-            FrameLayout.centerInRectangle(this, 0, 0, this@MeowddingModsScreen.width, this@MeowddingModsScreen.height)
-        }.visitWidgets(this::addRenderableWidget)
+        val maxElementsInRow = (modElementsWidth / elements.first().width).coerceAtLeast(1)
+        val chunked = elements.chunked(maxElementsInRow)
 
         featureList().apply {
             setPosition(0, 0)
+        }.visitWidgets(this::addRenderableWidget)
+
+        LayoutFactory.vertical(3, 0.5f) {
+            vertical(alignment = MIDDLE) {
+                chunked.forEach { columns ->
+                    horizontal {
+                        columns.forEach { element -> widget(element) }
+                    }
+                }
+            }
+        }.apply {
+            FrameLayout.centerInRectangle(this, maxFeatureWidth, 0, modElementsWidth, this@MeowddingModsScreen.height)
         }.visitWidgets(this::addRenderableWidget)
     }
 
