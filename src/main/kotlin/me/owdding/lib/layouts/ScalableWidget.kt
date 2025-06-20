@@ -41,8 +41,8 @@ class ScalableWidget(val original: AbstractWidget) : BaseParentWidget(original.w
     }
 
     private fun updateWidthHeight() {
-        width = original.width
-        height = original.height
+        width = (original.width * scale).floor()
+        height = (original.height * scale).floor()
     }
 
     override fun renderWidget(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
@@ -51,7 +51,7 @@ class ScalableWidget(val original: AbstractWidget) : BaseParentWidget(original.w
             original.y = (this@ScalableWidget.y / scale).floor()
             this@ScalableWidget.updateWidthHeight()
             currentScale.addLast(scale)
-            super.renderWidget(guiGraphics, (mouseX / scale).floor(), (mouseY / scale).floor(), partialTick)
+            original.render(guiGraphics, (mouseX / scale).floor(), (mouseY / scale).floor(), partialTick)
             currentScale.removeLast()
         }
     }
@@ -66,38 +66,39 @@ class ScalableWidget(val original: AbstractWidget) : BaseParentWidget(original.w
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int) = translated(mouseX, mouseY) { x, y ->
-        super.mouseClicked(x, y, button)
+        original.mouseClicked(x, y, button)
     }
 
     override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int) = translated(mouseX, mouseY) { x, y ->
-        super.mouseReleased(x, y, button)
+        original.mouseReleased(x, y, button)
     }
 
     override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, dragX: Double, dragY: Double) = translated(mouseX, mouseY) { x, y ->
-        super.mouseDragged(x, y, button, dragX / scale, dragY / scale)
+        original.mouseDragged(x, y, button, dragX / scale, dragY / scale)
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, scrollX: Double, scrollY: Double) = translated(mouseX, mouseY) { x, y ->
-        super.mouseScrolled(x, y, scrollX * scale, scrollY * scale)
+        original.mouseScrolled(x, y, scrollX * scale, scrollY * scale)
     }
 
     override fun mouseMoved(mouseX: Double, mouseY: Double) = translated(mouseX, mouseY) { x, y ->
-        super.mouseMoved(x, y)
+        original.mouseMoved(x, y)
     }
 
     override fun isMouseOver(mouseX: Double, mouseY: Double) = translated(mouseX, mouseY) { x, y ->
-        super.isMouseOver(x, y)
+        original.isMouseOver(x, y)
     }
 
     override fun getRectangle(): ScreenRectangle? {
-        val original = super<BaseParentWidget>.rectangle ?: return null
+        val original = original.rectangle ?: return null
         return ScreenRectangle(original.left(), original.top(), (original.width() * scale).floor(), (original.height() * scale).floor())
     }
 
     override fun getBorderForArrowNavigation(direction: ScreenDirection): ScreenRectangle? {
-        val original = super.getBorderForArrowNavigation(direction) ?: return null
+        val original = original.getBorderForArrowNavigation(direction) ?: return null
         return ScreenRectangle(original.left(), original.top(), (original.width() * scale).floor(), (original.height() * scale).floor())
     }
+
 
     override fun narrationPriority(): NarratableEntry.NarrationPriority? = original.narrationPriority()
 

@@ -34,6 +34,7 @@ dependencies {
     modImplementation(libs.olympus)
     modImplementation(libs.placeholders)
     modImplementation(libs.meowdding.patches)
+    modRuntimeOnly(rootProject.files("run/SkyBlockPv-1.2.2.jar"))
 
     modCompileOnly(libs.rconfig)
 
