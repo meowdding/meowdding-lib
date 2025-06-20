@@ -1,6 +1,7 @@
 package me.owdding.lib.compat.meowdding
 
 import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
+import com.teamresourceful.resourcefulconfig.client.utils.ConfigSearching
 import earth.terrarium.olympus.client.components.base.ListWidget
 import earth.terrarium.olympus.client.utils.ListenableState
 import me.owdding.ktmodules.Module
@@ -97,9 +98,14 @@ class MeowddingModsScreen : Screen(Text.of("Meowdding Mods")) {
 
                         features.forEach { feature ->
                             if (!feature.contains(input, ignoreCase = true)) return@forEach
-                            string(feature) {
-                                color = TextColor.GRAY
-                            }
+                            widget(
+                                Displays.text(feature, color = { TextColor.GRAY.toUInt() }).asButton {
+                                    McClient.setScreenAsync {
+                                        ConfigSearching.setSearch(feature)
+                                        ResourcefulConfigScreen.getFactory(mod.configId).apply(this@MeowddingModsScreen)
+                                    }
+                                },
+                            )
                         }
                         spacer(maxFeatureWidth)
                     }
