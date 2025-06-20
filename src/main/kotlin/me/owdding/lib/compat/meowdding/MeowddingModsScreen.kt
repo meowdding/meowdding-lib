@@ -117,7 +117,9 @@ class MeowddingModsScreen : Screen(Text.of("Meowdding Mods")) {
                 onChange = { updateList(it) },
             )
 
-            list = ListWidget(width, height)
+            list = ListWidget(width, height).apply {
+                withAutoFocus(false)
+            }
             widget(list)
             updateList()
         },
