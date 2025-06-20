@@ -10,6 +10,7 @@ import net.fabricmc.loader.api.FabricLoader
 import tech.thatgravyboat.skyblockapi.utils.http.Http
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import java.net.URI
+import java.util.concurrent.CompletableFuture
 
 private const val URL = "https://raw.githubusercontent.com/meowdding/meowdding-repo/refs/heads/master/data/resources/data/meowdding_mods.json"
 
@@ -22,11 +23,12 @@ object MeowddingModsParser {
     private val CODEC = MeowddingLibCodecs.getCodec<MeowddingMod>().listOf()
 
     init {
-        runBlocking {
-            mods = Http.getResult<JsonArray>(URL).getOrNull().toDataOrThrow(CODEC)
+        CompletableFuture.runAsync {
+            runBlocking {
+                mods = Http.getResult<JsonArray>(URL).getOrNull().toDataOrThrow(CODEC)
+            }
         }
     }
-
 }
 
 @GenerateCodec
