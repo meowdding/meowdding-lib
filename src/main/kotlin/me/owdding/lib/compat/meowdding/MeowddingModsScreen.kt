@@ -28,7 +28,7 @@ class MeowddingModsScreen : Screen(Text.of("Meowdding Mods")) {
 
     val background = MeowddingLib.id("background")
     val maxFeatureWidth by lazy { MeowddingFeatures.features.flatMap { it.value }.maxOf { McFont.width(it) } + 5 }
-    val modElementsWidth by lazy { width - maxFeatureWidth - 10 }
+    val modElementsWidth get() = width - maxFeatureWidth - 10
 
     override fun init() {
         val elements = MeowddingModsParser.mods.sortedByDescending { it.isInstalled }.map(::createElement)
@@ -112,8 +112,8 @@ class MeowddingModsScreen : Screen(Text.of("Meowdding Mods")) {
 
             textInput(
                 state = state,
-                placeholder = "Search...",
-                width = if (this@MeowddingModsScreen::list.isInitialized) list.width else 100,
+                placeholder = "Search for features...",
+                width = if (this@MeowddingModsScreen::list.isInitialized) list.width else 150,
                 onChange = { updateList(it) },
             )
 
