@@ -160,13 +160,13 @@ abstract class LayoutBuilder {
         textDisplay(text, color, shadow, { this }, init)
     }
 
-    open fun vertical(spacing: Int = 0, alignment: Float = 0f, builder: LayoutBuilder.() -> Unit) {
+    open fun vertical(spacing: Int = 0, alignment: Float = 0f, builder: VerticalLayoutBuilder.() -> Unit) {
         val builder = VerticalLayoutBuilder()
         builder.builder()
         widgets.add(builder.build(spacing, alignment))
     }
 
-    open fun horizontal(spacing: Int = 0, alignment: Float = 0f, builder: LayoutBuilder.() -> Unit) {
+    open fun horizontal(spacing: Int = 0, alignment: Float = 0f, builder: HorizontalLayoutBuilder.() -> Unit) {
         val builder = HorizontalLayoutBuilder()
         builder.builder()
         widgets.add(builder.build(spacing, alignment))
