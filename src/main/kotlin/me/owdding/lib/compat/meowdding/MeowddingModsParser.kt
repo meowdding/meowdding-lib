@@ -12,7 +12,7 @@ import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import java.net.URI
 import java.util.concurrent.CompletableFuture
 
-private const val URL = "https://raw.githubusercontent.com/meowdding/meowdding-repo/refs/heads/master/data/resources/data/meowdding_mods.json"
+private const val URL = "https://meowdd.ing/mod/info.json"
 
 @Module
 object MeowddingModsParser {
