@@ -160,13 +160,13 @@ abstract class LayoutBuilder {
         textDisplay(text, color, shadow, { this }, init)
     }
 
-    open fun vertical(spacing: Int = 0, alignment: Float = 0f, builder: VerticalLayoutBuilder.() -> Unit) {
+    open fun vertical(spacing: Int = 0, alignment: Float = 0f, builder: LayoutBuilder.() -> Unit) {
         val builder = VerticalLayoutBuilder()
         builder.builder()
         widgets.add(builder.build(spacing, alignment))
     }
 
-    open fun horizontal(spacing: Int = 0, alignment: Float = 0f, builder: HorizontalLayoutBuilder.() -> Unit) {
+    open fun horizontal(spacing: Int = 0, alignment: Float = 0f, builder: LayoutBuilder.() -> Unit) {
         val builder = HorizontalLayoutBuilder()
         builder.builder()
         widgets.add(builder.build(spacing, alignment))
@@ -198,7 +198,7 @@ abstract class LayoutBuilder {
 
     companion object {
         @Deprecated("Use the .setPos() in layouts/LayoutExtension.kt instead")
-        open fun Layout.setPos(x: Int, y: Int): Layout {
+        fun Layout.setPos(x: Int, y: Int): Layout {
             this.setPosition(x, y)
             return this
         }
