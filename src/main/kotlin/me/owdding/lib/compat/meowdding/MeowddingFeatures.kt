@@ -25,12 +25,12 @@ object MeowddingFeatures {
         categories().filterNot { it.value.info().isHidden }.forEach { addAll(it.value.getConfig()) }
     }
 
-    private fun ResourcefulConfigElement.getName(): List<String> = when (this) {
-        is ResourcefulConfigObjectEntryElement -> {
-            entry().elements().filterNot { it.isHidden }.flatMap { it.getName() }.takeUnless { isHidden } ?: emptyList()
+    private fun ResourcefulConfigElement.getName(): List<String> {
+        if (isHidden) return emptyList()
+        return when (this) {
+            is ResourcefulConfigObjectEntryElement -> entry().elements().filterNot { it.isHidden }.flatMap { it.getName() }
+            is ResourcefulConfigEntryElement -> listOf(entry().options().title().toLocalizedString())
+            else -> emptyList()
         }
-
-        is ResourcefulConfigEntryElement -> listOf(entry().options().title().toLocalizedString()).takeUnless { isHidden } ?: emptyList()
-        else -> emptyList()
     }
 }
