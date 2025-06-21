@@ -76,23 +76,23 @@ abstract class LayoutBuilder {
         add(LayoutElements(element) {})
     }
 
-    fun widget(widget: LayoutElement) {
+    open fun widget(widget: LayoutElement) {
         widgets.add(widget)
     }
 
-    fun LayoutElement.add() {
+    open fun LayoutElement.add() {
         this@LayoutBuilder.widget(this)
     }
 
-    fun widget(widget: List<LayoutElement>) {
+    open fun widget(widget: List<LayoutElement>) {
         widget.forEach(this::widget)
     }
 
-    fun List<LayoutElement>.add() {
+    open fun List<LayoutElement>.add() {
         this@LayoutBuilder.widget(this)
     }
 
-    fun widget(widget: LayoutElement, settings: LayoutSettings.() -> Unit) {
+    open fun widget(widget: LayoutElement, settings: LayoutSettings.() -> Unit) {
         if (widget is AbstractWidget) {
             widgets.add(LayoutElements(ScalableWidget(widget), settings))
             return
@@ -100,53 +100,53 @@ abstract class LayoutBuilder {
         widgets.add(LayoutElements(widget, settings))
     }
 
-    fun LayoutElement.add(settings: LayoutSettings.() -> Unit) {
+    open fun LayoutElement.add(settings: LayoutSettings.() -> Unit) {
         this@LayoutBuilder.widget(this, settings)
     }
 
-    fun string(text: String) {
+    open fun string(text: String) {
         widgets.add(Widgets.text(text))
     }
 
-    fun display(display: Display) {
+    open fun display(display: Display) {
         widgets.add(display.asWidget())
     }
 
-    fun Display.add() {
+    open fun Display.add() {
         this@LayoutBuilder.display(this)
     }
 
-    fun verticalDisplay(builder: DisplayBuilder.() -> Unit) {
+    open fun verticalDisplay(builder: DisplayBuilder.() -> Unit) {
         val display = VerticalDisplayBuilder()
         display.builder()
         display(display.build())
     }
 
-    fun horizontalDisplay(builder: DisplayBuilder.() -> Unit) {
+    open fun horizontalDisplay(builder: DisplayBuilder.() -> Unit) {
         val display = HorizontalDisplayBuilder()
         display.builder()
         display(display.build())
     }
 
-    fun layeredDisplay(builder: DisplayBuilder.() -> Unit) {
+    open fun layeredDisplay(builder: DisplayBuilder.() -> Unit) {
         val display = LayeredDisplayBuilder()
         display.builder()
         display(display.build())
     }
 
-    fun string(component: Component) {
+    open fun string(component: Component) {
         widgets.add(Widgets.text(component))
     }
 
-    fun string(text: String, init: MutableComponent.() -> Unit) {
+    open fun string(text: String, init: MutableComponent.() -> Unit) {
         string(Text.of(text, init))
     }
 
-    fun spacer(width: Int = 0, height: Int = 0) {
+    open fun spacer(width: Int = 0, height: Int = 0) {
         widgets.add(SpacerElement(width, height))
     }
 
-    fun textDisplay(
+    open fun textDisplay(
         text: String = "",
         color: UInt = 0x555555u,
         shadow: Boolean = false,
@@ -156,23 +156,23 @@ abstract class LayoutBuilder {
         Displays.text(Text.of(text, init), { color }, shadow = shadow).displayModifier().let { display(it) }
     }
 
-    fun textDisplay(text: String = "", color: UInt = 0x555555u, shadow: Boolean = false, init: MutableComponent.() -> Unit) {
+    open fun textDisplay(text: String = "", color: UInt = 0x555555u, shadow: Boolean = false, init: MutableComponent.() -> Unit) {
         textDisplay(text, color, shadow, { this }, init)
     }
 
-    fun vertical(spacing: Int = 0, alignment: Float = 0f, builder: VerticalLayoutBuilder.() -> Unit) {
+    open fun vertical(spacing: Int = 0, alignment: Float = 0f, builder: VerticalLayoutBuilder.() -> Unit) {
         val builder = VerticalLayoutBuilder()
         builder.builder()
         widgets.add(builder.build(spacing, alignment))
     }
 
-    fun horizontal(spacing: Int = 0, alignment: Float = 0f, builder: HorizontalLayoutBuilder.() -> Unit) {
+    open fun horizontal(spacing: Int = 0, alignment: Float = 0f, builder: HorizontalLayoutBuilder.() -> Unit) {
         val builder = HorizontalLayoutBuilder()
         builder.builder()
         widgets.add(builder.build(spacing, alignment))
     }
 
-    fun textInput(
+    open fun textInput(
         state: ListenableState<String>,
         placeholder: String = "",
         width: Int,
@@ -198,14 +198,14 @@ abstract class LayoutBuilder {
 
     companion object {
         @Deprecated("Use the .setPos() in layouts/LayoutExtension.kt instead")
-        fun Layout.setPos(x: Int, y: Int): Layout {
+        open fun Layout.setPos(x: Int, y: Int): Layout {
             this.setPosition(x, y)
             return this
         }
     }
 }
 
-class ScalableLinearLayout(orientation: Orientation, val spacing: Int, width: Int = 0, height: Int = 0) : LinearLayout(width, height, orientation),
+open class ScalableLinearLayout(orientation: Orientation, val spacing: Int, width: Int = 0, height: Int = 0) : LinearLayout(width, height, orientation),
     ScalableLayout {
 
     init {
@@ -228,7 +228,7 @@ class ScalableLinearLayout(orientation: Orientation, val spacing: Int, width: In
     }
 }
 
-class ScalableFrameLayout(width: Int, height: Int) : FrameLayout(width, height), ScalableLayout {
+open class ScalableFrameLayout(width: Int, height: Int) : FrameLayout(width, height), ScalableLayout {
     override fun scale(scale: Double) {
         this.visitChildren {
             if (it is Scalable) {
@@ -239,7 +239,7 @@ class ScalableFrameLayout(width: Int, height: Int) : FrameLayout(width, height),
     }
 }
 
-class FrameLayoutBuilder(val width: Int, val height: Int) : LayoutBuilder() {
+open class FrameLayoutBuilder(val width: Int, val height: Int) : LayoutBuilder() {
     override fun build(spacing: Int, alignment: Float): FrameLayout {
         val layout = ScalableFrameLayout(width, height)
         widgets.forEach { layout.addChild(it.element, it.settings) }
@@ -248,7 +248,7 @@ class FrameLayoutBuilder(val width: Int, val height: Int) : LayoutBuilder() {
     }
 }
 
-class VerticalLayoutBuilder : LayoutBuilder() {
+open class VerticalLayoutBuilder : LayoutBuilder() {
     override fun build(spacing: Int, alignment: Float): LinearLayout {
         val layout = ScalableLinearLayout.vertical(spacing)
         widgets.forEach { layout.addChild(it.element, layout.newCellSettings().alignHorizontally(alignment).apply(it.settings)) }
@@ -257,7 +257,7 @@ class VerticalLayoutBuilder : LayoutBuilder() {
     }
 }
 
-class HorizontalLayoutBuilder : LayoutBuilder() {
+open class HorizontalLayoutBuilder : LayoutBuilder() {
     override fun build(spacing: Int, alignment: Float): LinearLayout {
         val layout = ScalableLinearLayout.horizontal(spacing)
         widgets.forEach { layout.addChild(it.element, layout.newCellSettings().alignVertically(alignment).apply(it.settings)) }
