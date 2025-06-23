@@ -1,4 +1,4 @@
-package me.owdding.lib.utils
+package me.owdding.lib.compat
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
@@ -28,9 +28,9 @@ import java.util.function.Predicate
 
 object RemoteConfig {
     fun lockConfig(config: ResourcefulConfig, url: String, mod: ModContainer) {
-        runCatching {
+        val result = runCatching {
             runBlocking {
-                val data = Http.getResult<JsonObject>(url).getOrNull() ?: return@runBlocking
+                val data = Http.getResult<JsonObject>(url).getOrThrow()
                 val patches = data.asMap { string, element -> VersionIntervalParser.parse(string) to element as? JsonObject }
 
                 for ((version, data) in patches) {
@@ -41,10 +41,15 @@ object RemoteConfig {
                 }
             }
         }
+        result.exceptionOrNull()?.printStackTrace()
     }
 }
 
-internal class HiddenElement(val title: Component, val description: Component) : ResourcefulConfigElement {
+internal class HiddenElement(
+    val title: Component,
+    val description: Component,
+    val message: String?
+) : ResourcefulConfigElement {
     override fun search(p0: Predicate<String>): Boolean = false
     override fun renderer(): ResourceLocation = HiddenElementRenderer.ID
 }
@@ -63,10 +68,10 @@ internal class HiddenElementRenderer(element: ResourcefulConfigElement) : Resour
             { }
         )
 
-        button.tooltip = Tooltip.create(
+        button.tooltip = Tooltip.create(entry?.message?.let(Text::of) ?: Text.multiline(
             Text.of("This config element is disabled.") { this.color = TextColor.RED },
             Text.of("This config element is not available in this version of the mod.") { this.color = TextColor.GRAY }
-        )
+        ))
 
         return listOf(button)
     }
@@ -104,12 +109,16 @@ private fun lockElements(entries: MutableList<ResourcefulConfigElement>, data: J
 
             element is ResourcefulConfigEntryElement && element.entry() is ResourcefulConfigValueEntry -> {
                 val data = data.get(element.id())
-                if (data != null) {
-                    lockEntry(element.entry() as ResourcefulConfigValueEntry, data)
+                if (data is JsonObject) {
+                    val value = data.get("@value")
+                    val message = data.get("@message")?.asString?.takeUnless { it.isEmpty() }
+
+                    lockEntry(element.entry() as ResourcefulConfigValueEntry, value)
 
                     return@replaceAll HiddenElement(
                         element.entry().options().title.toComponent(),
-                        element.entry().options().comment.toComponent()
+                        element.entry().options().comment.toComponent(),
+                        message
                     )
                 }
             }
