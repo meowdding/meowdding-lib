@@ -1,7 +1,7 @@
 package me.owdding.lib
 
 import me.owdding.lib.generated.MeowddingLibModules
-import me.owdding.lib.utils.HiddenElementRenderer
+import me.owdding.lib.compat.HiddenElementRenderer
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.resources.ResourceLocation
