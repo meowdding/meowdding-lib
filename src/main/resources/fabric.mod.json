@@ -23,11 +23,15 @@
     ]
   },
   "depends": {
-    "fabricloader": ">=0.16.10",
     "fabric": "*",
-    "minecraft": "1.21.5",
-    "hypixel-mod-api": ">=1.0.1",
-    "fabric-language-kotlin": ">=1.12.3"
+    "minecraft": "${minecraft}",
+    "fabricloader": ">=${fabricLoader}",
+    "fabric-language-kotlin": ">=${fabricLanguageKotlin}",
+    "meowdding-patches": ">=${meowddingPatches}",
+    "resourcefullib": ">=${resourcefullib}",
+    "skyblock-api": ">=${skyblockApi}",
+    "olympus": ">=${olympus}",
+    "placeholder-api": ">=${placeholderApi}"
   },
   "mixins": [
     {
