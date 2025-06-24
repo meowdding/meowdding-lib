@@ -30,9 +30,9 @@ dependencies {
         officialMojangMappings()
         parchment("org.parchmentmc.data:parchment-1.21.3:2024.12.07@zip")
     })
-    modImplementation(libs.loader)
-    modImplementation(libs.fabrickotlin)
-    modImplementation(libs.fabric)
+    modImplementation(libs.fabric.loader)
+    modImplementation(libs.fabric.language.kotlin)
+    modImplementation(libs.fabric.api)
 
     modImplementation(libs.hypixelapi)
     modImplementation(libs.skyblockapi)
@@ -62,8 +62,17 @@ tasks {
     processResources {
         inputs.property("version", project.version)
         filesMatching("fabric.mod.json") {
-            expand(getProperties())
-            expand(mutableMapOf("version" to project.version))
+            expand(
+                "version" to project.version,
+                "minecraft" to libs.versions.minecraft.get(),
+                "fabricLoader" to libs.versions.fabric.loader.get(),
+                "fabricLanguageKotlin" to libs.versions.fabric.language.kotlin.get(),
+                "meowddingPatches" to libs.versions.meowdding.patches.get(),
+                "resourcefullib" to libs.versions.rlib.get(),
+                "skyblockApi" to libs.versions.skyblockapi.get(),
+                "olympus" to libs.versions.olympus.get(),
+                "placeholderApi" to libs.versions.placeholders.get(),
+            )
         }
     }
 
