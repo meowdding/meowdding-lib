@@ -5,6 +5,7 @@ import earth.terrarium.olympus.client.components.base.BaseParentWidget
 import me.owdding.lib.extensions.floor
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
+import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.narration.NarratableEntry
 import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.client.gui.navigation.ScreenDirection
@@ -89,6 +90,18 @@ class ScalableWidget(val original: AbstractWidget) : BaseParentWidget(original.w
         original.isMouseOver(x, y)
     }
 
+    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        return original.keyPressed(keyCode, scanCode, modifiers)
+    }
+
+    override fun keyReleased(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        return original.keyReleased(keyCode, scanCode, modifiers)
+    }
+
+    override fun charTyped(codePoint: Char, modifiers: Int): Boolean {
+        return original.charTyped(codePoint, modifiers)
+    }
+
     override fun getRectangle(): ScreenRectangle? {
         val original = original.rectangle ?: return null
         return ScreenRectangle(original.left(), original.top(), (original.width() * scale).floor(), (original.height() * scale).floor())
@@ -99,6 +112,15 @@ class ScalableWidget(val original: AbstractWidget) : BaseParentWidget(original.w
         return ScreenRectangle(original.left(), original.top(), (original.width() * scale).floor(), (original.height() * scale).floor())
     }
 
+    override fun setFocused(focused: GuiEventListener?) {
+        super.setFocused(focused)
+        original.isFocused = focused == this
+    }
+
+    override fun setFocused(focused: Boolean) {
+        super.setFocused(focused)
+        original.isFocused = focused
+    }
 
     override fun narrationPriority(): NarratableEntry.NarrationPriority? = original.narrationPriority()
 
