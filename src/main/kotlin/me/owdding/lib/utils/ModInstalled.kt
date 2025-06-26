@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package me.owdding.lib.utils
 
 import net.fabricmc.loader.api.FabricLoader
@@ -9,12 +11,19 @@ enum class KnownMods(val modId: String) {
     SKYCUBED("skycubed"),
     SKYBLOCK_PV("skyblockpv"),
     SKYOCEAN("skyocean"),
+    SKYBLOCK_RPC("skyblockrpc"),
 
-    // Other (potentially important for compat)
+    // Other SkyBlock
     SKYBLOCKER("skyblocker"),
     AARONS_MOD("aaron-mod"),
+    SKYHANNI("skyhanni"),
+    SKYTILS("skytils"),
+    FIRMAMENT("firmament"),
+
+    // "Performance" Mods
     SODIUM("sodium"),
     IRIS("iris"),
+    IMMEDIATLYFAST("immediatelyfast")
     ;
 
     val installed by lazy { FabricLoader.getInstance().isModLoaded(modId) }
