@@ -13,6 +13,8 @@ import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.*
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.ItemLike
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
 @Deprecated(message = "Deprecated in favour of LayoutFactory", replaceWith = ReplaceWith("LayoutFactory"))
@@ -80,16 +82,8 @@ abstract class LayoutBuilder {
         widgets.add(widget)
     }
 
-    open fun LayoutElement.add() {
-        this@LayoutBuilder.widget(this)
-    }
-
     open fun widget(widget: List<LayoutElement>) {
         widget.forEach(this::widget)
-    }
-
-    open fun List<LayoutElement>.add() {
-        this@LayoutBuilder.widget(this)
     }
 
     open fun widget(widget: LayoutElement, settings: LayoutSettings.() -> Unit) {
@@ -100,38 +94,8 @@ abstract class LayoutBuilder {
         widgets.add(LayoutElements(widget, settings))
     }
 
-    open fun LayoutElement.add(settings: LayoutSettings.() -> Unit) {
-        this@LayoutBuilder.widget(this, settings)
-    }
-
     open fun string(text: String) {
         widgets.add(Widgets.text(text))
-    }
-
-    open fun display(display: Display) {
-        widgets.add(display.asWidget())
-    }
-
-    open fun Display.add() {
-        this@LayoutBuilder.display(this)
-    }
-
-    open fun verticalDisplay(builder: DisplayBuilder.() -> Unit) {
-        val display = VerticalDisplayBuilder()
-        display.builder()
-        display(display.build())
-    }
-
-    open fun horizontalDisplay(builder: DisplayBuilder.() -> Unit) {
-        val display = HorizontalDisplayBuilder()
-        display.builder()
-        display(display.build())
-    }
-
-    open fun layeredDisplay(builder: DisplayBuilder.() -> Unit) {
-        val display = LayeredDisplayBuilder()
-        display.builder()
-        display(display.build())
     }
 
     open fun string(component: Component) {
@@ -140,6 +104,30 @@ abstract class LayoutBuilder {
 
     open fun string(text: String, init: MutableComponent.() -> Unit) {
         string(Text.of(text, init))
+    }
+
+    open fun display(display: Display) {
+        widgets.add(display.asWidget())
+    }
+
+    open fun item(
+        item: ItemStack,
+        width: Int = 16,
+        height: Int = 16,
+        showTooltip: Boolean = false,
+        showStackSize: Boolean = false,
+        customStackText: Any? = null,
+    ) {
+        display(Displays.item(item, width, height, showTooltip, showStackSize, customStackText))
+    }
+
+    open fun item(
+        item: ItemLike,
+        width: Int = 16,
+        height: Int = 16,
+        customStackText: Any? = null,
+    ) {
+        display(Displays.item(item, width, height, customStackText = customStackText))
     }
 
     open fun spacer(width: Int = 0, height: Int = 0) {
@@ -158,18 +146,6 @@ abstract class LayoutBuilder {
 
     open fun textDisplay(text: String = "", color: UInt = 0x555555u, shadow: Boolean = false, init: MutableComponent.() -> Unit) {
         textDisplay(text, color, shadow, { this }, init)
-    }
-
-    open fun vertical(spacing: Int = 0, alignment: Float = 0f, builder: VerticalLayoutBuilder.() -> Unit) {
-        val builder = VerticalLayoutBuilder()
-        builder.builder()
-        widgets.add(builder.build(spacing, alignment))
-    }
-
-    open fun horizontal(spacing: Int = 0, alignment: Float = 0f, builder: HorizontalLayoutBuilder.() -> Unit) {
-        val builder = HorizontalLayoutBuilder()
-        builder.builder()
-        widgets.add(builder.build(spacing, alignment))
     }
 
     open fun textInput(
@@ -192,6 +168,58 @@ abstract class LayoutBuilder {
         input.withSize(width, height)
 
         widget(input)
+    }
+
+    /**
+     * Builder in Builder
+     */
+    open fun verticalDisplay(builder: DisplayBuilder.() -> Unit) {
+        val display = VerticalDisplayBuilder()
+        display.builder()
+        display(display.build())
+    }
+
+    open fun horizontalDisplay(builder: DisplayBuilder.() -> Unit) {
+        val display = HorizontalDisplayBuilder()
+        display.builder()
+        display(display.build())
+    }
+
+    open fun layeredDisplay(builder: DisplayBuilder.() -> Unit) {
+        val display = LayeredDisplayBuilder()
+        display.builder()
+        display(display.build())
+    }
+
+    open fun vertical(spacing: Int = 0, alignment: Float = 0f, builder: VerticalLayoutBuilder.() -> Unit) {
+        val builder = VerticalLayoutBuilder()
+        builder.builder()
+        widgets.add(builder.build(spacing, alignment))
+    }
+
+    open fun horizontal(spacing: Int = 0, alignment: Float = 0f, builder: HorizontalLayoutBuilder.() -> Unit) {
+        val builder = HorizontalLayoutBuilder()
+        builder.builder()
+        widgets.add(builder.build(spacing, alignment))
+    }
+
+    /**
+     * Adding to the current layout.
+     */
+    open fun LayoutElement.add() {
+        this@LayoutBuilder.widget(this)
+    }
+
+    open fun LayoutElement.add(settings: LayoutSettings.() -> Unit) {
+        this@LayoutBuilder.widget(this, settings)
+    }
+
+    open fun List<LayoutElement>.add() {
+        this@LayoutBuilder.widget(this)
+    }
+
+    open fun Display.add() {
+        this@LayoutBuilder.display(this)
     }
 
     abstract fun build(spacing: Int = 0, alignment: Float = 0.0f): Layout

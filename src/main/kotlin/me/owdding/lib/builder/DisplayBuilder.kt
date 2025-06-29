@@ -3,6 +3,8 @@ package me.owdding.lib.builder
 import me.owdding.lib.displays.*
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.ItemLike
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
 object DisplayFactory {
@@ -37,6 +39,27 @@ abstract class DisplayBuilder {
     fun string(text: String, init: MutableComponent.() -> Unit) {
         string(Text.of(text, init))
     }
+
+    open fun item(
+        item: ItemStack,
+        width: Int = 16,
+        height: Int = 16,
+        showTooltip: Boolean = false,
+        showStackSize: Boolean = false,
+        customStackText: Any? = null,
+    ) {
+        display(Displays.item(item, width, height, showTooltip, showStackSize, customStackText))
+    }
+
+    open fun item(
+        item: ItemLike,
+        width: Int = 16,
+        height: Int = 16,
+        customStackText: Any? = null,
+    ) {
+        display(Displays.item(item, width, height, customStackText = customStackText))
+    }
+
 
     fun spacer(width: Int = 0, height: Int = 0) {
         displays.add(Displays.empty(width, height))
