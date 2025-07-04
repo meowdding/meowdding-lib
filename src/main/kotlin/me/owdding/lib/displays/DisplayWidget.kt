@@ -36,7 +36,7 @@ class DisplayWidget(private val display: Display): BaseWidget() {
     companion object {
         fun <T : AbstractWidget> displayRenderer(display: Display) = WidgetRenderer<T> { graphics, context, _ ->
             graphics.translated(context.x, context.y) {
-                scale(context.width.toFloat() / display.getWidth().toFloat(), context.height.toFloat() / display.getHeight().toFloat(), 0f)
+                scale(context.width.toFloat() / display.getWidth().toFloat(), context.height.toFloat() / display.getHeight().toFloat(), 1f)
                 display.render(graphics, 0, 0)
             }
         }
