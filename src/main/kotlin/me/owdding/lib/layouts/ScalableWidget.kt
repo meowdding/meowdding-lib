@@ -114,7 +114,7 @@ class ScalableWidget(val original: AbstractWidget) : BaseParentWidget(original.w
 
     override fun setFocused(focused: GuiEventListener?) {
         super.setFocused(focused)
-        original.isFocused = focused == this
+        original.isFocused = focused == original || focused == this
     }
 
     override fun setFocused(focused: Boolean) {
