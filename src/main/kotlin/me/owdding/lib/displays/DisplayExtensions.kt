@@ -1,5 +1,6 @@
 package me.owdding.lib.displays
 
+import com.mojang.blaze3d.platform.InputConstants
 import earth.terrarium.olympus.client.components.buttons.Button
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
@@ -74,14 +75,21 @@ fun Display.withTooltip(builder: TooltipBuilder.() -> Unit): Display = TooltipBu
 
 fun Display.withTooltip(vararg tooltip: Any?): Display = Displays.tooltip(this, Text.multiline(*tooltip))
 
-fun Display.asButton(action: (Button) -> Unit): Button {
-    val button = Button()
-    button.withTexture(null)
-    button.withRenderer(DisplayWidget.displayRenderer(this))
-    button.setSize(this.getWidth(), this.getHeight())
-    button.withCallback { action(button) }
+@Deprecated("Use asButtonLeft instead", ReplaceWith("asButtonLeft(action)"))
+fun Display.asButton(action: (Button) -> Unit) = asButton(leftClick = action)
 
-    return button
+fun Display.asButtonLeft(action: (Button) -> Unit) = asButton(leftClick = action)
+
+fun Display.asButtonRight(action: (Button) -> Unit) = asButton(rightClick = action)
+
+fun Display.asButton(leftClick: (Button) -> Unit = {}, rightClick: (Button) -> Unit = {}) = Button().apply {
+    val display = this@asButton
+
+    withTexture(null)
+    withRenderer(DisplayWidget.displayRenderer(display))
+    setSize(display.getWidth(), display.getHeight())
+    withCallback(InputConstants.MOUSE_BUTTON_LEFT) { leftClick(this) }
+    withCallback(InputConstants.MOUSE_BUTTON_RIGHT) { rightClick(this) }
 }
 
 fun Display.withPadding(padding: Int = 0, left: Int? = null, right: Int? = null, top: Int? = null, bottom: Int? = null): Display =
