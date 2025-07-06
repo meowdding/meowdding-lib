@@ -15,3 +15,7 @@ fun Layout.setPos(x: Int, y: Int): Layout {
     this.setPosition(x, y)
     return this
 }
+
+fun LayoutElement.withPadding(padding: Int): AbstractWidget = PaddedWidget(this, padding)
+fun LayoutElement.withPadding(paddingTop: Int, paddingRight: Int, paddingBottom: Int, paddingLeft: Int): AbstractWidget =
+    PaddedWidget(this, paddingTop, paddingRight, paddingBottom, paddingLeft)
