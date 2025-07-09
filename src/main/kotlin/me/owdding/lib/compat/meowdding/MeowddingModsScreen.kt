@@ -1,7 +1,7 @@
 package me.owdding.lib.compat.meowdding
 
 import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
-import com.teamresourceful.resourcefulconfig.client.utils.ConfigSearching
+import com.teamresourceful.resourcefulconfig.common.config.Configurations
 import earth.terrarium.olympus.client.components.base.ListWidget
 import earth.terrarium.olympus.client.utils.ListenableState
 import me.owdding.ktmodules.Module
@@ -68,7 +68,7 @@ class MeowddingModsScreen : Screen(Text.of("Meowdding Mods")) {
 
         val withBackground = listOf(main, Displays.empty(height * 2, height - 10)).asLayer().withPadding(5).withBackground(0xAA000000u)
 
-        val button = withBackground.asButton {
+        val button = withBackground.asButtonLeft {
             if (mod.isInstalled) {
                 McClient.setScreenAsync(ResourcefulConfigScreen.getFactory(mod.configId).apply(this))
             } else {
@@ -99,10 +99,13 @@ class MeowddingModsScreen : Screen(Text.of("Meowdding Mods")) {
                         features.forEach { feature ->
                             if (!feature.contains(input, ignoreCase = true)) return@forEach
                             widget(
-                                Displays.text(feature, color = { TextColor.GRAY.toUInt() }).asButton {
+                                Displays.text(feature, color = { TextColor.GRAY.toUInt() }).asButtonLeft {
+                                    val config = Configurations.INSTANCE.getConfig(mod.configId + "/config") ?: return@asButtonLeft
                                     McClient.setScreenAsync {
-                                        ConfigSearching.setSearch(feature)
-                                        ResourcefulConfigScreen.getFactory(mod.configId).apply(this@MeowddingModsScreen)
+                                        ResourcefulConfigScreen.make(config)
+                                            .withParent(this@MeowddingModsScreen)
+                                            .withQuery(feature)
+                                            .build()
                                     }
                                 },
                             )

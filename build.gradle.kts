@@ -52,8 +52,6 @@ dependencies {
     include(libs.placeholders)
     include(libs.meowdding.patches)
 
-    modCompileOnly(libs.rconfig)
-
     modRuntimeOnly(libs.devauth)
     modRuntimeOnly(libs.modmenu)
 }
