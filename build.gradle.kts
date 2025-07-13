@@ -1,7 +1,5 @@
 @file:Suppress("UnstableApiUsage")
 
-import org.gradle.kotlin.dsl.assign
-import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -38,11 +36,6 @@ tasks.withType<KotlinCompile>().configureEach {
     }
 }
 
-val kspAll: Configuration by configurations.creating {
-    isCanBeResolved = true
-    isCanBeConsumed = true
-}
-
 dependencies {
     compileOnly(libs.meowdding.ktmodules)
     ksp(libs.meowdding.ktmodules)
@@ -66,10 +59,10 @@ cloche {
         dependencies {
             compileOnly(libs.meowdding.ktcodecs)
             compileOnly(libs.meowdding.ktmodules)
+
             modImplementation(libs.hypixelapi)
-            modImplementation(libs.skyblockapi)
-            modImplementation(libs.resourceful.lib)
-            modImplementation(libs.olympus)
+            modImplementation(project.dependencies.variantOf(libs.skyblockapi) { artifactType("jar") })
+            modImplementation(libs.resourceful.lib1215)
             modImplementation(libs.placeholders) { isTransitive = false }
             modImplementation(libs.meowdding.patches) { isTransitive = false }
             modImplementation(libs.resourceful.config) { isTransitive = false }
@@ -85,16 +78,24 @@ cloche {
         version: String = name,
         loaderVersion: Provider<String> = libs.versions.fabric.loader,
         fabricApiVersion: Provider<String> = libs.versions.fabric.api,
+        dependencies: MutableMap<String, Provider<MinimalExternalModuleDependency>>.() -> Unit = { },
     ) {
+        val dependencies = mutableMapOf<String, Provider<MinimalExternalModuleDependency>>().apply(dependencies)
+        val rlib = dependencies["resourcefullib"]!!
+        val olympus = dependencies["olympus"]!!
+
         fabric(name) {
             includedClient()
             minecraftVersion = version
             this.loaderVersion = loaderVersion.get()
 
             include(libs.hypixelapi)
-            include(libs.skyblockapi)
-            include(libs.resourceful.lib)
-            include(libs.olympus)
+            include(project.dependencies.variantOf(libs.skyblockapi) {
+                classifier(version)
+                artifactType("jar")
+            })
+            include(rlib)
+            include(olympus)
             include(libs.placeholders)
             include(libs.meowdding.patches)
 
@@ -120,15 +121,16 @@ cloche {
 
                 dependency("fabricloader", libs.versions.fabric.loader)
                 dependency("fabric-language-kotlin", libs.versions.fabric.language.kotlin)
-                dependency("meowdding-patches", libs.versions.meowdding.patches)
-                dependency("resourcefullib", libs.versions.rlib)
+//                 dependency("meowdding-patches", libs.versions.meowdding.patches)
+//                 dependency("resourcefullib", libs.versions.rlib)
                 dependency("skyblock-api", libs.versions.skyblockapi)
-                dependency("olympus", libs.versions.olympus)
-                dependency("placeholder-api", libs.versions.placeholders)
+//                 dependency("olympus", libs.versions.olympus)
+//                 dependency("placeholder-api", libs.versions.placeholders)
             }
 
             dependencies {
                 fabricApi(fabricApiVersion, minecraftVersion)
+                modImplementation(olympus)
             }
 
             runs {
@@ -137,34 +139,19 @@ cloche {
         }
     }
 
-    createVersion("1.21.5", fabricApiVersion = provider { "0.127.1" })
-    createVersion("1.21.7")
+    createVersion("1.21.5", fabricApiVersion = provider { "0.127.1" }) {
+        this["resourcefullib"] = libs.resourceful.lib1215
+        this["olympus"] = libs.olympus.lib1215
+    }
+    createVersion("1.21.7") {
+        this["resourcefullib"] = libs.resourceful.lib1217
+        this["olympus"] = libs.olympus.lib1217
+    }
 
     mappings { official() }
 }
 
 tasks {
-    processResources {
-        inputs.property("version", project.version)
-        filesMatching("fabric.mod.json") {
-            expand(
-                "version" to project.version,
-                "minecraft" to libs.versions.minecraft.get(),
-                "fabricLoader" to libs.versions.fabric.loader.get(),
-                "fabricLanguageKotlin" to libs.versions.fabric.language.kotlin.get(),
-                "meowddingPatches" to libs.versions.meowdding.patches.get(),
-                "resourcefullib" to libs.versions.rlib.get(),
-                "skyblockApi" to libs.versions.skyblockapi.get(),
-                "olympus" to libs.versions.olympus.get(),
-                "placeholderApi" to libs.versions.placeholders.get(),
-            )
-        }
-    }
-
-    jar {
-        from("LICENSE")
-    }
-
     compileKotlin {
         compilerOptions {
             jvmTarget = JvmTarget.JVM_21

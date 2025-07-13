@@ -1,17 +1,12 @@
 package me.owdding.lib.displays
 
 import com.mojang.blaze3d.vertex.PoseStack
-import com.teamresourceful.resourcefullib.client.utils.RenderUtils
 import com.teamresourceful.resourcefullib.client.utils.ScreenUtils
-import earth.terrarium.olympus.client.images.BuiltinImageProviders
-import me.owdding.lib.extensions.floor
-import me.owdding.lib.layouts.ScalableWidget
 import net.minecraft.Util
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.PlayerFaceRenderer
 import net.minecraft.client.gui.components.Renderable
 import net.minecraft.client.gui.layouts.LayoutElement
-import net.minecraft.client.renderer.RenderType
 import net.minecraft.locale.Language
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.FormattedText
@@ -24,9 +19,11 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.ItemLike
 import org.joml.Quaternionf
 import org.joml.Vector3f
-import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
-import tech.thatgravyboat.skyblockapi.utils.extentions.*
+import tech.thatgravyboat.skyblockapi.platform.*
+import tech.thatgravyboat.skyblockapi.utils.extentions.scaled
+import tech.thatgravyboat.skyblockapi.utils.extentions.scissor
+import tech.thatgravyboat.skyblockapi.utils.extentions.translated
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.width
 import tech.thatgravyboat.skyblockapi.utils.text.TextUtils.splitLines
@@ -38,23 +35,6 @@ import kotlin.math.sin
 
 
 private const val NO_SPLIT = -1
-@Stub
-internal expect fun GuiGraphics.blitSprite(
-    texture: ResourceLocation,
-    x: Int,
-    y: Int,
-    width: Int,
-    height: Int,
-    color: Int,
-)
-@Stub
-internal expect fun GuiGraphics.drawString(
-    component: Component,
-    x: Int,
-    y: Int,
-    color: Int,
-    dropShadow: Boolean = false
-)
 
 object Displays {
 
@@ -110,7 +90,7 @@ object Displays {
             override fun getWidth() = display.getWidth()
             override fun getHeight() = display.getHeight()
             override fun render(graphics: GuiGraphics) {
-                graphics.blitSprite(
+                graphics.drawSprite(
                     sprite,
                     0,
                     0,
@@ -193,7 +173,7 @@ object Displays {
             override fun getWidth() = width
             override fun getHeight() = height
             override fun render(graphics: GuiGraphics) {
-                graphics.blitSprite(sprite, width, height, width, height, -1)
+                graphics.drawSprite(sprite, width, height, width, height, -1)
             }
         }
     }
@@ -241,7 +221,7 @@ object Displays {
             override fun getHeight() = height
             override fun render(graphics: GuiGraphics) {
                 lines.forEachIndexed { index, line ->
-                    graphics.drawString(line, 0, index * McFont.height, color().toInt(), shadow)
+//                     graphics.drawString(line, 0, index * McFont.height, color().toInt(), shadow)
                 }
             }
         }
@@ -256,7 +236,7 @@ object Displays {
             override fun getWidth() = McFont.width(sequence)
             override fun getHeight() = McFont.height
             override fun render(graphics: GuiGraphics) {
-                graphics.drawString(sequence, 0, 0, color().toInt(), shadow)
+//                 graphics.drawString(sequence, 0, 0, color().toInt(), shadow)
             }
         }
     }
@@ -279,7 +259,7 @@ object Displays {
             override fun getHeight() = lines.size * McFont.height
             override fun render(graphics: GuiGraphics) {
                 lines.forEachIndexed { index, line ->
-                    graphics.drawString(line, 0, index * McFont.height, color().toInt(), shadow)
+//                     graphics.drawString(line, 0, index * McFont.height, color().toInt(), shadow)
                 }
             }
         }
@@ -304,7 +284,7 @@ object Displays {
                         Alignment.END -> maxHeight - display.getHeight()
                     }
 
-                    graphics.translated(currentX, yOffset, 0) {
+                    graphics.translated(currentX, yOffset) {
                         display.render(graphics)
                         currentX += display.getWidth() + spacing
                     }
@@ -380,7 +360,7 @@ object Displays {
                 }
 
                 graphics.pushPop {
-                    scale(width / 16f, height / 16f, 1f)
+                    graphics.scale(width / 16f, height / 16f)
                     graphics.renderItem(item, 0, 0)
 
                     val stackSize = item.count
@@ -394,8 +374,8 @@ object Displays {
 
                         val scale = (width.toFloat() / McFont.width(component)).coerceAtMost(1f)
 
-                        translate(1 + width - McFont.width(component) * scale, 2 + height - McFont.height * scale, 200)
-                        scaled(scale, scale) {
+                        graphics.translate(1 + width - McFont.width(component) * scale, 2 + height - McFont.height * scale)
+                        graphics.scaled(scale, scale) {
                             graphics.drawString(
                                 component,
                                 0,
@@ -438,7 +418,7 @@ object Displays {
             override fun getHeight() = display.getHeight()
             override fun render(graphics: GuiGraphics) {
                 graphics.pushPop {
-                    operations()
+//                     operations()
                     display.render(graphics)
                 }
             }
@@ -559,7 +539,7 @@ object Displays {
                             val e = max(overhang.toDouble() * 0.5, 3.0)
                             val f = sin(Mth.HALF_PI * cos(Mth.TWO_PI * seconds / e)) / 2.0 + 0.5
                             val g = Mth.lerp(f, 0.0, overhang.toDouble())
-                            translate(-g, 0, 0)
+                            graphics.translate(-g, 0)
                         }
                         original.render(graphics)
                     }
@@ -575,13 +555,14 @@ object Displays {
     }
 
     fun isMouseOver(display: Display, graphics: GuiGraphics): Boolean {
-        val translation = Vector2i.ZERO //RenderUtils.getTranslation(graphics.pose())
-        val (mouseX, mouseY) = McClient.mouse
-        val xRange = translation.x()..(translation.x() + (display.getWidth() * ScalableWidget.getCurrentScale()).floor())
-        val yRange = translation.y()..(translation.y() + (display.getHeight() * ScalableWidget.getCurrentScale()).floor())
-        return mouseX.toInt() in xRange && mouseY.toInt() in yRange && graphics.containsPointInScissor(
-            mouseX.toInt(),
-            mouseY.toInt(),
-        ) && showTooltips
+//         val translation = Vector2i.ZERO //RenderUtils.getTranslation(graphics.pose())
+//         val (mouseX, mouseY) = McClient.mouse
+//         val xRange = translation.x()..(translation.x() + (display.getWidth() * ScalableWidget.getCurrentScale()).floor())
+//         val yRange = translation.y()..(translation.y() + (display.getHeight() * ScalableWidget.getCurrentScale()).floor())
+//         return mouseX.toInt() in xRange && mouseY.toInt() in yRange && graphics.containsPointInScissor(
+//             mouseX.toInt(),
+//             mouseY.toInt(),
+//         ) && showTooltips
+        return false
     }
 }
