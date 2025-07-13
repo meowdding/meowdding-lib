@@ -5,6 +5,8 @@ import kotlinx.coroutines.runBlocking
 import net.fabricmc.loader.api.ModContainer
 import net.fabricmc.loader.api.Version
 import net.minecraft.SharedConstants
+import net.minecraft.WorldVersion
+import net.msrandom.stub.Stub
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
@@ -12,6 +14,9 @@ import tech.thatgravyboat.skyblockapi.utils.http.Http
 import java.util.concurrent.CompletableFuture
 
 private const val URL = "https://api.modrinth.com/v2/project/%project%/version"
+
+@Stub
+internal expect val WorldVersion.name: String
 
 class MeowddingUpdateChecker(val projectSlug: String, val modContainer: ModContainer, val callback: UpdateCallback) {
 

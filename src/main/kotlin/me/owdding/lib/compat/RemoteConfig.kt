@@ -48,7 +48,7 @@ object RemoteConfig {
 internal class HiddenElement(
     val title: Component,
     val description: Component,
-    val message: String?
+    val message: String?,
 ) : ResourcefulConfigElement {
     override fun search(p0: Predicate<String>): Boolean = false
     override fun renderer(): ResourceLocation = HiddenElementRenderer.ID
@@ -65,13 +65,17 @@ internal class HiddenElementRenderer(element: ResourcefulConfigElement) : Resour
         val button = ResourcefulConfigUI.button(
             0, 0, 96, 12,
             Text.of("Disabled") { this.color = TextColor.RED },
-            { }
+            { },
         )
 
-        button.tooltip = Tooltip.create(entry?.message?.let(Text::of) ?: Text.multiline(
-            Text.of("This config element is disabled.") { this.color = TextColor.RED },
-            Text.of("This config element is not available in this version of the mod.") { this.color = TextColor.GRAY }
-        ))
+        button.setTooltip(
+            Tooltip.create(
+                entry?.message?.let(Text::of) ?: Text.multiline(
+                    Text.of("This config element is disabled.") { this.color = TextColor.RED },
+                    Text.of("This config element is not available in this version of the mod.") { this.color = TextColor.GRAY },
+                ),
+            ),
+        )
 
         return listOf(button)
     }
@@ -83,7 +87,7 @@ internal class HiddenElementRenderer(element: ResourcefulConfigElement) : Resour
         fun register() {
             ResourcefulConfigUI.registerElementRenderer(
                 ID,
-                ::HiddenElementRenderer
+                ::HiddenElementRenderer,
             )
         }
     }
@@ -116,9 +120,9 @@ private fun lockElements(entries: MutableList<ResourcefulConfigElement>, data: J
                     lockEntry(element.entry() as ResourcefulConfigValueEntry, value)
 
                     return@replaceAll HiddenElement(
-                        element.entry().options().title.toComponent(),
-                        element.entry().options().comment.toComponent(),
-                        message
+                        element.entry().options().title().toComponent(),
+                        element.entry().options().comment().toComponent(),
+                        message,
                     )
                 }
             }
