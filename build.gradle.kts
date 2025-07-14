@@ -56,6 +56,8 @@ cloche {
     }
 
     common {
+        mixins.from("src/mixins/meowdding-lib.mixins.json")
+
         dependencies {
             compileOnly(libs.meowdding.ktcodecs)
             compileOnly(libs.meowdding.ktmodules)
@@ -108,16 +110,15 @@ cloche {
                 fun dependency(modId: String, version: Provider<String>) {
                     dependency {
                         this.modId = modId
+                        this.required = true
                         version {
                             this.start = version
-                            this.startInclusive = true
                         }
                     }
                 }
 
-                dependency("fabricloader", libs.versions.fabric.loader)
+//                 dependency("fabricloader", libs.versions.fabric.loader)
                 dependency("fabric-language-kotlin", libs.versions.fabric.language.kotlin)
-//                 dependency("meowdding-patches", libs.versions.meowdding.patches)
                 dependency("resourcefullib", rlib.map { it.version!! })
                 dependency("skyblock-api", libs.versions.skyblockapi)
                 dependency("olympus", olympus.map { it.version!! })
@@ -139,7 +140,7 @@ cloche {
     createVersion("1.21.5", fabricApiVersion = provider { "0.127.1" }) {
         this["resourcefullib"] = libs.resourceful.lib1215
         this["resourcefulconfig"] = libs.resourceful.config1215
-        this["olympus"] = libs.olympus.lib1217 // TODO fix once cloche remap is fixed
+        this["olympus"] = libs.olympus.lib1215
     }
     createVersion("1.21.7") {
         this["resourcefullib"] = libs.resourceful.lib1217
@@ -177,7 +178,6 @@ ksp {
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            artifactId = "meowdding-lib-${libs.versions.minecraft.get()}"
             from(components["java"])
 
             pom {

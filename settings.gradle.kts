@@ -1,4 +1,4 @@
-rootProject.name = "Meowdding-Lib"
+rootProject.name = "meowdding-lib"
 
 pluginManagement {
     repositories {
