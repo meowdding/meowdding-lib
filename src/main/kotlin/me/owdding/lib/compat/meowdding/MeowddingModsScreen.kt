@@ -75,7 +75,7 @@ class MeowddingModsScreen : Screen(Text.of("Meowdding Mods")) {
 
         val button = withBackground.asButtonLeft {
             if (mod.isInstalled) {
-                McClient.setScreenAsync(ResourcefulConfigScreen.getFactory(mod.configId).apply(this))
+                McClient.setScreenAsync { ResourcefulConfigScreen.getFactory(mod.configId).apply(this) }
             } else {
                 McClient.openUri(URI("https://modrinth.com/mod/${mod.modrinthSlug}"))
             }
