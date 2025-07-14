@@ -2,6 +2,7 @@ package me.owdding.lib.compat.meowdding
 
 import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
 import com.teamresourceful.resourcefulconfig.common.config.Configurations
+import com.teamresourceful.resourcefullib.client.screens.BaseCursorScreen
 import earth.terrarium.olympus.client.components.base.ListWidget
 import earth.terrarium.olympus.client.utils.ListenableState
 import me.owdding.ktmodules.Module
@@ -15,7 +16,6 @@ import me.owdding.lib.layouts.ExpandingWidget
 import me.owdding.lib.layouts.asWidget
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.FrameLayout
-import net.minecraft.client.gui.screens.Screen
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -25,10 +25,10 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.net.URI
 
-class MeowddingModsScreen : Screen(Text.of("Meowdding Mods")) {
+class MeowddingModsScreen : BaseCursorScreen(Text.of("Meowdding Mods")) {
 
     val background = MeowddingLib.id("background")
-    val maxFeatureWidth by lazy { MeowddingFeatures.features.flatMap { it.value }.maxOf { McFont.width(it) } + 5 }
+    val maxFeatureWidth by lazy { (MeowddingFeatures.features.flatMap { it.value }.maxOfOrNull { McFont.width(it) } ?: 0) + 5 }
     val modElementsWidth get() = width - maxFeatureWidth - 10
 
     override fun init() {

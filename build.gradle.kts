@@ -61,11 +61,9 @@ cloche {
             compileOnly(libs.meowdding.ktmodules)
 
             modImplementation(libs.hypixelapi)
-            modImplementation(project.dependencies.variantOf(libs.skyblockapi) { artifactType("jar") })
-            modImplementation(libs.resourceful.lib1215)
+            modImplementation(libs.skyblockapi)
             modImplementation(libs.placeholders) { isTransitive = false }
             modImplementation(libs.meowdding.patches) { isTransitive = false }
-            modImplementation(libs.resourceful.config) { isTransitive = false }
 
             modCompileOnly(libs.rei)
 
@@ -82,6 +80,7 @@ cloche {
     ) {
         val dependencies = mutableMapOf<String, Provider<MinimalExternalModuleDependency>>().apply(dependencies)
         val rlib = dependencies["resourcefullib"]!!
+        val rconfig = dependencies["resourcefulconfig"]!!
         val olympus = dependencies["olympus"]!!
 
         fabric(name) {
@@ -90,10 +89,7 @@ cloche {
             this.loaderVersion = loaderVersion.get()
 
             include(libs.hypixelapi)
-            include(project.dependencies.variantOf(libs.skyblockapi) {
-                classifier(version)
-                artifactType("jar")
-            })
+            include(libs.skyblockapi)
             include(rlib)
             include(olympus)
             include(libs.placeholders)
@@ -122,15 +118,16 @@ cloche {
                 dependency("fabricloader", libs.versions.fabric.loader)
                 dependency("fabric-language-kotlin", libs.versions.fabric.language.kotlin)
 //                 dependency("meowdding-patches", libs.versions.meowdding.patches)
-//                 dependency("resourcefullib", libs.versions.rlib)
+                dependency("resourcefullib", rlib.map { it.version!! })
                 dependency("skyblock-api", libs.versions.skyblockapi)
-//                 dependency("olympus", libs.versions.olympus)
-//                 dependency("placeholder-api", libs.versions.placeholders)
+                dependency("olympus", olympus.map { it.version!! })
+                dependency("placeholder-api", libs.versions.placeholders)
             }
 
             dependencies {
                 fabricApi(fabricApiVersion, minecraftVersion)
                 modImplementation(olympus)
+                modImplementation(rconfig)
             }
 
             runs {
@@ -141,10 +138,12 @@ cloche {
 
     createVersion("1.21.5", fabricApiVersion = provider { "0.127.1" }) {
         this["resourcefullib"] = libs.resourceful.lib1215
-        this["olympus"] = libs.olympus.lib1215
+        this["resourcefulconfig"] = libs.resourceful.config1215
+        this["olympus"] = libs.olympus.lib1217 // TODO fix once cloche remap is fixed
     }
     createVersion("1.21.7") {
         this["resourcefullib"] = libs.resourceful.lib1217
+        this["resourcefulconfig"] = libs.resourceful.config1217
         this["olympus"] = libs.olympus.lib1217
     }
 
