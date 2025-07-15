@@ -10,9 +10,9 @@ import org.joml.Vector3f
 import tech.thatgravyboat.skyblockapi.platform.pushPop
 import kotlin.math.atan
 
-actual object PlatformDisplays {
+class PlatformDisplaysThingImpl : PlatformDisplaysThing {
 
-    actual fun entity(
+    override fun entity(
         entity: LivingEntity,
         width: Int,
         height: Int,
@@ -67,7 +67,7 @@ actual object PlatformDisplays {
         }
     }
 
-    actual fun pushPop(display: Display, operations: PoseStack.() -> Unit): Display {
+    override fun pushPop(display: Display, operations: PoseStack.() -> Unit): Display {
         return object : Display {
             // Does not account for scaling
             override fun getWidth() = display.getWidth()

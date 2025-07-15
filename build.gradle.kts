@@ -1,5 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
+import com.google.devtools.ksp.gradle.KspTask
+import net.msrandom.stubs.GenerateStubApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -151,29 +153,28 @@ cloche {
     mappings { official() }
 }
 
-tasks {
-    compileKotlin {
-        compilerOptions {
-            jvmTarget = JvmTarget.JVM_21
-        }
-    }
+tasks.withType<JavaCompile>().configureEach {
+    options.encoding = "UTF-8"
+    options.release.set(21)
+}
 
-    withType<JavaCompile>().configureEach {
-        options.encoding = "UTF-8"
-        options.release.set(21)
-    }
+tasks.withType<KotlinCompile>().configureEach {
+    compilerOptions.jvmTarget.set(JvmTarget.JVM_21)
+}
+
+tasks.withType<KspTask> {
+    outputs.upToDateWhen { false }
 }
 
 java {
     withSourcesJar()
 }
 
-ksp {
-    this@ksp.excludedSources.from(sourceSets.getByName("1215").kotlin.srcDirs)
-    this@ksp.excludedSources.from(sourceSets.getByName("1217").kotlin.srcDirs)
-    arg("meowdding.project_name", "MeowddingLib")
-    arg("meowdding.package", "me.owdding.lib.generated")
+artifacts {
+    add("1215RuntimeElements", tasks["1215JarInJar"])
+    add("1217RuntimeElements", tasks["1217JarInJar"])
 }
+
 
 publishing {
     publications {
@@ -201,4 +202,16 @@ publishing {
             }
         }
     }
+}
+
+ksp {
+    this@ksp.excludedSources.from(sourceSets.getByName("1215").kotlin.srcDirs)
+    this@ksp.excludedSources.from(sourceSets.getByName("1217").kotlin.srcDirs)
+    arg("meowdding.project_name", "MeowddingLib")
+    arg("meowdding.package", "me.owdding.lib.generated")
+    //arg("actualStubDir", "/mnt/drive2/git/meowdding-lib/build/generated/ksp/stubs/")
+}
+
+tasks.named("createCommonApiStub", GenerateStubApi::class) {
+    excludes.add(libs.skyblockapi.get().module.toString())
 }

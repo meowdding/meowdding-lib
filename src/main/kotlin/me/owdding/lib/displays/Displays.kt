@@ -23,8 +23,6 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.level.ItemLike
-import org.joml.component1
-import org.joml.component2
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
@@ -516,10 +514,10 @@ object Displays {
     }
 
     fun isMouseOver(display: Display, graphics: GuiGraphics): Boolean {
-        val (x, y) = graphics.getTranslation()
+        val translation = graphics.getTranslation()
         val (mouseX, mouseY) = McClient.mouse
-        val xRange = x..(x + (display.getWidth() * ScalableWidget.getCurrentScale()).floor())
-        val yRange = y..(y + (display.getHeight() * ScalableWidget.getCurrentScale()).floor())
+        val xRange = translation.x..(translation.x + (display.getWidth() * ScalableWidget.getCurrentScale()).floor())
+        val yRange = translation.y..(translation.y + (display.getHeight() * ScalableWidget.getCurrentScale()).floor())
         return mouseX in xRange && mouseY in yRange && graphics.containsPointInScissor(
             mouseX.toInt(),
             mouseY.toInt(),
