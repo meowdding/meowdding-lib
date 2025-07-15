@@ -19,16 +19,11 @@ import net.minecraft.util.ARGB
 import net.minecraft.util.FormattedCharSequence
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.level.ItemLike
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
-import tech.thatgravyboat.skyblockapi.helpers.McLevel
-import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.platform.*
-import tech.thatgravyboat.skyblockapi.utils.extentions.scaled
 import tech.thatgravyboat.skyblockapi.utils.extentions.scissor
 import tech.thatgravyboat.skyblockapi.utils.extentions.translated
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -345,58 +340,7 @@ object Displays {
         showStackSize: Boolean = false,
         customStackText: Any? = null,
     ): Display {
-        return object : Display {
-            override fun getWidth() = width
-            override fun getHeight() = height
-
-            override fun render(graphics: GuiGraphics) {
-                val x = 0
-                val y = 0
-                if (
-                    !graphics.containsPointInScissor(x, y) && !graphics.containsPointInScissor(x + 16, y) &&
-                    !graphics.containsPointInScissor(x + 16, y + 16) && !graphics.containsPointInScissor(x, y + 16)
-                ) return
-
-                if (showTooltip && !item.isEmpty) {
-                    val player = McPlayer.self
-                    if (isMouseOver(this, graphics) && player != null) {
-                        graphics.showTooltip(Text.multiline(item.getTooltipLines(
-                            Item.TooltipContext.of(McLevel.self),
-                            player,
-                            TooltipFlag.NORMAL
-                        )))
-                    }
-                }
-
-                graphics.pushPop {
-                    graphics.scale(width / 16f, height / 16f)
-                    graphics.renderItem(item, 0, 0)
-
-                    val stackSize = item.count
-                    if ((showStackSize && stackSize > 1) || customStackText != null) {
-                        val component = when (customStackText) {
-                            null -> Text.of(stackSize.toString())
-                            is Component -> customStackText
-                            is String -> Text.of(customStackText)
-                            else -> Text.of(customStackText.toString())
-                        }
-
-                        val scale = (width.toFloat() / McFont.width(component)).coerceAtMost(1f)
-
-                        graphics.translate(1 + width - McFont.width(component) * scale, 2 + height - McFont.height * scale)
-                        graphics.scaled(scale, scale) {
-                            graphics.drawString(
-                                component,
-                                0,
-                                0,
-                                -1,
-                                true,
-                            )
-                        }
-                    }
-                }
-            }
-        }
+        return PlatformDisplays.item(item, width, height, showTooltip, showStackSize, customStackText)
     }
 
     fun <T> renderable(renderable: T, width: Int = -1, height: Int = -1): Display

@@ -2,12 +2,26 @@ package me.owdding.lib.platform
 
 import com.mojang.blaze3d.vertex.PoseStack
 import me.owdding.lib.displays.Display
+import me.owdding.lib.displays.Displays.isMouseOver
 import me.owdding.lib.displays.entity.EntityStateRenderer
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.TooltipFlag
 import org.joml.Quaternionf
 import org.joml.Vector3f
+import tech.thatgravyboat.skyblockapi.helpers.McFont
+import tech.thatgravyboat.skyblockapi.helpers.McLevel
+import tech.thatgravyboat.skyblockapi.helpers.McPlayer
+import tech.thatgravyboat.skyblockapi.platform.drawString
 import tech.thatgravyboat.skyblockapi.platform.pushPop
+import tech.thatgravyboat.skyblockapi.platform.scale
+import tech.thatgravyboat.skyblockapi.platform.showTooltip
+import tech.thatgravyboat.skyblockapi.platform.translate
+import tech.thatgravyboat.skyblockapi.utils.extentions.scaled
+import tech.thatgravyboat.skyblockapi.utils.text.Text
 import kotlin.math.atan
 
 class PlatformDisplaysThingImpl : PlatformDisplaysThing {
@@ -63,6 +77,61 @@ class PlatformDisplaysThingImpl : PlatformDisplaysThing {
                 entity.xRot = originalXRotation
                 entity.yHeadRotO = originalHeadRotationPrev
                 entity.yHeadRot = originalHeadRotation
+            }
+        }
+    }
+
+    override fun item(
+        item: ItemStack,
+        width: Int,
+        height: Int,
+        showTooltip: Boolean,
+        showStackSize: Boolean,
+        customStackText: Any?,
+    ): Display {
+        return object : Display {
+            override fun getWidth() = width
+            override fun getHeight() = height
+
+            override fun render(graphics: GuiGraphics) {
+                if (showTooltip && !item.isEmpty) {
+                    val player = McPlayer.self
+                    if (isMouseOver(this, graphics) && player != null) {
+                        graphics.showTooltip(Text.multiline(item.getTooltipLines(
+                            Item.TooltipContext.of(McLevel.self),
+                            player,
+                            TooltipFlag.NORMAL
+                        )))
+                    }
+                }
+
+                graphics.pushPop {
+                    graphics.scale(width / 16f, height / 16f)
+                    graphics.renderItem(item, 0, 0)
+
+                    val stackSize = item.count
+                    if ((showStackSize && stackSize > 1) || customStackText != null) {
+                        val component = when (customStackText) {
+                            null -> Text.of(stackSize.toString())
+                            is Component -> customStackText
+                            is String -> Text.of(customStackText)
+                            else -> Text.of(customStackText.toString())
+                        }
+
+                        val scale = (width.toFloat() / McFont.width(component)).coerceAtMost(1f)
+
+                        graphics.translate(1 + width - McFont.width(component) * scale, 2 + height - McFont.height * scale)
+                        graphics.scaled(scale, scale) {
+                            graphics.drawString(
+                                component,
+                                0,
+                                0,
+                                -1,
+                                true,
+                            )
+                        }
+                    }
+                }
             }
         }
     }
