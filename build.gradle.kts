@@ -58,6 +58,7 @@ cloche {
     }
 
     common {
+        withPublication()
         mixins.from("src/mixins/meowdding-lib.mixins.json")
 
         dependencies {
@@ -119,7 +120,6 @@ cloche {
                     }
                 }
 
-//                 dependency("fabricloader", libs.versions.fabric.loader)
                 dependency("fabric-language-kotlin", libs.versions.fabric.language.kotlin)
                 dependency("resourcefullib", rlib.map { it.version!! })
                 dependency("skyblock-api", libs.versions.skyblockapi)
@@ -175,6 +175,11 @@ artifacts {
     add("1217RuntimeElements", tasks["1217JarInJar"])
 }
 
+
+artifacts {
+    add("1215RuntimeElements", tasks["1215JarInJar"])
+    add("1217RuntimeElements", tasks["1217JarInJar"])
+}
 
 publishing {
     publications {

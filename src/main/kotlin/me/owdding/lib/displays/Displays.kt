@@ -15,7 +15,6 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.FormattedText
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.util.ARGB
 import net.minecraft.util.FormattedCharSequence
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.LivingEntity
@@ -173,7 +172,7 @@ object Displays {
             override fun getWidth() = width
             override fun getHeight() = height
             override fun render(graphics: GuiGraphics) {
-                graphics.drawSprite(sprite, width, height, width, height, -1)
+                graphics.drawSprite(sprite, 0, 0, width, height, -1)
             }
         }
     }
@@ -191,7 +190,7 @@ object Displays {
             override fun getWidth() = component.width
             override fun getHeight() = 10
             override fun render(graphics: GuiGraphics) {
-                graphics.drawString(component, ARGB.opaque(color().toInt()), 0, 1, shadow)
+                graphics.drawString(component, 0, 1, color().toInt(), shadow)
             }
         }
     }
@@ -201,7 +200,7 @@ object Displays {
             override fun getWidth() = component().width
             override fun getHeight() = 10
             override fun render(graphics: GuiGraphics) {
-                graphics.drawString(component(), 0, 1, ARGB.opaque(color().toInt()), shadow)
+                graphics.drawString(component(), 0, 1, color().toInt(), shadow)
             }
         }
     }
@@ -221,7 +220,7 @@ object Displays {
             override fun getHeight() = height
             override fun render(graphics: GuiGraphics) {
                 lines.forEachIndexed { index, line ->
-                    graphics.drawString(line, 0, index * McFont.height, ARGB.opaque(color().toInt()), shadow)
+                    graphics.drawString(line, 0, index * McFont.height, color().toInt(), shadow)
                 }
             }
         }
@@ -236,7 +235,7 @@ object Displays {
             override fun getWidth() = McFont.width(sequence)
             override fun getHeight() = McFont.height
             override fun render(graphics: GuiGraphics) {
-                graphics.drawString(sequence, 0, 0, ARGB.opaque(color().toInt()), shadow)
+                graphics.drawString(sequence, 0, 0, color().toInt(), shadow)
             }
         }
     }
@@ -259,7 +258,7 @@ object Displays {
             override fun getHeight() = lines.size * McFont.height
             override fun render(graphics: GuiGraphics) {
                 lines.forEachIndexed { index, line ->
-                    graphics.drawString(line, 0, index * McFont.height, ARGB.opaque(color().toInt()), shadow)
+                    graphics.drawString(line, 0, index * McFont.height, color().toInt(), shadow)
                 }
             }
         }
@@ -466,6 +465,5 @@ object Displays {
             mouseX.toInt(),
             mouseY.toInt(),
         ) && showTooltips
-        return false
     }
 }
