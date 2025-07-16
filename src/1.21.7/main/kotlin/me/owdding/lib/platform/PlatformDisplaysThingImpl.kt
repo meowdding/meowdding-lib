@@ -15,11 +15,7 @@ import org.joml.Vector3f
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
-import tech.thatgravyboat.skyblockapi.platform.drawString
-import tech.thatgravyboat.skyblockapi.platform.pushPop
-import tech.thatgravyboat.skyblockapi.platform.scale
-import tech.thatgravyboat.skyblockapi.platform.showTooltip
-import tech.thatgravyboat.skyblockapi.platform.translate
+import tech.thatgravyboat.skyblockapi.platform.*
 import tech.thatgravyboat.skyblockapi.utils.extentions.scaled
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import kotlin.math.atan
@@ -97,11 +93,16 @@ class PlatformDisplaysThingImpl : PlatformDisplaysThing {
                 if (showTooltip && !item.isEmpty) {
                     val player = McPlayer.self
                     if (isMouseOver(this, graphics) && player != null) {
-                        graphics.showTooltip(Text.multiline(item.getTooltipLines(
-                            Item.TooltipContext.of(McLevel.self),
-                            player,
-                            TooltipFlag.NORMAL
-                        )))
+                        graphics.showTooltip(
+                            Text.multiline(
+                                item.getTooltipLines(
+                                    Item.TooltipContext.of(McLevel.self),
+                                    player,
+                                    TooltipFlag.NORMAL,
+                                ),
+                            ),
+                            1000,
+                        )
                     }
                 }
 

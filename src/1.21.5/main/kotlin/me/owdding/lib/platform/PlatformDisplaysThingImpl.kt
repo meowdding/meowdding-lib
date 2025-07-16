@@ -109,11 +109,16 @@ class PlatformDisplaysThingImpl : PlatformDisplaysThing {
                 if (showTooltip && !item.isEmpty) {
                     val player = McPlayer.self
                     if (isMouseOver(this, graphics) && player != null) {
-                        graphics.showTooltip(Text.multiline(item.getTooltipLines(
-                            Item.TooltipContext.of(McLevel.self),
-                            player,
-                            TooltipFlag.NORMAL
-                        )))
+                        graphics.showTooltip(
+                            Text.multiline(
+                                item.getTooltipLines(
+                                    Item.TooltipContext.of(McLevel.self),
+                                    player,
+                                    TooltipFlag.NORMAL,
+                                ),
+                            ),
+                            1000,
+                        )
                     }
                 }
 
