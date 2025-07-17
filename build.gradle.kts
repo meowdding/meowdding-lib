@@ -1,10 +1,16 @@
 @file:Suppress("UnstableApiUsage")
 
 import com.google.devtools.ksp.gradle.KspTask
+import jdk.tools.jlink.resources.plugins
+import net.msrandom.minecraftcodev.core.utils.toPath
+import net.msrandom.minecraftcodev.runs.task.WriteClasspathFile
 import net.msrandom.stubs.GenerateStubApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.io.File
+import kotlin.io.path.readText
+import kotlin.io.path.writeText
 
 plugins {
     java
@@ -144,10 +150,10 @@ cloche {
         this["resourcefulconfig"] = libs.resourceful.config1215
         this["olympus"] = libs.olympus.lib1215
     }
-    createVersion("1.21.7") {
-        this["resourcefullib"] = libs.resourceful.lib1217
-        this["resourcefulconfig"] = libs.resourceful.config1217
-        this["olympus"] = libs.olympus.lib1217
+    createVersion("1.21.8") {
+        this["resourcefullib"] = libs.resourceful.lib1218
+        this["resourcefulconfig"] = libs.resourceful.config1218
+        this["olympus"] = libs.olympus.lib1218
     }
 
     mappings { official() }
@@ -172,13 +178,13 @@ java {
 
 artifacts {
     add("1215RuntimeElements", tasks["1215JarInJar"])
-    add("1217RuntimeElements", tasks["1217JarInJar"])
+    add("1218RuntimeElements", tasks["1218JarInJar"])
 }
 
 
 artifacts {
     add("1215RuntimeElements", tasks["1215JarInJar"])
-    add("1217RuntimeElements", tasks["1217JarInJar"])
+    add("1218RuntimeElements", tasks["1218JarInJar"])
 }
 
 publishing {
@@ -211,7 +217,7 @@ publishing {
 
 ksp {
     this@ksp.excludedSources.from(sourceSets.getByName("1215").kotlin.srcDirs)
-    this@ksp.excludedSources.from(sourceSets.getByName("1217").kotlin.srcDirs)
+    this@ksp.excludedSources.from(sourceSets.getByName("1218").kotlin.srcDirs)
     arg("meowdding.project_name", "MeowddingLib")
     arg("meowdding.package", "me.owdding.lib.generated")
     //arg("actualStubDir", "/mnt/drive2/git/meowdding-lib/build/generated/ksp/stubs/")
@@ -219,4 +225,14 @@ ksp {
 
 tasks.named("createCommonApiStub", GenerateStubApi::class) {
     excludes.add(libs.skyblockapi.get().module.toString())
+}
+
+// TODO temporary workaround for a cloche issue on certain systems, remove once fixed
+tasks.withType<WriteClasspathFile>().configureEach {
+    actions.clear()
+    actions.add {
+        generate()
+        val file = output.get().toPath()
+        file.writeText(file.readText().lines().joinToString(File.pathSeparator))
+    }
 }
