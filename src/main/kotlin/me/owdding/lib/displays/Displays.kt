@@ -421,7 +421,7 @@ object Displays {
                 display.render(graphics)
 
                 if (isMouseOver(display, graphics)) {
-                    graphics.showTooltip(component, 1000)
+                    graphics.showTooltip(component)
                 }
             }
         }

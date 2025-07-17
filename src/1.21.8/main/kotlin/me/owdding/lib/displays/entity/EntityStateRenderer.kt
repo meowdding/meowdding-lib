@@ -71,6 +71,9 @@ class EntityStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPic
         ) {
             val entityState = McClient.self.entityRenderDispatcher.getRenderer(entity).createRenderState(entity, 1f)
             entityState.hitboxesRenderState = null
+            entityState.x = 0.0
+            entityState.y = 0.0
+            entityState.z = 0.0
 
             val (x, y) = graphics.getTranslation()
 

@@ -64,7 +64,7 @@ class PlatformDisplaysThingImpl : PlatformDisplaysThing {
                 entity.yHeadRotO = entity.yRot
                 val entityScale = entity.scale
                 val scaledSize = scale / entityScale
-                val positionOffset = Vector3f(0.0f, (-centerY / scaledSize) + entity.boundingBox.center.y.toFloat(), 0.0f)
+                val positionOffset = Vector3f(0.0f, (-centerY / scaledSize) + entity.boundingBox.ysize.toFloat() / 2f, 0.0f)
 
                 EntityStateRenderer.draw(graphics, entity, width, height, scaledSize, positionOffset, baseRotation, tiltRotation)
 
