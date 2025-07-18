@@ -20,9 +20,9 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.scaled
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import kotlin.math.atan
 
-class PlatformDisplaysThingImpl : PlatformDisplaysThing {
+actual object PlatformDisplays {
 
-    override fun entity(
+    actual fun entity(
         entity: LivingEntity,
         width: Int,
         height: Int,
@@ -77,7 +77,7 @@ class PlatformDisplaysThingImpl : PlatformDisplaysThing {
         }
     }
 
-    override fun item(
+    actual fun item(
         item: ItemStack,
         width: Int,
         height: Int,
@@ -137,14 +137,13 @@ class PlatformDisplaysThingImpl : PlatformDisplaysThing {
         }
     }
 
-    override fun pushPop(display: Display, operations: PoseStack.() -> Unit): Display {
+    actual fun pushPop(display: Display, operations: PoseStack.() -> Unit): Display {
         return object : Display {
             // Does not account for scaling
             override fun getWidth() = display.getWidth()
             override fun getHeight() = display.getHeight()
             override fun render(graphics: GuiGraphics) {
                 graphics.pushPop {
-//                     operations(graphics.pose())
                     display.render(graphics)
                 }
             }

@@ -39,7 +39,6 @@ private const val NO_SPLIT = -1
 @Stub
 internal expect fun roundedTextureDisplay(width: Int, height: Int, texture: ResourceLocation): Display
 
-
 object Displays {
 
     private var showTooltips = true
