@@ -8,8 +8,10 @@ import net.minecraft.client.gui.navigation.ScreenRectangle
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer
 import net.minecraft.client.gui.render.state.pip.PictureInPictureRenderState
 import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.client.renderer.entity.EntityRenderer
 import net.minecraft.client.renderer.entity.state.EntityRenderState
 import net.minecraft.util.Mth
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import org.joml.Quaternionf
 import org.joml.Vector3f
@@ -21,7 +23,13 @@ import java.util.function.Function
 
 class EntityStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictureRenderer<EntityStateRenderer.State>(buffer) {
 
+    private var lastState: State? = null
+
     override fun getRenderStateClass(): Class<State> = State::class.java
+
+    override fun textureIsReadyToBlit(state: State): Boolean {
+        return lastState != null && lastState == state
+    }
 
     override fun renderToTexture(state: State, stack: PoseStack) {
         val dispatcher = McClient.self.entityRenderDispatcher
@@ -59,9 +67,32 @@ class EntityStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPic
         override fun scale(): Float = scale
         override fun scissorArea(): ScreenRectangle? = scissor
         override fun bounds(): ScreenRectangle? = bounds
+
+        override fun hashCode(): Int {
+            return System.identityHashCode(state)
+        }
+
+        override fun equals(other: Any?): Boolean {
+            return when (other) {
+                is State -> state == other.state
+                else -> false
+            }
+        }
     }
 
     companion object {
+
+        fun <T : Entity, S : EntityRenderState> EntityRenderer<in T, S>.createNewState(entity: T): EntityRenderState {
+            val state = this.createRenderState()
+            this.extractRenderState(entity, state, 1f)
+
+            state.hitboxesRenderState = null
+            state.x = 0.0
+            state.y = 0.0
+            state.z = 0.0
+
+            return state
+        }
 
         fun draw(
             graphics: GuiGraphics,
@@ -69,8 +100,7 @@ class EntityStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPic
             width: Int, height: Int, scale: Float,
             translation: Vector3f, rotation: Quaternionf, cameraAngle: Quaternionf?
         ) {
-            val entityState = McClient.self.entityRenderDispatcher.getRenderer(entity).createRenderState(entity, 1f)
-            entityState.hitboxesRenderState = null
+            val entityState = McClient.self.entityRenderDispatcher.getRenderer(entity).createNewState(entity)
 
             val (x, y) = graphics.getTranslation()
 
