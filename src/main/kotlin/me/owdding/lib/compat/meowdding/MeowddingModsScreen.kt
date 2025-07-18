@@ -18,7 +18,6 @@ import me.owdding.lib.layouts.asWidget
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.FrameLayout
-import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
