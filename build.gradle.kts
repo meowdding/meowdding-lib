@@ -157,6 +157,12 @@ cloche {
     mappings { official() }
 }
 
+tasks.withType<ProcessResources>().configureEach {
+    filesMatching(listOf("**/*.fsh", "**/*.vsh")) {
+        filter { if (it.startsWith("//!moj_import")) "#${it.substring(3)}" else it }
+    }
+}
+
 tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
     options.release.set(21)
@@ -173,12 +179,6 @@ tasks.withType<KspTask> {
 java {
     withSourcesJar()
 }
-
-artifacts {
-    add("1215RuntimeElements", tasks["1215JarInJar"])
-    add("1218RuntimeElements", tasks["1218JarInJar"])
-}
-
 
 artifacts {
     add("1215RuntimeElements", tasks["1215JarInJar"])

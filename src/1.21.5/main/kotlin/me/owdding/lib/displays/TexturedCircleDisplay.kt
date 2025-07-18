@@ -15,6 +15,8 @@ import net.minecraft.client.renderer.texture.AbstractTexture
 import net.minecraft.resources.ResourceLocation
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 
+internal actual fun roundedTextureDisplay(width: Int, height: Int, texture: ResourceLocation): Display = TexturedCircleDisplay(width, height, texture)
+
 class TexturedCircleDisplay(@JvmField val width: Int, @JvmField val height: Int, private val texture: ResourceLocation) : Display {
     override fun getHeight(): Int = height
 
@@ -44,7 +46,7 @@ class TexturedCircleDisplay(@JvmField val width: Int, @JvmField val height: Int,
 
     private val renderPipeline: RenderPipeline = RenderPipelines.register(
         RenderPipeline.builder(RenderPipelines.GUI_TEXTURED_SNIPPET)
-            .withLocation(id("pipeline/circle_tex.fsh"))
+            .withLocation(id("circle"))
             .withFragmentShader(id("circle_tex"))
             .withVertexFormat(DefaultVertexFormat.POSITION_TEX, VertexFormat.Mode.QUADS)
             .withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST)

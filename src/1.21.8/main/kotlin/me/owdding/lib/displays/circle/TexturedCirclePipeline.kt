@@ -2,6 +2,7 @@ package me.owdding.lib.displays.circle
 
 import com.mojang.blaze3d.buffers.Std140Builder
 import com.mojang.blaze3d.buffers.Std140SizeCalculator
+import com.mojang.blaze3d.pipeline.BlendFunction
 import com.mojang.blaze3d.pipeline.RenderPipeline
 import com.mojang.blaze3d.platform.DepthTestFunction
 import com.mojang.blaze3d.shaders.UniformType
@@ -9,7 +10,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.VertexFormat
 import earth.terrarium.olympus.client.pipelines.uniforms.RenderPipelineUniforms
 import earth.terrarium.olympus.client.pipelines.uniforms.RenderPipelineUniformsStorage
-import me.owdding.lib.MeowddingLib
+import me.owdding.lib.MeowddingLib.id
 import me.owdding.lib.displays.circle.TexturedCirclePipeline.UNIFORM_NAME
 import net.minecraft.client.renderer.DynamicUniformStorage
 import net.minecraft.client.renderer.RenderPipelines
@@ -29,19 +30,24 @@ data class TexturedCircleUniform(val uvs: Vector4f) : RenderPipelineUniforms {
 
 object TexturedCirclePipeline {
 
-    const val UNIFORM_NAME = "TexturedCircleUniform"
+    const val UNIFORM_NAME = "MLibTexturedCircleUniform"
     val UNIFORM_STORAGE: Supplier<DynamicUniformStorage<TexturedCircleUniform>> =
-        RenderPipelineUniformsStorage.register("Textured Circle UBO", 2, Std140SizeCalculator().putVec4())
+        RenderPipelineUniformsStorage.register("Meowdding Textured Circle UBO", 2, Std140SizeCalculator().putVec4())
 
 
-    val PIPELINE = RenderPipelines.register(
-        RenderPipeline.builder(RenderPipelines.GUI_TEXTURED_SNIPPET)
-            .withLocation(MeowddingLib.id("pipeline/circle_tex.fsh"))
-            .withFragmentShader(MeowddingLib.id("circle_tex"))
-            .withVertexFormat(DefaultVertexFormat.POSITION_TEX, VertexFormat.Mode.QUADS)
-            .withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST)
+    val PIPELINE: RenderPipeline = RenderPipelines.register(
+        RenderPipeline.builder()
+            .withLocation(id("circle_tex"))
+            .withVertexShader(id("core/circle_tex"))
+            .withFragmentShader(id("core/circle_tex"))
+            .withCull(false)
+            .withDepthTestFunction(DepthTestFunction.LEQUAL_DEPTH_TEST)
+            .withBlend(BlendFunction.TRANSLUCENT)
+            .withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
+            .withSampler("Sampler0")
             .withUniform(UNIFORM_NAME, UniformType.UNIFORM_BUFFER)
-            .withDepthWrite(false)
+            .withUniform("DynamicTransforms", UniformType.UNIFORM_BUFFER)
+            .withUniform("Projection", UniformType.UNIFORM_BUFFER)
             .build(),
     )
 }

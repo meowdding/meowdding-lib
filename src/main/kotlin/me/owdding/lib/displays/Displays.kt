@@ -20,6 +20,7 @@ import net.minecraft.util.Mth
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.ItemLike
+import net.msrandom.stub.Stub
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.platform.*
@@ -34,6 +35,10 @@ import kotlin.math.sin
 
 
 private const val NO_SPLIT = -1
+
+@Stub
+internal expect fun roundedTextureDisplay(width: Int, height: Int, texture: ResourceLocation): Display
+
 
 object Displays {
 
@@ -466,4 +471,6 @@ object Displays {
             mouseY.toInt(),
         ) && showTooltips
     }
+
+    fun circleTexture(width: Int, height: Int, resourceLocation: ResourceLocation) = roundedTextureDisplay(width, height, resourceLocation)
 }
