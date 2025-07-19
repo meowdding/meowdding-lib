@@ -21,7 +21,7 @@ class TexturedCircleRenderer(buffer: MultiBufferSource.BufferSource) : PictureIn
     override fun getRenderStateClass(): Class<TexturedCircleState> = TexturedCircleState::class.java
 
     override fun renderToTexture(state: TexturedCircleState, stack: PoseStack) {
-        val bounds = state.bounds ?: return
+        val bounds = state.bounds
         val buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR)
 
         val scale = McClient.window.guiScale.toFloat()
@@ -52,10 +52,7 @@ class TexturedCircleRenderer(buffer: MultiBufferSource.BufferSource) : PictureIn
 
 
 data class TexturedCircleState(
-    override val x0: Int,
-    override val y0: Int,
-    override val x1: Int,
-    override val y1: Int,
+    override val bounds: ScreenRectangle,
     override val scissorArea: ScreenRectangle?,
     override val pose: Matrix3x2f,
     val texture: ResourceLocation,
@@ -65,4 +62,9 @@ data class TexturedCircleState(
 
     override val shrinkToScissor: Boolean
         get() = false
+
+    override val x0: Int = bounds.left()
+    override val x1: Int = bounds.right()
+    override val y0: Int = bounds.top()
+    override val y1: Int = bounds.bottom()
 }

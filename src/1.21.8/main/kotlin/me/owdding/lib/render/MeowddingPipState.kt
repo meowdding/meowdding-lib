@@ -17,7 +17,7 @@ abstract class MeowddingPipState<T : OlympusPictureInPictureRenderState<T>>() : 
 
     open val shrinkToScissor: Boolean = true
 
-    val bounds: ScreenRectangle? by lazy {
+    open val bounds: ScreenRectangle? by lazy {
         if (scissorArea != null && shrinkToScissor) {
             scissorArea!!.intersection(ScreenRectangle(x0, y0, x1 - x0, y1 - y0).transformMaxBounds(pose))
         } else {
