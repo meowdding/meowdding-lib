@@ -12,7 +12,7 @@ import kotlin.io.path.writeText
 
 plugins {
     java
-    kotlin("jvm") version "2.0.0"
+    kotlin("jvm") version "2.1.0"
     alias(libs.plugins.terrarium.cloche)
     id("maven-publish")
     alias(libs.plugins.kotlin.symbol.processor)
@@ -40,15 +40,24 @@ tasks.withType<KotlinCompile>().configureEach {
             "-Xexpect-actual-classes",
         )
     }
+
+}
+val kspAll: Configuration by configurations.creating {
+    isCanBeResolved = true
+    isCanBeConsumed = true
 }
 
 dependencies {
-    compileOnly(libs.meowdding.ktmodules)
-    ksp(libs.meowdding.ktmodules)
-    compileOnly(libs.meowdding.ktcodecs)
-    ksp(libs.meowdding.ktcodecs)
+    kspAll(libs.meowdding.ktmodules)
+    kspAll(libs.meowdding.ktcodecs)
 
-    compileOnly(libs.kotlin.stdlib)
+    compileOnly(libs.meowdding.ktmodules)
+    compileOnly(libs.meowdding.ktcodecs)
+    configurations.forEach {
+        if (it.name.startsWith("ksp") && !it.name.contains("classpath", true) && !it.name.contains("all", true)) {
+            kspAll.allDependencies.forEach { dependency -> add(it.name, dependency) }
+        }
+    }
 }
 
 cloche {
@@ -176,6 +185,10 @@ tasks.withType<KspTask> {
     outputs.upToDateWhen { false }
 }
 
+tasks.withType<Jar> {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
 java {
     withSourcesJar()
 }
@@ -213,16 +226,15 @@ publishing {
     }
 }
 
+tasks.named("createCommonApiStub", GenerateStubApi::class) {
+    excludes.add(libs.skyblockapi.get().module.toString())
+}
+
 ksp {
     this@ksp.excludedSources.from(sourceSets.getByName("1215").kotlin.srcDirs)
     this@ksp.excludedSources.from(sourceSets.getByName("1218").kotlin.srcDirs)
     arg("meowdding.project_name", "MeowddingLib")
     arg("meowdding.package", "me.owdding.lib.generated")
-    //arg("actualStubDir", "/mnt/drive2/git/meowdding-lib/build/generated/ksp/stubs/")
-}
-
-tasks.named("createCommonApiStub", GenerateStubApi::class) {
-    excludes.add(libs.skyblockapi.get().module.toString())
 }
 
 // TODO temporary workaround for a cloche issue on certain systems, remove once fixed

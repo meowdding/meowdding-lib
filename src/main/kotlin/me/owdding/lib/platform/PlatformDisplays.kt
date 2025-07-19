@@ -8,7 +8,6 @@ import net.msrandom.stub.Stub
 
 @Stub
 internal expect object PlatformDisplays {
-    @Stub
     fun entity(
         entity: LivingEntity,
         width: Int,
@@ -19,7 +18,6 @@ internal expect object PlatformDisplays {
         spinning: Boolean = false,
     ): Display
 
-    @Stub
     fun item(
         item: ItemStack,
         width: Int = 16,
@@ -29,6 +27,5 @@ internal expect object PlatformDisplays {
         customStackText: Any? = null,
     ): Display
 
-    @Stub
     fun pushPop(display: Display, operations: PoseStack.() -> Unit): Display
 }
