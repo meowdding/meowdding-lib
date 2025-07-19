@@ -1,6 +1,7 @@
 package me.owdding.lib.layouts
 
 import com.teamresourceful.resourcefullib.client.components.CursorWidget
+import com.teamresourceful.resourcefullib.client.screens.CursorScreen
 import earth.terrarium.olympus.client.components.base.BaseParentWidget
 import me.owdding.lib.extensions.floor
 import net.minecraft.client.gui.GuiGraphics
@@ -126,6 +127,10 @@ class ScalableWidget(val original: AbstractWidget) : BaseParentWidget(original.w
 
     override fun updateWidgetNarration(narrationElementOutput: NarrationElementOutput) {
         original.updateNarration(narrationElementOutput)
+    }
+
+    override fun getCursor(): CursorScreen.Cursor? {
+        return (original as? CursorWidget)?.cursor
     }
 
     companion object {
