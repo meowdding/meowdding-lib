@@ -4,7 +4,7 @@ import net.minecraft.client.gui.GuiGraphics
 import net.msrandom.stub.Stub
 
 @Stub
-expect fun GuiGraphics.drawRoundedRectange(
+expect fun GuiGraphics.drawRoundedRectangle(
     x: Int,
     y: Int,
     width: Int,
