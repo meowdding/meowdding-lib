@@ -12,7 +12,7 @@ object MeowddingFeatures {
     val configurators: Map<MeowddingMod, ResourcefulConfig> by lazy {
         @Suppress("UnstableApiUsage", "UNCHECKED_CAST")
         MeowddingModsParser.mods.associateWith { mod ->
-            Configurations.INSTANCE.modToConfigs[mod.modId]?.firstOrNull()?.let { Configurations.INSTANCE.configs[it] }
+            Configurations.INSTANCE.modToConfigs()[mod.modId]?.firstOrNull()?.let { Configurations.INSTANCE.configs()[it] }
         }.filterValues { it != null } as Map<MeowddingMod, ResourcefulConfig>
     }
 

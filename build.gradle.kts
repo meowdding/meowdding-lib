@@ -1,11 +1,21 @@
+@file:Suppress("UnstableApiUsage")
+
+import com.google.devtools.ksp.gradle.KspTask
+import net.msrandom.minecraftcodev.core.utils.toPath
+import net.msrandom.minecraftcodev.runs.task.WriteClasspathFile
+import net.msrandom.stubs.GenerateStubApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import kotlin.io.path.readText
+import kotlin.io.path.writeText
 
 plugins {
     java
-    kotlin("jvm") version "2.0.0"
-    alias(libs.plugins.loom)
+    kotlin("jvm") version "2.1.0"
+    alias(libs.plugins.terrarium.cloche)
     id("maven-publish")
-    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.symbol.processor)
 }
 
 repositories {
@@ -14,97 +24,183 @@ repositories {
     maven(url = "https://api.modrinth.com/maven")
     maven(url = "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
     maven(url = "https://maven.nucleoid.xyz")
+    maven(url = "https://maven.msrandom.net/repository/cloche")
+    maven(url = "https://maven.msrandom.net/repository/root")
     maven(url = "https://maven.shedaniel.me/")
     mavenCentral()
     mavenLocal()
 }
 
-dependencies {
-    compileOnly(libs.meowdding.ktmodules)
-    ksp(libs.meowdding.ktmodules)
-    compileOnly(libs.meowdding.ktcodecs)
-    ksp(libs.meowdding.ktcodecs)
+tasks.withType<KotlinCompile>().configureEach {
+    compilerOptions {
+        languageVersion = KotlinVersion.KOTLIN_2_0
+        freeCompilerArgs.addAll(
+            "-Xmulti-platform",
+            "-Xno-check-actual",
+            "-Xexpect-actual-classes",
+        )
+    }
 
-    minecraft(libs.minecraft)
-    mappings(loom.layered {
-        officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-1.21.3:2024.12.07@zip")
-    })
-    modImplementation(libs.fabric.loader)
-    modImplementation(libs.fabric.language.kotlin)
-    modImplementation(libs.fabric.api)
-
-    modImplementation(libs.hypixelapi)
-    modImplementation(libs.skyblockapi)
-    modImplementation(libs.rlib)
-    modImplementation(libs.olympus)
-    modImplementation(libs.placeholders)
-    modImplementation(libs.meowdding.patches)
-
-    modCompileOnly(libs.rconfig)
-
-    modCompileOnly(libs.rei)
-
-    include(libs.hypixelapi)
-    include(libs.skyblockapi)
-    include(libs.rlib)
-    include(libs.olympus)
-    include(libs.placeholders)
-    include(libs.meowdding.patches)
-
-    modRuntimeOnly(libs.devauth)
-    modRuntimeOnly(libs.modmenu)
+}
+val kspAll: Configuration by configurations.creating {
+    isCanBeResolved = true
+    isCanBeConsumed = true
 }
 
-tasks {
-    processResources {
-        inputs.property("version", project.version)
-        filesMatching("fabric.mod.json") {
-            expand(
-                "version" to project.version,
-                "minecraft" to libs.versions.minecraft.get(),
-                "fabricLoader" to libs.versions.fabric.loader.get(),
-                "fabricLanguageKotlin" to libs.versions.fabric.language.kotlin.get(),
-                "meowddingPatches" to libs.versions.meowdding.patches.get(),
-                "resourcefullib" to libs.versions.rlib.get(),
-                "skyblockApi" to libs.versions.skyblockapi.get(),
-                "olympus" to libs.versions.olympus.get(),
-                "placeholderApi" to libs.versions.placeholders.get(),
-            )
+dependencies {
+    kspAll(libs.meowdding.ktmodules)
+    kspAll(libs.meowdding.ktcodecs)
+
+    compileOnly(libs.meowdding.ktmodules)
+    compileOnly(libs.meowdding.ktcodecs)
+    configurations.forEach {
+        if (it.name.startsWith("ksp") && !it.name.contains("classpath", true) && !it.name.contains("all", true)) {
+            kspAll.allDependencies.forEach { dependency -> add(it.name, dependency) }
+        }
+    }
+}
+
+cloche {
+    metadata {
+        modId = "meowdding-lib"
+        name = "Meowdding-Lib"
+        license = ""
+        clientOnly = true
+
+        custom("modmenu" to mapOf("badges" to listOf("library")))
+    }
+
+    common {
+        withPublication()
+        mixins.from("src/mixins/meowdding-lib.mixins.json")
+
+        dependencies {
+            compileOnly(libs.meowdding.ktcodecs)
+            compileOnly(libs.meowdding.ktmodules)
+
+            modImplementation(libs.hypixelapi)
+            modImplementation(libs.skyblockapi)
+            modImplementation(libs.placeholders) { isTransitive = false }
+            modImplementation(libs.meowdding.patches) { isTransitive = false }
+
+            modCompileOnly(libs.rei)
+
+            modImplementation(libs.fabric.language.kotlin)
         }
     }
 
-    jar {
-        from("LICENSE")
-    }
+    fun createVersion(
+        name: String,
+        version: String = name,
+        loaderVersion: Provider<String> = libs.versions.fabric.loader,
+        fabricApiVersion: Provider<String> = libs.versions.fabric.api,
+        dependencies: MutableMap<String, Provider<MinimalExternalModuleDependency>>.() -> Unit = { },
+    ) {
+        val dependencies = mutableMapOf<String, Provider<MinimalExternalModuleDependency>>().apply(dependencies)
+        val rlib = dependencies["resourcefullib"]!!
+        val rconfig = dependencies["resourcefulconfig"]!!
+        val olympus = dependencies["olympus"]!!
 
-    compileKotlin {
-        compilerOptions {
-            jvmTarget = JvmTarget.JVM_21
+        fabric(name) {
+            includedClient()
+            minecraftVersion = version
+            this.loaderVersion = loaderVersion.get()
+
+            include(libs.hypixelapi)
+            include(libs.skyblockapi)
+            include(rlib)
+            include(olympus)
+            include(libs.placeholders)
+            include(libs.meowdding.patches)
+
+            metadata {
+                entrypoint("client") {
+                    adapter = "kotlin"
+                    value = "me.owdding.lib.MeowddingLib"
+                }
+                entrypoint("rei_client") {
+                    adapter = "kotlin"
+                    value = "me.owdding.lib.compat.REICompatability"
+                }
+
+                fun dependency(modId: String, version: Provider<String>) {
+                    dependency {
+                        this.modId = modId
+                        this.required = true
+                        version {
+                            this.start = version
+                        }
+                    }
+                }
+
+                dependency("fabric-language-kotlin", libs.versions.fabric.language.kotlin)
+                dependency("resourcefullib", rlib.map { it.version!! })
+                dependency("skyblock-api", libs.versions.skyblockapi)
+                dependency("olympus", olympus.map { it.version!! })
+                dependency("placeholder-api", libs.versions.placeholders)
+            }
+
+            dependencies {
+                fabricApi(fabricApiVersion, minecraftVersion)
+                modImplementation(olympus)
+                modImplementation(rconfig)
+            }
+
+            runs {
+                client()
+            }
         }
     }
 
-    withType<JavaCompile>().configureEach {
-        options.encoding = "UTF-8"
-        options.release.set(21)
+    createVersion("1.21.5", fabricApiVersion = provider { "0.127.1" }) {
+        this["resourcefullib"] = libs.resourceful.lib1215
+        this["resourcefulconfig"] = libs.resourceful.config1215
+        this["olympus"] = libs.olympus.lib1215
     }
+    createVersion("1.21.8") {
+        this["resourcefullib"] = libs.resourceful.lib1218
+        this["resourcefulconfig"] = libs.resourceful.config1218
+        this["olympus"] = libs.olympus.lib1218
+    }
+
+    mappings { official() }
+}
+
+tasks.withType<ProcessResources>().configureEach {
+    filesMatching(listOf("**/*.fsh", "**/*.vsh")) {
+        filter { if (it.startsWith("//!moj_import")) "#${it.substring(3)}" else it }
+    }
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    options.encoding = "UTF-8"
+    options.release.set(21)
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    compilerOptions.jvmTarget.set(JvmTarget.JVM_21)
+}
+
+tasks.withType<KspTask> {
+    outputs.upToDateWhen { false }
+}
+
+tasks.withType<Jar> {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 java {
     withSourcesJar()
 }
 
-ksp {
-    arg("meowdding.modules.project_name", "MeowddingLib")
-    arg("meowdding.modules.package", "me.owdding.lib.generated")
-    arg("meowdding.codecs.project_name", "MeowddingLib")
-    arg("meowdding.codecs.package", "me.owdding.lib.generated")
+artifacts {
+    add("1215RuntimeElements", tasks["1215JarInJar"])
+    add("1218RuntimeElements", tasks["1218JarInJar"])
 }
 
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            artifactId = "meowdding-lib-${libs.versions.minecraft.get()}"
             from(components["java"])
 
             pom {
@@ -127,5 +223,26 @@ publishing {
                 password = System.getenv("MAVEN_PASS") ?: providers.gradleProperty("maven_password").orNull
             }
         }
+    }
+}
+
+tasks.named("createCommonApiStub", GenerateStubApi::class) {
+    excludes.add(libs.skyblockapi.get().module.toString())
+}
+
+ksp {
+    this@ksp.excludedSources.from(sourceSets.getByName("1215").kotlin.srcDirs)
+    this@ksp.excludedSources.from(sourceSets.getByName("1218").kotlin.srcDirs)
+    arg("meowdding.project_name", "MeowddingLib")
+    arg("meowdding.package", "me.owdding.lib.generated")
+}
+
+// TODO temporary workaround for a cloche issue on certain systems, remove once fixed
+tasks.withType<WriteClasspathFile>().configureEach {
+    actions.clear()
+    actions.add {
+        generate()
+        val file = output.get().toPath()
+        file.writeText(file.readText().lines().joinToString(File.pathSeparator))
     }
 }

@@ -47,7 +47,7 @@ class ScalableWidget(val original: AbstractWidget) : BaseParentWidget(original.w
     }
 
     override fun renderWidget(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
-        guiGraphics.scaled(scale, scale, 1) {
+        guiGraphics.scaled(scale, scale) {
             original.x = (this@ScalableWidget.x / scale).floor()
             original.y = (this@ScalableWidget.y / scale).floor()
             this@ScalableWidget.updateWidthHeight()

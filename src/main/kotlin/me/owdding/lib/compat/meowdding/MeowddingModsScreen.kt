@@ -2,6 +2,7 @@ package me.owdding.lib.compat.meowdding
 
 import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
 import com.teamresourceful.resourcefulconfig.common.config.Configurations
+import com.teamresourceful.resourcefullib.client.screens.BaseCursorScreen
 import earth.terrarium.olympus.client.components.base.ListWidget
 import earth.terrarium.olympus.client.utils.ListenableState
 import me.owdding.ktmodules.Module
@@ -9,6 +10,7 @@ import me.owdding.lib.MeowddingLib
 import me.owdding.lib.builder.DisplayFactory
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.MIDDLE
+import me.owdding.lib.dev.DisplayTest
 import me.owdding.lib.displays.*
 import me.owdding.lib.layouts.BackgroundWidget
 import me.owdding.lib.layouts.ExpandingWidget
@@ -16,7 +18,6 @@ import me.owdding.lib.layouts.asWidget
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.FrameLayout
-import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
@@ -30,10 +31,10 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.net.URI
 import kotlin.jvm.optionals.getOrNull
 
-class MeowddingModsScreen : Screen(Text.of("Meowdding Mods")) {
+class MeowddingModsScreen : BaseCursorScreen(Text.of("Meowdding Mods")) {
 
     val background = MeowddingLib.id("background")
-    val maxFeatureWidth by lazy { MeowddingFeatures.features.flatMap { it.value }.maxOf { McFont.width(it) } + 5 }
+    val maxFeatureWidth by lazy { (MeowddingFeatures.features.flatMap { it.value }.maxOfOrNull { McFont.width(it) } ?: 0) + 5 }
     val modElementsWidth get() = width - maxFeatureWidth - 10
 
     override fun init() {
@@ -75,7 +76,9 @@ class MeowddingModsScreen : Screen(Text.of("Meowdding Mods")) {
 
         val button = withBackground.asButtonLeft {
             if (mod.isInstalled) {
-                McClient.setScreenAsync { ResourcefulConfigScreen.getFactory(mod.configId).apply(this) }
+                McClient.setScreenAsync {
+                    ResourcefulConfigScreen.getFactory(mod.configId).apply(this)
+                }
             } else {
                 McClient.openUri(URI("https://modrinth.com/mod/${mod.modrinthSlug}"))
             }
@@ -176,6 +179,11 @@ class MeowddingModsScreen : Screen(Text.of("Meowdding Mods")) {
                     McClient.runNextTick {
                         McClient.setScreen(MeowddingModsScreen())
                     }
+                }
+            }
+            event.registerWithCallback("meowdding test") {
+                McClient.runNextTick {
+                    McClient.setScreen(DisplayTest)
                 }
             }
         }

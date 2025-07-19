@@ -1,8 +1,8 @@
-rootProject.name = "Meowdding-Lib"
+rootProject.name = "meowdding-lib"
 
 pluginManagement {
     repositories {
-        maven("https://maven.fabricmc.net/")
+        maven(url = "https://maven.msrandom.net/repository/cloche")
         gradlePluginPortal()
     }
 }
