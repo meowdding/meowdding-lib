@@ -3,6 +3,7 @@
 import com.google.devtools.ksp.gradle.KspTask
 import earth.terrarium.cloche.api.metadata.ModMetadata
 import net.msrandom.minecraftcodev.core.utils.toPath
+import net.msrandom.minecraftcodev.fabric.task.JarInJar
 import net.msrandom.minecraftcodev.runs.task.WriteClasspathFile
 import net.msrandom.stubs.GenerateStubApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -145,6 +146,7 @@ cloche {
                     version(minecraftVersionRange)
                 }
                 dependency("fabric")
+                dependency("fabricloader", libs.versions.fabric.loader)
                 dependency("fabric-language-kotlin", libs.versions.fabric.language.kotlin)
                 dependency("resourcefullib", rlib.map { it.version!! })
                 dependency("skyblock-api", libs.versions.skyblockapi)
@@ -279,5 +281,14 @@ tasks.register("cleanRelease") {
             dependsOn(task)
             mustRunAfter(task)
         }
+    }
+}
+
+tasks.withType<JarInJar>().configureEach {
+    include {
+        if (it.name.endsWith("-dev.jar")) {
+            return@include false
+        }
+        true
     }
 }
