@@ -54,6 +54,7 @@ dependencies {
 
     compileOnly(libs.meowdding.ktmodules)
     compileOnly(libs.meowdding.ktcodecs)
+    compileOnly(libs.kotlin.stdlib)
     configurations.forEach {
         if (it.name.startsWith("ksp") && !it.name.contains("classpath", true) && !it.name.contains("all", true)) {
             kspAll.allDependencies.forEach { dependency -> add(it.name, dependency) }
@@ -79,7 +80,7 @@ cloche {
             compileOnly(libs.meowdding.ktcodecs)
             compileOnly(libs.meowdding.ktmodules)
 
-            modImplementation(libs.hypixelapi)
+            modImplementation(libs.hypixelapi) // included in skyblockapi
             modImplementation(libs.skyblockapi)
             modImplementation(libs.placeholders) { isTransitive = false }
             modImplementation(libs.meowdding.patches) { isTransitive = false }
@@ -112,7 +113,6 @@ cloche {
             minecraftVersion = version
             this.loaderVersion = loaderVersion.get()
 
-            include(libs.hypixelapi)
             include(libs.skyblockapi)
             include(rlib)
             include(olympus)
@@ -129,28 +129,27 @@ cloche {
                     value = "me.owdding.lib.compat.REICompatability"
                 }
 
-                fun dependency(modId: String, version: Provider<String>) {
+                fun dependency(modId: String, version: Provider<String>? = null) {
                     dependency {
                         this.modId = modId
                         this.required = true
-                        version {
+                        if (version != null) version {
                             this.start = version
                         }
                     }
                 }
 
                 dependency {
-                    modId = "fabric"
-                    version("*")
-                }
-                dependency {
                     modId = "minecraft"
+                    required = true
                     version(minecraftVersionRange)
                 }
+                dependency("fabric")
                 dependency("fabric-language-kotlin", libs.versions.fabric.language.kotlin)
                 dependency("resourcefullib", rlib.map { it.version!! })
                 dependency("skyblock-api", libs.versions.skyblockapi)
                 dependency("olympus", olympus.map { it.version!! })
+                dependency("meowdding-patches", libs.versions.meowdding.patches)
                 dependency("placeholder-api", libs.versions.placeholders)
             }
 
@@ -265,8 +264,7 @@ tasks.withType<WriteClasspathFile>().configureEach {
 
 tasks.register("release") {
     group = "meowdding"
-    sourceSets.filterNot { it.name == SourceSet.MAIN_SOURCE_SET_NAME || it.name == SourceSet.TEST_SOURCE_SET_NAME }
-        .forEach {
+    sourceSets.filterNot { it.name == SourceSet.MAIN_SOURCE_SET_NAME || it.name == SourceSet.TEST_SOURCE_SET_NAME }.forEach {
             tasks.getByName("${it.name}JarInJar").let { task ->
                 dependsOn(task)
                 mustRunAfter(task)

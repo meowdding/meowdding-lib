@@ -1,8 +1,5 @@
 [versions]
 
-# Minecraft
-minecraft = "1.21.5"
-
 fabric-loader = "0.16.10"
 fabric-language-kotlin = "1.13.0+kotlin.2.1.0"
 fabric-api = "0.128.1"
@@ -11,14 +8,10 @@ kotlin = "2.1.20"
 kotlin-symbol-processor = "2.1.0-1.0.29"
 
 # Dependencies
-skyblockapi = "2.1.0"
+skyblockapi = "2.1.1"
 hypixelapi = "1.0.1+build.1+mc1.21"
 placeholders = "2.6.1+1.21.5"
 rei = "19.0.806"
-
-# Dev Dependencies
-devauth = "1.2.1"
-modmenu = "14.0.0-rc.1"
 
 meowdding-patches = "1.0.5"
 meowdding-ktmodules = "1.0.5"
@@ -28,9 +21,6 @@ terrarium-cloche = "0.11.6"
 
 [libraries]
 
-minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
-fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
-fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
 fabric-language-kotlin = { module = "net.fabricmc:fabric-language-kotlin", version.ref = "fabric-language-kotlin" }
 
 skyblockapi = { module = "tech.thatgravyboat:skyblock-api", version.ref = "skyblockapi" }
@@ -50,9 +40,6 @@ meowdding-ktcodecs = { module = "me.owdding.ktcodecs:KtCodecs", version.ref = "m
 meowdding-patches = { module = "me.owdding.patches:patches", version.ref = "meowdding-patches" }
 
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
-
-devauth = { module = "me.djtheredstoner:DevAuth-fabric", version.ref = "devauth" }
-modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
 
 [plugins]
 terrarium-cloche = { id = "earth.terrarium.cloche", version.ref = "terrarium-cloche" }
