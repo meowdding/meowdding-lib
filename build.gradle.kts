@@ -285,10 +285,5 @@ tasks.register("cleanRelease") {
 }
 
 tasks.withType<JarInJar>().configureEach {
-    include {
-        if (it.name.endsWith("-dev.jar")) {
-            return@include false
-        }
-        true
-    }
+    include { !it.name.endsWith("-dev.jar") }
 }
