@@ -1,6 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
 import com.google.devtools.ksp.gradle.KspTask
+import earth.terrarium.cloche.api.metadata.ModMetadata
 import net.msrandom.minecraftcodev.core.utils.toPath
 import net.msrandom.minecraftcodev.runs.task.WriteClasspathFile
 import net.msrandom.stubs.GenerateStubApi
@@ -94,6 +95,11 @@ cloche {
         version: String = name,
         loaderVersion: Provider<String> = libs.versions.fabric.loader,
         fabricApiVersion: Provider<String> = libs.versions.fabric.api,
+        minecraftVersionRange: ModMetadata.VersionRange.() -> Unit = {
+            start = version
+            end = version
+            endExclusive = false
+        },
         dependencies: MutableMap<String, Provider<MinimalExternalModuleDependency>>.() -> Unit = { },
     ) {
         val dependencies = mutableMapOf<String, Provider<MinimalExternalModuleDependency>>().apply(dependencies)
@@ -133,6 +139,14 @@ cloche {
                     }
                 }
 
+                dependency {
+                    modId = "fabric"
+                    version("*")
+                }
+                dependency {
+                    modId = "minecraft"
+                    version(minecraftVersionRange)
+                }
                 dependency("fabric-language-kotlin", libs.versions.fabric.language.kotlin)
                 dependency("resourcefullib", rlib.map { it.version!! })
                 dependency("skyblock-api", libs.versions.skyblockapi)
@@ -157,7 +171,9 @@ cloche {
         this["resourcefulconfig"] = libs.resourceful.config1215
         this["olympus"] = libs.olympus.lib1215
     }
-    createVersion("1.21.8") {
+    createVersion("1.21.8", minecraftVersionRange = {
+        start = "1.21.6"
+    }) {
         this["resourcefullib"] = libs.resourceful.lib1218
         this["resourcefulconfig"] = libs.resourceful.config1218
         this["olympus"] = libs.olympus.lib1218
@@ -244,5 +260,26 @@ tasks.withType<WriteClasspathFile>().configureEach {
         generate()
         val file = output.get().toPath()
         file.writeText(file.readText().lines().joinToString(File.pathSeparator))
+    }
+}
+
+tasks.register("release") {
+    group = "meowdding"
+    sourceSets.filterNot { it.name == SourceSet.MAIN_SOURCE_SET_NAME || it.name == SourceSet.TEST_SOURCE_SET_NAME }
+        .forEach {
+            tasks.getByName("${it.name}JarInJar").let { task ->
+                dependsOn(task)
+                mustRunAfter(task)
+            }
+        }
+}
+
+tasks.register("cleanRelease") {
+    group = "meowdding"
+    listOf("clean", "release").forEach {
+        tasks.getByName(it).let { task ->
+            dependsOn(task)
+            mustRunAfter(task)
+        }
     }
 }
