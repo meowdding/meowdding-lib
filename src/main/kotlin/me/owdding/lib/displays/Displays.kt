@@ -192,9 +192,9 @@ object Displays {
                 get() = Text.of(text())
 
             override fun getWidth() = component.width
-            override fun getHeight() = 10
+            override fun getHeight() = McFont.height
             override fun render(graphics: GuiGraphics) {
-                graphics.drawString(component, 0, 1, color().toInt(), shadow)
+                graphics.drawString(component, 0, 0, color().toInt(), shadow)
             }
         }
     }
@@ -202,9 +202,9 @@ object Displays {
     fun component(component: () -> Component, color: () -> UInt = { 0xFFFFFFFFu }, shadow: Boolean = true): Display {
         return object : Display {
             override fun getWidth() = component().width
-            override fun getHeight() = 10
+            override fun getHeight() = McFont.height
             override fun render(graphics: GuiGraphics) {
-                graphics.drawString(component(), 0, 1, color().toInt(), shadow)
+                graphics.drawString(component(), 0, 0, color().toInt(), shadow)
             }
         }
     }

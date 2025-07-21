@@ -32,12 +32,12 @@ abstract class DisplayBuilder {
         displays.add(Displays.text(component))
     }
 
-    fun display(display: Display) {
-        displays.add(display)
-    }
-
     fun string(text: String, init: MutableComponent.() -> Unit) {
         string(Text.of(text, init))
+    }
+
+    fun display(display: Display) {
+        displays.add(display)
     }
 
     open fun item(
