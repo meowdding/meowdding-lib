@@ -114,7 +114,7 @@ cloche {
             minecraftVersion = version
             this.loaderVersion = loaderVersion.get()
 
-            include(libs.skyblockapi)
+            //include(libs.skyblockapi)
             include(rlib)
             include(olympus)
             include(libs.placeholders)
