@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack
 import me.owdding.lib.displays.Display
 import me.owdding.lib.displays.Displays.isMouseOver
 import me.owdding.lib.displays.entity.EntityStateRenderer
+import me.owdding.lib.displays.item.ItemStateRenderer
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.LivingEntity
@@ -108,7 +109,13 @@ actual object PlatformDisplays {
 
                 graphics.pushPop {
                     graphics.scale(width / 16f, height / 16f)
-                    graphics.renderItem(item, 0, 0)
+
+                    val scale = graphics.getScale()
+                    if (scale.x > 1f || scale.y > 1f) {
+                        ItemStateRenderer.draw(graphics, item, 0, 0)
+                    } else {
+                        graphics.renderItem(item, 0, 0)
+                    }
 
                     val stackSize = item.count
                     if ((showStackSize && stackSize > 1) || customStackText != null) {
