@@ -7,6 +7,7 @@ import me.owdding.lib.extensions.floor
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.events.GuiEventListener
+import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.client.gui.narration.NarratableEntry
 import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.client.gui.navigation.ScreenDirection
@@ -17,6 +18,8 @@ import kotlin.properties.Delegates.observable
 
 
 class ScalableWidget(val original: AbstractWidget) : BaseParentWidget(original.width, original.height), Scalable, CursorWidget {
+
+    constructor(original: LayoutElement) : this(original.asWidget())
 
     init {
         x = original.x
