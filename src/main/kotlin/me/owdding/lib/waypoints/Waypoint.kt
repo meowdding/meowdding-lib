@@ -14,6 +14,8 @@ import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.extentions.translated
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.awt.Color
 
 data class Waypoint(
@@ -56,7 +58,7 @@ data class Waypoint(
 
     private fun RenderWorldEvent.renderDistance(position: Vec3) {
         val text = Text.of("Distance: ${McPlayer.position!!.distanceTo(position).round()}") {
-            color = 0xFFFF0000.toInt()
+            this.color = TextColor.YELLOW
         }
         this.renderTextInWorld(position.add(0.0, -0.5, 0.0), text)
     }
