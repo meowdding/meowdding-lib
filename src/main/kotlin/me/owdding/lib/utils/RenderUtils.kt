@@ -1,21 +1,44 @@
 package me.owdding.lib.utils
 
+import com.mojang.blaze3d.pipeline.RenderPipeline
+import com.mojang.blaze3d.platform.DepthTestFunction
+import com.mojang.blaze3d.vertex.DefaultVertexFormat
+import com.mojang.blaze3d.vertex.VertexFormat
 import net.minecraft.client.gui.Font
 import net.minecraft.client.renderer.LightTexture
+import net.minecraft.client.renderer.RenderPipelines
+import net.minecraft.client.renderer.RenderType
+import net.minecraft.client.renderer.ShapeRenderer
+import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
+import net.minecraft.util.ARGB
+import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.platform.drawString
 import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
-import tech.thatgravyboat.skyblockapi.utils.text.Text´
+import tech.thatgravyboat.skyblockapi.utils.text.Text
 import kotlin.math.max
 
 object RenderUtils {
+    private val BLOCK_FILL_TRIANGLE_THROUGH_WALLS: RenderType = RenderType.create(
+        "mlib/filled_triangle_through_walls",
+        131072,
+        RenderPipeline.builder(RenderPipelines.DEBUG_FILLED_SNIPPET)
+            .withLocation("pipeline/debug_filled_box")
+            .withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.TRIANGLE_STRIP)
+            .withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST)
+            .build(),
+        RenderType.CompositeState.builder()
+            .setLayeringState(RenderType.VIEW_OFFSET_Z_LAYERING)
+            .createCompositeState(false),
+    )
+
     fun RenderWorldEvent.renderTextInWorld(
         position: Vec3,
         text: String,
-        color: Int,
+        color: Int = 0xFFFFFFFF.toInt(),
         center: Boolean = true,
     ) {
         renderTextInWorld(position, Text.of(text), color, center)
@@ -24,7 +47,7 @@ object RenderUtils {
     fun RenderWorldEvent.renderTextInWorld(
         position: Vec3,
         text: Component,
-        color: Int,
+        color: Int = 0xFFFFFFFF.toInt(),
         center: Boolean = true,
     ) {
         val x = camera.position.x
@@ -44,10 +67,39 @@ object RenderUtils {
                 x = xOffset,
                 y = 0.0f,
                 color = color.toUInt(),
-                dropShadow = false,
+                dropShadow = true,
                 displayMode = Font.DisplayMode.SEE_THROUGH,
-                backgroundColor = 0u,
+                backgroundColor = 0x70000000.toUInt(),
                 light = LightTexture.FULL_BRIGHT,
+            )
+        }
+    }
+
+    fun RenderWorldEvent.renderBox(
+        position: Vec3,
+        color: Int,
+    ) {
+        renderBox(AABB(position.x, position.y, position.z, position.x + 1, position.y + 1, position.z + 1), color)
+    }
+
+    fun RenderWorldEvent.renderBox(
+        position: BlockPos,
+        color: Int,
+    ) {
+        renderBox(AABB(position), color)
+    }
+
+    fun RenderWorldEvent.renderBox(
+        position: AABB,
+        color: Int,
+    ) {
+        atCamera {
+            ShapeRenderer.addChainedFilledBoxVertices(
+                poseStack,
+                buffer.getBuffer(BLOCK_FILL_TRIANGLE_THROUGH_WALLS),
+                position.minX - 0.005, position.minY - 0.005, position.minZ - 0.005,
+                position.maxX + 0.005, position.maxY + 0.005, position.maxZ + 0.005,
+                ARGB.redFloat(color), ARGB.greenFloat(color), ARGB.blueFloat(color), ARGB.alphaFloat(color).coerceAtMost(0.6f),
             )
         }
     }
