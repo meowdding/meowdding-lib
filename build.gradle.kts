@@ -120,6 +120,8 @@ cloche {
             include(libs.placeholders)
             include(libs.meowdding.patches)
 
+            mixins.from("src/mixins/meowdding-lib.${sourceSet.name}.mixins.json")
+
             metadata {
                 entrypoint("client") {
                     adapter = "kotlin"

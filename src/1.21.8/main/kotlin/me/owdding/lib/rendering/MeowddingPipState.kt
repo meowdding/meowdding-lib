@@ -1,4 +1,4 @@
-package me.owdding.lib.render
+package me.owdding.lib.rendering
 
 import earth.terrarium.olympus.client.pipelines.pips.OlympusPictureInPictureRenderState
 import net.minecraft.client.gui.navigation.ScreenRectangle
