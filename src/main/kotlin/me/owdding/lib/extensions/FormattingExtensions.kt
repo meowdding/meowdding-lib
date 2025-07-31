@@ -1,20 +1,44 @@
 package me.owdding.lib.extensions
 
 import java.text.DecimalFormat
-import java.text.NumberFormat
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import java.util.concurrent.ConcurrentHashMap
+import kotlin.math.log10
+import kotlin.math.pow
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
 
 private val DECIMAL_FORMAT = DecimalFormat("#.##")
 fun Number.round(): String = DECIMAL_FORMAT.format(this)
 
-private val COMPACT_NUMBER_FORMAT = NumberFormat.getCompactNumberInstance()
-fun Number.shorten(decimalDigits: Int = 1): String = COMPACT_NUMBER_FORMAT.apply { maximumFractionDigits = decimalDigits }.format(this)
+private val decimalFormatCache = ConcurrentHashMap<Int, DecimalFormat>()
+private val SUFFIXES = arrayOf("K", "M", "B", "T", "Q")
+
+fun Number.shorten(decimalDigits: Int = 1): String {
+    val doubleValue = this.toDouble()
+    if (doubleValue < 1000) {
+        return this.toString()
+    }
+
+    val tier = (log10(doubleValue) / 3).toInt()
+
+    val suffix = SUFFIXES.getOrElse(tier - 1) { SUFFIXES.last() }
+
+    val value = doubleValue / 10.0.pow(tier * 3)
+
+    val formatter = decimalFormatCache.computeIfAbsent(decimalDigits) {
+        DecimalFormat().apply {
+            maximumFractionDigits = it
+            minimumFractionDigits = 0
+        }
+    }
+
+    return "${formatter.format(value)}$suffix"
+}
 
 fun Duration.toReadableTime(biggestUnit: DurationUnit = DurationUnit.DAYS, maxUnits: Int = 2, allowMs: Boolean = false): String {
     val units = listOfNotNull(
