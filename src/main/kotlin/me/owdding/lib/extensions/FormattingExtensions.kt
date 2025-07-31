@@ -1,15 +1,15 @@
 package me.owdding.lib.extensions
 
 import java.text.DecimalFormat
+import java.text.NumberFormat
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
-import java.text.NumberFormat
-import java.util.Locale
 
 private val DECIMAL_FORMAT = DecimalFormat("#.##")
 fun Number.round(): String = DECIMAL_FORMAT.format(this)
