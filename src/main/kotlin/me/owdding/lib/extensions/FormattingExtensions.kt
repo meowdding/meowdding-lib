@@ -7,13 +7,14 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
 
 private val DECIMAL_FORMAT = DecimalFormat("#.##")
 fun Number.round(): String = DECIMAL_FORMAT.format(this)
 
-private val COMPACT_NUMBER_FORMAT = NumberFormat.getCompactNumberInstance()
+private val COMPACT_NUMBER_FORMAT = NumberFormat.getCompactNumberInstance(Locale.US, NumberFormat.Style.SHORT)
 fun Number.shorten(decimalDigits: Int = 1): String = COMPACT_NUMBER_FORMAT.apply { maximumFractionDigits = decimalDigits }.format(this)
 
 fun Duration.toReadableTime(biggestUnit: DurationUnit = DurationUnit.DAYS, maxUnits: Int = 2, allowMs: Boolean = false): String {
