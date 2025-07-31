@@ -31,6 +31,7 @@ data class Waypoint(
     var renderTypes: List<WaypointRenderType> = emptyList()
     var name: Component = Text.of("Waypoint $id")
     var color: Int = 0xFFFFFFFF.toInt()
+    var inLocatorBar = false
 
     fun withName(name: String) = withName(Text.of(name))
     fun withName(name: Component) = this.apply { this.name = name }
@@ -38,8 +39,11 @@ data class Waypoint(
     fun withColor(color: Color) = withColor(color.rgb)
     fun withColor(color: Int) = this.apply { this.color = color }
 
+    fun withNormalRenderTypes() = withRenderTypes(WaypointRenderType.TEXT, WaypointRenderType.BOX, WaypointRenderType.BEAM, WaypointRenderType.DISTANCE)
     fun withAllRenderTypes() = withRenderTypes(*WaypointRenderType.entries.toTypedArray())
     fun withRenderTypes(vararg types: WaypointRenderType) = this.apply { this.renderTypes = types.toList() }
+
+    fun inLocatorBar(boolean: Boolean = true) = this.apply { this.inLocatorBar = boolean }
 
     internal fun render(event: RenderWorldEvent) {
         if (renderTypes.isEmpty()) return
@@ -51,6 +55,7 @@ data class Waypoint(
                     WaypointRenderType.DISTANCE -> event.renderDistance(position)
                     WaypointRenderType.BOX -> event.renderBox(position, color)
                     WaypointRenderType.BEAM -> event.renderBeam(position, color)
+                    WaypointRenderType.TRACER -> {}
                 }
             }
         }
@@ -80,4 +85,5 @@ enum class WaypointRenderType {
     BOX,
     TEXT,
     DISTANCE,
+    TRACER,
 }
