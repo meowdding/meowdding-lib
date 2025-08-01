@@ -1,36 +1,31 @@
 package me.owdding.lib.dev
 
-import me.owdding.lib.displays.Displays
-import me.owdding.lib.displays.asWidget
-import me.owdding.lib.displays.withBackground
-import me.owdding.lib.layouts.ScalableWidget
+import me.owdding.lib.rendering.text.TextShaders.withTextShader
+import me.owdding.lib.rendering.text.builtin.GradientTextShader
+import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.CommonComponents
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.item.Items
+import tech.thatgravyboat.skyblockapi.platform.drawString
 
 object DisplayTest : Screen(CommonComponents.EMPTY) {
 
-    fun minecraft(path: String): ResourceLocation = ResourceLocation.withDefaultNamespace(path)
+    val shader = GradientTextShader(listOf(
+        0xFF55CDFC.toInt(),
+        0xFFF7A8B8.toInt(),
+        0xFFFFFFFF.toInt(),
+        0xFFF7A8B8.toInt(),
+        0xFF55CDFC.toInt()
+    ))
 
-    override fun init() {
-        super.init()
+    override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
+        super.render(graphics, mouseX, mouseY, partialTicks)
 
-        val widget = ScalableWidget(Displays.item(Items.CHEST).withBackground(0xFFFF0000u).asWidget())
-        widget.scale(5.0)
-
-        this.addRenderableWidget(widget)
-
-        val widget1 = ScalableWidget(Displays.item(Items.CHEST).withBackground(0xFFFF0000u).asWidget())
-        widget1.setPosition(100, 0)
-        widget1.scale(2.0)
-
-        this.addRenderableWidget(widget1)
-
-        val widget2 = ScalableWidget(Displays.item(Items.CHEST).withBackground(0xFFFF0000u).asWidget())
-        widget2.setPosition(200, 0)
-        widget2.scale(4.0)
-        this.addRenderableWidget(widget2)
+        graphics.withTextShader(shader) {
+            graphics.drawString("Hello, World!", 10, 10)
+        }
     }
 
+    override fun isPauseScreen(): Boolean {
+        return false
+    }
 }
