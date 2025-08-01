@@ -2,6 +2,7 @@ package me.owdding.lib.waypoints
 
 import net.msrandom.stub.Stub
 
+@Stub
 expect interface MinecraftWaypoint
 
 @Stub
