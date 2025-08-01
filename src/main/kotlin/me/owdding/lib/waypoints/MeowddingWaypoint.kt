@@ -17,19 +17,20 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.awt.Color
+import java.util.*
 
-data class Waypoint(
-    val id: Int,
+data class MeowddingWaypoint(
+    val uuid: UUID,
     val position: Vec3,
 ) {
-    constructor(id: Int, block: BlockPos) : this(id, Vec3.atCenterOf(block))
-    constructor(id: Int, block: BlockPos, builder: Waypoint.() -> Unit) : this(id, Vec3.atCenterOf(block), builder)
-    constructor(id: Int, position: Vec3, builder: Waypoint.() -> Unit) : this(id, position) {
+    constructor(uuid: UUID, block: BlockPos) : this(uuid, Vec3.atCenterOf(block))
+    constructor(uuid: UUID, block: BlockPos, builder: MeowddingWaypoint.() -> Unit) : this(uuid, Vec3.atCenterOf(block), builder)
+    constructor(uuid: UUID, position: Vec3, builder: MeowddingWaypoint.() -> Unit) : this(uuid, position) {
         this.builder()
     }
 
     var renderTypes: List<WaypointRenderType> = emptyList()
-    var name: Component = Text.of("Waypoint $id")
+    var name: Component = Text.of("Waypoint $uuid")
     var color: Int = 0xFFFFFFFF.toInt()
     var inLocatorBar = false
 
