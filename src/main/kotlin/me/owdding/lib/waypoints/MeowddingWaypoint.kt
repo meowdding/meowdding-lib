@@ -12,6 +12,7 @@ import net.minecraft.world.phys.Vec3
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
+import tech.thatgravyboat.skyblockapi.utils.McVersionGroup
 import tech.thatgravyboat.skyblockapi.utils.extentions.translated
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
@@ -34,6 +35,8 @@ data class MeowddingWaypoint(
     var color: Int = 0xFFFFFFFF.toInt()
     var inLocatorBar = false
 
+    val blockPos: BlockPos = BlockPos.containing(position)
+
     fun withName(name: String) = withName(Text.of(name))
     fun withName(name: Component) = this.apply { this.name = name }
 
@@ -44,7 +47,13 @@ data class MeowddingWaypoint(
     fun withAllRenderTypes() = withRenderTypes(*WaypointRenderType.entries.toTypedArray())
     fun withRenderTypes(vararg types: WaypointRenderType) = this.apply { this.renderTypes = types.toList() }
 
-    fun inLocatorBar(boolean: Boolean = true) = this.apply { this.inLocatorBar = boolean }
+    fun inLocatorBar(boolean: Boolean = true) = this.apply { this.inLocatorBar = boolean }.also {
+        // TODO: handle in manager
+
+        if (boolean && McVersionGroup.MC_1_21_6.isActive) {
+            MinecraftWaypointHandler.addWaypoint(it)
+        }
+    }
 
     internal fun render(event: RenderWorldEvent) {
         if (renderTypes.isEmpty()) return

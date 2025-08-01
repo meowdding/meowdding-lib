@@ -28,6 +28,7 @@ object TestCommands {
                     withName("Test Waypoint")
                     withColor(0xFF00FF00.toInt())
                     withAllRenderTypes()
+                    inLocatorBar(true)
                 }
             }
         }
