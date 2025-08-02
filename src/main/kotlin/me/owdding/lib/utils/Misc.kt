@@ -1,6 +1,12 @@
 package me.owdding.lib.utils
 
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
+import net.minecraft.commands.CommandSource
+import net.minecraft.commands.CommandSourceStack
+import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.player.Player
+import tech.thatgravyboat.skyblockapi.helpers.McPlayer
+import tech.thatgravyboat.skyblockapi.utils.text.Text
 import java.util.*
 
 private val DEVS = setOf(
@@ -12,3 +18,33 @@ private val DEVS = setOf(
 
 fun Player.isMeowddingDev(): Boolean = this.stringUUID in DEVS
 fun UUID.isMeowddingDev(): Boolean = this.toString() in DEVS
+
+fun FabricClientCommandSource.toCommandSourceStack(): CommandSourceStack {
+    return CommandSourceStack(
+        object : CommandSource {
+            override fun sendSystemMessage(component: Component) {
+                McPlayer.self?.displayClientMessage(component, false)
+            }
+
+            override fun acceptsSuccess(): Boolean {
+                return true
+            }
+
+            override fun acceptsFailure(): Boolean {
+                return true
+            }
+
+            override fun shouldInformAdmins(): Boolean {
+                return true
+            }
+        },
+        McPlayer.position!!,
+        this@toCommandSourceStack.rotation,
+        null,
+        0,
+        "FakeServerCommandSource",
+        Text.of("FakeServerCommandSource"),
+        null,
+        McPlayer.self!!,
+    )
+}

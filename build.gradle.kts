@@ -114,6 +114,8 @@ cloche {
             minecraftVersion = version
             this.loaderVersion = loaderVersion.get()
 
+            accessWideners.from(project.layout.projectDirectory.file("src/$name/${sourceSet.name}.accesswidener"))
+
             //include(libs.skyblockapi)
             include(rlib)
             include(olympus)
