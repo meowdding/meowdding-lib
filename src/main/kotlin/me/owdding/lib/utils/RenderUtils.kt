@@ -51,15 +51,17 @@ object RenderUtils {
         text: Component,
         color: Int = 0xFFFFFFFF.toInt(),
         center: Boolean = true,
+        yOffset: Float = 0f,
     ) {
         val x = camera.position.x
         val y = camera.position.y
         val z = camera.position.z
 
-        val scale = max((camera.position.distanceTo(position).toFloat() / 10).toDouble(), 1.0).toFloat() * 0.025f
+        val scale = max((camera.position.distanceTo(position).toFloat() / 10).toDouble(), 1.0).toFloat() * 0.033f
 
         poseStack.pushPop {
             poseStack.translate(position.x - x + 0.5, position.y - y + 1.07f, position.z - z + 0.5)
+            poseStack.translate(0f, yOffset * -scale, 0f)
             poseStack.mulPose(camera.rotation())
             poseStack.scale(scale, -scale, scale)
             val xOffset = if (center) -McFont.width(text) / 2.0f else 0.0f
