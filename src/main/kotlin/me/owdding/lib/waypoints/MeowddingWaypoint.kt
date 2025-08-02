@@ -32,6 +32,9 @@ data class MeowddingWaypoint(val position: Vec3) {
 
     var uuid: UUID = UUID.randomUUID()
     var renderTypes: Set<WaypointRenderType> = emptySet()
+        set(value) {
+            field = value.toSortedSet()
+        }
     var name: Component = Text.of("Waypoint $uuid")
     var color: Int = 0xFFFFFFFF.toInt()
     var inLocatorBar = false
@@ -71,7 +74,7 @@ data class MeowddingWaypoint(val position: Vec3) {
             Mth.lerp(event.ctx.tickCounter().getGameTimeDeltaPartialTick(false).toDouble(), McPlayer.self!!.oldPosition().y, McPlayer.position!!.y)
 
         event.poseStack.translated(-0.5, 0.0, -0.5) {
-            for (type in renderTypes.sorted()) {
+            for (type in renderTypes) {
                 when (type) {
                     WaypointRenderType.TEXT -> event.renderTextInWorld(position, name)
                     WaypointRenderType.DISTANCE -> event.renderDistance(position)
