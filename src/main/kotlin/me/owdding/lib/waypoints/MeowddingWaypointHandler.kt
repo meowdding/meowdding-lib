@@ -72,11 +72,9 @@ object MeowddingWaypointHandler {
                     val uuid = this.getArgument("uuid", String::class.java)
                     _waypoints.find { it.uuid.toString() == uuid }?.let(::removeWaypoint)
                 }
-                then("name") {
-                    thenCallback("name", StringArgumentType.greedyString(), MeowddingSuggestionProviders.iterable(_waypoints) { it.name.stripped }) {
-                        val name = this.getArgument("name", String::class.java)
-                        _waypoints.find { it.name.stripped.equals(name, ignoreCase = true) }?.let(::removeWaypoint)
-                    }
+                thenCallback("name name", StringArgumentType.greedyString(), MeowddingSuggestionProviders.iterable(_waypoints) { it.name.stripped }) {
+                    val name = this.getArgument("name", String::class.java)
+                    _waypoints.find { it.name.stripped.equals(name, ignoreCase = true) }?.let(::removeWaypoint)
                 }
             }
         }
