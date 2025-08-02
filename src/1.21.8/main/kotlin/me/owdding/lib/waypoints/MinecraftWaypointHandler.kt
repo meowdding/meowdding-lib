@@ -12,8 +12,6 @@ actual typealias MinecraftWaypoint = Waypoint
 
 actual object MinecraftWaypointHandler {
 
-    actual fun getWaypoints(): List<MinecraftWaypoint> = emptyList()
-    actual fun getWaypoint(uuid: String): MinecraftWaypoint? = null
     actual fun addWaypoint(meowddingWaypoint: MeowddingWaypoint): MinecraftWaypoint {
         val trackedWaypoint = TrackedWaypoint.setPosition(
             meowddingWaypoint.uuid,
