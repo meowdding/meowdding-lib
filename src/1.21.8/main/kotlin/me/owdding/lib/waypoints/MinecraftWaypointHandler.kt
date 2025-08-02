@@ -14,16 +14,16 @@ actual object MinecraftWaypointHandler {
 
     actual fun getWaypoints(): List<MinecraftWaypoint> = emptyList()
     actual fun getWaypoint(uuid: String): MinecraftWaypoint? = null
-    actual fun addWaypoint(waypoint: MeowddingWaypoint): MinecraftWaypoint {
-        val waypoint = TrackedWaypoint.setPosition(
-            waypoint.uuid,
-            Waypoint.Icon(WaypointStyleAssets.DEFAULT, Optional.of(waypoint.color)),
-            waypoint.blockPos,
+    actual fun addWaypoint(meowddingWaypoint: MeowddingWaypoint): MinecraftWaypoint {
+        val trackedWaypoint = TrackedWaypoint.setPosition(
+            meowddingWaypoint.uuid,
+            Waypoint.Icon(WaypointStyleAssets.DEFAULT, Optional.of(meowddingWaypoint.color)),
+            meowddingWaypoint.blockPos,
         )
 
-        McClient.connection?.waypointManager?.trackWaypoint(waypoint)
+        McClient.connection?.waypointManager?.trackWaypoint(trackedWaypoint)
 
-        return waypoint
+        return trackedWaypoint
     }
     actual fun removeWaypoint(waypoint: MeowddingWaypoint): Boolean {
         return waypoint.minecraftWaypoint?.let { McClient.connection?.waypointManager?.untrackWaypoint(it as TrackedWaypoint) } != null

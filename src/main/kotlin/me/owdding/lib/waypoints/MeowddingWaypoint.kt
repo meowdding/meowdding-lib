@@ -21,6 +21,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.awt.Color
 import java.util.*
+import kotlin.random.Random
 
 data class MeowddingWaypoint(val position: Vec3) {
     constructor(block: BlockPos) : this(Vec3.atCenterOf(block))
@@ -46,7 +47,7 @@ data class MeowddingWaypoint(val position: Vec3) {
     fun withName(name: String) = withName(Text.of(name))
     fun withName(name: Component) = this.apply { this.name = name }
 
-    fun withRandomColor() = withColor(ARGB.opaque((Math.random() * 0xFFFFFF).toInt()))
+    fun withRandomColor() = withColor(ARGB.opaque(Random.nextInt(0xFFFFFF)))
     fun withColor(color: Color) = withColor(color.rgb)
     fun withColor(color: Int) = this.apply { this.color = color }
 
