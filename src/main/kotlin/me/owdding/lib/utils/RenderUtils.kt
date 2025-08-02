@@ -86,7 +86,7 @@ object RenderUtils {
         position: Vec3,
         color: Int,
     ) {
-        renderBox(AABB(position.x, position.y, position.z, position.x + 1, position.y + 1, position.z + 1), color)
+        renderBox(AABB.unitCubeFromLowerCorner(position), color)
     }
 
     fun RenderWorldEvent.renderBox(
