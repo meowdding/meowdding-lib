@@ -7,7 +7,7 @@ expect interface MinecraftWaypoint
 @Stub
 expect object MinecraftWaypointHandler {
 
-    fun addWaypoint(waypoint: MeowddingWaypoint): MinecraftWaypoint
+    fun addWaypoint(meowddingWaypoint: MeowddingWaypoint): MinecraftWaypoint
     fun removeWaypoint(waypoint: MeowddingWaypoint): Boolean
 
 }
