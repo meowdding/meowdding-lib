@@ -66,7 +66,7 @@ object MeowddingWaypointHandler {
             }
             then("remove") {
                 thenCallback("nearest") {
-                    waypoints.minByOrNull { it.position.distanceToSqr(McPlayer.position!!) }?.let(::removeWaypoint)
+                    _waypoints.minByOrNull { it.position.distanceToSqr(McPlayer.position!!) }?.let(::removeWaypoint)
                 }
                 then("uuid") {
                     thenCallback("uuid", StringArgumentType.string(), MeowddingSuggestionProviders.iterable(_waypoints) { it.uuid.toString() }) {
@@ -98,7 +98,7 @@ object MeowddingWaypointHandler {
     @Subscription
     fun onRender(event: RenderWorldEvent.AfterTranslucent) {
         val position = McPlayer.position ?: return
-        waypoints.filter { it.renderCondition(event) }.sortedByDescending { it.position.distanceToSqr(position) }.forEach { it.render(event) }
+        _waypoints.filter { it.renderCondition(event) }.sortedByDescending { it.position.distanceToSqr(position) }.forEach { it.render(event) }
     }
 
 }
