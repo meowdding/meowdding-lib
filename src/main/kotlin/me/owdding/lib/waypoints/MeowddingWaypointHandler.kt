@@ -16,6 +16,7 @@ import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.McVersionGroup
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import java.util.*
+import kotlin.math.pow
 
 @Module
 object MeowddingWaypointHandler {
@@ -88,7 +89,9 @@ object MeowddingWaypointHandler {
     @Subscription
     fun onTick(event: TickEvent) {
         val position = McPlayer.position ?: return
-        _waypoints.filter { it.removeWhenClose && it.position.distanceToSqr(position) < 5.0 }.forEach(::removeWaypoint)
+        _waypoints
+            .filter { it.removalDistance != null && it.position.distanceToSqr(position) < (it.removalDistance?.pow(2)?.toInt() ?: Int.MIN_VALUE) }
+            .forEach(::removeWaypoint)
     }
 
     @Subscription

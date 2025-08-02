@@ -35,7 +35,7 @@ data class MeowddingWaypoint(val position: Vec3) {
     var color: Int = 0xFFFFFFFF.toInt()
     var inLocatorBar = false
     var renderCondition: (RenderWorldEvent) -> Boolean = { true }
-    var removeWhenClose = false
+    var removalDistance: Float? = null
 
     var minecraftWaypoint: MinecraftWaypoint? = null
         internal set
@@ -51,7 +51,7 @@ data class MeowddingWaypoint(val position: Vec3) {
 
     fun withRenderCondition(condition: (RenderWorldEvent) -> Boolean) = this.apply { this.renderCondition = condition }
 
-    fun withRemoveWhenClose(boolean: Boolean = true) = this.apply { this.removeWhenClose = boolean }
+    fun withRemovalDistance(range: Float? = 5f) = this.apply { this.removalDistance = range }
 
     fun withNormalRenderTypes() = withRenderTypes(WaypointRenderType.TEXT, WaypointRenderType.BOX, WaypointRenderType.BEAM, WaypointRenderType.DISTANCE)
     fun withAllRenderTypes() = withRenderTypes(*WaypointRenderType.entries.toTypedArray())
