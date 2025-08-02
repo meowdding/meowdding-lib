@@ -68,11 +68,9 @@ object MeowddingWaypointHandler {
                 thenCallback("nearest") {
                     _waypoints.minByOrNull { it.position.distanceToSqr(McPlayer.position!!) }?.let(::removeWaypoint)
                 }
-                then("uuid") {
-                    thenCallback("uuid", StringArgumentType.string(), MeowddingSuggestionProviders.iterable(_waypoints) { it.uuid.toString() }) {
-                        val uuid = this.getArgument("uuid", String::class.java)
-                        _waypoints.find { it.uuid.toString() == uuid }?.let(::removeWaypoint)
-                    }
+                thenCallback("uuid uuid", StringArgumentType.string(), MeowddingSuggestionProviders.iterable(_waypoints) { it.uuid.toString() }) {
+                    val uuid = this.getArgument("uuid", String::class.java)
+                    _waypoints.find { it.uuid.toString() == uuid }?.let(::removeWaypoint)
                 }
                 then("name") {
                     thenCallback("name", StringArgumentType.greedyString(), MeowddingSuggestionProviders.iterable(_waypoints) { it.name.stripped }) {
