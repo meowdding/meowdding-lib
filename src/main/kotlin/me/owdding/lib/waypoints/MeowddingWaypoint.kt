@@ -20,19 +20,15 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.awt.Color
 import java.util.*
 
-data class MeowddingWaypoint(
-    val uuid: UUID,
-    val position: Vec3,
-) {
-    constructor(uuid: UUID, block: BlockPos) : this(uuid, Vec3.atCenterOf(block))
-    constructor(uuid: UUID, block: BlockPos, addToHandler: Boolean = true, builder: MeowddingWaypoint.() -> Unit)
-        : this(uuid, Vec3.atCenterOf(block), addToHandler, builder)
-
-    constructor(uuid: UUID, position: Vec3, addToHandler: Boolean = true, builder: MeowddingWaypoint.() -> Unit) : this(uuid, position) {
+data class MeowddingWaypoint(val position: Vec3) {
+    constructor(block: BlockPos) : this(Vec3.atCenterOf(block))
+    constructor(block: BlockPos, addToHandler: Boolean = true, builder: MeowddingWaypoint.() -> Unit) : this(Vec3.atCenterOf(block), addToHandler, builder)
+    constructor(position: Vec3, addToHandler: Boolean = true, builder: MeowddingWaypoint.() -> Unit) : this(position) {
         this.builder()
         if (addToHandler) addToHandler()
     }
 
+    var uuid: UUID = UUID.randomUUID()
     var renderTypes: Set<WaypointRenderType> = emptySet()
     var name: Component = Text.of("Waypoint $uuid")
     var color: Int = 0xFFFFFFFF.toInt()

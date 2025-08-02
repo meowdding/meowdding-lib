@@ -40,7 +40,7 @@ object MeowddingWaypointHandler {
     fun onCommand(event: RegisterCommandsEvent) {
         event.register("meowdding waypoint") {
             thenCallback("add") {
-                MeowddingWaypoint(UUID.randomUUID(), McPlayer.position!!) {
+                MeowddingWaypoint(McPlayer.position!!) {
                     withName("Waypoint $uuid")
                     withRandomColor()
                     withAllRenderTypes()
