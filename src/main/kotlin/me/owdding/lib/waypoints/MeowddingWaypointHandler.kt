@@ -7,6 +7,8 @@ import me.owdding.lib.utils.toCommandSourceStack
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument
 import net.minecraft.commands.arguments.coordinates.Coordinates
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
+import tech.thatgravyboat.skyblockapi.api.events.location.ServerDisconnectEvent
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
@@ -51,7 +53,6 @@ object MeowddingWaypointHandler {
                         withRandomColor()
                         withAllRenderTypes()
                         inLocatorBar()
-                        withRemoveWhenClose()
                     }
                 }
                 callback {
@@ -60,7 +61,6 @@ object MeowddingWaypointHandler {
                         withRandomColor()
                         withAllRenderTypes()
                         inLocatorBar()
-                        withRemoveWhenClose()
                     }
                 }
             }
@@ -84,14 +84,21 @@ object MeowddingWaypointHandler {
         }
     }
 
+    @Subscription(ServerChangeEvent::class, ServerDisconnectEvent::class)
+    fun clearWaypoints() {
+        _waypoints.clear()
+    }
+
     @Subscription
     fun onTick(event: TickEvent) {
-        _waypoints.filter { it.removeWhenClose && it.position.distanceToSqr(McPlayer.position!!) < 5.0 }.forEach(::removeWaypoint)
+        val position = McPlayer.position ?: return
+        _waypoints.filter { it.removeWhenClose && it.position.distanceToSqr(position) < 5.0 }.forEach(::removeWaypoint)
     }
 
     @Subscription
     fun onRender(event: RenderWorldEvent) {
-        waypoints.filter { it.renderCondition(event) }.sortedByDescending { it.position.distanceToSqr(McPlayer.position!!) }.forEach { it.render(event) }
+        val position = McPlayer.position ?: return
+        waypoints.filter { it.renderCondition(event) }.sortedByDescending { it.position.distanceToSqr(position) }.forEach { it.render(event) }
     }
 
 }
