@@ -54,7 +54,6 @@ object MeowddingWaypointHandler {
                         withRandomColor()
                         withAllRenderTypes()
                         inLocatorBar()
-                        withIgnoreY(true)
                     }
                 }
                 callback {
@@ -67,6 +66,9 @@ object MeowddingWaypointHandler {
                 }
             }
             then("remove") {
+                thenCallback("all") {
+                    _waypoints.forEach(::removeWaypoint)
+                }
                 thenCallback("nearest") {
                     _waypoints.minByOrNull { it.position.distanceToSqr(McPlayer.position!!) }?.let(::removeWaypoint)
                 }
