@@ -12,9 +12,7 @@ object TestCommands {
     fun onCommand(event: RegisterCommandsEvent) {
         event.register("meowdding test") {
             thenCallback("display") {
-                McClient.runNextTick {
-                    McClient.setScreen(DisplayTest)
-                }
+                McClient.setScreenAsync { DisplayTest }
             }
         }
     }
