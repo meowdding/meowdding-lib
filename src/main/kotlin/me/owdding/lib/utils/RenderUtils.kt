@@ -2,6 +2,7 @@ package me.owdding.lib.utils
 
 import com.mojang.blaze3d.pipeline.RenderPipeline
 import com.mojang.blaze3d.platform.DepthTestFunction
+import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.VertexFormat
 import net.minecraft.client.gui.Font
@@ -14,11 +15,12 @@ import net.minecraft.network.chat.Component
 import net.minecraft.util.ARGB
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
+import org.joml.Vector3f
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.helpers.McFont
-import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.platform.drawString
 import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
+import tech.thatgravyboat.skyblockapi.utils.extentions.translated
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import kotlin.math.max
 
@@ -106,16 +108,23 @@ object RenderUtils {
         }
     }
 
-    fun RenderWorldEvent.renderLineFromCursor(pos: Vec3, color: Int, width: Double = 5.0) {
-        draw3dLine(McPlayer.self!!.eyePosition, pos, color, width)
-    }
+    fun RenderWorldEvent.renderLineFromCursor(pos: Vec3, color: Int, width: Float = 5f) {
+        val cameraPos: Vec3 = camera.position
 
-    fun RenderWorldEvent.draw3dLine(start: Vec3, end: Vec3, color: Int, width: Double = 5.0) {
-        atCamera {
-            val vertexConsumer = buffer.getBuffer(RenderType.debugLineStrip(width))
-            vertexConsumer.addVertex(poseStack.last(), start.x.toFloat(), start.y.toFloat(), start.z.toFloat()).setColor(color)
-            vertexConsumer.addVertex(poseStack.last(), end.x.toFloat(), end.y.toFloat(), end.z.toFloat()).setColor(color)
+        poseStack.translated(-cameraPos.x, -cameraPos.y, -cameraPos.z) {
+            val entry = poseStack.last()
+
+            RenderSystem.lineWidth(width)
+
+            val cameraPoint: Vec3 = cameraPos.add(Vec3.directionFromRotation(camera.xRot, camera.yRot))
+
+            val buffer = buffer.getBuffer(RenderType.lineStrip())
+            val normal: Vector3f = pos.toVector3f().sub(cameraPoint.x.toFloat(), cameraPoint.y.toFloat(), cameraPoint.z.toFloat()).normalize()
+            buffer.addVertex(entry, cameraPoint.x.toFloat(), cameraPoint.y.toFloat(), cameraPoint.z.toFloat()).setColor(color).setNormal(entry, normal)
+            buffer.addVertex(entry, pos.toVector3f()).setColor(color).setNormal(entry, normal)
         }
+
+        RenderSystem.lineWidth(1f)
     }
 
 }
