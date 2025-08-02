@@ -16,10 +16,12 @@ import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.helpers.McFont
+import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.platform.drawString
 import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import kotlin.math.max
+
 
 object RenderUtils {
     private val BLOCK_FILL_TRIANGLE_THROUGH_WALLS: RenderType = RenderType.create(
@@ -101,6 +103,18 @@ object RenderUtils {
                 position.maxX + 0.005, position.maxY + 0.005, position.maxZ + 0.005,
                 ARGB.redFloat(color), ARGB.greenFloat(color), ARGB.blueFloat(color), ARGB.alphaFloat(color).coerceAtMost(0.6f),
             )
+        }
+    }
+
+    fun RenderWorldEvent.renderLineFromCursor(pos: Vec3, color: Int, width: Double = 5.0) {
+        draw3dLine(McPlayer.self!!.eyePosition, pos, color, width)
+    }
+
+    fun RenderWorldEvent.draw3dLine(start: Vec3, end: Vec3, color: Int, width: Double = 5.0) {
+        atCamera {
+            val vertexConsumer = buffer.getBuffer(RenderType.debugLineStrip(width))
+            vertexConsumer.addVertex(poseStack.last(), start.x.toFloat(), start.y.toFloat(), start.z.toFloat()).setColor(color)
+            vertexConsumer.addVertex(poseStack.last(), end.x.toFloat(), end.y.toFloat(), end.z.toFloat()).setColor(color)
         }
     }
 

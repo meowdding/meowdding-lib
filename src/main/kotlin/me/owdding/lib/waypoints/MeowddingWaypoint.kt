@@ -2,6 +2,7 @@ package me.owdding.lib.waypoints
 
 import me.owdding.lib.extensions.round
 import me.owdding.lib.utils.RenderUtils.renderBox
+import me.owdding.lib.utils.RenderUtils.renderLineFromCursor
 import me.owdding.lib.utils.RenderUtils.renderTextInWorld
 import net.minecraft.client.renderer.blockentity.BeaconRenderer
 import net.minecraft.core.BlockPos
@@ -30,7 +31,7 @@ data class MeowddingWaypoint(
         this.builder()
     }
 
-    var renderTypes: List<WaypointRenderType> = emptyList()
+    var renderTypes: Set<WaypointRenderType> = emptySet()
     var name: Component = Text.of("Waypoint $uuid")
     var color: Int = 0xFFFFFFFF.toInt()
     var inLocatorBar = false
@@ -45,7 +46,7 @@ data class MeowddingWaypoint(
 
     fun withNormalRenderTypes() = withRenderTypes(WaypointRenderType.TEXT, WaypointRenderType.BOX, WaypointRenderType.BEAM, WaypointRenderType.DISTANCE)
     fun withAllRenderTypes() = withRenderTypes(*WaypointRenderType.entries.toTypedArray())
-    fun withRenderTypes(vararg types: WaypointRenderType) = this.apply { this.renderTypes = types.toList() }
+    fun withRenderTypes(vararg types: WaypointRenderType) = this.apply { this.renderTypes = types.toSet() }
 
     fun inLocatorBar(boolean: Boolean = true) = this.apply { this.inLocatorBar = boolean }.also {
         // TODO: handle in manager
@@ -65,7 +66,7 @@ data class MeowddingWaypoint(
                     WaypointRenderType.DISTANCE -> event.renderDistance(position)
                     WaypointRenderType.BOX -> event.renderBox(position, color)
                     WaypointRenderType.BEAM -> event.renderBeam(position, color)
-                    WaypointRenderType.TRACER -> {}
+                    WaypointRenderType.TRACER -> event.poseStack.translated(0.5, 0, 0.5) { event.renderLineFromCursor(position, color) }
                 }
             }
         }
