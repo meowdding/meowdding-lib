@@ -8,6 +8,7 @@ import me.owdding.lib.utils.RenderUtils.renderTextInWorld
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.util.ARGB
+import net.minecraft.util.Mth
 import net.minecraft.world.phys.Vec3
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.helpers.McFont
@@ -36,6 +37,7 @@ data class MeowddingWaypoint(val position: Vec3) {
     var inLocatorBar = false
     var renderCondition: (RenderWorldEvent) -> Boolean = { true }
     var removalDistance: Float? = null
+    var ignoreY = false
 
     var minecraftWaypoint: MinecraftWaypoint? = null
         internal set
@@ -59,10 +61,14 @@ data class MeowddingWaypoint(val position: Vec3) {
 
     fun inLocatorBar(boolean: Boolean = true) = this.apply { this.inLocatorBar = boolean }
 
+    fun withIgnoreY(boolean: Boolean = true) = this.apply { this.ignoreY = boolean }
+
     fun addToHandler() = MeowddingWaypointHandler.addWaypoint(this)
 
     internal fun render(event: RenderWorldEvent) {
         if (renderTypes.isEmpty()) return
+        if (ignoreY) position.y =
+            Mth.lerp(event.ctx.tickCounter().getGameTimeDeltaPartialTick(false).toDouble(), McPlayer.self!!.oldPosition().y, McPlayer.position!!.y)
 
         event.poseStack.translated(-0.5, 0.0, -0.5) {
             for (type in renderTypes.sorted()) {

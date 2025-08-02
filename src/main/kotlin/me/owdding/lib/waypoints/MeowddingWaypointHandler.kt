@@ -54,6 +54,7 @@ object MeowddingWaypointHandler {
                         withRandomColor()
                         withAllRenderTypes()
                         inLocatorBar()
+                        withIgnoreY(true)
                     }
                 }
                 callback {

@@ -76,6 +76,7 @@ cloche {
     common {
         withPublication()
         mixins.from("src/mixins/meowdding-lib.mixins.json")
+        accessWideners.from("src/main/mlib.accesswidener")
 
         dependencies {
             compileOnly(libs.meowdding.ktcodecs)
