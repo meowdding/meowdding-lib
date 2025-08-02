@@ -10,13 +10,16 @@ import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.ShapeRenderer
+import net.minecraft.client.renderer.blockentity.BeaconRenderer
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.util.ARGB
+import net.minecraft.util.Mth
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.helpers.McFont
+import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.platform.drawString
 import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -123,6 +126,17 @@ object RenderUtils {
             buffer.addVertex(entry, end.toVector3f()).setColor(color).setNormal(entry, normal)
 
             RenderSystem.lineWidth(1f)
+        }
+    }
+
+    fun RenderWorldEvent.renderBeaconBeam(position: Vec3, color: Int) {
+        atCamera {
+            translate(position)
+            BeaconRenderer.renderBeaconBeam(
+                poseStack, buffer, BeaconRenderer.BEAM_LOCATION,
+                0f, Mth.PI, McLevel.self.gameTime, 0, McLevel.self.maxY * 2,
+                ARGB.opaque(color), 0.2f, 0.25f,
+            )
         }
     }
 
