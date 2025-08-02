@@ -1,0 +1,75 @@
+package me.owdding.lib.waypoints
+
+import com.mojang.brigadier.arguments.StringArgumentType
+import me.owdding.ktmodules.Module
+import me.owdding.lib.utils.suggestions.MeowddingSuggestionProviders
+import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
+import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
+import tech.thatgravyboat.skyblockapi.helpers.McPlayer
+import tech.thatgravyboat.skyblockapi.utils.McVersionGroup
+import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
+import java.util.*
+
+@Module
+object MeowddingWaypointHandler {
+
+    private var _waypoints: MutableList<MeowddingWaypoint> = mutableListOf()
+    val waypoints: List<MeowddingWaypoint> get() = _waypoints
+
+    fun addWaypoint(waypoint: MeowddingWaypoint) {
+        _waypoints.add(waypoint)
+
+        if (waypoint.inLocatorBar && !McVersionGroup.MC_1_21_5.isActive) {
+            waypoint.minecraftWaypoint = MinecraftWaypointHandler.addWaypoint(waypoint)
+        }
+    }
+
+    fun removeWaypoint(uuid: UUID) {
+        _waypoints.find { it.uuid == uuid }?.let(::removeWaypoint)
+    }
+
+    fun removeWaypoint(waypoint: MeowddingWaypoint) {
+        _waypoints.remove(waypoint)
+        if (waypoint.inLocatorBar && !McVersionGroup.MC_1_21_5.isActive) {
+            MinecraftWaypointHandler.removeWaypoint(waypoint)
+        }
+    }
+
+    @Subscription
+    fun onCommand(event: RegisterCommandsEvent) {
+        event.register("meowdding waypoint") {
+            thenCallback("add") {
+                MeowddingWaypoint(UUID.randomUUID(), McPlayer.position!!) {
+                    withName("Waypoint $uuid")
+                    withRandomColor()
+                    withAllRenderTypes()
+                    inLocatorBar(true)
+                }
+            }
+            then("remove") {
+                thenCallback("nearest") {
+                    waypoints.minByOrNull { it.position.distanceTo(McPlayer.position!!) }?.let(::removeWaypoint)
+                }
+                then("uuid") {
+                    thenCallback("uuid", StringArgumentType.string(), MeowddingSuggestionProviders.iterable(_waypoints) { it.uuid.toString() }) {
+                        val uuid = this.getArgument("uuid", String::class.java)
+                        _waypoints.find { it.uuid.toString() == uuid }?.let(::removeWaypoint)
+                    }
+                }
+                then("name") {
+                    thenCallback("name", StringArgumentType.greedyString(), MeowddingSuggestionProviders.iterable(_waypoints) { it.name.stripped }) {
+                        val name = this.getArgument("name", String::class.java)
+                        _waypoints.find { it.name.stripped.equals(name, ignoreCase = true) }?.let(::removeWaypoint)
+                    }
+                }
+            }
+        }
+    }
+
+    @Subscription
+    fun onRender(event: RenderWorldEvent) {
+        waypoints.filter { it.renderCondition(event) }.sortedByDescending { it.position.distanceTo(McPlayer.position!!) }.forEach { it.render(event) }
+    }
+
+}

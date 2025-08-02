@@ -13,7 +13,6 @@ import net.minecraft.world.phys.Vec3
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
-import tech.thatgravyboat.skyblockapi.utils.McVersionGroup
 import tech.thatgravyboat.skyblockapi.utils.extentions.translated
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
@@ -26,35 +25,41 @@ data class MeowddingWaypoint(
     val position: Vec3,
 ) {
     constructor(uuid: UUID, block: BlockPos) : this(uuid, Vec3.atCenterOf(block))
-    constructor(uuid: UUID, block: BlockPos, builder: MeowddingWaypoint.() -> Unit) : this(uuid, Vec3.atCenterOf(block), builder)
-    constructor(uuid: UUID, position: Vec3, builder: MeowddingWaypoint.() -> Unit) : this(uuid, position) {
+    constructor(uuid: UUID, block: BlockPos, addToHandler: Boolean = true, builder: MeowddingWaypoint.() -> Unit)
+        : this(uuid, Vec3.atCenterOf(block), addToHandler, builder)
+
+    constructor(uuid: UUID, position: Vec3, addToHandler: Boolean = true, builder: MeowddingWaypoint.() -> Unit) : this(uuid, position) {
         this.builder()
+        if (addToHandler) addToHandler()
     }
 
     var renderTypes: Set<WaypointRenderType> = emptySet()
     var name: Component = Text.of("Waypoint $uuid")
     var color: Int = 0xFFFFFFFF.toInt()
     var inLocatorBar = false
+    var renderCondition: (RenderWorldEvent) -> Boolean = { true }
+
+    var minecraftWaypoint: MinecraftWaypoint? = null
+        internal set
 
     val blockPos: BlockPos = BlockPos.containing(position)
 
     fun withName(name: String) = withName(Text.of(name))
     fun withName(name: Component) = this.apply { this.name = name }
 
+    fun withRandomColor() = withColor(ARGB.opaque((Math.random() * 0xFFFFFF).toInt()))
     fun withColor(color: Color) = withColor(color.rgb)
     fun withColor(color: Int) = this.apply { this.color = color }
+
+    fun withRenderCondition(condition: (RenderWorldEvent) -> Boolean) = this.apply { this.renderCondition = condition }
 
     fun withNormalRenderTypes() = withRenderTypes(WaypointRenderType.TEXT, WaypointRenderType.BOX, WaypointRenderType.BEAM, WaypointRenderType.DISTANCE)
     fun withAllRenderTypes() = withRenderTypes(*WaypointRenderType.entries.toTypedArray())
     fun withRenderTypes(vararg types: WaypointRenderType) = this.apply { this.renderTypes = types.toSet() }
 
-    fun inLocatorBar(boolean: Boolean = true) = this.apply { this.inLocatorBar = boolean }.also {
-        // TODO: handle in manager
+    fun inLocatorBar(boolean: Boolean = true) = this.apply { this.inLocatorBar = boolean }
 
-        if (boolean && McVersionGroup.MC_1_21_6.isActive) {
-            MinecraftWaypointHandler.addWaypoint(it)
-        }
-    }
+    fun addToHandler() = MeowddingWaypointHandler.addWaypoint(this)
 
     internal fun render(event: RenderWorldEvent) {
         if (renderTypes.isEmpty()) return
@@ -66,7 +71,7 @@ data class MeowddingWaypoint(
                     WaypointRenderType.DISTANCE -> event.renderDistance(position)
                     WaypointRenderType.BOX -> event.renderBox(position, color)
                     WaypointRenderType.BEAM -> event.renderBeam(position, color)
-                    WaypointRenderType.TRACER -> event.poseStack.translated(0.5, 0, 0.5) { event.renderLineFromCursor(position, color) }
+                    WaypointRenderType.TRACER -> event.poseStack.translated(0.5, 0, 0.5) { event.renderLineFromCursor(position.add(0.0, 0.5, 0.0), color) }
                 }
             }
         }

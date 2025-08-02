@@ -10,6 +10,7 @@ expect object MinecraftWaypointHandler {
     fun getWaypoints(): List<MinecraftWaypoint>
     fun getWaypoint(uuid: String): MinecraftWaypoint?
     fun addWaypoint(waypoint: MeowddingWaypoint): MinecraftWaypoint
+    fun removeWaypoint(waypoint: MeowddingWaypoint): Boolean
 
 }
 

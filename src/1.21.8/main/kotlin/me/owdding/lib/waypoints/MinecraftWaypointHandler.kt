@@ -25,6 +25,9 @@ actual object MinecraftWaypointHandler {
 
         return waypoint
     }
+    actual fun removeWaypoint(waypoint: MeowddingWaypoint): Boolean {
+        return waypoint.minecraftWaypoint?.let { McClient.connection?.waypointManager?.untrackWaypoint(it as TrackedWaypoint) } != null
+    }
 
 }
 
