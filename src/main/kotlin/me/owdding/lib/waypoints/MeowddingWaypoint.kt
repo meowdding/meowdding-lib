@@ -16,6 +16,7 @@ import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.extentions.translated
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.awt.Color
@@ -78,8 +79,9 @@ data class MeowddingWaypoint(val position: Vec3) {
     }
 
     private fun RenderWorldEvent.renderDistance(position: Vec3) {
-        val text = Text.of("Distance: ${McPlayer.position!!.distanceTo(position).round()}") {
-            this.color = TextColor.YELLOW
+        val text = Text.of("Distance: ") {
+            this.color = TextColor.GRAY
+            append(McPlayer.position!!.distanceTo(position).round()) { this.color = TextColor.YELLOW }
         }
         this.renderTextInWorld(position.add(0.0, -0.5, 0.0), text, yOffset = if (WaypointRenderType.TEXT in renderTypes) McFont.height.toFloat() else 0f)
     }
