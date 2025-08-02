@@ -3,9 +3,13 @@ package me.owdding.lib.waypoints
 import com.mojang.brigadier.arguments.StringArgumentType
 import me.owdding.ktmodules.Module
 import me.owdding.lib.utils.suggestions.MeowddingSuggestionProviders
+import me.owdding.lib.utils.toCommandSourceStack
+import net.minecraft.commands.arguments.coordinates.BlockPosArgument
+import net.minecraft.commands.arguments.coordinates.Coordinates
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
+import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.McVersionGroup
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
@@ -39,17 +43,30 @@ object MeowddingWaypointHandler {
     @Subscription
     fun onCommand(event: RegisterCommandsEvent) {
         event.register("meowdding waypoint") {
-            thenCallback("add") {
-                MeowddingWaypoint(McPlayer.position!!) {
-                    withName("Waypoint $uuid")
-                    withRandomColor()
-                    withAllRenderTypes()
-                    inLocatorBar(true)
+            then("add") {
+                thenCallback("coords", BlockPosArgument.blockPos()) {
+                    val pos = this.getArgument("coords", Coordinates::class.java).getBlockPos(this.source.toCommandSourceStack())
+                    MeowddingWaypoint(pos) {
+                        withName("Waypoint $uuid")
+                        withRandomColor()
+                        withAllRenderTypes()
+                        inLocatorBar()
+                        withRemoveWhenClose()
+                    }
+                }
+                callback {
+                    MeowddingWaypoint(McPlayer.position!!) {
+                        withName("Waypoint $uuid")
+                        withRandomColor()
+                        withAllRenderTypes()
+                        inLocatorBar()
+                        withRemoveWhenClose()
+                    }
                 }
             }
             then("remove") {
                 thenCallback("nearest") {
-                    waypoints.minByOrNull { it.position.distanceTo(McPlayer.position!!) }?.let(::removeWaypoint)
+                    waypoints.minByOrNull { it.position.distanceToSqr(McPlayer.position!!) }?.let(::removeWaypoint)
                 }
                 then("uuid") {
                     thenCallback("uuid", StringArgumentType.string(), MeowddingSuggestionProviders.iterable(_waypoints) { it.uuid.toString() }) {
@@ -68,8 +85,13 @@ object MeowddingWaypointHandler {
     }
 
     @Subscription
+    fun onTick(event: TickEvent) {
+        _waypoints.filter { it.removeWhenClose && it.position.distanceToSqr(McPlayer.position!!) < 5.0 }.forEach(::removeWaypoint)
+    }
+
+    @Subscription
     fun onRender(event: RenderWorldEvent) {
-        waypoints.filter { it.renderCondition(event) }.sortedByDescending { it.position.distanceTo(McPlayer.position!!) }.forEach { it.render(event) }
+        waypoints.filter { it.renderCondition(event) }.sortedByDescending { it.position.distanceToSqr(McPlayer.position!!) }.forEach { it.render(event) }
     }
 
 }
