@@ -29,6 +29,7 @@ repositories {
     maven(url = "https://maven.msrandom.net/repository/cloche")
     maven(url = "https://maven.msrandom.net/repository/root")
     maven(url = "https://maven.shedaniel.me/")
+    maven(url = "https://maven.teamresourceful.com/repository/maven-private/")
     mavenCentral()
     mavenLocal()
 }
@@ -52,6 +53,9 @@ val kspAll: Configuration by configurations.creating {
 dependencies {
     kspAll(libs.meowdding.ktmodules)
     kspAll(libs.meowdding.ktcodecs)
+    kspAll("net.msrandom:kmp-actual-stubs-processor:1.0.3+workaround") {
+        version { strictly("1.0.312312+workaround") } // fixes an issue with ksp stubs https://github.com/terrarium-earth/jvm-multiplatform/pull/11
+    }
 
     compileOnly(libs.meowdding.ktmodules)
     compileOnly(libs.meowdding.ktcodecs)
