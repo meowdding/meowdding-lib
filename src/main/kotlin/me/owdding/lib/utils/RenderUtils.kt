@@ -40,6 +40,8 @@ object RenderUtils {
             .createCompositeState(false),
     )
 
+    val RenderWorldEvent.partialTicks: Float get() = this.ctx.tickCounter().getGameTimeDeltaPartialTick(false)
+
     fun RenderWorldEvent.renderTextInWorld(
         position: Vec3,
         text: String,

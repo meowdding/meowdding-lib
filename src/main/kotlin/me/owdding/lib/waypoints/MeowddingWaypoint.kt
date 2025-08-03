@@ -1,6 +1,7 @@
 package me.owdding.lib.waypoints
 
 import me.owdding.lib.extensions.round
+import me.owdding.lib.utils.RenderUtils.partialTicks
 import me.owdding.lib.utils.RenderUtils.renderBeaconBeam
 import me.owdding.lib.utils.RenderUtils.renderBox
 import me.owdding.lib.utils.RenderUtils.renderLineFromCursor
@@ -68,10 +69,22 @@ data class MeowddingWaypoint(val position: Vec3) {
 
     fun addToHandler() = MeowddingWaypointHandler.addWaypoint(this)
 
+    fun distanceToSqr(other: Vec3): Double {
+        return if (this.ignoreY) {
+            other.let { it.distanceToSqr(this.position.x, it.y, this.position.z) }
+        } else {
+            other.distanceToSqr(this.position)
+        }
+    }
+
     internal fun render(event: RenderWorldEvent) {
         if (renderTypes.isEmpty()) return
-        if (ignoreY) position.y =
-            Mth.lerp(event.ctx.tickCounter().getGameTimeDeltaPartialTick(false).toDouble(), McPlayer.self!!.oldPosition().y, McPlayer.position!!.y)
+
+        val position = Vec3(
+            position.x(),
+            if (ignoreY) Mth.lerp(event.partialTicks.toDouble(), McPlayer.self!!.oldPosition().y, McPlayer.position!!.y) else position.y(),
+            position.z()
+        )
 
         event.poseStack.translated(-0.5, 0.0, -0.5) {
             for (type in renderTypes) {
