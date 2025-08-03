@@ -16,7 +16,7 @@ actual object MinecraftWaypointHandler {
         val trackedWaypoint = TrackedWaypoint.setPosition(
             meowddingWaypoint.uuid,
             Waypoint.Icon(WaypointStyleAssets.DEFAULT, Optional.of(meowddingWaypoint.color)),
-            meowddingWaypoint.blockPos,
+            meowddingWaypoint.getBlockPos(),
         )
 
         McClient.connection?.waypointManager?.trackWaypoint(trackedWaypoint)

@@ -23,7 +23,7 @@ import java.awt.Color
 import java.util.*
 import kotlin.random.Random
 
-data class MeowddingWaypoint(val position: Vec3) {
+data class MeowddingWaypoint(private val _position: Vec3) {
     constructor(block: BlockPos) : this(Vec3.atCenterOf(block))
     constructor(block: BlockPos, addToHandler: Boolean = true, builder: MeowddingWaypoint.() -> Unit) : this(Vec3.atCenterOf(block), addToHandler, builder)
     constructor(position: Vec3, addToHandler: Boolean = true, builder: MeowddingWaypoint.() -> Unit) : this(position) {
@@ -45,8 +45,6 @@ data class MeowddingWaypoint(val position: Vec3) {
 
     var minecraftWaypoint: MinecraftWaypoint? = null
         internal set
-
-    val blockPos: BlockPos = BlockPos.containing(position)
 
     fun withName(name: String) = withName(Text.of(name))
     fun withName(name: Component) = this.apply { this.name = name }
@@ -71,20 +69,36 @@ data class MeowddingWaypoint(val position: Vec3) {
 
     fun distanceToSqr(other: Vec3): Double {
         return if (this.ignoreY) {
-            other.let { it.distanceToSqr(this.position.x, it.y, this.position.z) }
+            other.let { it.distanceToSqr(this._position.x, it.y, this._position.z) }
         } else {
-            other.distanceToSqr(this.position)
+            other.distanceToSqr(this._position)
         }
+    }
+
+    fun getPosition(partialTicks: Float = 1f): Vec3 = if (ignoreY) {
+        Vec3(
+            _position.x(),
+            Mth.lerp(partialTicks.toDouble(), McPlayer.self!!.oldPosition().y, McPlayer.position!!.y),
+            _position.z()
+        )
+    } else {
+        _position
+    }
+
+    fun getBlockPos(partialTicks: Float = 1f): BlockPos = if (ignoreY) {
+        BlockPos.containing(
+            _position.x(),
+            Mth.lerp(partialTicks.toDouble(), McPlayer.self!!.oldPosition().y, McPlayer.position!!.y),
+            _position.z()
+        )
+    } else {
+        BlockPos.containing(_position)
     }
 
     internal fun render(event: RenderWorldEvent) {
         if (renderTypes.isEmpty()) return
 
-        val position = Vec3(
-            position.x(),
-            if (ignoreY) Mth.lerp(event.partialTicks.toDouble(), McPlayer.self!!.oldPosition().y, McPlayer.position!!.y) else position.y(),
-            position.z()
-        )
+        val position = getPosition(event.partialTicks)
 
         event.poseStack.translated(-0.5, 0.0, -0.5) {
             for (type in renderTypes) {
