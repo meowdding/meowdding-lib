@@ -76,6 +76,7 @@ cloche {
     common {
         withPublication()
         mixins.from("src/mixins/meowdding-lib.mixins.json")
+        accessWideners.from("src/main/mlib.accesswidener")
 
         dependencies {
             compileOnly(libs.meowdding.ktcodecs)
@@ -113,6 +114,8 @@ cloche {
             includedClient()
             minecraftVersion = version
             this.loaderVersion = loaderVersion.get()
+
+            accessWideners.from(project.layout.projectDirectory.file("src/$name/${sourceSet.name}.accesswidener"))
 
             //include(libs.skyblockapi)
             include(rlib)
