@@ -43,6 +43,11 @@ object MeowddingWaypointHandler {
         }
     }
 
+    @Subscription(ServerChangeEvent::class, ServerDisconnectEvent::class)
+    fun clearWaypoints() {
+        _waypoints.forEach(::removeWaypoint)
+    }
+
     @Subscription
     fun onCommand(event: RegisterCommandsEvent) {
         event.register("meowdding waypoint") {
@@ -66,9 +71,7 @@ object MeowddingWaypointHandler {
                 }
             }
             then("remove") {
-                thenCallback("all") {
-                    _waypoints.forEach(::removeWaypoint)
-                }
+                thenCallback("all") { clearWaypoints() }
                 thenCallback("nearest") {
                     val position = McPlayer.position ?: return@thenCallback
                     _waypoints.minByOrNull { it.distanceToSqr(position) }?.let(::removeWaypoint)
@@ -83,11 +86,6 @@ object MeowddingWaypointHandler {
                 }
             }
         }
-    }
-
-    @Subscription(ServerChangeEvent::class, ServerDisconnectEvent::class)
-    fun clearWaypoints() {
-        _waypoints.clear()
     }
 
     @Subscription

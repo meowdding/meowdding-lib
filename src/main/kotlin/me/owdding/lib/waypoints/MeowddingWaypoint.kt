@@ -23,7 +23,7 @@ import java.awt.Color
 import java.util.*
 import kotlin.random.Random
 
-data class MeowddingWaypoint(private val _position: Vec3) {
+data class MeowddingWaypoint(private val position: Vec3) {
     constructor(block: BlockPos) : this(Vec3.atCenterOf(block))
     constructor(block: BlockPos, addToHandler: Boolean = true, builder: MeowddingWaypoint.() -> Unit) : this(Vec3.atCenterOf(block), addToHandler, builder)
     constructor(position: Vec3, addToHandler: Boolean = true, builder: MeowddingWaypoint.() -> Unit) : this(position) {
@@ -69,30 +69,22 @@ data class MeowddingWaypoint(private val _position: Vec3) {
 
     fun distanceToSqr(other: Vec3): Double {
         return if (this.ignoreY) {
-            other.let { it.distanceToSqr(this._position.x, it.y, this._position.z) }
+            other.let { it.distanceToSqr(this.position.x, it.y, this.position.z) }
         } else {
-            other.distanceToSqr(this._position)
+            other.distanceToSqr(this.position)
         }
     }
 
+    private fun lerpedY(partialTicks: Float) = Mth.lerp(partialTicks.toDouble(), McPlayer.self!!.oldPosition().y, McPlayer.position!!.y)
     fun getPosition(partialTicks: Float = 1f): Vec3 = if (ignoreY) {
-        Vec3(
-            _position.x(),
-            Mth.lerp(partialTicks.toDouble(), McPlayer.self!!.oldPosition().y, McPlayer.position!!.y),
-            _position.z()
-        )
+        Vec3(position.x(), lerpedY(partialTicks), position.z())
     } else {
-        _position
+        position
     }
-
     fun getBlockPos(partialTicks: Float = 1f): BlockPos = if (ignoreY) {
-        BlockPos.containing(
-            _position.x(),
-            Mth.lerp(partialTicks.toDouble(), McPlayer.self!!.oldPosition().y, McPlayer.position!!.y),
-            _position.z()
-        )
+        BlockPos.containing(position.x(), lerpedY(partialTicks), position.z())
     } else {
-        BlockPos.containing(_position)
+        BlockPos.containing(position)
     }
 
     internal fun render(event: RenderWorldEvent) {
