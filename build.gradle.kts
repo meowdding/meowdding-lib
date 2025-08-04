@@ -2,6 +2,7 @@
 
 import com.google.devtools.ksp.gradle.KspTask
 import earth.terrarium.cloche.api.metadata.ModMetadata
+import earth.terrarium.cloche.tasks.GenerateFabricModJson
 import net.msrandom.minecraftcodev.core.utils.toPath
 import net.msrandom.minecraftcodev.fabric.task.JarInJar
 import net.msrandom.minecraftcodev.runs.task.WriteClasspathFile
@@ -293,4 +294,8 @@ tasks.register("cleanRelease") {
 
 tasks.withType<JarInJar>().configureEach {
     include { !it.name.endsWith("-dev.jar") }
+}
+
+tasks.withType<GenerateFabricModJson> {
+    accessWidener = commonMetadata.flatMap { it.modId.map { modId -> "$modId.accessWidener" } }
 }
