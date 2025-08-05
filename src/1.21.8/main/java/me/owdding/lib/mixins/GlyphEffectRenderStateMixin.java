@@ -20,7 +20,7 @@ public class GlyphEffectRenderStateMixin {
     private BakedGlyph.Effect effect;
 
     @WrapMethod(method = "pipeline")
-    private RenderPipeline sbpv$usePipeline(Operation<RenderPipeline> original) {
+    private RenderPipeline meowddinglib$usePipeline(Operation<RenderPipeline> original) {
         var holder = FontPipelineHolder.getHolder(this.effect);
         var pipeline = holder != null ? holder.meowddinglib$getPipeline() : null;
         return pipeline != null ? pipeline : original.call();
