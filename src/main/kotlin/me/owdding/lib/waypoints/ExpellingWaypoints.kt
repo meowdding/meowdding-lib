@@ -23,10 +23,11 @@ class ExpellingWaypointList {
     operator fun invoke() = waypoints
 
     operator fun setValue(thisRef: Any?, property: Any?, value: Iterable<MeowddingWaypoint>) {
+        val copy = value.toSet()
         waypoints.forEach(MeowddingWaypointHandler::removeWaypoint)
         waypoints.clear()
-        waypoints.addAll(value)
-        value.forEach(MeowddingWaypointHandler::addWaypoint)
+        waypoints.addAll(copy)
+        copy.forEach(MeowddingWaypointHandler::addWaypoint)
     }
 
 }
