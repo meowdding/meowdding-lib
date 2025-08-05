@@ -108,7 +108,10 @@ data class MeowddingWaypoint(private val position: Vec3) {
     private fun RenderWorldEvent.renderDistance(position: Vec3) {
         val text = Text.of("Distance: ") {
             this.color = TextColor.GRAY
-            append(McPlayer.position!!.distanceTo(position).round()) { this.color = TextColor.YELLOW }
+            append(McPlayer.position!!.distanceTo(position).round()) {
+                this.color = TextColor.YELLOW
+                append("m")
+            }
         }
         this.renderTextInWorld(position.add(0.0, -0.5, 0.0), text, yOffset = if (WaypointRenderType.TEXT in renderTypes) McFont.height.toFloat() else 0f)
     }
