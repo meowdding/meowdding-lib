@@ -12,7 +12,7 @@ import java.util.function.BiFunction
 val TEXT_RENDER_TYPE_CACHE: BiFunction<TextShader, ResourceLocation, RenderType> =
     Util.memoize<TextShader, ResourceLocation, RenderType> { shader, location ->
         RenderType.create(
-            "meowddinglib/render_type_cache",
+            "meowddinglib/text_shader",
             786432,
             false,
             false,
