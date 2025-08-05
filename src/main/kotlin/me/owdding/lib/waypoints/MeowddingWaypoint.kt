@@ -24,8 +24,12 @@ import java.util.*
 import kotlin.random.Random
 
 data class MeowddingWaypoint(private val position: Vec3) {
-    constructor(block: BlockPos) : this(Vec3.atCenterOf(block))
-    constructor(block: BlockPos, addToHandler: Boolean = true, builder: MeowddingWaypoint.() -> Unit) : this(Vec3.atCenterOf(block), addToHandler, builder)
+    constructor(block: BlockPos) : this(Vec3.atBottomCenterOf(block))
+    constructor(block: BlockPos, addToHandler: Boolean = true, builder: MeowddingWaypoint.() -> Unit) : this(
+        Vec3.atBottomCenterOf(block),
+        addToHandler,
+        builder,
+    )
     constructor(position: Vec3, addToHandler: Boolean = true, builder: MeowddingWaypoint.() -> Unit) : this(position) {
         this.builder()
         if (addToHandler) addToHandler()
