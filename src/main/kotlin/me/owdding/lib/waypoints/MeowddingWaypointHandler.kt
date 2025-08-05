@@ -7,6 +7,7 @@ import me.owdding.lib.utils.toCommandSourceStack
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument
 import net.minecraft.commands.arguments.coordinates.Coordinates
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.base.Subscription.Companion.HIGHEST
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.location.ServerDisconnectEvent
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
@@ -43,9 +44,9 @@ object MeowddingWaypointHandler {
         }
     }
 
-    @Subscription(ServerChangeEvent::class, ServerDisconnectEvent::class)
+    @Subscription(ServerChangeEvent::class, ServerDisconnectEvent::class, priority = HIGHEST)
     fun clearWaypoints() {
-        _waypoints.forEach(::removeWaypoint)
+        _waypoints.toSet().forEach(::removeWaypoint)
     }
 
     @Subscription
