@@ -1,10 +1,5 @@
 package me.owdding.lib.waypoints
 
-/**
- * USA Reference fuck yeahhh!!!! 🇺🇸🇺🇸🇺🇸🇺🇸🇺🇸 🦅🦅🦅🦅🦅🦅 🔫🔫🔫🔫
- */
-typealias IceWaypoint = ExpellingWaypoint
-
 class ExpellingWaypoint {
 
     private var waypoint: MeowddingWaypoint? = null
