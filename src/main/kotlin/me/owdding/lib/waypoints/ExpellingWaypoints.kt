@@ -1,5 +1,10 @@
 package me.owdding.lib.waypoints
 
+/**
+ * USA Reference fuck yeahhh!!!! 🇺🇸🇺🇸🇺🇸🇺🇸🇺🇸 🦅🦅🦅🦅🦅🦅 🔫🔫🔫🔫
+ */
+typealias IceWaypoint = ExpellingWaypoint
+
 class ExpellingWaypoint {
 
     private var waypoint: MeowddingWaypoint? = null
@@ -19,7 +24,7 @@ class ExpellingWaypointList {
 
     private val waypoints: MutableList<MeowddingWaypoint> = mutableListOf()
 
-    operator fun getValue(thisRef: Any?, property: Any?): List<MeowddingWaypoint> = waypoints
+    operator fun getValue(thisRef: Any?, property: Any?): MutableList<MeowddingWaypoint> = waypoints
     operator fun invoke() = waypoints
 
     operator fun setValue(thisRef: Any?, property: Any?, value: Iterable<MeowddingWaypoint>) {
