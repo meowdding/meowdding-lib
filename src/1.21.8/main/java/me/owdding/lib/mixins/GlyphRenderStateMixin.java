@@ -11,6 +11,8 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
+import java.util.Objects;
+
 @Mixin(GlyphRenderState.class)
 public class GlyphRenderStateMixin {
 
@@ -23,6 +25,6 @@ public class GlyphRenderStateMixin {
     private RenderPipeline meowddinglib$usePipeline(Operation<RenderPipeline> original) {
         var holder = FontPipelineHolder.getHolder(this.instance);
         var pipeline = holder != null ? holder.meowddinglib$getPipeline() : null;
-        return pipeline != null ? pipeline : original.call();
+        return Objects.requireNonNullElseGet(pipeline, original::call);
     }
 }

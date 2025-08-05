@@ -17,11 +17,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class GlyphRenderTypesMixin {
 
     @Unique
-    private ResourceLocation meowdding$texture;
+    private ResourceLocation meowddinglib$texture;
 
     @ModifyReturnValue(method = {"createForColorTexture", "createForIntensityTexture"}, at = @At("RETURN"))
     private static GlyphRenderTypes create(GlyphRenderTypes original, @Local(argsOnly = true) ResourceLocation texture) {
-        ((GlyphRenderTypesMixin) ((Object) original)).meowdding$texture = texture;
+        ((GlyphRenderTypesMixin) ((Object) original)).meowddinglib$texture = texture;
         return original;
     }
 
@@ -30,7 +30,7 @@ public class GlyphRenderTypesMixin {
         if (TextShaderMixinHelper.skip) return;
         var shader = TextShaders.getActiveShader();
         if (shader != null) {
-            cir.setReturnValue(shader.getRenderType(meowdding$texture));
+            cir.setReturnValue(shader.getRenderType(meowddinglib$texture));
         }
     }
 

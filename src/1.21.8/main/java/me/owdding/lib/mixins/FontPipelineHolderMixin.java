@@ -14,15 +14,15 @@ import org.spongepowered.asm.mixin.Unique;
 public class FontPipelineHolderMixin implements FontPipelineHolder {
 
     @Unique
-    private RenderPipeline sbpv$pipeline;
+    private RenderPipeline meowddinglib$pipeline;
 
     @Override
     public RenderPipeline meowddinglib$getPipeline() {
-        return this.sbpv$pipeline;
+        return this.meowddinglib$pipeline;
     }
 
     @Override
     public void meowddinglib$setPipeline(RenderPipeline pipeline) {
-        this.sbpv$pipeline = pipeline;
+        this.meowddinglib$pipeline = pipeline;
     }
 }
