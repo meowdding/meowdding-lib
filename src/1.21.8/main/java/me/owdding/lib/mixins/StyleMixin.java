@@ -25,7 +25,7 @@ import java.util.Objects;
 @Mixin(Style.class)
 public abstract class StyleMixin implements TextShaderHolder {
 
-    private final static ThreadLocal<TextShader> meowddinglib$SHADER = new ThreadLocal();
+    private final static ThreadLocal<TextShader> meowddinglib$SHADER = new ThreadLocal<>();
     @Shadow
     @Final
     @Nullable

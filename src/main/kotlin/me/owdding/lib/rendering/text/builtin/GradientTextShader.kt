@@ -4,6 +4,7 @@ import com.mojang.blaze3d.pipeline.RenderPipeline
 import me.owdding.lib.MeowddingLib
 import me.owdding.lib.extensions.withShaderDefine
 import me.owdding.lib.rendering.text.TextShader
+import me.owdding.lib.utils.MeowddingPipelines
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.network.chat.TextColor
 import net.minecraft.util.ARGB
@@ -14,7 +15,7 @@ class GradientTextShader(gradientProvider: GradientProvider) : TextShader {
     constructor(vararg colors: TextColor) : this(colors.map { it.value })
 
     override val pipeline: RenderPipeline = RenderPipelines.register(
-        RenderPipeline.builder(RenderPipelines.TEXT_SNIPPET, RenderPipelines.FOG_SNIPPET)
+        RenderPipeline.builder(RenderPipelines.TEXT_SNIPPET, RenderPipelines.FOG_SNIPPET, MeowddingPipelines.GAME_TIME_SNIPPET)
             .withLocation(MeowddingLib.id("gradient_text"))
             .withVertexShader(MeowddingLib.id("text/gradient"))
             .withFragmentShader(MeowddingLib.id("text/gradient"))
