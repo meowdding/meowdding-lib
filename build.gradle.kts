@@ -2,6 +2,7 @@
 
 import com.google.devtools.ksp.gradle.KspTask
 import earth.terrarium.cloche.api.metadata.ModMetadata
+import earth.terrarium.cloche.tasks.GenerateFabricModJson
 import net.msrandom.minecraftcodev.core.utils.toPath
 import net.msrandom.minecraftcodev.fabric.task.JarInJar
 import net.msrandom.minecraftcodev.runs.task.WriteClasspathFile
@@ -29,6 +30,7 @@ repositories {
     maven(url = "https://maven.msrandom.net/repository/cloche")
     maven(url = "https://maven.msrandom.net/repository/root")
     maven(url = "https://maven.shedaniel.me/")
+    maven(url = "https://maven.teamresourceful.com/repository/maven-private/")
     mavenCentral()
     mavenLocal()
 }
@@ -52,6 +54,9 @@ val kspAll: Configuration by configurations.creating {
 dependencies {
     kspAll(libs.meowdding.ktmodules)
     kspAll(libs.meowdding.ktcodecs)
+    kspAll("net.msrandom:kmp-actual-stubs-processor:1.0.3+workaround") {
+        version { strictly("1.0.312312+workaround") } // fixes an issue with ksp stubs https://github.com/terrarium-earth/jvm-multiplatform/pull/11
+    }
 
     compileOnly(libs.meowdding.ktmodules)
     compileOnly(libs.meowdding.ktcodecs)
@@ -76,6 +81,7 @@ cloche {
     common {
         withPublication()
         mixins.from("src/mixins/meowdding-lib.mixins.json")
+        accessWideners.from("src/main/mlib.accesswidener")
 
         dependencies {
             compileOnly(libs.meowdding.ktcodecs)
@@ -114,6 +120,8 @@ cloche {
             minecraftVersion = version
             this.loaderVersion = loaderVersion.get()
 
+            accessWideners.from(project.layout.projectDirectory.file("src/$name/${sourceSet.name}.accesswidener"))
+
             //include(libs.skyblockapi)
             include(rlib)
             include(olympus)
@@ -131,6 +139,8 @@ cloche {
                     adapter = "kotlin"
                     value = "me.owdding.lib.compat.REICompatability"
                 }
+
+                mixins.from("src/mixins/${sourceSet.name}.mixins.json")
 
                 fun dependency(modId: String, version: Provider<String>? = null) {
                     dependency {
@@ -288,4 +298,8 @@ tasks.register("cleanRelease") {
 
 tasks.withType<JarInJar>().configureEach {
     include { !it.name.endsWith("-dev.jar") }
+}
+
+tasks.withType<GenerateFabricModJson> {
+    accessWidener = commonMetadata.flatMap { it.modId.map { modId -> "$modId.accessWidener" } }
 }
