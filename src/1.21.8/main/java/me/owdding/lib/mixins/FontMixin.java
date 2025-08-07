@@ -1,8 +1,12 @@
 package me.owdding.lib.mixins;
 
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import me.owdding.lib.accessor.FontPipelineHolder;
+import me.owdding.lib.accessor.TextShaderHolder;
 import me.owdding.lib.rendering.text.TextShaders;
 import net.minecraft.client.gui.font.glyphs.BakedGlyph;
+import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.util.ARGB;
 import org.spongepowered.asm.mixin.Mixin;
@@ -51,5 +55,20 @@ public class FontMixin {
         if (shader.getUseWhite()) {
             cir.setReturnValue(meowddinglib$shadow);
         }
+    }
+
+    @WrapMethod(method = "accept")
+    public boolean accept(int $$0, Style style, int $$2, Operation<Boolean> original) {
+        var previous = FontPipelineHolder.ACTIVE_PIPELINE.get();
+        var previousShader = TextShaders.getActiveShader();
+        if (style instanceof TextShaderHolder holder && holder.meowddinglib$getTextShader() != null) {
+            FontPipelineHolder.ACTIVE_PIPELINE.set(holder.meowddinglib$getTextShader().getPipeline());
+            TextShaders.setActiveShader(holder.meowddinglib$getTextShader());
+        }
+        var result = original.call($$0, style, $$2);
+        FontPipelineHolder.ACTIVE_PIPELINE.set(previous);
+        TextShaders.setActiveShader(previousShader);
+
+        return result;
     }
 }

@@ -4,6 +4,8 @@
   ],
   "client": [
     "FontMixin",
-    "GlyphRenderTypesMixin"
+    "GlyphRenderTypesMixin",
+    "StyleMixin",
+    "BakedGlyphMixin"
   ]
 }

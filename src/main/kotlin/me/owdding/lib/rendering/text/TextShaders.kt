@@ -1,12 +1,14 @@
 package me.owdding.lib.rendering.text
 
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.network.chat.Style
+import org.jetbrains.annotations.ApiStatus
 
 object TextShaders {
 
     var activeShader: TextShader? = null
         @JvmStatic get
-        private set
+        @JvmStatic @ApiStatus.Internal set
 
     fun GuiGraphics.withTextShader(shader: TextShader?, action: () -> Unit) = pushPop(shader, action)
 

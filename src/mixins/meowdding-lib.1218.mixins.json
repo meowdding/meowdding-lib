@@ -9,6 +9,7 @@
     "GlyphRenderStateMixin",
     "GlyphRenderTypesMixin",
     "GuiRenderStateMixin",
-    "GuiTextRenderStateMixin"
+    "GuiTextRenderStateMixin",
+    "StyleMixin"
   ]
 }
