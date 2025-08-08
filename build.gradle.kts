@@ -128,6 +128,8 @@ cloche {
             include(libs.placeholders)
             include(libs.meowdding.patches)
 
+            mixins.from("src/mixins/meowdding-lib.${sourceSet.name}.mixins.json")
+
             metadata {
                 entrypoint("client") {
                     adapter = "kotlin"
@@ -190,7 +192,11 @@ cloche {
         this["olympus"] = libs.olympus.lib1218
     }
 
-    mappings { official() }
+    mappings {
+        official()
+        parchment("2025.07.20", "1.21.8")
+        parchment("2025.06.15", "1.21.5")
+    }
 }
 
 tasks.withType<ProcessResources>().configureEach {
@@ -299,5 +305,5 @@ tasks.withType<JarInJar>().configureEach {
 }
 
 tasks.withType<GenerateFabricModJson> {
-    accessWidener = commonMetadata.flatMap { it.modId.map { modId -> "$modId.accessWidener" } }
+    //accessWidener = commonMetadata.flatMap { it.modId.map { modId -> "$modId.accessWidener" } }
 }

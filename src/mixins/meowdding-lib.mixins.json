@@ -5,6 +5,7 @@
     "LanguageMixin"
   ],
   "client": [
-    "AbstractContainerScreenMixin"
+    "AbstractContainerScreenMixin",
+    "RenderPipelineBuilderMixin"
   ]
 }

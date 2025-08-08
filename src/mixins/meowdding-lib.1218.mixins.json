@@ -1,0 +1,15 @@
+{
+  "package": "me.owdding.lib.mixins",
+  "mixins": [
+  ],
+  "client": [
+    "FontMixin",
+    "FontPipelineHolderMixin",
+    "GlyphEffectRenderStateMixin",
+    "GlyphRenderStateMixin",
+    "GlyphRenderTypesMixin",
+    "GuiRenderStateMixin",
+    "GuiTextRenderStateMixin",
+    "StyleMixin"
+  ]
+}
