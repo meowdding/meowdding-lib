@@ -2,12 +2,13 @@ package me.owdding.lib
 
 import me.owdding.lib.generated.MeowddingLibModules
 import me.owdding.lib.compat.HiddenElementRenderer
+import me.owdding.lib.utils.MeowddingLogger
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.resources.ResourceLocation
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 
-object MeowddingLib : ClientModInitializer {
+object MeowddingLib : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoResolve() {
 
     override fun onInitializeClient() {
         if (FabricLoader.getInstance().isModLoaded("resourcefulconfig")) {
