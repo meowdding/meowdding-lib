@@ -3,6 +3,7 @@ package me.owdding.lib.compat
 import me.shedaniel.math.Rectangle
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin
 import me.shedaniel.rei.api.client.registry.screen.ExclusionZones
+import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.client.gui.screens.Screen
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.CancellableSkyBlockEvent
@@ -12,6 +13,8 @@ class REIRenderOverlayEvent(val screen: Screen, private val registrar: (Int, Int
     fun register(x: Int, y: Int, width: Int, height: Int) {
         registrar(x, y, width, height)
     }
+
+    fun register(layout: LayoutElement) = register(layout.x, layout.y, layout.width, layout.height)
 }
 
 object REICompatability : REIClientPlugin {
