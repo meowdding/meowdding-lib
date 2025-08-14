@@ -25,7 +25,8 @@ object MeowddingWaypointHandler {
     private var _waypoints: MutableList<MeowddingWaypoint> = mutableListOf()
     val waypoints: List<MeowddingWaypoint> get() = _waypoints
 
-    fun getWaypointsWithTags(vararg tags: MeowddingWaypointTag): List<MeowddingWaypoint> = _waypoints.filter { it.tags.any { tags.contains(it) } }
+    fun getWaypointsWithAnyTags(vararg tags: MeowddingWaypointTag): List<MeowddingWaypoint> = _waypoints.filter { it.tags.any { tag -> tags.contains(tag) } }
+    fun getWaypointsWithAllTags(vararg tags: MeowddingWaypointTag): List<MeowddingWaypoint> = _waypoints.filter { it.tags.containsAll(tags.toList()) }
 
     fun addWaypoint(waypoint: MeowddingWaypoint) {
         _waypoints.add(waypoint)
