@@ -36,12 +36,13 @@ data class MeowddingWaypoint(private val position: Vec3) {
     }
 
     var uuid: UUID = UUID.randomUUID()
+    var name: Component = Text.of("Waypoint $uuid")
+    var color: Int = 0xFFFFFFFF.toInt()
     var renderTypes: Set<WaypointRenderType> = emptySet()
         set(value) {
             field = value.toSortedSet()
         }
-    var name: Component = Text.of("Waypoint $uuid")
-    var color: Int = 0xFFFFFFFF.toInt()
+    var tags: Set<MeowddingWaypointTag> = emptySet()
     var inLocatorBar = false
     var renderCondition: (RenderWorldEvent) -> Boolean = { true }
     var removalDistance: Float? = null
@@ -64,6 +65,8 @@ data class MeowddingWaypoint(private val position: Vec3) {
     fun withNormalRenderTypes() = withRenderTypes(WaypointRenderType.TEXT, WaypointRenderType.BOX, WaypointRenderType.BEAM, WaypointRenderType.DISTANCE)
     fun withAllRenderTypes() = withRenderTypes(*WaypointRenderType.entries.toTypedArray())
     fun withRenderTypes(vararg types: WaypointRenderType) = this.apply { this.renderTypes = types.toSet() }
+
+    fun withTags(vararg tags: MeowddingWaypointTag) = this.apply { this.tags = tags.toSet() }
 
     fun inLocatorBar(boolean: Boolean = true) = this.apply { this.inLocatorBar = boolean }
 

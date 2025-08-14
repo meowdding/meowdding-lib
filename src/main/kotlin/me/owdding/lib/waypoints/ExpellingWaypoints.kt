@@ -15,6 +15,10 @@ class ExpellingWaypoint {
 
 }
 
+/**
+ * Using this requires doing a SelfAssignment since MutableList operations don't use setValue()
+ * and I was too lazy to implement a MutableList wrapper.
+ */
 class ExpellingWaypointList {
 
     private val waypoints: MutableList<MeowddingWaypoint> = mutableListOf()
