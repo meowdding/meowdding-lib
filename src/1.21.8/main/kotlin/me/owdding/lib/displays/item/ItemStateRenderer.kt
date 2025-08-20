@@ -23,7 +23,7 @@ import org.joml.Matrix3x2f
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
-import java.util.Objects
+import java.util.*
 import java.util.function.Function
 
 class ItemStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictureRenderer<ItemStateRenderer.State>(buffer) {
@@ -42,7 +42,7 @@ class ItemStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictu
         stack.scale(1f, -1f, -1f)
         val item = state.state
 
-        McClient.self.gameRenderer.lighting.setupFor(if (item.itemStackRenderState().usesBlockLight()) Entry.ITEMS_FLAT else Entry.ITEMS_3D)
+        McClient.self.gameRenderer.lighting.setupFor(if (item.itemStackRenderState().usesBlockLight()) Entry.ITEMS_3D else Entry.ITEMS_FLAT)
         item.itemStackRenderState().render(stack, this.bufferSource, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY)
     }
 
