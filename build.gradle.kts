@@ -285,11 +285,11 @@ tasks.withType<WriteClasspathFile>().configureEach {
 tasks.register("release") {
     group = "meowdding"
     sourceSets.filterNot { it.name == SourceSet.MAIN_SOURCE_SET_NAME || it.name == SourceSet.TEST_SOURCE_SET_NAME }.forEach {
-            tasks.getByName("${it.name}JarInJar").let { task ->
-                dependsOn(task)
-                mustRunAfter(task)
-            }
+        tasks.getByName("${it.name}JarInJar").let { task ->
+            dependsOn(task)
+            mustRunAfter(task)
         }
+    }
 }
 
 tasks.register("cleanRelease") {
@@ -304,8 +304,14 @@ tasks.register("cleanRelease") {
 
 tasks.withType<JarInJar>().configureEach {
     include { !it.name.endsWith("-dev.jar") }
+
+    manifest {
+        attributes["Fabric-Loom-Mixin-Remap-Type"] = "static"
+        attributes["Fabric-Jar-Type"] = "classes"
+        attributes["Fabric-Mapping-Namespace"] = "intermediary"
+    }
 }
 
 tasks.withType<GenerateFabricModJson> {
-    //accessWidener = commonMetadata.flatMap { it.modId.map { modId -> "$modId.accessWidener" } }
+    accessWidener = commonMetadata.flatMap { it.modId.map { modId -> "$modId.accessWidener" } }
 }

@@ -9,7 +9,7 @@ interface MeowddingLogger {
     companion object {
         internal val STACK_WALKER = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE)
         fun named(name: String): MeowddingLogger = MeowddingLoggerImpl(LoggerFactory.getLogger(name))
-        fun autoResolve(): MeowddingLogger = MeowddingLoggerImpl(LoggerFactory.getLogger(STACK_WALKER.callerClass))
+        fun autoResolve(): MeowddingLogger = MeowddingLoggerImpl(LoggerFactory.getLogger(STACK_WALKER.callerClass.simpleName))
 
         fun MeowddingLogger.featureLogger(): MeowddingLogger {
             val name = STACK_WALKER.callerClass.let { it.annotations.filterIsInstance<FeatureName>().firstOrNull()?.name ?: it.simpleName }
