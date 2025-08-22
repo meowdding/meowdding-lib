@@ -106,6 +106,19 @@ abstract class LayoutBuilder {
         string(Text.of(text, init))
     }
 
+    fun singularComponent(builder: ComponentBuilder.() -> Unit) {
+        val builder = SingularLineComponentBuilder()
+        builder.builder()
+        string(builder.component)
+    }
+
+    fun multilineComponent(builder: ComponentBuilder.() -> Unit) {
+        val builder = MultilineComponentBuilder()
+        builder.builder()
+        string(builder.component)
+    }
+
+
     open fun display(display: Display) {
         widgets.add(display.asWidget())
     }

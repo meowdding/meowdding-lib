@@ -1,5 +1,6 @@
 package me.owdding.lib.dev
 
+import me.owdding.lib.builder.DisplayFactory
 import me.owdding.lib.rendering.text.TextShaders.withTextShader
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
 import me.owdding.lib.rendering.text.textShader
@@ -35,6 +36,26 @@ object DisplayTest : Screen(CommonComponents.EMPTY) {
             },
             10, 20,
         )
+
+        DisplayFactory.vertical {
+            singularComponent {
+                string("hello") {
+                    append("world")
+                }
+                string("test") {
+                    append("123")
+                }
+            }
+
+            multilineComponent {
+                string("hello") {
+                    append("") {
+
+                    }
+                }
+                string("world")
+            }
+        }.render(graphics, 100, 100)
     }
 
     override fun isPauseScreen(): Boolean {
