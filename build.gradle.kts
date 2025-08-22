@@ -313,5 +313,5 @@ tasks.withType<JarInJar>().configureEach {
 }
 
 tasks.withType<GenerateFabricModJson> {
-    //accessWidener = commonMetadata.flatMap { it.modId.map { modId -> "$modId.accessWidener" } }
+    accessWidener = commonMetadata.flatMap { it.modId.map { modId -> "$modId.accessWidener" } }
 }
