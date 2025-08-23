@@ -88,14 +88,15 @@ cloche {
             compileOnly(libs.meowdding.ktcodecs)
             compileOnly(libs.meowdding.ktmodules)
 
-            modImplementation(libs.hypixelapi) // included in skyblockapi
-            modImplementation(libs.skyblockapi)
-            modImplementation(libs.placeholders) { isTransitive = false }
-            modImplementation(libs.meowdding.patches) { isTransitive = false }
+            implementation(libs.hypixelapi) // included in skyblockapi
+            implementation(libs.skyblockapi)
+            implementation(libs.placeholders) { isTransitive = false }
+            implementation(libs.meowdding.patches) { isTransitive = false }
+            implementation(libs.resourceful.config.kotlin)
 
-            modCompileOnly(libs.rei)
+            compileOnly(libs.rei)
 
-            modImplementation(libs.fabric.language.kotlin)
+            implementation(libs.fabric.language.kotlin)
         }
     }
 
@@ -170,8 +171,8 @@ cloche {
 
             dependencies {
                 fabricApi(fabricApiVersion, minecraftVersion)
-                modImplementation(olympus)
-                modImplementation(rconfig)
+                implementation(olympus)
+                implementation(rconfig)
             }
 
             runs {
@@ -313,5 +314,5 @@ tasks.withType<JarInJar>().configureEach {
 }
 
 tasks.withType<GenerateFabricModJson> {
-    accessWidener = commonMetadata.flatMap { it.modId.map { modId -> "$modId.accessWidener" } }
+    //accessWidener = commonMetadata.flatMap { it.modId.map { modId -> "$modId.accessWidener" } }
 }

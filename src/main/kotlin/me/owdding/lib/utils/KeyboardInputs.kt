@@ -12,7 +12,6 @@ data class KeyboardInputs(
     }
 
     class Builder internal constructor() {
-
         internal val symbols = mutableSetOf<String>()
         internal val keys = mutableSetOf<Int>()
 
