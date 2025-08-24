@@ -10,7 +10,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text
 
 interface Overlay {
 
-    val modName: Component
+    val modId: String
     val name: Component
 
     val properties: Collection<EditableProperty> get() = EditableProperty.entries
@@ -28,8 +28,8 @@ interface Overlay {
     fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) = render(graphics, mouseX, mouseY)
 
     fun onRightClick() = ContextMenu.open {
-        it.dangerButton(Text.of("Reset Position")) {
-            position.reset()
+        it.dangerButton(Text.translatable("mlib.overlay.edit.reset")) {
+            position.resetPosition()
         }
     }
 
@@ -49,16 +49,15 @@ interface Overlay {
         position.scale = (scale * 10f).toInt() / 10f
     }
 
-    companion object {
-
-        fun isEditing(): Boolean {
-            var effectiveScreen = McScreen.self
-            if (effectiveScreen is OverlayAccessor) {
-                effectiveScreen = effectiveScreen.`mlib$getBackgroundScreen`()
-            }
-            return effectiveScreen is EditOverlaysScreen || effectiveScreen is OverlayScreen
+    fun isEditing(): Boolean {
+        var effectiveScreen = McScreen.self
+        if (effectiveScreen is OverlayAccessor) {
+            effectiveScreen = effectiveScreen.`mlib$getBackgroundScreen`()
         }
+        return (effectiveScreen is EditOverlaysScreen && effectiveScreen.modId in arrayOf(null, modId)) || effectiveScreen is OverlayScreen
     }
+
+    fun isEditingOverlay(): Boolean = (McScreen.self as? EditOverlaysScreen)?.modId !in arrayOf(null, modId)
 }
 
 enum class EditableProperty {

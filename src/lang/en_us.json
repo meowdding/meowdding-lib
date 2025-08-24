@@ -1,0 +1,22 @@
+{
+  "@meowdding:metadata": {
+    "allowMultiline": true,
+    "allowReferences": true,
+    "allowTags": true,
+    "objectAsKeys": true,
+    "prefix": "mlib",
+    "@references": {}
+  },
+  "overlay": {
+    "edit": {
+      "@value": "<gold>Click to edit overlay.</gold>",
+      "reset": "<red>Reset Location</red>",
+      "options": "<gold>Right Click to configure</gold>"
+    },
+    "mod": {
+      "meowdding-lib": "<blue>MLib</blue>",
+      "skyocean": "<blue>SkyOcean</blue>",
+      "skycubed": "<blue>SkyCubed</blue>"
+    }
+  }
+}

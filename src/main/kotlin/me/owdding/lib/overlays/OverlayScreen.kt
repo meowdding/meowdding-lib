@@ -58,7 +58,7 @@ class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) :
                     overlay.name,
                     CommonText.EMPTY,
                     Text.translatable("mlib.overlay.edit.options"),
-                    overlay.modName,
+                    Text.translatable("mlib.overlay.mod.${overlay.modId}"),
                 ),
             )
         }
@@ -103,7 +103,7 @@ class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) :
                 }
             }
         } else if (this.parent != null) {
-            FinishOverlayEditingEvent.post(SkyBlockAPI.eventBus)
+            save()
             McClient.setScreen(this.parent)
         }
         return true
@@ -137,13 +137,15 @@ class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) :
     }
 
     override fun onClose() {
-        FinishOverlayEditingEvent.post(SkyBlockAPI.eventBus)
+        save()
         if (parent != null && parent !is ChatScreen) {
             McClient.setScreen(parent)
         } else {
             super.onClose()
         }
     }
+
+    fun save() = FinishOverlayEditingEvent(overlay.modId).post(SkyBlockAPI.eventBus)
 
     fun isMouseOverOverlay(mouseX: Double, mouseY: Double): Boolean {
         val (x, y) = overlay.position

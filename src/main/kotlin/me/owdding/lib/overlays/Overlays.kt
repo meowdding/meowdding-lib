@@ -60,6 +60,7 @@ object Overlays {
             val rect = it.editBounds * it.position.scale
 
             if (isOverlayScreen(screen, mouseX.toInt(), mouseY.toInt()) && rect.contains(mouseX.toInt(), mouseY.toInt())) {
+                if (it.isEditingOverlay()) return@forEach
                 graphics.fill(rect.x, rect.y, rect.right, rect.bottom, 0x50000000)
                 graphics.renderOutline(rect.x - 1, rect.y - 1, rect.width + 2, rect.height + 2, 0xFFFFFFFF.toInt())
                 if (it.properties.isNotEmpty()) {
@@ -68,7 +69,7 @@ object Overlays {
                             it.name,
                             CommonText.EMPTY,
                             Text.translatable("mlib.overlay.edit"),
-                            it.modName,
+                            Text.translatable("mlib.overlay.mod.${it.modId}"),
                         ),
                     )
                 } else {
@@ -85,6 +86,7 @@ object Overlays {
         for (overlay in overlays.reversed()) {
             if (!overlay.enabled) continue
             if (overlay.properties.isEmpty()) continue
+            if (overlay.isEditingOverlay()) continue
             val rect = overlay.editBounds * overlay.position.scale
 
             if (rect.contains(event.x, event.y)) {
@@ -97,9 +99,12 @@ object Overlays {
 
     @Subscription
     fun onCommandRegistration(event: RegisterCommandsEvent) {
-        event.register("skycubed") {
+        event.register("meowdding") {
             then("overlays") {
                 callback { McClient.setScreen(EditOverlaysScreen()) }
+            }
+            thenCallback("mliboverlays") {
+                McClient.setScreen(EditOverlaysScreen("meowdding-lib"))
             }
         }
     }

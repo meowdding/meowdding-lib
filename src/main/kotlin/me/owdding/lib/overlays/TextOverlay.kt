@@ -6,7 +6,7 @@ import tech.thatgravyboat.skyblockapi.platform.drawString
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.width
 
 open class TextOverlay(
-    override val modName: Component,
+    override val modId: String,
     override val name: Component,
     override val position: Position,
     private val isEnabled: () -> Boolean,

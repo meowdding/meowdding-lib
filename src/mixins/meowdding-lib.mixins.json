@@ -2,7 +2,8 @@
   "package": "me.owdding.lib.mixins",
   "mixins": [
     "ComponentMixin",
-    "LanguageMixin"
+    "LanguageMixin",
+    "OverlayAccessor"
   ],
   "client": [
     "AbstractContainerScreenMixin",
