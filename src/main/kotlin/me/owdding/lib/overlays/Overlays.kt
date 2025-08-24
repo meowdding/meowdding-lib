@@ -103,9 +103,6 @@ object Overlays {
             then("overlays") {
                 callback { McClient.setScreen(EditOverlaysScreen()) }
             }
-            thenCallback("mliboverlays") {
-                McClient.setScreen(EditOverlaysScreen("meowdding-lib"))
-            }
         }
     }
 }
