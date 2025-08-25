@@ -7,6 +7,7 @@ import me.owdding.lib.utils.keysOf
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.ChatScreen
 import net.minecraft.client.gui.screens.Screen
+import org.lwjgl.glfw.GLFW
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.platform.pushPop
@@ -25,7 +26,7 @@ private val ADD_KEY = keys {
 private val MINUS_KEY = keys {
     withSymbol("-")
     withKey(InputConstants.KEY_MINUS)
-    withKey(InputConstants.KEY_ADD)
+    withKey(GLFW.GLFW_KEY_KP_SUBTRACT)
 }
 
 private val UP_KEY = keysOf(InputConstants.KEY_UP)
