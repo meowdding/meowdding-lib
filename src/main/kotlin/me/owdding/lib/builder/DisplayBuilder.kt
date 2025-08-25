@@ -29,11 +29,23 @@ abstract class DisplayBuilder {
     }
 
     fun string(component: Component) {
-        displays.add(Displays.text(component))
+        displays.add(Displays.component(component, maxWidth = Int.MAX_VALUE))
     }
 
     fun string(text: String, init: MutableComponent.() -> Unit) {
         string(Text.of(text, init))
+    }
+
+    fun singularComponent(builder: ComponentBuilder.() -> Unit) {
+        val builder = SingularLineComponentBuilder()
+        builder.builder()
+        string(builder.component)
+    }
+
+    fun multilineComponent(builder: ComponentBuilder.() -> Unit) {
+        val builder = MultilineComponentBuilder()
+        builder.builder()
+        string(builder.component)
     }
 
     fun display(display: Display) {
