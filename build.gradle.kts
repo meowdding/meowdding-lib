@@ -19,6 +19,7 @@ plugins {
     alias(libs.plugins.terrarium.cloche)
     id("maven-publish")
     alias(libs.plugins.kotlin.symbol.processor)
+    id("me.owdding.gradle") version "1.0.0"
 }
 
 repositories {
@@ -88,14 +89,15 @@ cloche {
             compileOnly(libs.meowdding.ktcodecs)
             compileOnly(libs.meowdding.ktmodules)
 
-            modImplementation(libs.hypixelapi) // included in skyblockapi
-            modImplementation(libs.skyblockapi)
-            modImplementation(libs.placeholders) { isTransitive = false }
-            modImplementation(libs.meowdding.patches) { isTransitive = false }
+            implementation(libs.hypixelapi) // included in skyblockapi
+            implementation(libs.skyblockapi)
+            implementation(libs.placeholders) { isTransitive = false }
+            implementation(libs.meowdding.patches) { isTransitive = false }
+            implementation(libs.resourceful.config.kotlin)
 
-            modCompileOnly(libs.rei)
+            compileOnly(libs.rei)
 
-            modImplementation(libs.fabric.language.kotlin)
+            implementation(libs.fabric.language.kotlin)
         }
     }
 
@@ -170,12 +172,14 @@ cloche {
 
             dependencies {
                 fabricApi(fabricApiVersion, minecraftVersion)
-                modImplementation(olympus)
-                modImplementation(rconfig)
+                implementation(olympus)
+                implementation(rconfig)
             }
 
             runs {
-                client()
+                client {
+                    jvmArgs("-Dmeowdding.overlay.test=true")
+                }
             }
         }
     }
@@ -197,12 +201,6 @@ cloche {
         official()
         parchment("2025.07.20", "1.21.8")
         parchment("2025.06.15", "1.21.5")
-    }
-}
-
-tasks.withType<ProcessResources>().configureEach {
-    filesMatching(listOf("**/*.fsh", "**/*.vsh")) {
-        filter { if (it.startsWith("//!moj_import")) "#${it.substring(3)}" else it }
     }
 }
 
@@ -267,51 +265,15 @@ tasks.named("createCommonApiStub", GenerateStubApi::class) {
 ksp {
     this@ksp.excludedSources.from(sourceSets.getByName("1215").kotlin.srcDirs)
     this@ksp.excludedSources.from(sourceSets.getByName("1218").kotlin.srcDirs)
-    arg("meowdding.project_name", "MeowddingLib")
-    arg("meowdding.package", "me.owdding.lib.generated")
     arg("actualStubDir", project.layout.buildDirectory.dir("generated/ksp/main/stubs").get().asFile.absolutePath)
 }
 
-// TODO temporary workaround for a cloche issue on certain systems, remove once fixed
-tasks.withType<WriteClasspathFile>().configureEach {
-    actions.clear()
-    actions.add {
-        generate()
-        val file = output.get().toPath()
-        file.writeText(file.readText().lines().joinToString(File.pathSeparator))
-    }
-}
-
-tasks.register("release") {
-    group = "meowdding"
-    sourceSets.filterNot { it.name == SourceSet.MAIN_SOURCE_SET_NAME || it.name == SourceSet.TEST_SOURCE_SET_NAME }.forEach {
-        tasks.getByName("${it.name}JarInJar").let { task ->
-            dependsOn(task)
-            mustRunAfter(task)
-        }
-    }
-}
-
-tasks.register("cleanRelease") {
-    group = "meowdding"
-    listOf("clean", "release").forEach {
-        tasks.getByName(it).let { task ->
-            dependsOn(task)
-            mustRunAfter(task)
-        }
-    }
-}
-
-tasks.withType<JarInJar>().configureEach {
-    include { !it.name.endsWith("-dev.jar") }
-
-    manifest {
-        attributes["Fabric-Loom-Mixin-Remap-Type"] = "static"
-        attributes["Fabric-Jar-Type"] = "classes"
-        attributes["Fabric-Mapping-Namespace"] = "intermediary"
-    }
-}
-
 tasks.withType<GenerateFabricModJson> {
-    accessWidener = commonMetadata.flatMap { it.modId.map { modId -> "$modId.accessWidener" } }
+    //accessWidener = commonMetadata.flatMap { it.modId.map { modId -> "$modId.accessWidener" } }
+}
+
+meowdding {
+    setupClocheClasspathFix()
+    projectName = "MeowddingLib"
+    generatedPackage = "me.owdding.lib.generated"
 }
