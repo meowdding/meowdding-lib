@@ -125,12 +125,6 @@ cloche {
 
             accessWideners.from(project.layout.projectDirectory.file("src/$name/${sourceSet.name}.accesswidener"))
 
-            //include(libs.skyblockapi)
-            include(rlib)
-            include(olympus)
-            include(libs.placeholders)
-            include(libs.meowdding.patches)
-
             mixins.from("src/mixins/meowdding-lib.${sourceSet.name}.mixins.json")
 
             metadata {
@@ -174,6 +168,11 @@ cloche {
                 fabricApi(fabricApiVersion, minecraftVersion)
                 implementation(olympus)
                 implementation(rconfig)
+
+                include(rlib)
+                include(olympus)
+                include(libs.placeholders)
+                include(libs.meowdding.patches)
             }
 
             runs {
@@ -223,11 +222,6 @@ tasks.withType<Jar> {
 
 java {
     withSourcesJar()
-}
-
-artifacts {
-    add("1215RuntimeElements", tasks["1215JarInJar"])
-    add("1218RuntimeElements", tasks["1218JarInJar"])
 }
 
 publishing {
