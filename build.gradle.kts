@@ -19,7 +19,7 @@ plugins {
     alias(libs.plugins.terrarium.cloche)
     id("maven-publish")
     alias(libs.plugins.kotlin.symbol.processor)
-    id("me.owdding.gradle") version "1.0.1"
+    id("me.owdding.gradle") version "1.0.2"
 }
 
 repositories {
@@ -169,10 +169,10 @@ cloche {
                 implementation(olympus)
                 implementation(rconfig)
 
-                include(rlib)
-                include(olympus)
-                include(libs.placeholders)
-                include(libs.meowdding.patches)
+                include(rlib) { isTransitive = false }
+                include(olympus) { isTransitive = false }
+                include(libs.placeholders) { isTransitive = false }
+                include(libs.meowdding.patches) { isTransitive = false }
             }
 
             runs {
@@ -263,7 +263,7 @@ ksp {
 }
 
 tasks.withType<GenerateFabricModJson> {
-    //accessWidener = commonMetadata.flatMap { it.modId.map { modId -> "$modId.accessWidener" } }
+    accessWidener = commonMetadata.flatMap { it.modId.map { modId -> "$modId.accessWidener" } }
 }
 
 meowdding {
