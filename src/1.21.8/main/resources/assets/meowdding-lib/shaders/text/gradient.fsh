@@ -39,7 +39,7 @@ void main() {
 
     if (length(finalColor.rgb) != 0.0) {
         vec2 coords = gl_FragCoord.xy;
-        finalColor = vec4(SMOOTHY(float(int(coords.x + (GameTime * 24000) * 2) % 500) / 500.0).rgb, 1) * vec4(vertexColor.rgb, 1.0);
+        finalColor = vec4(SMOOTHY(float(int(coords.x + (GameTime * 24000) * 2) % 500) / 500.0).rgb, 1) * vertexColor;
     }
 
     fragColor = apply_fog(

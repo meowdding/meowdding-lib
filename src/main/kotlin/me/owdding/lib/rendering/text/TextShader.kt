@@ -29,6 +29,7 @@ var MutableComponent.textShader: TextShader?
 
 interface TextShader {
 
+    val id: ResourceLocation
     val pipeline: RenderPipeline
 
     val useWhite: Boolean get() = true
