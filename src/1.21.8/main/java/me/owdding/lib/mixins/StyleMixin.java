@@ -4,7 +4,7 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import me.owdding.lib.accessor.TextShaderHolder;
+import me.owdding.lib.helper.TextShaderHolder;
 import me.owdding.lib.rendering.text.TextShader;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.HoverEvent;
@@ -25,6 +25,7 @@ import java.util.Objects;
 @Mixin(Style.class)
 public abstract class StyleMixin implements TextShaderHolder {
 
+    @Unique
     private final static ThreadLocal<TextShader> meowddinglib$SHADER = new ThreadLocal<>();
     @Shadow
     @Final

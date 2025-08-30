@@ -8,5 +8,4 @@ public interface TextShaderHolder {
     TextShader meowddinglib$getTextShader();
 
     Style meowddinglib$withTextShader(TextShader shader);
-
 }

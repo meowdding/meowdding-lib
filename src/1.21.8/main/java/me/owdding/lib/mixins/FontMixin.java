@@ -3,7 +3,7 @@ package me.owdding.lib.mixins;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import me.owdding.lib.accessor.FontPipelineHolder;
-import me.owdding.lib.accessor.TextShaderHolder;
+import me.owdding.lib.helper.TextShaderHolder;
 import me.owdding.lib.rendering.text.TextShaders;
 import net.minecraft.client.gui.font.glyphs.BakedGlyph;
 import net.minecraft.network.chat.Style;
