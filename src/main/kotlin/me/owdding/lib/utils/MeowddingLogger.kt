@@ -21,13 +21,73 @@ interface MeowddingLogger {
 
     fun featureLogger(name: String): MeowddingLogger
 
+    fun trace(message: String) {
+        trace(message, null, null)
+    }
+
+    fun trace(message: String, throwable: Throwable) {
+        trace(message, throwable, null)
+    }
+
+    fun trace(message: String, prefix: String) {
+        trace(message, null, prefix)
+    }
+
     fun trace(message: String, throwable: Throwable? = null, prefix: String? = null)
+
+    fun debug(message: String) {
+        debug(message, null, null)
+    }
+
+    fun debug(message: String, throwable: Throwable) {
+        debug(message, throwable, null)
+    }
+
+    fun debug(message: String, prefix: String) {
+        debug(message, null, prefix)
+    }
 
     fun debug(message: String, throwable: Throwable? = null, prefix: String? = null)
 
+    fun info(message: String) {
+        info(message, null, null)
+    }
+
+    fun info(message: String, throwable: Throwable) {
+        info(message, throwable, null)
+    }
+
+    fun info(message: String, prefix: String) {
+        info(message, null, prefix)
+    }
+
     fun info(message: String, throwable: Throwable? = null, prefix: String? = null)
 
+    fun warn(message: String) {
+        warn(message, null, null)
+    }
+
+    fun warn(message: String, throwable: Throwable) {
+        warn(message, throwable, null)
+    }
+
+    fun warn(message: String, prefix: String) {
+        warn(message, null, prefix)
+    }
+
     fun warn(message: String, throwable: Throwable? = null, prefix: String? = null)
+
+    fun error(message: String) {
+        error(message, null, null)
+    }
+
+    fun error(message: String, throwable: Throwable) {
+        error(message, throwable, null)
+    }
+
+    fun error(message: String, prefix: String) {
+        error(message, null, prefix)
+    }
 
     fun error(message: String, throwable: Throwable? = null, prefix: String? = null)
 
