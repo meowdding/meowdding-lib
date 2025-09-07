@@ -2,16 +2,10 @@
 
 import com.google.devtools.ksp.gradle.KspTask
 import earth.terrarium.cloche.api.metadata.ModMetadata
-import earth.terrarium.cloche.tasks.GenerateFabricModJson
-import net.msrandom.minecraftcodev.core.utils.toPath
-import net.msrandom.minecraftcodev.fabric.task.JarInJar
-import net.msrandom.minecraftcodev.runs.task.WriteClasspathFile
 import net.msrandom.stubs.GenerateStubApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import kotlin.io.path.readText
-import kotlin.io.path.writeText
 
 plugins {
     java
@@ -19,7 +13,7 @@ plugins {
     alias(libs.plugins.terrarium.cloche)
     id("maven-publish")
     alias(libs.plugins.kotlin.symbol.processor)
-    id("me.owdding.gradle") version "1.0.2"
+    id("me.owdding.gradle") version "1.0.4"
 }
 
 repositories {
@@ -262,12 +256,9 @@ ksp {
     arg("actualStubDir", project.layout.buildDirectory.dir("generated/ksp/main/stubs").get().asFile.absolutePath)
 }
 
-tasks.withType<GenerateFabricModJson> {
-    accessWidener = commonMetadata.flatMap { it.modId.map { modId -> "$modId.accessWidener" } }
-}
-
 meowdding {
     setupClocheClasspathFix()
     projectName = "MeowddingLib"
     generatedPackage = "me.owdding.lib.generated"
+    hasAccessWideners = true
 }

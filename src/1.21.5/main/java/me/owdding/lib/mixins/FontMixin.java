@@ -1,5 +1,6 @@
 package me.owdding.lib.mixins;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -12,7 +13,6 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.font.glyphs.BakedGlyph;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextColor;
 import net.minecraft.util.ARGB;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Final;
@@ -20,8 +20,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(targets = "net.minecraft.client.gui.Font$StringRenderOutput")
 public class FontMixin {
@@ -40,27 +38,26 @@ public class FontMixin {
         return returnValue;
     }
 
-    @Inject(method = "getTextColor", at = @At("HEAD"), cancellable = true)
-    public void getTextColor(TextColor textColor, CallbackInfoReturnable<Integer> cir) {
+    @ModifyReturnValue(method = "getTextColor", at = @At("RETURN"))
+    public int getTextColor(int original) {
         var shader = TextShaders.getActiveShader();
         if (shader != null && shader.getUseWhite()) {
-            cir.setReturnValue(0xFFFFFFFF);
+            return ARGB.color(ARGB.alpha(original), 0xFFFFFF);
         }
+        return original;
     }
 
-    @Inject(method = "getShadowColor", at = @At("RETURN"), cancellable = true)
-    public void getShadowColor(CallbackInfoReturnable<Integer> cir) {
+    @ModifyReturnValue(method = "getShadowColor", at = @At("RETURN"))
+    public int getShadowColor(int original) {
         var shader = TextShaders.getActiveShader();
         if (shader == null) {
-            return;
+            return original;
         }
         var shadow = shader.getHasShadow();
-        if (shadow != null && !shadow) {
-            cir.setReturnValue(0);
+        if (shadow != null && !shadow && !shader.getUseWhite()) {
+            return original;
         }
-        if (shader.getUseWhite()) {
-            cir.setReturnValue(meowddinglib$shadow);
-        }
+        return ARGB.color(ARGB.alpha(original), meowddinglib$shadow);
     }
 
     @WrapMethod(method = "accept")

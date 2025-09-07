@@ -3,6 +3,7 @@ package me.owdding.lib.dev
 import me.owdding.ktmodules.Module
 import me.owdding.lib.rendering.text.TextShaders
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
+import me.owdding.lib.rendering.text.textShader
 import me.owdding.lib.utils.type.EnumArgumentType
 import net.minecraft.ChatFormatting
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -28,6 +29,11 @@ object TestCommands {
                     val enum = getArgument("enum", ChatFormatting::class.java)
                     Text.of(enum.name).send()
                 }
+            }
+            thenCallback("boop") {
+                Text.of("Meow") {
+                    this.textShader = GradientTextShader(listOf(0, 0xFF, 0xFF00, 0xFF0000, 0xFF00FF, 0))
+                }.send()
             }
             thenCallback("shader_serialization") {
                 Text.of("Click to copy") {
