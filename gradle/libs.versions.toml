@@ -13,7 +13,7 @@ resourceful-config-kotlin = "3.5.12"
 skyblockapi = "2.3.0"
 hypixelapi = "1.0.1+build.1+mc1.21"
 placeholders = "2.6.1+1.21.5"
-rei = "19.0.806"
+rei = "20.0.811"
 
 meowdding-patches = "1.0.8"
 meowdding-ktmodules = "1.0.5"

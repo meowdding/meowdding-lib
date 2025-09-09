@@ -1,12 +1,22 @@
 package me.owdding.lib.compat
 
+import me.owdding.lib.utils.KnownMods
 import me.shedaniel.math.Rectangle
+import me.shedaniel.math.impl.PointHelper
+import me.shedaniel.rei.api.client.REIRuntime
+import me.shedaniel.rei.api.client.gui.widgets.Slot
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin
 import me.shedaniel.rei.api.client.registry.screen.ExclusionZones
+import me.shedaniel.rei.api.client.registry.screen.ScreenRegistry
+import net.minecraft.client.gui.components.events.ContainerEventHandler
+import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
+import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.CancellableSkyBlockEvent
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 
 class REIRenderOverlayEvent(val screen: Screen, private val registrar: (Int, Int, Int, Int) -> Unit) : CancellableSkyBlockEvent() {
 
@@ -27,6 +37,53 @@ object REICompatability : REIClientPlugin {
             }.post(SkyBlockAPI.eventBus)
 
             if (hide) listOf(Rectangle(0, 0, screen.width, screen.height)) else areas
+        }
+    }
+
+    fun getReiHoveredItemStack(): ItemStack? {
+        if (!KnownMods.REI.installed) return null
+        try {
+            REIRuntime.getInstance()
+        } catch (e: Throwable) {
+            return null
+        }
+        var stack = getItemStackFromItemList()
+        if (stack == null) {
+            val screen = McClient.self.screen
+            if (screen !is AbstractContainerScreen<*>) return null
+            stack = getItemStackFromRecipe(screen)
+        }
+        return stack
+    }
+
+    private fun getItemStackFromRecipe(screen: AbstractContainerScreen<*>): ItemStack? {
+        val entryStack = ScreenRegistry.getInstance().getFocusedStack(screen, PointHelper.ofMouse())
+            ?: return null
+        return entryStack.value as? ItemStack ?: entryStack.cheatsAs().value
+    }
+
+    private fun getItemStackFromItemList(): ItemStack? {
+        var guiEventListener: GuiEventListener? = REIRuntime.getInstance().overlay.orElse(null)
+        val mx = PointHelper.getMouseFloatingX()
+        val my = PointHelper.getMouseFloatingY()
+
+        while (true) {
+            if (guiEventListener is Slot) {
+                return guiEventListener.currentEntry.cheatsAs().value
+            }
+
+            if (guiEventListener !is ContainerEventHandler) {
+                return null
+            }
+
+            guiEventListener = guiEventListener.children().firstOrNull { child ->
+                if (child is LayoutElement) {
+                    mx >= child.x && mx < child.x + child.width &&
+                        my >= child.y && my < child.y + child.height
+                } else {
+                    false
+                }
+            }
         }
     }
 }
