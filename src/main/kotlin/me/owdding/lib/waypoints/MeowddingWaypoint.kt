@@ -23,7 +23,7 @@ import java.awt.Color
 import java.util.*
 import kotlin.random.Random
 
-data class MeowddingWaypoint(private val position: Vec3) {
+class MeowddingWaypoint(private val position: Vec3) {
     constructor(block: BlockPos) : this(Vec3.atBottomCenterOf(block))
     constructor(block: BlockPos, addToHandler: Boolean = true, builder: MeowddingWaypoint.() -> Unit) : this(
         Vec3.atBottomCenterOf(block),
@@ -88,6 +88,7 @@ data class MeowddingWaypoint(private val position: Vec3) {
     } else {
         position
     }
+
     fun getBlockPos(partialTicks: Float = 1f): BlockPos = if (ignoreY) {
         BlockPos.containing(position.x(), lerpedY(partialTicks), position.z())
     } else {
@@ -122,6 +123,10 @@ data class MeowddingWaypoint(private val position: Vec3) {
         }
         this.renderTextInWorld(position.add(0.0, -0.5, 0.0), text, yOffset = if (WaypointRenderType.TEXT in renderTypes) McFont.height.toFloat() else 0f)
     }
+
+    override fun hashCode(): Int = uuid.hashCode()
+    override fun equals(other: Any?) = this === other || uuid == (other as? MeowddingWaypoint)?.uuid
+    override fun toString() = "Waypoint(position=$position, uuid=$uuid, name=$name)"
 }
 
 enum class WaypointRenderType {
