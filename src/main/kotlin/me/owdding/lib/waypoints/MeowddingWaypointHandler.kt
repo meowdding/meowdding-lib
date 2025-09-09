@@ -31,6 +31,7 @@ object MeowddingWaypointHandler {
     fun getWaypointsWithAllTags(tags: Collection<MeowddingWaypointTag>): List<MeowddingWaypoint> = _waypoints.filter { it.tags.containsAll(tags) }
 
     fun addWaypoint(waypoint: MeowddingWaypoint) {
+        _waypoints.removeIf { it.uuid == waypoint.uuid }
         _waypoints.add(waypoint)
 
         if (waypoint.inLocatorBar && !McVersionGroup.MC_1_21_5.isActive) {
