@@ -39,50 +39,32 @@ object REICompatability : REIClientPlugin {
             if (hide) listOf(Rectangle(0, 0, screen.width, screen.height)) else areas
         }
     }
+}
 
+object REIRuntimeCompatability {
     fun getReiHoveredItemStack(): ItemStack? {
-        if (!KnownMods.REI.installed) return null
-        try {
-            REIRuntime.getInstance()
-        } catch (e: Throwable) {
-            return null
-        }
-        var stack = getItemStackFromItemList()
-        if (stack == null) {
-            val screen = McClient.self.screen
-            if (screen !is AbstractContainerScreen<*>) return null
-            stack = getItemStackFromRecipe(screen)
-        }
-        return stack
+        runCatching { REIRuntime.getInstance() }.getOrNull() ?: return null
+        return getItemStackFromItemList() ?: getItemStackFromRecipe()
     }
 
-    private fun getItemStackFromRecipe(screen: AbstractContainerScreen<*>): ItemStack? {
-        val entryStack = ScreenRegistry.getInstance().getFocusedStack(screen, PointHelper.ofMouse())
-            ?: return null
+    private fun getItemStackFromRecipe(): ItemStack? {
+        val screen = McClient.self.screen.takeIf { it is AbstractContainerScreen<*> } ?: return null
+        val entryStack = ScreenRegistry.getInstance().getFocusedStack(screen, PointHelper.ofMouse()) ?: return null
         return entryStack.value as? ItemStack ?: entryStack.cheatsAs().value
     }
 
     private fun getItemStackFromItemList(): ItemStack? {
-        var guiEventListener: GuiEventListener? = REIRuntime.getInstance().overlay.orElse(null)
-        val mx = PointHelper.getMouseFloatingX()
-        val my = PointHelper.getMouseFloatingY()
+        var listener: GuiEventListener? = REIRuntime.getInstance().overlay.orElse(null) ?: return null
+        val mx = PointHelper.getMouseFloatingX().toInt()
+        val my = PointHelper.getMouseFloatingY().toInt()
 
         while (true) {
-            if (guiEventListener is Slot) {
-                return guiEventListener.currentEntry.cheatsAs().value
-            }
-
-            if (guiEventListener !is ContainerEventHandler) {
-                return null
-            }
-
-            guiEventListener = guiEventListener.children().firstOrNull { child ->
-                if (child is LayoutElement) {
-                    mx >= child.x && mx < child.x + child.width &&
-                        my >= child.y && my < child.y + child.height
-                } else {
-                    false
-                }
+            when (listener) {
+                is Slot -> return listener.currentEntry.cheatsAs().value
+                !is ContainerEventHandler -> return null
+                else -> listener = listener.children()
+                    .firstOrNull { it is LayoutElement && mx in it.x until (it.x + it.width) && my in it.y until (it.y + it.height) }
+                    ?: return null
             }
         }
     }
