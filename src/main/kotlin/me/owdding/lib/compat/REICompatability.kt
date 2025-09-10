@@ -42,6 +42,10 @@ object REICompatability : REIClientPlugin {
 }
 
 object REIRuntimeCompatability {
+    fun getOverlay() = runCatching { REIRuntime.getInstance().overlay }.getOrNull()
+
+    fun getOverlayStuff() = getOverlay()?.get()?.entryList?.focusedStack?.cheatsAs()?.value
+
     fun getReiHoveredItemStack(): ItemStack? {
         runCatching { REIRuntime.getInstance() }.getOrNull() ?: return null
         return getItemStackFromItemList() ?: getItemStackFromRecipe()
