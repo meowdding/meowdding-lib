@@ -9,6 +9,7 @@ import me.shedaniel.rei.api.client.gui.widgets.Slot
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin
 import me.shedaniel.rei.api.client.registry.screen.ExclusionZones
 import me.shedaniel.rei.api.client.registry.screen.ScreenRegistry
+import me.shedaniel.rei.api.common.entry.EntryStack
 import net.minecraft.client.gui.components.events.ContainerEventHandler
 import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.layouts.LayoutElement
@@ -58,14 +59,12 @@ object REIRuntimeCompatability {
         return getStack(listener)
     }
 
-    private fun getRecipe(): ItemStack? {
-        val entryStack = ScreenRegistry.getInstance().getFocusedStack(McClient.self.screen, PointHelper.ofMouse()) ?: return null
-        return entryStack.value as? ItemStack ?: entryStack.cheatsAs().value
-    }
+    private fun getRecipe(): ItemStack? = ScreenRegistry.getInstance().getFocusedStack(McClient.self.screen, PointHelper.ofMouse())?.toStack()
 
     private fun getRecipeFallback(): ItemStack? {
         val screen = McClient.self.screen as? DisplayScreen ?: return null
-        val result = screen.resultsToNotice.firstOrNull() ?: return null
-        return result.value as? ItemStack ?: result.cheatsAs().value
+        return screen.resultsToNotice.firstOrNull()?.toStack()
     }
+
+    private fun EntryStack<*>.toStack(): ItemStack? = this.value as? ItemStack ?: this.cheatsAs().value
 }
