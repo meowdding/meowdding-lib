@@ -1,7 +1,9 @@
 package me.owdding.lib
 
+import me.owdding.ktmodules.AutoCollect
 import me.owdding.lib.generated.MeowddingLibModules
 import me.owdding.lib.compat.HiddenElementRenderer
+import me.owdding.lib.generated.MeowddingLibPreInitModules
 import me.owdding.lib.utils.MeowddingLogger
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.loader.api.FabricLoader
@@ -9,6 +11,10 @@ import net.minecraft.resources.ResourceLocation
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 
 object MeowddingLib : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoResolve() {
+
+    init {
+        MeowddingLibPreInitModules.init { SkyBlockAPI.eventBus.register(it) }
+    }
 
     override fun onInitializeClient() {
         if (FabricLoader.getInstance().isModLoaded("resourcefulconfig")) {
@@ -20,3 +26,8 @@ object MeowddingLib : ClientModInitializer, MeowddingLogger by MeowddingLogger.a
 
     fun id(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath("meowdding-lib", path)
 }
+
+@AutoCollect("PreInitModules")
+@Target(AnnotationTarget.CLASS)
+@Retention(AnnotationRetention.SOURCE)
+annotation class PreInitModule

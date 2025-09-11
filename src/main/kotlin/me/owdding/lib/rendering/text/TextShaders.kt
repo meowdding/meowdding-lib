@@ -3,6 +3,7 @@ package me.owdding.lib.rendering.text
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import me.owdding.ktmodules.Module
+import me.owdding.lib.PreInitModule
 import me.owdding.lib.events.RegisterTextShaderEvent
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
 import net.minecraft.client.gui.GuiGraphics
@@ -11,7 +12,7 @@ import org.jetbrains.annotations.ApiStatus
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 
-@Module
+@PreInitModule
 object TextShaders {
 
     var activeShader: TextShader? = null
