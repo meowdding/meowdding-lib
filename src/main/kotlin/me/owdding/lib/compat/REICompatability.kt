@@ -1,5 +1,6 @@
 package me.owdding.lib.compat
 
+import me.owdding.ktmodules.Module
 import me.owdding.lib.utils.KnownMods
 import me.shedaniel.math.Rectangle
 import me.shedaniel.math.impl.PointHelper
@@ -13,9 +14,13 @@ import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.world.item.ItemStack
+import org.lwjgl.glfw.GLFW
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.CancellableSkyBlockEvent
+import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyPressedEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 
 class REIRenderOverlayEvent(val screen: Screen, private val registrar: (Int, Int, Int, Int) -> Unit) : CancellableSkyBlockEvent() {
 
@@ -40,7 +45,13 @@ object REICompatability : REIClientPlugin {
     }
 }
 
+@Module
 object REIRuntimeCompatability {
+    @Subscription
+    fun onScreen(event: ScreenKeyPressedEvent) {
+        if (event.key == GLFW.GLFW_KEY_L) getReiHoveredItemStack()?.hoverName?.send()
+    }
+
     fun getOverlay() = runCatching { REIRuntime.getInstance().overlay }.getOrNull()
 
     // Same as getItemStackFromItemList but returns air everywhere else, use getItemStackFromItemList preferably I think :3
