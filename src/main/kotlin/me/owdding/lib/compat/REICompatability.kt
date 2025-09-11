@@ -1,6 +1,5 @@
 package me.owdding.lib.compat
 
-import me.owdding.lib.utils.KnownMods
 import me.shedaniel.math.Rectangle
 import me.shedaniel.math.impl.PointHelper
 import me.shedaniel.rei.api.client.REIRuntime
@@ -13,6 +12,7 @@ import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
+import net.minecraft.client.gui.screens.inventory.ContainerScreen
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.CancellableSkyBlockEvent
@@ -59,16 +59,13 @@ object REIRuntimeCompatability {
 
     private fun getItemStackFromItemList(): ItemStack? {
         var listener: GuiEventListener? = REIRuntime.getInstance().overlay.orElse(null) ?: return null
-        val mx = PointHelper.getMouseFloatingX().toInt()
-        val my = PointHelper.getMouseFloatingY().toInt()
-
+        val mx = PointHelper.getMouseFloatingX()
+        val my = PointHelper.getMouseFloatingY()
         while (true) {
             when (listener) {
                 is Slot -> return listener.currentEntry.cheatsAs().value
                 !is ContainerEventHandler -> return null
-                else -> listener = listener.children()
-                    .firstOrNull { it is LayoutElement && mx in it.x until (it.x + it.width) && my in it.y until (it.y + it.height) }
-                    ?: return null
+                else -> listener = listener.getChildAt(mx, my).orElse(null)
             }
         }
     }
