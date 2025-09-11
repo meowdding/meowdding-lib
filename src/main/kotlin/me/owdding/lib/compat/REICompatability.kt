@@ -56,21 +56,10 @@ object REIRuntimeCompatability {
     fun getReiHoveredItemStack(): ItemStack? {
         if (!KnownMods.REI.installed) return null
         runCatching { REIRuntime.getInstance() }.getOrNull() ?: return null
-        return getItemStackFromItemList() ?: getItemStackFromRecipe() ?: getRecipeFallback()
+        return getItemList() ?: getRecipe() ?: getRecipeFallback()
     }
 
-    private fun getItemStackFromRecipe(): ItemStack? {
-        val entryStack = ScreenRegistry.getInstance().getFocusedStack(McClient.self.screen, PointHelper.ofMouse()) ?: return null
-        return entryStack.value as? ItemStack ?: entryStack.cheatsAs().value
-    }
-
-    private fun getRecipeFallback(): ItemStack? {
-        val screen = McClient.self.screen as? DisplayScreen ?: return null
-        val result = screen.resultsToNotice.firstOrNull() ?: return null
-        return result.value as? ItemStack ?: result.cheatsAs().value
-    }
-
-    private fun getItemStackFromItemList(): ItemStack? {
+    private fun getItemList(): ItemStack? {
         fun getStack(listener: GuiEventListener): ItemStack? = when (listener) {
             is Slot -> listener.currentEntry.cheatsAs().value
             !is ContainerEventHandler -> null
@@ -79,5 +68,16 @@ object REIRuntimeCompatability {
 
         val listener = REIRuntime.getInstance().overlay.orElse(null) ?: return null
         return getStack(listener)
+    }
+
+    private fun getRecipe(): ItemStack? {
+        val entryStack = ScreenRegistry.getInstance().getFocusedStack(McClient.self.screen, PointHelper.ofMouse()) ?: return null
+        return entryStack.value as? ItemStack ?: entryStack.cheatsAs().value
+    }
+
+    private fun getRecipeFallback(): ItemStack? {
+        val screen = McClient.self.screen as? DisplayScreen ?: return null
+        val result = screen.resultsToNotice.firstOrNull() ?: return null
+        return result.value as? ItemStack ?: result.cheatsAs().value
     }
 }
