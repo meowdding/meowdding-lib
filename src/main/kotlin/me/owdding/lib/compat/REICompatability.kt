@@ -9,6 +9,7 @@ import me.shedaniel.rei.api.client.gui.screen.DisplayScreen
 import me.shedaniel.rei.api.client.gui.widgets.Slot
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin
 import me.shedaniel.rei.api.client.registry.screen.ExclusionZones
+import me.shedaniel.rei.api.client.registry.screen.ScreenRegistry
 import net.minecraft.client.gui.components.events.ContainerEventHandler
 import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.layouts.LayoutElement
@@ -52,38 +53,31 @@ object REIRuntimeCompatability {
         if (event.key == GLFW.GLFW_KEY_L) getReiHoveredItemStack()?.hoverName?.send()
     }
 
-    fun getOverlay() = runCatching { REIRuntime.getInstance().overlay }.getOrNull()
-
-    // Same as getItemStackFromItemList but returns air everywhere else, use getItemStackFromItemList preferably I think :3
-    fun getOverlayStuff() = getOverlay()?.get()?.entryList?.focusedStack?.cheatsAs()?.value
-
     fun getReiHoveredItemStack(): ItemStack? {
         if (!KnownMods.REI.installed) return null
         runCatching { REIRuntime.getInstance() }.getOrNull() ?: return null
-        return getItemStackFromItemList() ?: getItemStackFromRecipe()
+        return getItemStackFromItemList() ?: getItemStackFromRecipe() ?: getRecipeFallback()
     }
 
     private fun getItemStackFromRecipe(): ItemStack? {
-        val displayScreen = McClient.self.screen as? DisplayScreen ?: return null
-        val result = displayScreen.resultsToNotice.firstOrNull() ?: return null
+        val entryStack = ScreenRegistry.getInstance().getFocusedStack(McClient.self.screen, PointHelper.ofMouse()) ?: return null
+        return entryStack.value as? ItemStack ?: entryStack.cheatsAs().value
+    }
+
+    private fun getRecipeFallback(): ItemStack? {
+        val screen = McClient.self.screen as? DisplayScreen ?: return null
+        val result = screen.resultsToNotice.firstOrNull() ?: return null
         return result.value as? ItemStack ?: result.cheatsAs().value
-        /**
-         * val screen = McClient.self.screen.takeIf { it is AbstractContainerScreen<*> } ?: return null
-         * val entryStack = ScreenRegistry.getInstance().getFocusedStack(screen, PointHelper.ofMouse()) ?: return null
-         * return entryStack.value as? ItemStack ?: entryStack.cheatsAs().value
-         */
     }
 
     private fun getItemStackFromItemList(): ItemStack? {
-        var listener: GuiEventListener? = REIRuntime.getInstance().overlay.orElse(null) ?: return null
-        val mx = PointHelper.getMouseFloatingX()
-        val my = PointHelper.getMouseFloatingY()
-        while (true) {
-            when (listener) {
-                is Slot -> return listener.currentEntry.cheatsAs().value
-                !is ContainerEventHandler -> return null
-                else -> listener = listener.getChildAt(mx, my).orElse(null)
-            }
+        fun getStack(listener: GuiEventListener): ItemStack? = when (listener) {
+            is Slot -> listener.currentEntry.cheatsAs().value
+            !is ContainerEventHandler -> null
+            else -> listener.getChildAt(PointHelper.getMouseFloatingX(), PointHelper.getMouseFloatingY()).orElse(null)?.let(::getStack)
         }
+
+        val listener = REIRuntime.getInstance().overlay.orElse(null) ?: return null
+        return getStack(listener)
     }
 }
