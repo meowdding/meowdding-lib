@@ -32,7 +32,7 @@ object TextShaders {
         registry
     }
 
-    val CODEC: Codec<TextShader> = ResourceLocation.CODEC.dispatch({ it.id }, { codecRegistry[it] })
+    val CODEC: Codec<TextShader> = ResourceLocation.CODEC.dispatch({ it.id }, { codecRegistry[it]!! })
 
     @Subscription
     fun register(event: RegisterTextShaderEvent) {
