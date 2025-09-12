@@ -70,7 +70,7 @@ abstract class LayoutBuilder {
 
     protected val widgets = mutableListOf<LayoutElements>()
 
-    private fun MutableList<LayoutElements>.add(element: LayoutElement) {
+    protected open fun MutableList<LayoutElements>.add(element: LayoutElement) {
         if (element is AbstractWidget) {
             add(LayoutElements(ScalableWidget(element)) {})
             return
