@@ -173,11 +173,6 @@ cloche {
                 include(libs.placeholders) { isTransitive = false }
                 include(libs.meowdding.patches) { isTransitive = false }
 
-                if (version == "1.21.8") {
-                    runtimeOnly(libs.rei)
-                    runtimeOnly("dev.architectury:architectury:16.1.4")
-                }
-
                 val mods = project.layout.buildDirectory.get().toPath().resolve("tmp/extracted${sourceSet.name}RuntimeMods")
                 val modsTmp = project.layout.buildDirectory.get().toPath().resolve("tmp/extracted${sourceSet.name}RuntimeMods/tmp")
 
