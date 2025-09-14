@@ -11,6 +11,7 @@ import me.owdding.lib.helper.TextShaderMixinHelper;
 import me.owdding.lib.rendering.text.TextShaders;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.font.glyphs.BakedGlyph;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.ARGB;
@@ -27,6 +28,9 @@ public class FontMixin {
     @Shadow
     @Final
     private Font.DisplayMode mode;
+    @Shadow
+    @Final
+    MultiBufferSource bufferSource;
     @Unique
     private final int meowddinglib$shadow = ARGB.scaleRGB(0xFFFFFFFF, 0.25f);
 
@@ -103,7 +107,7 @@ public class FontMixin {
         if (((Object) effect) instanceof TextShaderHolder holder && holder.meowddinglib$getTextShader() != null) {
             var previousShader = TextShaders.getActiveShader();
             TextShaders.setActiveShader(holder.meowddinglib$getTextShader());
-            original.call(instance, effect, pose, instance.renderType(this.mode), lightCoords);
+            original.call(instance, effect, pose, bufferSource.getBuffer(instance.renderType(mode)), lightCoords);
             TextShaders.setActiveShader(previousShader);
         } else {
             original.call(instance, effect, pose, buffer, lightCoords);
