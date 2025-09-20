@@ -18,7 +18,7 @@ plugins {
     alias(libs.plugins.terrarium.cloche)
     id("maven-publish")
     alias(libs.plugins.kotlin.symbol.processor)
-    id("me.owdding.gradle") version "1.0.4"
+    id("me.owdding.gradle") version "1.0.8"
 }
 
 repositories {
