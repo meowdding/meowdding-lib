@@ -155,7 +155,7 @@ object Displays {
             override fun getHeight() = display.getHeight() + 2
             override fun render(graphics: GuiGraphics) {
                 display.render(graphics, 1, 1)
-                graphics.renderOutline(0, 0, getWidth(), getHeight(), color().toInt())
+                graphics.drawOutline(0, 0, getWidth(), getHeight(), color().toInt())
             }
         }
     }

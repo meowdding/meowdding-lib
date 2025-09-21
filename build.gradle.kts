@@ -13,7 +13,7 @@ plugins {
     alias(libs.plugins.terrarium.cloche)
     id("maven-publish")
     alias(libs.plugins.kotlin.symbol.processor)
-    id("me.owdding.gradle") version "1.0.4"
+    id("me.owdding.gradle") version "1.0.8"
 }
 
 repositories {
@@ -159,7 +159,7 @@ cloche {
             }
 
             dependencies {
-                fabricApi(fabricApiVersion, minecraftVersion)
+                fabricApi(fabricApiVersion, name)
                 implementation(olympus)
                 implementation(rconfig)
 
@@ -189,11 +189,16 @@ cloche {
         this["resourcefulconfig"] = libs.resourceful.config1218
         this["olympus"] = libs.olympus.lib1218
     }
+    createVersion("1.21.9", "1.21.9-pre1", fabricApiVersion = provider { "0.133.7" }, minecraftVersionRange = {
+        start = "1.21.0-beta.1"
+    }) {
+        this["resourcefullib"] = libs.resourceful.lib1219
+        this["resourcefulconfig"] = libs.resourceful.config1219
+        this["olympus"] = libs.olympus.lib1219
+    }
 
     mappings {
         official()
-        parchment("2025.07.20", "1.21.8")
-        parchment("2025.06.15", "1.21.5")
     }
 }
 
