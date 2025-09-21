@@ -3,5 +3,9 @@
   "mixins": [
   ],
   "client": [
+    "BakedGlyphMixin",
+    "FontMixin",
+    "GlyphRenderTypesMixin",
+    "StyleMixin"
   ]
 }

@@ -124,8 +124,6 @@ cloche {
 
             accessWideners.from(project.layout.projectDirectory.file("src/$name/${sourceSet.name}.accesswidener"))
 
-            mixins.from("src/mixins/meowdding-lib.${sourceSet.name}.mixins.json")
-
             metadata {
                 entrypoint("client") {
                     adapter = "kotlin"
