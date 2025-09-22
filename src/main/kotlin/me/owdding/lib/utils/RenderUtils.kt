@@ -1,13 +1,9 @@
 package me.owdding.lib.utils
 
-import com.mojang.blaze3d.pipeline.RenderPipeline
-import com.mojang.blaze3d.platform.DepthTestFunction
 import com.mojang.blaze3d.systems.RenderSystem
-import com.mojang.blaze3d.vertex.DefaultVertexFormat
-import com.mojang.blaze3d.vertex.VertexFormat
+import me.owdding.lib.rendering.world.RenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS
 import net.minecraft.client.gui.Font
 import net.minecraft.client.renderer.LightTexture
-import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.ShapeRenderer
 import net.minecraft.client.renderer.blockentity.BeaconRenderer
@@ -27,18 +23,6 @@ import kotlin.math.max
 
 
 object RenderUtils {
-    private val BLOCK_FILL_TRIANGLE_THROUGH_WALLS: RenderType = RenderType.create(
-        "mlib/filled_triangle_through_walls",
-        131072,
-        RenderPipeline.builder(RenderPipelines.DEBUG_FILLED_SNIPPET)
-            .withLocation("pipeline/debug_filled_box")
-            .withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.TRIANGLE_STRIP)
-            .withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST)
-            .build(),
-        RenderType.CompositeState.builder()
-            .setLayeringState(RenderType.VIEW_OFFSET_Z_LAYERING)
-            .createCompositeState(false),
-    )
 
     val RenderWorldEvent.partialTicks: Float get() = this.ctx.tickCounter().getGameTimeDeltaPartialTick(false)
 
