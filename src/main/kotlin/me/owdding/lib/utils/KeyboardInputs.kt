@@ -1,11 +1,16 @@
 package me.owdding.lib.utils
 
+import me.owdding.lib.platform.screens.KeyEvent
 import org.lwjgl.glfw.GLFW
 
 data class KeyboardInputs(
     val symbols: Set<String>,
     val keys: Set<Int>,
 ) {
+
+    fun isDown(event: KeyEvent): Boolean {
+        return isDown(event.key, event.scancode)
+    }
 
     fun isDown(key: Int, scanCode: Int): Boolean {
         return key in keys || GLFW.glfwGetKeyName(key, scanCode) in symbols

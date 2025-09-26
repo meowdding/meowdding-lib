@@ -43,7 +43,9 @@ class ItemStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictu
         val item = state.state
 
         McClient.self.gameRenderer.lighting.setupFor(if (item.itemStackRenderState().usesBlockLight()) Entry.ITEMS_3D else Entry.ITEMS_FLAT)
-        item.itemStackRenderState().submit(stack, this.bufferSource, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY)
+
+        val featureRenderer = McClient.self.gameRenderer.featureRenderDispatcher
+        item.itemStackRenderState().submit(stack, featureRenderer.submitNodeStorage, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0)
     }
 
     override fun getTranslateY(height: Int, ignored: Int): Float {

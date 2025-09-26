@@ -131,8 +131,6 @@ cloche {
                     value = "me.owdding.lib.compat.REICompatability"
                 }
 
-                mixins.from("src/mixins/${sourceSet.name}.mixins.json")
-
                 fun dependency(modId: String, version: Provider<String>? = null) {
                     dependency {
                         this.modId = modId

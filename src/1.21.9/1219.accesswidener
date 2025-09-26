@@ -1,1 +1,2 @@
 accessWidener v2 named
+accessible method net/minecraft/world/waypoints/Waypoint$Icon <init> (Lnet/minecraft/resources/ResourceKey;Ljava/util/Optional;)V

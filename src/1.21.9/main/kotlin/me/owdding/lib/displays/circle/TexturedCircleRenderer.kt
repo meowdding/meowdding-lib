@@ -11,6 +11,7 @@ import net.minecraft.client.gui.navigation.ScreenRectangle
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.texture.AbstractTexture
+import net.minecraft.data.AtlasIds
 import net.minecraft.resources.ResourceLocation
 import org.joml.Matrix3x2f
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -34,8 +35,7 @@ class TexturedCircleRenderer(buffer: MultiBufferSource.BufferSource) : PictureIn
         buffer.addVertex(scaledWidth, scaledHeight, 0f).setUv(1f, 1f).setColor(-1)
         buffer.addVertex(scaledWidth, 0f, 0f).setUv(1f, -1f).setColor(-1)
 
-        val sprite = McClient.self.guiSprites.getSprite(state.texture)
-
+        val sprite = McClient.self.atlasManager.getAtlasOrThrow(AtlasIds.GUI).getSprite(state.texture)
         val abstractTexture: AbstractTexture = McClient.self.textureManager.getTexture(sprite.atlasLocation())
 
         RenderSystem.setShaderTexture(0, abstractTexture.textureView)
