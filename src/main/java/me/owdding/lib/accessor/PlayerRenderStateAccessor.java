@@ -8,19 +8,19 @@ public interface PlayerRenderStateAccessor {
 
     static void setUUID(PlayerRenderState renderState, UUID uuid) {
         if (renderState instanceof PlayerRenderStateAccessor accessor) {
-            accessor.ocean$setUUID(uuid);
+            accessor.mlib$setUUID(uuid);
         }
     }
 
     static UUID getUUID(PlayerRenderState renderState) {
         if (renderState instanceof PlayerRenderStateAccessor accessor) {
-            return accessor.ocean$getUUID();
+            return accessor.mlib$getUUID();
         }
         return null;
     }
 
-    UUID ocean$getUUID();
+    UUID mlib$getUUID();
 
-    void ocean$setUUID(UUID uuid);
+    void mlib$setUUID(UUID uuid);
 
 }

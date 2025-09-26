@@ -34,7 +34,6 @@ object CosmeticParser {
             try {
                 cosmetics = Http.getResult<JsonObject>(CONTRIBUTOR_URL).getOrNull().toData(CODEC) ?: mutableMapOf()
                 cosmetics.putAll(Http.getResult<JsonObject>(SPECIAL_PEOPLE_URL).getOrNull().toData(CODEC) ?: mutableMapOf())
-                println(cosmetics)
             } catch (e: Throwable) {
                 MeowddingLib.error("Something went wrong trying to fetch and parse cosmetics", e)
             }
