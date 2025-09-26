@@ -6,7 +6,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import me.owdding.lib.accessor.FontPipelineHolder;
 import me.owdding.lib.helper.TextShaderHolder;
 import me.owdding.lib.rendering.text.TextShaders;
-import net.minecraft.client.gui.font.glyphs.BakedGlyph;
+import net.minecraft.client.gui.font.TextRenderable;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.ARGB;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,19 +21,19 @@ public class FontMixin {
     @Unique
     private final int meowddinglib$shadow = ARGB.scaleRGB(0xFFFFFFFF, 0.25f);
 
-    //@Inject(method = "addGlyph", at = @At("HEAD"))
-    //private void apply(BakedGlyph.GlyphInstance instance, CallbackInfo ci) {
-    //    var holder = FontPipelineHolder.getHolder(instance);
-    //    if (holder == null) return;
-    //    holder.meowddinglib$setPipeline(FontPipelineHolder.ACTIVE_PIPELINE.get());
-    //}
+    @Inject(method = "addGlyph", at = @At("HEAD"))
+    private void applyGlyph(TextRenderable instance, CallbackInfo ci) {
+        var holder = FontPipelineHolder.getHolder(instance);
+        if (holder == null) return;
+        holder.meowddinglib$setPipeline(FontPipelineHolder.ACTIVE_PIPELINE.get());
+    }
 
-    //@Inject(method = "addEffect", at = @At("HEAD"))
-    //private void apply(BakedGlyph.Effect effect, CallbackInfo ci) {
-    //    var holder = FontPipelineHolder.getHolder(effect);
-    //    if (holder == null) return;
-    //    holder.meowddinglib$setPipeline(FontPipelineHolder.ACTIVE_PIPELINE.get());
-    //}
+    @Inject(method = "addEffect", at = @At("HEAD"))
+    private void applyEffewct(TextRenderable effect, CallbackInfo ci) {
+        var holder = FontPipelineHolder.getHolder(effect);
+        if (holder == null) return;
+        holder.meowddinglib$setPipeline(FontPipelineHolder.ACTIVE_PIPELINE.get());
+    }
 
     @ModifyReturnValue(method = "getTextColor", at = @At("RETURN"))
     public int getTextColor(int original) {
@@ -61,10 +61,11 @@ public class FontMixin {
     public boolean accept(int $$0, Style style, int $$2, Operation<Boolean> original) {
         var previous = FontPipelineHolder.ACTIVE_PIPELINE.get();
         var previousShader = TextShaders.getActiveShader();
-        //if (style instanceof TextShaderHolder holder && holder.meowddinglib$getTextShader() != null) {
-        //    FontPipelineHolder.ACTIVE_PIPELINE.set(holder.meowddinglib$getTextShader().getPipeline());
-        //    TextShaders.setActiveShader(holder.meowddinglib$getTextShader());
-        //}
+        //noinspection ConstantValue
+        if ((Object) style instanceof TextShaderHolder holder && holder.meowddinglib$getTextShader() != null) {
+            FontPipelineHolder.ACTIVE_PIPELINE.set(holder.meowddinglib$getTextShader().getPipeline());
+            TextShaders.setActiveShader(holder.meowddinglib$getTextShader());
+        }
         var result = original.call($$0, style, $$2);
         FontPipelineHolder.ACTIVE_PIPELINE.set(previous);
         TextShaders.setActiveShader(previousShader);

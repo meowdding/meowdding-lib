@@ -5,12 +5,11 @@
   "client": [
     "FontMixin",
     "FontPipelineHolderMixin",
-    "GlyphEffectRenderStateMixin",
-    "GlyphRenderStateMixin",
     "GlyphRenderTypesMixin",
     "GuiRenderStateMixin",
     "GuiTextRenderStateMixin",
     "StyleMixin",
-    "LocalPlayerMixin"
+    "LocalPlayerMixin",
+    "TextRenderablesMixin"
   ]
 }

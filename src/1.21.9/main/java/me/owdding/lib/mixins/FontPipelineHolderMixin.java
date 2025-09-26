@@ -7,8 +7,8 @@ import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(targets = {
     "net.minecraft.client.gui.render.state.GuiTextRenderState",
-    "net.minecraft.client.gui.font.glyphs.BakedGlyph$GlyphInstance",
-    "net.minecraft.client.gui.font.glyphs.BakedGlyph$Effect",
+    "net.minecraft.client.gui.font.glyphs.BakedSheetGlyph$GlyphInstance",
+    "net.minecraft.client.gui.font.glyphs.BakedGlyph$EffectInstance",
     "net.minecraft.client.gui.font.Font$PreparedTextBuilder",
 })
 public class FontPipelineHolderMixin implements FontPipelineHolder {
