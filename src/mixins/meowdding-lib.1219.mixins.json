@@ -3,6 +3,14 @@
   "mixins": [
   ],
   "client": [
-
+    "FontMixin",
+    "FontPipelineHolderMixin",
+    "GlyphEffectRenderStateMixin",
+    "GlyphRenderStateMixin",
+    "GlyphRenderTypesMixin",
+    "GuiRenderStateMixin",
+    "GuiTextRenderStateMixin",
+    "StyleMixin",
+    "LocalPlayerMixin"
   ]
 }

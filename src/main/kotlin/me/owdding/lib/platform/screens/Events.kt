@@ -1,12 +1,14 @@
 package me.owdding.lib.platform.screens
 
-import net.minecraft.Util
+import com.mojang.blaze3d.platform.InputConstants
+import org.jetbrains.annotations.ApiStatus
+import tech.thatgravyboat.skyblockapi.helpers.McScreen
 
 data class CharacterEvent(
     val codepoint: Int,
     val modifiers: Int,
 ) {
-    fun codepointAsString() = Char(codepoint)
+    fun codepointAsString(): String = Character.toString(codepoint)
     fun isAllowedInChat() = isAllowedChatCharacter(this.codepoint.toChar())
 
     fun isAllowedChatCharacter(char: Char): Boolean {
@@ -35,78 +37,50 @@ data class MouseButtonEvent(
     val buttonInfo: MouseButtonInfo,
 ) : InputWithModifiers by buttonInfo {
     val button get() = buttonInfo.button
+    fun isLeftClick() = button == 0
+    fun isRightClick() = button == 1
+    fun isMiddleClick() = button == 2
 }
 
 
 interface InputWithModifiers {
 
     val input: Int
+
+    @get:ApiStatus.Internal
     val modifiers: Int
 
-
-    fun isSelection(): Boolean {
-        return this.input == 257 || this.input == 32 || this.input == 335
-    }
-
-    fun isConfirmation(): Boolean {
-        return this.input == 257 || this.input == 335
-    }
-
-    fun isEscape(): Boolean {
-        return this.input == 256
-    }
-
-    fun isLeft(): Boolean {
-        return this.input == 263
-    }
-
-    fun isRight(): Boolean {
-        return this.input == 262
-    }
-
-    fun isUp(): Boolean {
-        return this.input == 265
-    }
-
-    fun isDown(): Boolean {
-        return this.input == 264
-    }
-
-    fun isCycleFocus(): Boolean {
-        return this.input == 258
-    }
+    fun isSelection() = this.input == InputConstants.KEY_RETURN || this.input == InputConstants.KEY_SPACE || this.input == InputConstants.KEY_NUMPADENTER
+    fun isConfirmation() = this.input == InputConstants.KEY_RETURN || this.input == InputConstants.KEY_NUMPADENTER
+    fun isEscape() = this.input == InputConstants.KEY_ESCAPE
+    fun isLeft() = this.input == InputConstants.KEY_LEFT
+    fun isRight() = this.input == InputConstants.KEY_RIGHT
+    fun isUp() = this.input == InputConstants.KEY_UP
+    fun isDown() = this.input == InputConstants.KEY_DOWN
+    fun isCycleFocus() = this.input == InputConstants.KEY_TAB
 
     fun getDigit(): Int {
-        val digitOffset: Int = this.input - 48
-        return if (digitOffset in 0..9) digitOffset else -1
+        return if (this.input in InputConstants.KEY_0..InputConstants.KEY_9) this.input - InputConstants.KEY_0 else -1
     }
 
-    fun hasAltDown(): Boolean {
-        return (this.modifiers and 4) != 0
-    }
-
-    fun hasShiftDown(): Boolean {
-        return (this.modifiers and 1) != 0
-    }
-
-    fun hasControlDown(): Boolean {
-        return (this.modifiers and (if (Util.getPlatform() == Util.OS.OSX) 8 else 2)) != 0
-    }
+    fun hasAltDown() = McScreen.isAltDown
+    fun hasShiftDown() = McScreen.isShiftDown
+    fun hasControlDown() = McScreen.isControlDown
 
     fun isSelectAll(): Boolean {
-        return this.input == 65 && this.hasControlDown() && !this.hasShiftDown() && !this.hasAltDown()
+        return this.input == InputConstants.KEY_A && this.hasControlDown() && !this.hasShiftDown() && !this.hasAltDown()
     }
 
     fun isCopy(): Boolean {
-        return this.input == 67 && this.hasControlDown() && !this.hasShiftDown() && !this.hasAltDown()
+        return this.input == InputConstants.KEY_C && this.hasControlDown() && !this.hasShiftDown() && !this.hasAltDown()
     }
 
     fun isPaste(): Boolean {
-        return this.input == 86 && this.hasControlDown() && !this.hasShiftDown() && !this.hasAltDown()
+        return this.input == InputConstants.KEY_V && this.hasControlDown() && !this.hasShiftDown() && !this.hasAltDown()
     }
 
     fun isCut(): Boolean {
-        return this.input == 88 && this.hasControlDown() && !this.hasShiftDown() && !this.hasAltDown()
+        return this.input == InputConstants.KEY_X && this.hasControlDown() && !this.hasShiftDown() && !this.hasAltDown()
     }
 
 }

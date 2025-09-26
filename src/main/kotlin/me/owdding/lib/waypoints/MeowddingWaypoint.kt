@@ -95,19 +95,19 @@ class MeowddingWaypoint(private val position: Vec3) {
         BlockPos.containing(position)
     }
 
-    internal fun render(event: RenderWorldEvent) {
+    internal fun render(event: RenderWorldEvent, translucent: Boolean) {
         if (renderTypes.isEmpty()) return
 
         val position = getPosition(event.partialTicks)
-
         event.poseStack.translated(-0.5, 0.0, -0.5) {
             for (type in renderTypes) {
-                when (type) {
+                when (type.takeUnless { it.translucent != translucent }) {
                     WaypointRenderType.TEXT -> event.renderTextInWorld(position, name)
                     WaypointRenderType.DISTANCE -> event.renderDistance(position)
                     WaypointRenderType.BOX -> event.renderBox(position, color)
                     WaypointRenderType.BEAM -> event.renderBeaconBeam(position, color)
                     WaypointRenderType.TRACER -> event.poseStack.translated(0.5, 0, 0.5) { event.renderLineFromCursor(position.add(0.0, 0.5, 0.0), color) }
+                    else -> {}
                 }
             }
         }
@@ -129,8 +129,8 @@ class MeowddingWaypoint(private val position: Vec3) {
     override fun toString() = "Waypoint(position=$position, uuid=$uuid, name=$name)"
 }
 
-enum class WaypointRenderType {
-    BEAM,
+enum class WaypointRenderType(val translucent: Boolean = true) {
+    BEAM(false),
     BOX,
     TEXT,
     DISTANCE,

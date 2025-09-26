@@ -104,12 +104,21 @@ object MeowddingWaypointHandler {
     }
 
     @Subscription
+    fun onRender(event: RenderWorldEvent.AfterEntities) {
+        val position = McPlayer.position ?: return
+        _waypoints
+            .filter { it.renderCondition(event) }
+            .sortedByDescending { it.distanceToSqr(position) }
+            .forEach { it.render(event, false) }
+    }
+
+    @Subscription
     fun onRender(event: RenderWorldEvent.AfterTranslucent) {
         val position = McPlayer.position ?: return
         _waypoints
             .filter { it.renderCondition(event) }
             .sortedByDescending { it.distanceToSqr(position) }
-            .forEach { it.render(event) }
+            .forEach { it.render(event, true) }
     }
 
 }
