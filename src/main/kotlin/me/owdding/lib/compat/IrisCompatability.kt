@@ -15,7 +15,12 @@ interface IrisCompatability {
         enum class IrisShaderType {
             LINES,
             BASIC,
-            TEXTURED
+            TEXTURED,
+            TRANSLUCENT,
+            ARMOR_GLINT,
+            BLOCK,
+            BLOCK_TRANSLUCENT,
+            BEACON_BEAM,
         }
 
         init {
@@ -37,6 +42,11 @@ internal object IrisCompatImpl : IrisCompatability {
             IrisCompatability.Companion.IrisShaderType.BASIC -> IrisProgram.BASIC
             IrisCompatability.Companion.IrisShaderType.LINES -> IrisProgram.LINES
             IrisCompatability.Companion.IrisShaderType.TEXTURED -> IrisProgram.TEXTURED
+            IrisCompatability.Companion.IrisShaderType.TRANSLUCENT -> IrisProgram.TRANSLUCENT
+            IrisCompatability.Companion.IrisShaderType.ARMOR_GLINT -> IrisProgram.ARMOR_GLINT
+            IrisCompatability.Companion.IrisShaderType.BLOCK -> IrisProgram.BLOCK
+            IrisCompatability.Companion.IrisShaderType.BLOCK_TRANSLUCENT -> IrisProgram.BLOCK_TRANSLUCENT
+            IrisCompatability.Companion.IrisShaderType.BEACON_BEAM -> IrisProgram.BEACON_BEAM
         }
         instance.assignPipeline(renderPipeline, type)
     }
