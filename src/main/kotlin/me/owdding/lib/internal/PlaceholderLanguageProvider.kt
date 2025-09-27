@@ -26,7 +26,7 @@ object PlaceholderLanguageProvider : TagLikeParser.Provider {
         "open_url", "url",
     )
 
-    private var PARSER = SingleTagLikeParser(TagLikeParser.TAGS, PlaceholderLanguageProvider)
+    private var PARSER = SingleTagLikeParser(TagLikeParser.TAGS_LENIENT, PlaceholderLanguageProvider)
 
     private fun getTag(id: String): TextTag? {
         return if (SAFEISH_TAGS.contains(id)) {
