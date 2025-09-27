@@ -126,7 +126,7 @@ cloche {
 
             accessWideners.from(project.layout.projectDirectory.file("src/versions/$name/${name.replace(".", "")}.accesswidener"))
 
-            mixins.from("src/mixins/meowdding-lib.${name}.mixins.json")
+            mixins.from("src/mixins/meowdding-lib.${name.replace(".", "")}.mixins.json")
 
             metadata {
                 entrypoint("client") {
