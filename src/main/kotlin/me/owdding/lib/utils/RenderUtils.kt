@@ -4,19 +4,23 @@ import com.mojang.blaze3d.pipeline.RenderPipeline
 import com.mojang.blaze3d.platform.DepthTestFunction
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
+import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexFormat
 import net.minecraft.client.gui.Font
 import net.minecraft.client.renderer.LightTexture
+import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.ShapeRenderer
 import net.minecraft.client.renderer.blockentity.BeaconRenderer
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.ARGB
 import net.minecraft.util.Mth
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
+import net.msrandom.stub.Stub
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
@@ -25,6 +29,21 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import kotlin.math.max
 
+@Stub
+internal expect fun RenderWorldEvent.renderBeaconBeam(
+    poseStack: PoseStack,
+    position: Vec3,
+    bufferSource: MultiBufferSource,
+    texture: ResourceLocation,
+    partialTicks: Float,
+    textureScale: Float,
+    gameTime: Long,
+    yOffset: Int,
+    height: Int,
+    color: Int,
+    beamRadius: Float,
+    glowRadius: Float,
+)
 
 object RenderUtils {
     private val BLOCK_FILL_TRIANGLE_THROUGH_WALLS: RenderType = RenderType.create(
@@ -132,14 +151,11 @@ object RenderUtils {
     }
 
     fun RenderWorldEvent.renderBeaconBeam(position: Vec3, color: Int) {
-        atCamera {
-            translate(position)
-            BeaconRenderer.renderBeaconBeam(
-                poseStack, buffer, BeaconRenderer.BEAM_LOCATION,
-                0f, Mth.PI, McLevel.self.gameTime, 0, McLevel.self.maxY * 2,
-                ARGB.opaque(color), 0.2f, 0.25f,
-            )
-        }
+        renderBeaconBeam(
+            poseStack, position, buffer, BeaconRenderer.BEAM_LOCATION,
+            0f, Mth.PI, McLevel.self.gameTime, 0, McLevel.self.maxY * 2,
+            ARGB.opaque(color), 0.2f, 0.25f,
+        )
     }
 
 }

@@ -2,6 +2,9 @@ package me.owdding.lib.overlays
 
 import com.mojang.blaze3d.platform.InputConstants
 import me.owdding.lib.events.overlay.FinishOverlayEditingEvent
+import me.owdding.lib.platform.screens.KeyEvent
+import me.owdding.lib.platform.screens.MeowddingScreen
+import me.owdding.lib.platform.screens.MouseButtonEvent
 import me.owdding.lib.utils.keys
 import me.owdding.lib.utils.keysOf
 import net.minecraft.client.gui.GuiGraphics
@@ -10,6 +13,8 @@ import net.minecraft.client.gui.screens.Screen
 import org.lwjgl.glfw.GLFW
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.helpers.McScreen
+import tech.thatgravyboat.skyblockapi.platform.drawOutline
 import tech.thatgravyboat.skyblockapi.platform.pushPop
 import tech.thatgravyboat.skyblockapi.platform.scale
 import tech.thatgravyboat.skyblockapi.platform.showTooltip
@@ -34,7 +39,7 @@ private val DOWN_KEY = keysOf(InputConstants.KEY_DOWN)
 private val LEFT_KEY = keysOf(InputConstants.KEY_LEFT)
 private val RIGHT_KEY = keysOf(InputConstants.KEY_RIGHT)
 
-class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) : Screen(CommonText.EMPTY) {
+class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) : MeowddingScreen(CommonText.EMPTY) {
 
     private var dragging = false
     private var relativeX = 0
@@ -53,7 +58,7 @@ class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) :
         }
         if (hovered) {
             graphics.fill(x, y, x + width, y + height, 0x50000000)
-            graphics.renderOutline(x - 1, y - 1, width + 2, height + 2, 0xFFFFFFFF.toInt())
+            graphics.drawOutline(x - 1, y - 1, width + 2, height + 2, 0xFFFFFFFF.toInt())
             graphics.showTooltip(
                 Text.multiline(
                     overlay.name,
@@ -74,20 +79,22 @@ class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) :
         this.renderMenuBackground(guiGraphics)
     }
 
-    override fun mouseDragged(mouseX: Double, mouseY: Double, i: Int, f: Double, g: Double): Boolean {
+    override fun mouseDragged(mouseEvent: MouseButtonEvent, deltaX: Double, deltaY: Double): Boolean {
         if (dragging) {
-            if (EditableProperty.X in overlay.properties) overlay.setX(mouseX.toInt() - relativeX)
-            if (EditableProperty.Y in overlay.properties) overlay.setY(mouseY.toInt() - relativeY)
+            if (EditableProperty.X in overlay.properties) overlay.setX(mouseEvent.x.toInt() - relativeX)
+            if (EditableProperty.Y in overlay.properties) overlay.setY(mouseEvent.y.toInt() - relativeY)
         }
         return true
     }
 
-    override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int): Boolean {
+    override fun mouseReleased(mouseEvent: MouseButtonEvent): Boolean {
         dragging = false
         return true
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+    override fun mouseClicked(mouseEvent: MouseButtonEvent, doubleClicked: Boolean): Boolean {
+        val (mouseX, mouseY) = mouseEvent
+        val (button) = mouseEvent.buttonInfo
         val (x, y) = overlay.position
         val (width, height) = overlay.bounds * overlay.position.scale
 
@@ -120,8 +127,9 @@ class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) :
         return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY)
     }
 
-    override fun keyPressed(key: Int, scan: Int, modifiers: Int): Boolean {
-        val multiplier = if (hasShiftDown()) 10 else 1
+    override fun keyPressed(keyEvent: KeyEvent): Boolean {
+        val (key, scan) = keyEvent
+        val multiplier = if (McScreen.isShiftDown) 10 else 1
         val (x, y) = overlay.position
         val scale = overlay.position.scale
 
@@ -132,7 +140,7 @@ class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) :
             RIGHT_KEY.isDown(key, scan) && EditableProperty.X in overlay.properties -> overlay.setX(x + multiplier)
             ADD_KEY.isDown(key, scan) && EditableProperty.SCALE in overlay.properties -> overlay.setScale(scale + 0.1f)
             MINUS_KEY.isDown(key, scan) && EditableProperty.SCALE in overlay.properties -> overlay.setScale(scale - 0.1f)
-            else -> return super.keyPressed(key, scan, modifiers)
+            else -> return super.keyPressed(keyEvent)
         }
         return true
     }

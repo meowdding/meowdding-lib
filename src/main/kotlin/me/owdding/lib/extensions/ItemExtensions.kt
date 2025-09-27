@@ -7,8 +7,9 @@ import net.minecraft.core.component.DataComponents
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.ItemLore
-import net.minecraft.world.item.component.ResolvableProfile
 import net.minecraft.world.item.component.TooltipDisplay
+import tech.thatgravyboat.skyblockapi.platform.properties
+import tech.thatgravyboat.skyblockapi.platform.toResolvableProfile
 import tech.thatgravyboat.skyblockapi.utils.builders.TooltipBuilder
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
 import java.util.*
@@ -50,7 +51,7 @@ object ItemUtils {
 
     fun createSkull(profile: GameProfile): ItemStack {
         val stack = ItemStack(Items.PLAYER_HEAD)
-        stack.set(DataComponents.PROFILE, ResolvableProfile(profile))
+        stack.set(DataComponents.PROFILE, profile.toResolvableProfile())
         return stack
     }
 }
