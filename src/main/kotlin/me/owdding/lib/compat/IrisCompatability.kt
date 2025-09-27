@@ -2,7 +2,6 @@ package me.owdding.lib.compat
 
 import com.mojang.blaze3d.pipeline.RenderPipeline
 import me.owdding.ktmodules.Module
-import me.owdding.lib.compat.IrisCompatability.Companion.IrisShaderType
 import me.owdding.lib.rendering.world.RenderTypes
 import me.owdding.lib.utils.KnownMods
 import net.irisshaders.iris.api.v0.IrisApi
@@ -13,23 +12,24 @@ interface IrisCompatability {
 
     @Module
     companion object : IrisCompatability by resolve() {
-        enum class IrisShaderType {
-            LINES,
-            BASIC,
-            TEXTURED,
-            TRANSLUCENT,
-            ARMOR_GLINT,
-            BLOCK,
-            BLOCK_TRANSLUCENT,
-            BEACON_BEAM,
-        }
-
         init {
             registerPipeline(RenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS.renderPipeline, IrisShaderType.BASIC)
             registerPipeline(RenderTypes.BLOCK_FILL_QUAD.renderPipeline, IrisShaderType.BASIC)
         }
     }
 }
+
+enum class IrisShaderType {
+    LINES,
+    BASIC,
+    TEXTURED,
+    TRANSLUCENT,
+    ARMOR_GLINT,
+    BLOCK,
+    BLOCK_TRANSLUCENT,
+    BEACON_BEAM,
+}
+
 
 internal object IrisCompatNoOp : IrisCompatability
 
