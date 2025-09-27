@@ -2,6 +2,7 @@ package me.owdding.lib.compat
 
 import com.mojang.blaze3d.pipeline.RenderPipeline
 import me.owdding.ktmodules.Module
+import me.owdding.lib.compat.IrisCompatability.Companion.IrisShaderType
 import me.owdding.lib.rendering.world.RenderTypes
 import me.owdding.lib.utils.KnownMods
 import net.irisshaders.iris.api.v0.IrisApi
@@ -37,16 +38,16 @@ internal fun resolve(): IrisCompatability = if (KnownMods.IRIS.installed) IrisCo
 internal object IrisCompatImpl : IrisCompatability {
     private val instance by lazy { IrisApi.getInstance() }
 
-    override fun registerPipeline(renderPipeline: RenderPipeline, shaderType: IrisCompatability.Companion.IrisShaderType) {
+    override fun registerPipeline(renderPipeline: RenderPipeline, shaderType: IrisShaderType) {
         val type = when (shaderType) {
-            IrisCompatability.Companion.IrisShaderType.BASIC -> IrisProgram.BASIC
-            IrisCompatability.Companion.IrisShaderType.LINES -> IrisProgram.LINES
-            IrisCompatability.Companion.IrisShaderType.TEXTURED -> IrisProgram.TEXTURED
-            IrisCompatability.Companion.IrisShaderType.TRANSLUCENT -> IrisProgram.TRANSLUCENT
-            IrisCompatability.Companion.IrisShaderType.ARMOR_GLINT -> IrisProgram.ARMOR_GLINT
-            IrisCompatability.Companion.IrisShaderType.BLOCK -> IrisProgram.BLOCK
-            IrisCompatability.Companion.IrisShaderType.BLOCK_TRANSLUCENT -> IrisProgram.BLOCK_TRANSLUCENT
-            IrisCompatability.Companion.IrisShaderType.BEACON_BEAM -> IrisProgram.BEACON_BEAM
+            IrisShaderType.BASIC -> IrisProgram.BASIC
+            IrisShaderType.LINES -> IrisProgram.LINES
+            IrisShaderType.TEXTURED -> IrisProgram.TEXTURED
+            IrisShaderType.TRANSLUCENT -> IrisProgram.TRANSLUCENT
+            IrisShaderType.ARMOR_GLINT -> IrisProgram.ARMOR_GLINT
+            IrisShaderType.BLOCK -> IrisProgram.BLOCK
+            IrisShaderType.BLOCK_TRANSLUCENT -> IrisProgram.BLOCK_TRANSLUCENT
+            IrisShaderType.BEACON_BEAM -> IrisProgram.BEACON_BEAM
         }
         instance.assignPipeline(renderPipeline, type)
     }
