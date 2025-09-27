@@ -1,20 +1,43 @@
 package me.owdding.lib.compat
 
+import com.mojang.blaze3d.pipeline.RenderPipeline
 import me.owdding.ktmodules.Module
 import me.owdding.lib.rendering.world.RenderTypes
 import me.owdding.lib.utils.KnownMods
 import net.irisshaders.iris.api.v0.IrisApi
 import net.irisshaders.iris.api.v0.IrisProgram
 
-@Module
-object IrisCompatability {
+interface IrisCompatability {
+    fun registerPipeline(renderPipeline: RenderPipeline, shaderType: IrisShaderType) {}
 
-    init {
-        KnownMods.IRIS.installed {
-            val iris = IrisApi.getInstance()
-            iris.assignPipeline(RenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS.renderPipeline, IrisProgram.BASIC)
-            iris.assignPipeline(RenderTypes.BLOCK_FILL_QUAD.renderPipeline, IrisProgram.BASIC)
+    @Module
+    companion object : IrisCompatability by resolve() {
+        enum class IrisShaderType {
+            LINES,
+            BASIC,
+            TEXTURED
+        }
+
+        init {
+            registerPipeline(RenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS.renderPipeline, IrisShaderType.BASIC)
+            registerPipeline(RenderTypes.BLOCK_FILL_QUAD.renderPipeline, IrisShaderType.BASIC)
         }
     }
+}
 
+internal object IrisCompatNoOp : IrisCompatability
+
+internal fun resolve(): IrisCompatability = if (KnownMods.IRIS.installed) IrisCompatImpl else IrisCompatNoOp
+
+internal object IrisCompatImpl : IrisCompatability {
+    private val instance by lazy { IrisApi.getInstance() }
+
+    override fun registerPipeline(renderPipeline: RenderPipeline, shaderType: IrisCompatability.Companion.IrisShaderType) {
+        val type = when (shaderType) {
+            IrisCompatability.Companion.IrisShaderType.BASIC -> IrisProgram.BASIC
+            IrisCompatability.Companion.IrisShaderType.LINES -> IrisProgram.LINES
+            IrisCompatability.Companion.IrisShaderType.TEXTURED -> IrisProgram.TEXTURED
+        }
+        instance.assignPipeline(renderPipeline, type)
+    }
 }
