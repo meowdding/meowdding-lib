@@ -14,7 +14,7 @@ plugins {
     alias(libs.plugins.terrarium.cloche)
     id("maven-publish")
     alias(libs.plugins.kotlin.symbol.processor)
-    id("me.owdding.gradle") version "1.0.10"
+    id("me.owdding.gradle") version "1.1.0"
 }
 
 repositories {
@@ -51,8 +51,9 @@ val kspAll: Configuration by configurations.creating {
 dependencies {
     kspAll(libs.meowdding.ktmodules)
     kspAll(libs.meowdding.ktcodecs)
-    kspAll("net.msrandom:kmp-actual-stubs-processor:1.0.3+workaround") {
-        version { strictly("1.0.312312+workaround") } // fixes an issue with ksp stubs https://github.com/terrarium-earth/jvm-multiplatform/pull/11
+    kspAll("net.msrandom:kmp-actual-stubs-processor:1.0.5-meowwwwwwwwwwwwww") {
+        version { strictly("1.0.5-meowwwwwwwwwwwwww") }
+        isTransitive = false
     }
 
     compileOnly(libs.meowdding.ktmodules)

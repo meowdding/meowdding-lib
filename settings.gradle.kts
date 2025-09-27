@@ -13,5 +13,3 @@ dependencyResolutionManagement {
         create("libs")
     }
 }
-
-includeBuild("../meowdding/meowdding-gradle")

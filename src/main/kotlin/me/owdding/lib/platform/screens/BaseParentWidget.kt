@@ -1,7 +1,9 @@
 package me.owdding.lib.platform.screens
 
 import earth.terrarium.olympus.client.components.base.BaseParentWidget
+import net.msrandom.stub.Stub
 
+@Stub
 expect abstract class BaseParentWidget : BaseParentWidget {
     constructor()
     constructor(width: Int, height: Int)

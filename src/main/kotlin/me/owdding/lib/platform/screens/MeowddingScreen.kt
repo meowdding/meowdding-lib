@@ -2,7 +2,9 @@ package me.owdding.lib.platform.screens
 
 import com.teamresourceful.resourcefullib.client.screens.BaseCursorScreen
 import net.minecraft.network.chat.Component
+import net.msrandom.stub.Stub
 
+@Stub
 expect abstract class MeowddingScreen(component: Component) : BaseCursorScreen {
 
     open fun mouseClicked(mouseEvent: MouseButtonEvent, doubleClicked: Boolean): Boolean
