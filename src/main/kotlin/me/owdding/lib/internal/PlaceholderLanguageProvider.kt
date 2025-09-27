@@ -52,22 +52,19 @@ object PlaceholderLanguageProvider : TagLikeParser.Provider {
         } else if (id == "/*") {
             context.pop(context.size())
         } else if (id.length > 1 && id[0] == '/') {
-            var s = id.substring(1)
-            context.pop(s)
+            context.pop(id.substring(1))
         } else if (id.length > 1 && id[0] == ';') {
-            var s = id.substring(1)
-            context.popOnly(s)
+            context.popOnly(id.substring(1))
         } else if (id.startsWith("#")) {
-            var text = TextColor.parseColor(id)
+            val text = TextColor.parseColor(id)
             if (text.result().isPresent) {
                 context.push(id) { ColorNode(it, text.result().get()) }
             }
         } else if (StringUtils.isNumeric(id)) {
             context.addNode(DynamicTextNode.of(id, KEY))
         } else {
-            var tag = getTag(id)!!
-
-            var args = StringArgs.full(argument, ' ', ':')
+            val tag = getTag(id)!!
+            val args = StringArgs.full(argument, ' ', ':')
 
             if (tag.selfContained()) {
                 context.addNode(tag.nodeCreator().createTextNode(TextNode.array(), args, context.parser()))
@@ -79,7 +76,7 @@ object PlaceholderLanguageProvider : TagLikeParser.Provider {
 
     fun parse(text: String, args: Array<Any?>): Component = PARSER.parseText(text, ParserContext.of(
         KEY, Function { key ->
-            var index = key.toIntOrNull()
+            val index = key.toIntOrNull()
             if (index != null && index in args.indices) {
                 args[index] as? Component ?: Component.literal(args[index].toString())
             } else {
