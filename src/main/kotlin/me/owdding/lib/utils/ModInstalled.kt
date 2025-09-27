@@ -23,7 +23,10 @@ enum class KnownMods(val modId: String) {
     // "Performance" Mods
     SODIUM("sodium"),
     IRIS("iris"),
-    IMMEDIATLYFAST("immediatelyfast")
+    IMMEDIATLYFAST("immediatelyfast"),
+
+    // General Mods
+    REI("roughlyenoughitems"),
     ;
 
     val installed by lazy { FabricLoader.getInstance().isModLoaded(modId) }

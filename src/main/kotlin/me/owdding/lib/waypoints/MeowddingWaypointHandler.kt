@@ -22,8 +22,8 @@ import kotlin.math.pow
 @Module
 object MeowddingWaypointHandler {
 
-    private var _waypoints: MutableList<MeowddingWaypoint> = mutableListOf()
-    val waypoints: List<MeowddingWaypoint> get() = _waypoints
+    private var _waypoints: MutableSet<MeowddingWaypoint> = mutableSetOf()
+    val waypoints: List<MeowddingWaypoint> get() = _waypoints.toList()
 
     fun getWaypointsWithAnyTags(vararg tags: MeowddingWaypointTag): List<MeowddingWaypoint> = getWaypointsWithAnyTags(tags.toList())
     fun getWaypointsWithAnyTags(tags: Collection<MeowddingWaypointTag>): List<MeowddingWaypoint> = _waypoints.filter { it.tags.any { t -> tags.contains(t) } }
@@ -31,7 +31,7 @@ object MeowddingWaypointHandler {
     fun getWaypointsWithAllTags(tags: Collection<MeowddingWaypointTag>): List<MeowddingWaypoint> = _waypoints.filter { it.tags.containsAll(tags) }
 
     fun addWaypoint(waypoint: MeowddingWaypoint) {
-        _waypoints.removeIf { it.uuid == waypoint.uuid }
+        _waypoints.filter { it.uuid == waypoint.uuid }.forEach(::removeWaypoint)
         _waypoints.add(waypoint)
 
         if (waypoint.inLocatorBar && !McVersionGroup.MC_1_21_5.isActive) {
@@ -116,6 +116,7 @@ object MeowddingWaypointHandler {
     fun onRender(event: RenderWorldEvent.AfterTranslucent) {
         val position = McPlayer.position ?: return
         _waypoints
+            .toList()
             .filter { it.renderCondition(event) }
             .sortedByDescending { it.distanceToSqr(position) }
             .forEach { it.render(event, true) }
