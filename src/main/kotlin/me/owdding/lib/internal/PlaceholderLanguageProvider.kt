@@ -23,6 +23,7 @@ object PlaceholderLanguageProvider : TagLikeParser.Provider {
         "suggest_command", "cmd",
         "copy_to_clipboard", "copy",
         "insert", "insertion",
+        "open_url", "url",
     )
 
     private var PARSER = SingleTagLikeParser(TagLikeParser.TAGS, PlaceholderLanguageProvider)
