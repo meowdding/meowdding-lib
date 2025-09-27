@@ -157,7 +157,8 @@ cloche {
                 fabricApi(fabricApiVersion, name)
                 implementation(olympus) { isTransitive = false }
                 implementation(rlib)
-                implementation(rconfig)
+                compileOnly(rconfig)
+                localRuntime(rconfig)
 
                 include(rlib) { isTransitive = false }
                 include(olympus) { isTransitive = false }

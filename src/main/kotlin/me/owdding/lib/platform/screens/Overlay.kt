@@ -1,6 +1,6 @@
 package me.owdding.lib.platform.screens
 
-import me.owdding.lib.overlays.Overlay
+import earth.terrarium.olympus.client.ui.Overlay
 import net.minecraft.client.gui.screens.Screen
 import net.msrandom.stub.Stub
 
