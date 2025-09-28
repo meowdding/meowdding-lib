@@ -1,7 +1,16 @@
 package me.owdding.lib.utils
 
+import me.owdding.ktmodules.Module
 import me.owdding.lib.platform.screens.KeyEvent
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
+import net.minecraft.client.KeyMapping
+import net.minecraft.resources.ResourceLocation
+import net.msrandom.stub.Stub
 import org.lwjgl.glfw.GLFW
+import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyPressedEvent
+import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyReleasedEvent
+import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 
 data class KeyboardInputs(
     val symbols: Set<String>,
@@ -42,3 +51,48 @@ fun keysOf(vararg symbols: String) = KeyboardInputs(
     keys = emptySet(),
     symbols = symbols.toSet(),
 )
+
+@Stub
+internal expect fun keyMapping(translationKey: String, keyCode: Int, category: ResourceLocation): KeyMapping
+
+@Stub
+expect fun KeyMapping.matches(event: KeyEvent): Boolean
+
+abstract class MeowddingKeybind(
+    category: ResourceLocation,
+    translationKey: String,
+    keyCode: Int,
+    private val allowMultipleExecutions: Boolean = false,
+    private val runnable: (() -> Unit)? = null,
+) {
+    init {
+        if (runnable != null) {
+            knownKeybinds.add(this)
+        }
+    }
+
+    val key: KeyMapping = KeyBindingHelper.registerKeyBinding(keyMapping(translationKey, keyCode, category))
+
+    val isDown get() = key.isDown
+
+    fun matches(keyCode: Int, scancode: Int) = key.matches(KeyEvent(keyCode, scancode, 0))
+    fun matches(event: ScreenKeyReleasedEvent) = matches(event.key, event.scanCode)
+    fun matches(event: ScreenKeyPressedEvent) = matches(event.key, event.scanCode)
+    fun matches(event: KeyEvent) = key.matches(event)
+
+    @Module
+    companion object {
+        private val knownKeybinds = mutableListOf<MeowddingKeybind>()
+
+        @Subscription(event = [TickEvent::class])
+        fun onTick() {
+            knownKeybinds.forEach { keybind ->
+                if (keybind.allowMultipleExecutions && keybind.isDown) {
+                    keybind.runnable?.invoke()
+                } else if (keybind.key.consumeClick()) {
+                    keybind.runnable?.invoke()
+                }
+            }
+        }
+    }
+}

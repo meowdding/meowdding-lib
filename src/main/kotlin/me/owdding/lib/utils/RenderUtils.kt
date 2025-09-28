@@ -20,6 +20,7 @@ import net.minecraft.util.ARGB
 import net.minecraft.util.Mth
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
+import net.msrandom.stub.Stub
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
@@ -28,6 +29,7 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import kotlin.math.max
 
+@Stub
 internal expect fun RenderWorldEvent.renderBeaconBeam(
     poseStack: PoseStack,
     position: Vec3,

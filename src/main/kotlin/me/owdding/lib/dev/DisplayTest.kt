@@ -9,6 +9,8 @@ import net.minecraft.network.chat.CommonComponents
 import tech.thatgravyboat.skyblockapi.platform.drawString
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.strikethrough
 
 object DisplayTest : Screen(CommonComponents.EMPTY) {
 
@@ -30,6 +32,11 @@ object DisplayTest : Screen(CommonComponents.EMPTY) {
             Text.of("Hello, ") {
                 append("World") {
                     this.textShader = shader
+                    this.italic = true
+                }
+                append(" and other World") {
+                    this.textShader = shader
+                    this.strikethrough = true
                 }
                 append("!")
             },

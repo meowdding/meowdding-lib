@@ -1,11 +1,17 @@
 @file:Suppress("UnstableApiUsage")
+@file:OptIn(ExperimentalPathApi::class)
 
 import com.google.devtools.ksp.gradle.KspTask
 import earth.terrarium.cloche.api.metadata.ModMetadata
+import net.msrandom.minecraftcodev.core.utils.toPath
+import me.owdding.gradle.dependency
 import net.msrandom.stubs.GenerateStubApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.nio.file.StandardOpenOption
+import java.util.zip.ZipFile
+import kotlin.io.path.*
 
 plugins {
     java
@@ -13,7 +19,7 @@ plugins {
     alias(libs.plugins.terrarium.cloche)
     id("maven-publish")
     alias(libs.plugins.kotlin.symbol.processor)
-    id("me.owdding.gradle") version "1.0.9"
+    id("me.owdding.gradle") version "1.1.0"
 }
 
 repositories {
@@ -50,8 +56,9 @@ val kspAll: Configuration by configurations.creating {
 dependencies {
     kspAll(libs.meowdding.ktmodules)
     kspAll(libs.meowdding.ktcodecs)
-    kspAll("net.msrandom:kmp-actual-stubs-processor:1.0.3+workaround") {
-        version { strictly("1.0.312312+workaround") } // fixes an issue with ksp stubs https://github.com/terrarium-earth/jvm-multiplatform/pull/11
+    kspAll("net.msrandom:kmp-actual-stubs-processor:1.0.5-meowwwwwwwwwwwwww") {
+        version { strictly("1.0.5-meowwwwwwwwwwwwww") }
+        isTransitive = false
     }
 
     compileOnly(libs.meowdding.ktmodules)
@@ -112,14 +119,14 @@ cloche {
         val rconfig = dependencies["resourcefulconfig"]!!
         val olympus = dependencies["olympus"]!!
 
-        fabric(name) {
+        fabric("versions:$name") {
             includedClient()
             minecraftVersion = version
             this.loaderVersion = loaderVersion.get()
 
-            accessWideners.from(project.layout.projectDirectory.file("src/$name/${sourceSet.name}.accesswidener"))
+            accessWideners.from(project.layout.projectDirectory.file("src/versions/$name/${name.replace(".", "")}.accesswidener"))
 
-            mixins.from("src/mixins/meowdding-lib.${sourceSet.name}.mixins.json")
+            mixins.from("src/mixins/meowdding-lib.${name.replace(".", "")}.mixins.json")
 
             metadata {
                 entrypoint("client") {
@@ -131,16 +138,6 @@ cloche {
                     value = "me.owdding.lib.compat.REICompatability"
                 }
 
-                fun dependency(modId: String, version: Provider<String>? = null) {
-                    dependency {
-                        this.modId = modId
-                        this.required = true
-                        if (version != null) version {
-                            this.start = version
-                        }
-                    }
-                }
-
                 dependency {
                     modId = "minecraft"
                     required = true
@@ -149,8 +146,8 @@ cloche {
                 dependency("fabric")
                 dependency("fabricloader", libs.versions.fabric.loader)
                 dependency("fabric-language-kotlin", libs.versions.fabric.language.kotlin)
-                //dependency("resourcefullib", rlib.map { it.version!! })
-                //dependency("olympus", olympus.map { it.version!! })
+                dependency("resourcefullib", rlib.map { it.version!! })
+                dependency("olympus", olympus.map { it.version!! })
                 dependency("skyblock-api", libs.versions.skyblockapi)
                 dependency("meowdding-patches", libs.versions.meowdding.patches)
                 dependency("placeholder-api", libs.versions.placeholders)
@@ -160,12 +157,47 @@ cloche {
                 fabricApi(fabricApiVersion, name)
                 implementation(olympus) { isTransitive = false }
                 implementation(rlib)
-                implementation(rconfig)
+                compileOnly(rconfig)
+                localRuntime(rconfig)
 
                 include(rlib) { isTransitive = false }
                 include(olympus) { isTransitive = false }
                 include(libs.placeholders) { isTransitive = false }
                 include(libs.meowdding.patches) { isTransitive = false }
+
+                val mods = project.layout.buildDirectory.get().toPath().resolve("tmp/extracted${sourceSet.name}RuntimeMods")
+                val modsTmp = project.layout.buildDirectory.get().toPath().resolve("tmp/extracted${sourceSet.name}RuntimeMods/tmp")
+
+                mods.deleteRecursively()
+                modsTmp.createDirectories()
+                mods.createDirectories()
+
+                fun extractMods(file: java.nio.file.Path) {
+                    println("Adding runtime mod ${file.name}")
+                    val extracted = mods.resolve(file.name)
+                    file.copyTo(extracted, overwrite = true)
+                    if (!file.fileName.endsWith(".disabled.jar")) {
+                        modRuntimeOnly(files(extracted))
+                    }
+                    ZipFile(extracted.toFile()).use {
+                        it.entries().asIterator().forEach { file ->
+                            val name = file.name.replace(File.separator, "/")
+                            if (name.startsWith("META-INF/jars/") && name.endsWith(".jar")) {
+                                val data = it.getInputStream(file).readAllBytes()
+                                val file = modsTmp.resolve(name.substringAfterLast("/"))
+                                file.writeBytes(data, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE)
+                                extractMods(file)
+                            }
+                        }
+                    }
+                }
+
+                project.layout.projectDirectory.toPath().resolve("run/${sourceSet.name}Mods").takeIf { it.exists() }
+                    ?.listDirectoryEntries()?.filter { it.isRegularFile() }?.forEach { file ->
+                        extractMods(file)
+                    }
+
+                modsTmp.deleteRecursively()
             }
 
             runs {
@@ -255,8 +287,9 @@ tasks.named("createCommonApiStub", GenerateStubApi::class) {
 }
 
 ksp {
-    this@ksp.excludedSources.from(sourceSets.getByName("1215").kotlin.srcDirs)
-    this@ksp.excludedSources.from(sourceSets.getByName("1218").kotlin.srcDirs)
+    this@ksp.excludedSources.from(sourceSets.getByName("versions1215").kotlin.srcDirs)
+    this@ksp.excludedSources.from(sourceSets.getByName("versions1218").kotlin.srcDirs)
+    this@ksp.excludedSources.from(sourceSets.getByName("versions1219").kotlin.srcDirs)
     arg("actualStubDir", project.layout.buildDirectory.dir("generated/ksp/main/stubs").get().asFile.absolutePath)
 }
 

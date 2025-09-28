@@ -1,11 +1,11 @@
 package me.owdding.lib.platform.screens
 
-import com.teamresourceful.resourcefullib.client.screens.BaseCursorScreen
-import net.minecraft.network.chat.Component
+import earth.terrarium.olympus.client.ui.Overlay
+import net.minecraft.client.gui.screens.Screen
 import net.msrandom.stub.Stub
 
 @Stub
-expect abstract class MeowddingScreen(component: Component) : BaseCursorScreen {
+expect abstract class Overlay(parent: Screen?) : Overlay {
 
     open fun mouseClicked(mouseEvent: MouseButtonEvent, doubleClicked: Boolean): Boolean
     open fun mouseReleased(mouseEvent: MouseButtonEvent): Boolean
