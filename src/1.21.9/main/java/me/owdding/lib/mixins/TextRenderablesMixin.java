@@ -10,7 +10,7 @@ import java.util.Objects;
 
 @Mixin(targets = {
     "net.minecraft.client.gui.font.glyphs.BakedSheetGlyph$GlyphInstance",
-    "net.minecraft.client.gui.font.glyphs.BakedGlyph$EffectInstance",
+    "net.minecraft.client.gui.font.glyphs.BakedSheetGlyph$EffectInstance",
 })
 public class TextRenderablesMixin {
 
