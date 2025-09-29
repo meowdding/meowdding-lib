@@ -10,6 +10,7 @@ import net.minecraft.client.gui.render.state.pip.PictureInPictureRenderState
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.entity.EntityRenderer
 import net.minecraft.client.renderer.entity.state.EntityRenderState
+import net.minecraft.client.renderer.state.CameraRenderState
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
@@ -38,13 +39,14 @@ class EntityStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPic
         renderer.lighting.setupFor(Lighting.Entry.ENTITY_IN_UI)
         stack.translate(state.translation.x, state.translation.y, state.translation.z)
         stack.mulPose(state.rotation)
+        val cameraState = CameraRenderState()
+        val featureRenderer = McClient.self.gameRenderer.featureRenderDispatcher
         if (state.cameraAngle != null) {
-            //dispatcher.overrideCameraOrientation(state.cameraAngle.conjugate(Quaternionf()).rotateY(Mth.PI))
+            cameraState.orientation = state.cameraAngle.conjugate(Quaternionf()).rotateY(Mth.PI)
         }
 
-        //dispatcher.setRenderShadow(false)
-        //dispatcher.render(state.state, 0.0, 0.0, 0.0, stack, this.bufferSource, 15728880)
-        //dispatcher.setRenderShadow(true)
+        dispatcher.submit(state.state, cameraState, 0.0, 0.0, 0.0, stack, featureRenderer.submitNodeStorage)
+        featureRenderer.renderAllFeatures()
     }
 
     override fun getTextureLabel(): String = "meowdding_lib_entity_state"
