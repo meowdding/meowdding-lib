@@ -2,7 +2,7 @@ package me.owdding.lib.utils
 
 import com.mojang.blaze3d.pipeline.RenderPipeline
 import com.mojang.blaze3d.shaders.UniformType
-import net.msrandom.stub.Stub
+
 
 actual object MeowddingPipelines {
 

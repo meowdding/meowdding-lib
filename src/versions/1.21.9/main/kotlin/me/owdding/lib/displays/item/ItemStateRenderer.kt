@@ -46,6 +46,7 @@ class ItemStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictu
 
         val featureRenderer = McClient.self.gameRenderer.featureRenderDispatcher
         item.itemStackRenderState().submit(stack, featureRenderer.submitNodeStorage, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0)
+        featureRenderer.renderAllFeatures()
     }
 
     override fun getTranslateY(height: Int, ignored: Int): Float {
