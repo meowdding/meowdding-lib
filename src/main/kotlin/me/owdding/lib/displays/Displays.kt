@@ -21,8 +21,6 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.ItemLike
 import net.msrandom.stub.Stub
-import org.joml.component1
-import org.joml.component2
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.platform.*
@@ -157,10 +155,7 @@ object Displays {
             override fun getHeight() = display.getHeight() + 2
             override fun render(graphics: GuiGraphics) {
                 display.render(graphics, 1, 1)
-                val (x, y) = graphics.getTranslation()
-                graphics.translated(-x, -y) {
-                    graphics.drawOutline(x.toInt(), y.toInt(), getWidth(), getHeight(), color().toInt())
-                }
+                graphics.drawOutline(0, 0, getWidth(), getHeight(), color().toInt())
             }
         }
     }
