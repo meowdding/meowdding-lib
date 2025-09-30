@@ -78,7 +78,7 @@ object Displays {
             override fun getWidth() = display.getWidth()
             override fun getHeight() = display.getHeight()
             override fun render(graphics: GuiGraphics) {
-                graphics.fill(
+                graphics.drawFilledBox(
                     0, 0,
                     getWidth(), getHeight(),
                     color.toInt(),

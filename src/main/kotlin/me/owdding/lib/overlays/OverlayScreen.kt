@@ -14,11 +14,7 @@ import org.lwjgl.glfw.GLFW
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
-import tech.thatgravyboat.skyblockapi.platform.drawOutline
-import tech.thatgravyboat.skyblockapi.platform.pushPop
-import tech.thatgravyboat.skyblockapi.platform.scale
-import tech.thatgravyboat.skyblockapi.platform.showTooltip
-import tech.thatgravyboat.skyblockapi.platform.translate
+import tech.thatgravyboat.skyblockapi.platform.*
 import tech.thatgravyboat.skyblockapi.utils.text.CommonText
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
@@ -57,7 +53,7 @@ class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) :
             overlay.render(graphics, mouseX, mouseY, partialTicks)
         }
         if (hovered) {
-            graphics.fill(x, y, x + width, y + height, 0x50000000)
+            graphics.drawFilledBox(x, y, x + width, y + height, 0x50000000)
             graphics.drawOutline(x - 1, y - 1, width + 2, height + 2, 0xFFFFFFFF.toInt())
             graphics.showTooltip(
                 Text.multiline(
