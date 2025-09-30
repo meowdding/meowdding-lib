@@ -3,8 +3,9 @@
 
 import com.google.devtools.ksp.gradle.KspTask
 import earth.terrarium.cloche.api.metadata.ModMetadata
-import net.msrandom.minecraftcodev.core.utils.toPath
+import me.owdding.gradle.breaks
 import me.owdding.gradle.dependency
+import net.msrandom.minecraftcodev.core.utils.toPath
 import net.msrandom.stubs.GenerateStubApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
@@ -19,7 +20,7 @@ plugins {
     alias(libs.plugins.terrarium.cloche)
     id("maven-publish")
     alias(libs.plugins.kotlin.symbol.processor)
-    id("me.owdding.gradle") version "1.1.0"
+    id("me.owdding.gradle") version "1.1.1"
 }
 
 repositories {
@@ -151,7 +152,14 @@ cloche {
                 dependency("skyblock-api", libs.versions.skyblockapi)
                 dependency("meowdding-patches", libs.versions.meowdding.patches)
                 dependency("placeholder-api", libs.versions.placeholders)
+
             }
+
+            breaks("skyblockpv", "1.4.6")
+            breaks("skyocean", "1.8.1")
+            breaks("skycubed", "1.6.5")
+            breaks("skyblockrpc", "1.0.3")
+            breaks("customscoreboard", "1.7.4")
 
             dependencies {
                 fabricApi(fabricApiVersion, name)
@@ -220,9 +228,7 @@ cloche {
         this["resourcefulconfig"] = libs.resourceful.config1218
         this["olympus"] = libs.olympus.lib1218
     }
-    createVersion("1.21.9", "1.21.9-rc1", fabricApiVersion = provider { "0.133.7" }, minecraftVersionRange = {
-        start = "1.21.0-rc.1"
-    }) {
+    createVersion("1.21.9", "1.21.9", fabricApiVersion = provider { "0.133.7" }) {
         this["resourcefullib"] = libs.resourceful.lib1219
         this["resourcefulconfig"] = libs.resourceful.config1219
         this["olympus"] = libs.olympus.lib1219
