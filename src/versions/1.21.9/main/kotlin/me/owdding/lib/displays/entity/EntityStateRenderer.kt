@@ -7,6 +7,7 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.navigation.ScreenRectangle
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer
 import net.minecraft.client.gui.render.state.pip.PictureInPictureRenderState
+import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.entity.EntityRenderer
 import net.minecraft.client.renderer.entity.state.EntityRenderState
@@ -34,9 +35,8 @@ class EntityStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPic
 
     override fun renderToTexture(state: State, stack: PoseStack) {
         val dispatcher = McClient.self.entityRenderDispatcher
-        val renderer = McClient.self.gameRenderer
 
-        renderer.lighting.setupFor(Lighting.Entry.ENTITY_IN_UI)
+        McClient.self.gameRenderer.lighting.setupFor(Lighting.Entry.ENTITY_IN_UI)
         stack.translate(state.translation.x, state.translation.y, state.translation.z)
         stack.mulPose(state.rotation)
         val cameraState = CameraRenderState()
@@ -44,6 +44,8 @@ class EntityStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPic
         if (state.cameraAngle != null) {
             cameraState.orientation = state.cameraAngle.conjugate(Quaternionf()).rotateY(Mth.PI)
         }
+        state.state.lightCoords = LightTexture.FULL_BRIGHT
+        //featureRenderer.renderAllFeatures()
 
         dispatcher.submit(state.state, cameraState, 0.0, 0.0, 0.0, stack, featureRenderer.submitNodeStorage)
         featureRenderer.renderAllFeatures()

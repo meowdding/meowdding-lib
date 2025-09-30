@@ -12,6 +12,9 @@ import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyPressedEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyReleasedEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 
+@Stub
+internal expect fun isDown(key: Int): Boolean
+
 data class KeyboardInputs(
     val symbols: Set<String>,
     val keys: Set<Int>,
@@ -23,6 +26,10 @@ data class KeyboardInputs(
 
     fun isDown(key: Int, scanCode: Int): Boolean {
         return key in keys || GLFW.glfwGetKeyName(key, scanCode) in symbols
+    }
+
+    fun isDown(): Boolean {
+        return keys.any { isDown(it) }
     }
 
     class Builder internal constructor() {
