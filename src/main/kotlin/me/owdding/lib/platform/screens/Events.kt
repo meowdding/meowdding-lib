@@ -36,6 +36,7 @@ data class MouseButtonEvent(
     val y: Double,
     val buttonInfo: MouseButtonInfo,
 ) : InputWithModifiers by buttonInfo {
+    constructor(x: Double, y: Double, button: Int) : this(x, y, MouseButtonInfo(button, 0))
     val button get() = buttonInfo.button
     fun isLeftClick() = button == 0
     fun isRightClick() = button == 1

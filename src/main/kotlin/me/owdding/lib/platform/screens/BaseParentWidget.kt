@@ -12,7 +12,7 @@ expect abstract class BaseParentWidget : BaseParentWidget {
     open fun onRelease(event: MouseButtonEvent)
     open fun onDrag(event: MouseButtonEvent, deltaX: Double, deltaY: Double)
 
-    open fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean
+    open fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean = false): Boolean
     open fun mouseReleased(event: MouseButtonEvent): Boolean
     open fun mouseDragged(event: MouseButtonEvent, deltaX: Double, deltaY: Double): Boolean
 

@@ -65,7 +65,7 @@ internal expect fun keyMapping(translationKey: String, keyCode: Int, category: R
 @Stub
 expect fun KeyMapping.matches(event: KeyEvent): Boolean
 
-abstract class MeowddingKeybind(
+open class MeowddingKeybind(
     category: ResourceLocation,
     translationKey: String,
     keyCode: Int,

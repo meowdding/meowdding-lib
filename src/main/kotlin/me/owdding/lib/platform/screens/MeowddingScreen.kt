@@ -7,7 +7,7 @@ import net.msrandom.stub.Stub
 @Stub
 expect abstract class MeowddingScreen(component: Component) : BaseCursorScreen {
 
-    open fun mouseClicked(mouseEvent: MouseButtonEvent, doubleClicked: Boolean): Boolean
+    open fun mouseClicked(mouseEvent: MouseButtonEvent, doubleClicked: Boolean = false): Boolean
     open fun mouseReleased(mouseEvent: MouseButtonEvent): Boolean
     open fun mouseDragged(mouseEvent: MouseButtonEvent, deltaX: Double, deltaY: Double): Boolean
     open fun keyPressed(keyEvent: KeyEvent): Boolean
