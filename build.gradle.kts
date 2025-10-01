@@ -3,6 +3,7 @@
 
 import com.google.devtools.ksp.gradle.KspTask
 import earth.terrarium.cloche.api.metadata.ModMetadata
+import me.owdding.gradle.dependency
 import net.msrandom.minecraftcodev.core.utils.toPath
 import net.msrandom.stubs.GenerateStubApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -18,7 +19,7 @@ plugins {
     alias(libs.plugins.terrarium.cloche)
     id("maven-publish")
     alias(libs.plugins.kotlin.symbol.processor)
-    id("me.owdding.gradle") version "1.0.8"
+    id("me.owdding.gradle") version "1.1.1"
 }
 
 repositories {
@@ -55,8 +56,9 @@ val kspAll: Configuration by configurations.creating {
 dependencies {
     kspAll(libs.meowdding.ktmodules)
     kspAll(libs.meowdding.ktcodecs)
-    kspAll("net.msrandom:kmp-actual-stubs-processor:1.0.3+workaround") {
-        version { strictly("1.0.312312+workaround") } // fixes an issue with ksp stubs https://github.com/terrarium-earth/jvm-multiplatform/pull/11
+    kspAll("net.msrandom:kmp-actual-stubs-processor:1.0.5-meowwwwwwwwwwwwww") {
+        version { strictly("1.0.5-meowwwwwwwwwwwwww") }
+        isTransitive = false
     }
 
     compileOnly(libs.meowdding.ktmodules)
@@ -117,14 +119,14 @@ cloche {
         val rconfig = dependencies["resourcefulconfig"]!!
         val olympus = dependencies["olympus"]!!
 
-        fabric(name) {
+        fabric("versions:$name") {
             includedClient()
             minecraftVersion = version
             this.loaderVersion = loaderVersion.get()
 
-            accessWideners.from(project.layout.projectDirectory.file("src/$name/${sourceSet.name}.accesswidener"))
+            accessWideners.from(project.layout.projectDirectory.file("src/versions/$name/${name.replace(".", "")}.accesswidener"))
 
-            mixins.from("src/mixins/meowdding-lib.${sourceSet.name}.mixins.json")
+            mixins.from("src/mixins/meowdding-lib.${name.replace(".", "")}.mixins.json")
 
             metadata {
                 entrypoint("client") {
@@ -136,18 +138,6 @@ cloche {
                     value = "me.owdding.lib.compat.REICompatability"
                 }
 
-                mixins.from("src/mixins/${sourceSet.name}.mixins.json")
-
-                fun dependency(modId: String, version: Provider<String>? = null) {
-                    dependency {
-                        this.modId = modId
-                        this.required = true
-                        if (version != null) version {
-                            this.start = version
-                        }
-                    }
-                }
-
                 dependency {
                     modId = "minecraft"
                     required = true
@@ -157,16 +147,19 @@ cloche {
                 dependency("fabricloader", libs.versions.fabric.loader)
                 dependency("fabric-language-kotlin", libs.versions.fabric.language.kotlin)
                 dependency("resourcefullib", rlib.map { it.version!! })
-                dependency("skyblock-api", libs.versions.skyblockapi)
                 dependency("olympus", olympus.map { it.version!! })
+                dependency("skyblock-api", libs.versions.skyblockapi)
                 dependency("meowdding-patches", libs.versions.meowdding.patches)
                 dependency("placeholder-api", libs.versions.placeholders)
+
             }
 
             dependencies {
-                fabricApi(fabricApiVersion, minecraftVersion)
-                implementation(olympus)
-                implementation(rconfig)
+                fabricApi(fabricApiVersion, name)
+                implementation(olympus) { isTransitive = false }
+                implementation(rlib)
+                compileOnly(rconfig)
+                localRuntime(rconfig)
 
                 include(rlib) { isTransitive = false }
                 include(olympus) { isTransitive = false }
@@ -228,11 +221,14 @@ cloche {
         this["resourcefulconfig"] = libs.resourceful.config1218
         this["olympus"] = libs.olympus.lib1218
     }
+    createVersion("1.21.9", "1.21.9", fabricApiVersion = provider { "0.133.7" }) {
+        this["resourcefullib"] = libs.resourceful.lib1219
+        this["resourcefulconfig"] = libs.resourceful.config1219
+        this["olympus"] = libs.olympus.lib1219
+    }
 
     mappings {
         official()
-        parchment("2025.07.20", "1.21.8")
-        parchment("2025.06.15", "1.21.5")
     }
 }
 
@@ -290,8 +286,9 @@ tasks.named("createCommonApiStub", GenerateStubApi::class) {
 }
 
 ksp {
-    this@ksp.excludedSources.from(sourceSets.getByName("1215").kotlin.srcDirs)
-    this@ksp.excludedSources.from(sourceSets.getByName("1218").kotlin.srcDirs)
+    this@ksp.excludedSources.from(sourceSets.getByName("versions1215").kotlin.srcDirs)
+    this@ksp.excludedSources.from(sourceSets.getByName("versions1218").kotlin.srcDirs)
+    this@ksp.excludedSources.from(sourceSets.getByName("versions1219").kotlin.srcDirs)
     arg("actualStubDir", project.layout.buildDirectory.dir("generated/ksp/main/stubs").get().asFile.absolutePath)
 }
 
