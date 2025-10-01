@@ -21,6 +21,7 @@ internal expect fun isMouseKeyDown(key: Int): Boolean
 data class KeyboardInputs(
     val symbols: Set<String>,
     val keys: Set<Int>,
+    val mouseButtons: Set<Int>,
 ) {
 
     fun isDown(event: KeyEvent): Boolean {
@@ -32,15 +33,17 @@ data class KeyboardInputs(
     }
 
     fun isDown(): Boolean {
-        return keys.any { isDown(it) || isMouseKeyDown(it) }
+        return keys.any { isDown(it) } || mouseButtons.any { isMouseKeyDown(it) }
     }
 
     class Builder internal constructor() {
         internal val symbols = mutableSetOf<String>()
         internal val keys = mutableSetOf<Int>()
+        internal val mouseButtons = mutableSetOf<Int>()
 
         fun withSymbol(symbol: String) = symbols.add(symbol)
         fun withKey(key: Int) = keys.add(key)
+        fun withButton(button: Int) = mouseButtons.add(button)
     }
 }
 
@@ -49,16 +52,19 @@ fun keys(action: KeyboardInputs.Builder.() -> Unit): KeyboardInputs {
     return KeyboardInputs(
         symbols = builder.symbols,
         keys = builder.keys,
+        mouseButtons = builder.mouseButtons,
     )
 }
 
 fun keysOf(vararg keys: Int) = KeyboardInputs(
     keys = keys.toSet(),
+    mouseButtons = emptySet(),
     symbols = emptySet(),
 )
 
 fun keysOf(vararg symbols: String) = KeyboardInputs(
     keys = emptySet(),
+    mouseButtons = emptySet(),
     symbols = symbols.toSet(),
 )
 
