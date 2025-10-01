@@ -5,7 +5,9 @@ import net.minecraft.network.chat.Component
 import net.msrandom.stub.Stub
 
 @Stub
-expect abstract class MeowddingScreen(component: Component) : BaseCursorScreen {
+expect abstract class MeowddingScreen : BaseCursorScreen {
+    constructor(component: Component)
+    constructor(name: String)
 
     open fun mouseClicked(mouseEvent: MouseButtonEvent, doubleClicked: Boolean = false): Boolean
     open fun mouseReleased(mouseEvent: MouseButtonEvent): Boolean

@@ -4,8 +4,13 @@ package me.owdding.lib.platform.screens
 
 import com.teamresourceful.resourcefullib.client.screens.BaseCursorScreen
 import net.minecraft.network.chat.Component
+import tech.thatgravyboat.skyblockapi.utils.text.Text
 
-actual abstract class MeowddingScreen actual constructor(component: Component) : BaseCursorScreen(component) {
+actual abstract class MeowddingScreen : BaseCursorScreen {
+
+    actual constructor(component: Component) : super(component)
+    actual constructor(name: String) : this(Text.of(name))
+
     private var lastClickTime = 0L
     private var lastButton = 0
 

@@ -4,11 +4,15 @@ package me.owdding.lib.platform.screens
 
 import com.teamresourceful.resourcefullib.client.screens.BaseCursorScreen
 import net.minecraft.network.chat.Component
+import tech.thatgravyboat.skyblockapi.utils.text.Text
 import net.minecraft.client.input.CharacterEvent as McCharacterEvent
 import net.minecraft.client.input.KeyEvent as McKeyEvent
 import net.minecraft.client.input.MouseButtonEvent as McMouseButtonEvent
 
-actual abstract class MeowddingScreen actual constructor(component: Component) : BaseCursorScreen(component) {
+actual abstract class MeowddingScreen : BaseCursorScreen {
+
+    actual constructor(component: Component) : super(component)
+    actual constructor(name: String) : this(Text.of(name))
 
     actual open fun mouseClicked(mouseEvent: MouseButtonEvent, doubleClicked: Boolean) = super.mouseClicked(mouseEvent.into(), doubleClicked)
     actual open fun mouseReleased(mouseEvent: MouseButtonEvent) = super.mouseReleased(mouseEvent.into())
