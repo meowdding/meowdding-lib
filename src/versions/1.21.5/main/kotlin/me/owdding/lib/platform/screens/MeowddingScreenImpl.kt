@@ -2,11 +2,10 @@
 
 package me.owdding.lib.platform.screens
 
-import com.teamresourceful.resourcefullib.client.screens.BaseCursorScreen
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
-actual abstract class MeowddingScreen : BaseCursorScreen {
+actual abstract class MeowddingScreen : ParameterLessScreen {
 
     actual constructor(component: Component) : super(component)
     actual constructor(name: String) : this(Text.of(name))
