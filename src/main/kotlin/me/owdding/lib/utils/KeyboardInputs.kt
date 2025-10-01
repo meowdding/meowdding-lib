@@ -15,6 +15,9 @@ import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 @Stub
 internal expect fun isDown(key: Int): Boolean
 
+@Stub
+internal expect fun isMouseKeyDown(key: Int): Boolean
+
 data class KeyboardInputs(
     val symbols: Set<String>,
     val keys: Set<Int>,
@@ -29,7 +32,7 @@ data class KeyboardInputs(
     }
 
     fun isDown(): Boolean {
-        return keys.any { isDown(it) }
+        return keys.any { isDown(it) || isMouseKeyDown(it) }
     }
 
     class Builder internal constructor() {

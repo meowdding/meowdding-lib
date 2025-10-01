@@ -7,6 +7,7 @@ import me.owdding.lib.platform.screens.KeyEvent
 import me.owdding.lib.platform.screens.into
 import net.minecraft.client.KeyMapping
 import net.minecraft.resources.ResourceLocation
+import org.lwjgl.glfw.GLFW
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 
 private val categoryCache = mutableMapOf<ResourceLocation, KeyMapping.Category>()
@@ -18,3 +19,5 @@ internal actual fun keyMapping(translationKey: String, keyCode: Int, category: R
 actual fun KeyMapping.matches(event: KeyEvent): Boolean = this.matches(event.into())
 
 internal actual fun isDown(key: Int): Boolean = InputConstants.isKeyDown(McClient.window, key)
+
+internal actual fun isMouseKeyDown(key: Int): Boolean = (GLFW.glfwGetMouseButton(McClient.window.handle(), key) == 1)
