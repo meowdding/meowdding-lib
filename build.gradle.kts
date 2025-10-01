@@ -3,7 +3,6 @@
 
 import com.google.devtools.ksp.gradle.KspTask
 import earth.terrarium.cloche.api.metadata.ModMetadata
-import me.owdding.gradle.breaks
 import me.owdding.gradle.dependency
 import net.msrandom.minecraftcodev.core.utils.toPath
 import net.msrandom.stubs.GenerateStubApi
@@ -154,12 +153,6 @@ cloche {
                 dependency("placeholder-api", libs.versions.placeholders)
 
             }
-
-            breaks("skyblockpv", "1.4.6")
-            breaks("skyocean", "1.8.1")
-            breaks("skycubed", "1.6.5")
-            breaks("skyblockrpc", "1.0.3")
-            breaks("customscoreboard", "1.7.4")
 
             dependencies {
                 fabricApi(fabricApiVersion, name)
