@@ -23,16 +23,14 @@ plugins {
 }
 
 repositories {
-    maven(url = "https://maven.teamresourceful.com/repository/maven-public/")
     maven(url = "https://repo.hypixel.net/repository/Hypixel/")
-    maven(url = "https://api.modrinth.com/maven")
-    maven(url = "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
-    maven(url = "https://maven.nucleoid.xyz")
     maven(url = "https://maven.msrandom.net/repository/cloche")
     maven(url = "https://maven.msrandom.net/repository/root")
+    maven(url = "https://api.modrinth.com/maven")
+    maven(url = "https://api.modrinth.com/maven")
+    maven(url = "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
+    maven(url = "https://maven.teamresourceful.com/repository/maven-public/")
     maven(url = "https://maven.shedaniel.me/")
-    maven(url = "https://maven.teamresourceful.com/repository/maven-private/")
-    mavenCentral()
     mavenLocal()
 }
 
@@ -107,10 +105,13 @@ cloche {
         version: String = name,
         loaderVersion: Provider<String> = libs.versions.fabric.loader,
         fabricApiVersion: Provider<String> = libs.versions.fabric.api,
+        endAtSameVersion: Boolean = true,
         minecraftVersionRange: ModMetadata.VersionRange.() -> Unit = {
             start = version
-            end = version
-            endExclusive = false
+            if (endAtSameVersion) {
+                end = version
+                endExclusive = false
+            }
         },
         dependencies: MutableMap<String, Provider<MinimalExternalModuleDependency>>.() -> Unit = { },
     ) {
@@ -157,9 +158,9 @@ cloche {
             dependencies {
                 fabricApi(fabricApiVersion, name)
                 implementation(olympus) { isTransitive = false }
-                implementation(rlib)
-                compileOnly(rconfig)
-                localRuntime(rconfig)
+                implementation(rlib) { isTransitive = false }
+                compileOnly(rconfig) { isTransitive = false }
+                localRuntime(rconfig) { isTransitive = false }
 
                 include(rlib) { isTransitive = false }
                 include(olympus) { isTransitive = false }
@@ -216,12 +217,14 @@ cloche {
     }
     createVersion("1.21.8", minecraftVersionRange = {
         start = "1.21.6"
+        end = "1.21.8"
+        endExclusive = false
     }) {
         this["resourcefullib"] = libs.resourceful.lib1218
         this["resourcefulconfig"] = libs.resourceful.config1218
         this["olympus"] = libs.olympus.lib1218
     }
-    createVersion("1.21.9", "1.21.9", fabricApiVersion = provider { "0.133.7" }) {
+    createVersion("1.21.9", endAtSameVersion = true, fabricApiVersion = provider { "0.133.7" }) {
         this["resourcefullib"] = libs.resourceful.lib1219
         this["resourcefulconfig"] = libs.resourceful.config1219
         this["olympus"] = libs.olympus.lib1219
