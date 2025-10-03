@@ -7,11 +7,11 @@ import net.minecraft.core.component.DataComponents
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.ItemLore
-import net.minecraft.world.item.component.ResolvableProfile
 import net.minecraft.world.item.component.TooltipDisplay
+import tech.thatgravyboat.skyblockapi.platform.GameProfile
+import tech.thatgravyboat.skyblockapi.platform.toResolvableProfile
 import tech.thatgravyboat.skyblockapi.utils.builders.TooltipBuilder
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
-import java.util.*
 
 fun ItemStack.withoutTooltip() = withTooltip()
 
@@ -43,14 +43,16 @@ fun ItemStack.withTooltip(init: TooltipBuilder.() -> Unit = {}): ItemStack {
 object ItemUtils {
 
     fun createSkull(textureBase64: String): ItemStack {
-        val profile = GameProfile(UUID.randomUUID(), "a")
-        profile.properties.put("textures", Property("textures", textureBase64))
-        return createSkull(profile)
+        return createSkull(
+            GameProfile {
+                put("textures", Property("textures", textureBase64))
+            },
+        )
     }
 
     fun createSkull(profile: GameProfile): ItemStack {
         val stack = ItemStack(Items.PLAYER_HEAD)
-        stack.set(DataComponents.PROFILE, ResolvableProfile(profile))
+        stack.set(DataComponents.PROFILE, profile.toResolvableProfile())
         return stack
     }
 }
