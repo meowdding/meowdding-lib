@@ -1,7 +1,6 @@
 package me.owdding.lib.waypoints
 
 import me.owdding.lib.extensions.round
-import me.owdding.lib.utils.RenderUtils.partialTicks
 import me.owdding.lib.utils.RenderUtils.renderBeaconBeam
 import me.owdding.lib.utils.RenderUtils.renderBox
 import me.owdding.lib.utils.RenderUtils.renderLineFromCursor

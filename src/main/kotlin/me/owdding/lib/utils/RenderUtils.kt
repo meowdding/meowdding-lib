@@ -6,12 +6,9 @@ import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexFormat
+import net.minecraft.client.CameraType
 import net.minecraft.client.gui.Font
-import net.minecraft.client.renderer.LightTexture
-import net.minecraft.client.renderer.MultiBufferSource
-import net.minecraft.client.renderer.RenderPipelines
-import net.minecraft.client.renderer.RenderType
-import net.minecraft.client.renderer.ShapeRenderer
+import net.minecraft.client.renderer.*
 import net.minecraft.client.renderer.blockentity.BeaconRenderer
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
@@ -22,6 +19,7 @@ import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 import net.msrandom.stub.Stub
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.platform.drawString
@@ -59,8 +57,6 @@ object RenderUtils {
             .createCompositeState(false),
     )
 
-    val RenderWorldEvent.partialTicks: Float get() = this.ctx.tickCounter().getGameTimeDeltaPartialTick(false)
-
     fun RenderWorldEvent.renderTextInWorld(
         position: Vec3,
         text: String,
@@ -77,20 +73,20 @@ object RenderUtils {
         center: Boolean = true,
         yOffset: Float = 0f,
     ) {
-        val x = camera.position.x
-        val y = camera.position.y
-        val z = camera.position.z
+        val x = cameraPosition.x
+        val y = cameraPosition.y
+        val z = cameraPosition.z
 
-        val scale = max((camera.position.distanceTo(position).toFloat() / 10).toDouble(), 1.0).toFloat() * 0.033f
+        val scale = max((cameraPosition.distanceTo(position).toFloat() / 10).toDouble(), 1.0).toFloat() * 0.033f
 
         poseStack.pushPop {
             poseStack.translate(position.x - x + 0.5, position.y - y + 1.07f, position.z - z + 0.5)
             poseStack.translate(0f, yOffset * -scale, 0f)
-            poseStack.mulPose(camera.rotation())
+            poseStack.mulPose(cameraRotation)
             poseStack.scale(scale, -scale, scale)
             val xOffset = if (center) -McFont.width(text) / 2.0f else 0.0f
 
-            ctx.drawString(
+            drawString(
                 text = text,
                 x = xOffset,
                 y = 0.0f,
@@ -133,7 +129,11 @@ object RenderUtils {
     }
 
     fun RenderWorldEvent.renderLineFromCursor(pos: Vec3, color: Int, width: Float = 5f) {
-        render3dLine(camera.position.add(Vec3.directionFromRotation(camera.xRot, camera.yRot)), pos, color, width)
+        val cameraEntity = McClient.self.cameraEntity ?: return
+        val vec = Vec3.directionFromRotation(cameraEntity.xRot, cameraEntity.yRot).let {
+            if (McClient.options.cameraType == CameraType.THIRD_PERSON_FRONT) it.reverse() else it
+        }
+        render3dLine(cameraPosition.add(vec), pos, color, width)
     }
 
     fun RenderWorldEvent.render3dLine(start: Vec3, end: Vec3, color: Int, width: Float = 5f) {
