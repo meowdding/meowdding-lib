@@ -31,4 +31,8 @@ enum class KnownMods(val modId: String) {
 
     val installed by lazy { FabricLoader.getInstance().isModLoaded(modId) }
     val version: String? by lazy { FabricLoader.getInstance().getModContainer(modId).getOrNull()?.metadata?.version?.friendlyString }
+
+    fun installed(action: (version: String?) -> Unit) {
+        if (installed) action(version)
+    }
 }
