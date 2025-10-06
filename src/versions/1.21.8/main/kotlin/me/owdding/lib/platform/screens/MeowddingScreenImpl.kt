@@ -47,6 +47,6 @@ actual abstract class MeowddingScreen : ParameterLessScreen {
     override fun mouseReleased(x: Double, y: Double, button: Int) = mouseReleased(mouseButtonEvent(x, y, button))
     override fun mouseDragged(x: Double, y: Double, button: Int, deltaX: Double, deltaY: Double) = mouseDragged(mouseButtonEvent(x, y, button), deltaX, deltaY)
     override fun keyPressed(key: Int, scancode: Int, modifier: Int) = keyPressed(KeyEvent(key, scancode, modifier))
-    override fun keyReleased(key: Int, scancode: Int, modifier: Int) = keyPressed(KeyEvent(key, scancode, modifier))
+    override fun keyReleased(key: Int, scancode: Int, modifier: Int) = keyReleased(KeyEvent(key, scancode, modifier))
     override fun charTyped(char: Char, modifiers: Int) = charTyped(CharacterEvent(char.code, modifiers))
 }
