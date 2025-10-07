@@ -3,18 +3,21 @@
 package me.owdding.lib.platform.screens
 
 import earth.terrarium.olympus.client.components.base.BaseWidget
+import net.minecraft.client.input.CharacterEvent as McCharacterEvent
+import net.minecraft.client.input.KeyEvent as McKeyEvent
 import net.minecraft.client.input.MouseButtonEvent as McMouseButtonEvent
 import net.minecraft.client.input.MouseButtonInfo as McMouseButtonInfo
-import net.minecraft.client.input.KeyEvent as McKeyEvent
-import net.minecraft.client.input.CharacterEvent as McCharacterEvent
 
 actual abstract class BaseWidget : BaseWidget {
     actual constructor() : super()
     actual constructor(width: Int, height: Int) : super(width, height)
 
-    actual open fun onClick(event: MouseButtonEvent, doubleClick: Boolean) {}
-    actual open fun onRelease(event: MouseButtonEvent) {}
-    actual open fun onDrag(event: MouseButtonEvent, deltaX: Double, deltaY: Double) {}
+    actual open fun onClick(event: MouseButtonEvent, doubleClick: Boolean) = super.onClick(event.into(), doubleClick)
+    override fun onClick(event: McMouseButtonEvent, doubleClick: Boolean) = this.onClick(event.into(), doubleClick)
+    actual open fun onRelease(event: MouseButtonEvent) = super.onRelease(event.into())
+    override fun onRelease(event: McMouseButtonEvent) = this.onRelease(event.into())
+    actual open fun onDrag(event: MouseButtonEvent, deltaX: Double, deltaY: Double) = super.onDrag(event.into(), deltaX, deltaY)
+    override fun onDrag(event: McMouseButtonEvent, deltaX: Double, deltaY: Double) = this.onDrag(event.into(), deltaX, deltaY)
 
     actual open fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean = super.mouseClicked(event.into(), doubleClick)
     override fun mouseClicked(event: McMouseButtonEvent, doubleClick: Boolean) = this.mouseClicked(event.into(), doubleClick)

@@ -11,9 +11,22 @@ actual abstract class BaseParentWidget : BaseParentWidget {
     private var lastClickTime = 0L
     private var lastButton = 0
 
-    actual open fun onClick(event: MouseButtonEvent, doubleClick: Boolean) {}
-    actual open fun onRelease(event: MouseButtonEvent) {}
-    actual open fun onDrag(event: MouseButtonEvent, deltaX: Double, deltaY: Double) {}
+    actual open fun onClick(event: MouseButtonEvent, doubleClick: Boolean) = super.onClick(event.x, event.y)
+    override fun onClick(mouseX: Double, mouseY: Double) {
+        val isDoubleClick = System.currentTimeMillis() - lastClickTime < 250
+        this.onClick(mouseButtonEvent(mouseX, mouseY, lastButton), isDoubleClick)
+    }
+
+    actual open fun onRelease(event: MouseButtonEvent) = super.onRelease(event.x, event.y)
+    override fun onRelease(mouseX: Double, mouseY: Double) {
+        this.onRelease(mouseButtonEvent(mouseX, mouseY, lastButton))
+    }
+
+    actual open fun onDrag(event: MouseButtonEvent, deltaX: Double, deltaY: Double) = super.onDrag(event.x, event.y, deltaX, deltaY)
+    override fun onDrag(mouseX: Double, mouseY: Double, deltaX: Double, deltaY: Double) {
+        this.onDrag(mouseButtonEvent(mouseX, mouseY, lastButton), deltaX, deltaY)
+    }
+
 
     actual open fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean = super.mouseClicked(event.x, event.y, event.button)
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
