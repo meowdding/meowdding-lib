@@ -29,7 +29,7 @@ abstract class ComponentBuilder {
     }
 
     open fun component(component: Component, init: MutableComponent.() -> Unit = {}) {
-        this.component.append(component)
+        this.component.append(component.copy().apply(init))
     }
 
     fun MutableComponent.append(like: ComponentLike): MutableComponent = this.append(like.toComponent())
@@ -42,6 +42,10 @@ abstract class ComponentBuilder {
 class SingularLineComponentBuilder : ComponentBuilder()
 
 class MultilineComponentBuilder : ComponentBuilder() {
+    fun newLine() {
+        component.append(CommonText.NEWLINE)
+    }
+
     override fun string(text: String, init: MutableComponent.() -> Unit) {
         super.string(text, init)
         super.component.append(CommonText.NEWLINE)
