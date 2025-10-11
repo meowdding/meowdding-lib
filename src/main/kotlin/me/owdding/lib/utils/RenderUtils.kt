@@ -1,18 +1,10 @@
 package me.owdding.lib.utils
 
 import com.mojang.blaze3d.systems.RenderSystem
-import me.owdding.lib.rendering.world.RenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS
-import me.owdding.lib.rendering.world.RenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS
-import net.minecraft.client.gui.Font
-import net.minecraft.client.renderer.LightTexture
-import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
-import com.mojang.blaze3d.vertex.VertexFormat
+import me.owdding.lib.rendering.world.RenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS
 import net.minecraft.client.CameraType
 import net.minecraft.client.gui.Font
-import net.minecraft.client.renderer.LightTexture
-import net.minecraft.client.renderer.RenderType
-import net.minecraft.client.renderer.ShapeRenderer
 import net.minecraft.client.renderer.*
 import net.minecraft.client.renderer.blockentity.BeaconRenderer
 import net.minecraft.core.BlockPos
@@ -49,8 +41,6 @@ internal expect fun RenderWorldEvent.renderBeaconBeam(
 )
 
 object RenderUtils {
-
-    val RenderWorldEvent.partialTicks: Float get() = this.ctx.tickCounter().getGameTimeDeltaPartialTick(false)
 
     fun RenderWorldEvent.renderTextInWorld(
         position: Vec3,

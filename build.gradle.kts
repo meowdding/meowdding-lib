@@ -233,6 +233,7 @@ cloche {
         this["resourcefullib"] = libs.resourceful.lib1219
         this["resourcefulconfig"] = libs.resourceful.config1219
         this["olympus"] = libs.olympus.lib1219
+        this["iris"] = libs.iris1219
     }
 
     mappings {
