@@ -10,7 +10,7 @@ kotlin-symbol-processor = "2.2.0-2.0.2"
 resourceful-config-kotlin = "3.5.12"
 
 # Dependencies
-skyblockapi = "3.0.4"
+skyblockapi = "3.0.5"
 hypixelapi = "1.0.1+build.1+mc1.21"
 placeholders = "2.6.1+1.21.5"
 rei = "20.0.811"

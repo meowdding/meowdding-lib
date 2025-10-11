@@ -6,6 +6,7 @@ import net.fabricmc.loader.api.ModContainer
 import net.fabricmc.loader.api.Version
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.hypixel.HypixelJoinEvent
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.http.Http
@@ -21,7 +22,7 @@ class MeowddingUpdateChecker(val projectSlug: String, val modContainer: ModConta
 
     private var firstLoad = true
 
-    @Subscription(event = [ServerChangeEvent::class])
+    @Subscription(HypixelJoinEvent::class)
     fun onJoinHypixel() {
         if (!firstLoad) return
         firstLoad = false

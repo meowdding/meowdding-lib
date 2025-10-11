@@ -14,7 +14,7 @@ object ComponentFactory {
         return builder.component
     }
 
-    fun multiline(builder: ComponentBuilder.() -> Unit): MutableComponent {
+    fun multiline(builder: MultilineComponentBuilder.() -> Unit): MutableComponent {
         val builder = MultilineComponentBuilder()
         builder.builder()
         return builder.component
@@ -24,12 +24,20 @@ object ComponentFactory {
 abstract class ComponentBuilder {
     internal var component: MutableComponent = CommonText.EMPTY.copy()
 
-    open fun string(text: String, init: MutableComponent.() -> Unit = {}) {
-        component.append(Text.of(text).apply(init))
+    open fun component(component: MutableComponent, init: MutableComponent.() -> Unit = {}) {
+        this.component.append(component.apply(init))
     }
 
-    open fun component(component: Component, init: MutableComponent.() -> Unit = {}) {
-        this.component.append(component.copy().apply(init))
+    fun string(text: String, init: MutableComponent.() -> Unit = {}) {
+        component(Text.of(text), init)
+    }
+
+    fun component(component: Component, init: MutableComponent.() -> Unit = {}) {
+        component(component.copy(), init)
+    }
+
+    fun component(init: MutableComponent.() -> Unit) {
+        component(Component.empty(), init)
     }
 
     fun MutableComponent.append(like: ComponentLike): MutableComponent = this.append(like.toComponent())
@@ -46,13 +54,8 @@ class MultilineComponentBuilder : ComponentBuilder() {
         component.append(CommonText.NEWLINE)
     }
 
-    override fun string(text: String, init: MutableComponent.() -> Unit) {
-        super.string(text, init)
-        super.component.append(CommonText.NEWLINE)
-    }
-
-    override fun component(component: Component, init: MutableComponent.() -> Unit) {
+    override fun component(component: MutableComponent, init: MutableComponent.() -> Unit) {
         super.component(component, init)
-        super.component.append(CommonText.NEWLINE)
+        newLine()
     }
 }
