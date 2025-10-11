@@ -10,9 +10,7 @@ class InventoryBuilder(val maxSize: Int = 54) {
     private val items: MutableMap<Int, ItemStack> = mutableMapOf()
 
     fun add(slot: Int, item: ItemStack, init: (TooltipBuilder.() -> Unit)? = null) {
-        if (slot >= maxSize || slot < 0) {
-            throw IllegalStateException("Inventory Index out of bounds")
-        }
+        check(slot !in 0..<maxSize) { "Inventory Index out of bounds" }
         items[slot] = init?.let { item.withTooltip(it) } ?: item
     }
 
@@ -20,9 +18,7 @@ class InventoryBuilder(val maxSize: Int = 54) {
 
     fun add(x: Int, y: Int, item: ItemStack, init: (TooltipBuilder.() -> Unit)? = null) {
         val slot = x + y * 9
-        if (slot >= maxSize || slot < 0) {
-            throw IllegalStateException("Inventory Index out of bounds")
-        }
+        check(slot !in 0..<maxSize) { "Inventory Index out of bounds" }
         items[slot] = init?.let { item.withTooltip(it) } ?: item
     }
 
@@ -39,6 +35,6 @@ class InventoryBuilder(val maxSize: Int = 54) {
 
     fun fill(item: ItemLike, init: (TooltipBuilder.() -> Unit)? = null) = fill(item.asItem().defaultInstance, init)
 
-    fun build(): List<ItemStack> = items.entries.sortedBy { it.key }.map { it.value }.toList()
+    fun build(): List<ItemStack> = items.entries.sortedBy { it.key }.map { it.value }
 
 }
