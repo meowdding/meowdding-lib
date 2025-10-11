@@ -10,7 +10,7 @@ kotlin-symbol-processor = "2.2.0-2.0.2"
 resourceful-config-kotlin = "3.5.12"
 
 # Dependencies
-skyblockapi = "2.3.3"
+skyblockapi = "3.0.4"
 hypixelapi = "1.0.1+build.1+mc1.21"
 placeholders = "2.6.1+1.21.5"
 rei = "20.0.811"
@@ -19,7 +19,7 @@ meowdding-patches = "1.0.8"
 meowdding-ktmodules = "1.0.5"
 meowdding-ktcodecs = "1.0.23"
 
-terrarium-cloche = "0.13.4"
+terrarium-cloche = "0.13.5"
 
 [libraries]
 
@@ -32,11 +32,14 @@ rei = { module = "me.shedaniel:RoughlyEnoughItems-api-fabric", version.ref = "re
 
 resourceful-lib1215 = { module = "com.teamresourceful.resourcefullib:resourcefullib-fabric-1.21.5", version = "3.5.0" }
 resourceful-lib1218 = { module = "com.teamresourceful.resourcefullib:resourcefullib-fabric-1.21.6", version = "3.6.0" }
+resourceful-lib1219 = { module = "com.teamresourceful.resourcefullib:resourcefullib-fabric-1.21.9", version = "3.9.0" }
 resourceful-config1215 = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-1.21.5", version = "3.5.15" }
 resourceful-config1218 = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-1.21.7", version = "3.7.1" }
+resourceful-config1219 = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-1.21.9", version = "3.9.0" }
 resourceful-config-kotlin = { module = "com.teamresourceful.resourcefulconfigkt:resourcefulconfigkt-fabric-1.21.5", version.ref = "resourceful-config-kotlin" }
 olympus-lib1215 = { module = "earth.terrarium.olympus:olympus-fabric-1.21.5", version = "1.3.6" }
 olympus-lib1218 = { module = "earth.terrarium.olympus:olympus-fabric-1.21.7", version = "1.5.2" }
+olympus-lib1219 = { module = "earth.terrarium.olympus:olympus-fabric-1.21.9", version = "1.6.1" }
 iris1215 = { module = "maven.modrinth:iris", version = "1.8.11+1.21.5-fabric" }
 iris1218 = { module = "maven.modrinth:iris", version = "1.9.1+1.21.7-fabric" }
 
