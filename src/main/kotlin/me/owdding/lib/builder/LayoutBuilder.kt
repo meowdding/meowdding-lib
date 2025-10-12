@@ -112,7 +112,7 @@ abstract class LayoutBuilder {
         string(builder.component)
     }
 
-    fun multilineComponent(builder: ComponentBuilder.() -> Unit) {
+    fun multilineComponent(builder: MultilineComponentBuilder.() -> Unit) {
         val builder = MultilineComponentBuilder()
         builder.builder()
         string(builder.component)
