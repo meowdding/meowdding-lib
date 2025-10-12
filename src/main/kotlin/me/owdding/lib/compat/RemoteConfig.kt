@@ -11,7 +11,6 @@ import com.teamresourceful.resourcefulconfig.api.types.elements.ResourcefulConfi
 import com.teamresourceful.resourcefulconfig.api.types.entries.ResourcefulConfigValueEntry
 import com.teamresourceful.resourcefulconfig.api.types.options.EntryType
 import kotlinx.coroutines.runBlocking
-import me.owdding.patches.utils.VersionIntervalParser
 import net.fabricmc.loader.api.ModContainer
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.Tooltip

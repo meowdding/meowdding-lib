@@ -91,7 +91,6 @@ cloche {
             implementation(libs.hypixelapi) // included in skyblockapi
             implementation(libs.skyblockapi)
             implementation(libs.placeholders) { isTransitive = false }
-            implementation(libs.meowdding.patches) { isTransitive = false }
             implementation(libs.resourceful.config.kotlin)
 
             compileOnly(libs.rei)
@@ -150,22 +149,22 @@ cloche {
                 dependency("resourcefullib", rlib.map { it.version!! })
                 dependency("olympus", olympus.map { it.version!! })
                 dependency("skyblock-api", libs.versions.skyblockapi)
-                dependency("meowdding-patches", libs.versions.meowdding.patches)
                 dependency("placeholder-api", libs.versions.placeholders)
 
             }
 
             dependencies {
                 fabricApi(fabricApiVersion, name)
-                implementation(olympus) { isTransitive = false }
-                implementation(rlib) { isTransitive = false }
-                compileOnly(rconfig) { isTransitive = false }
-                localRuntime(rconfig) { isTransitive = false }
+                implementation(olympus)
+                implementation(rlib)
+                implementation(libs.meowdding.remote.repo)
+                compileOnly(rconfig)
+                localRuntime(rconfig)
 
                 include(rlib) { isTransitive = false }
+                include(libs.meowdding.remote.repo)
                 include(olympus) { isTransitive = false }
                 include(libs.placeholders) { isTransitive = false }
-                include(libs.meowdding.patches) { isTransitive = false }
 
                 val mods = project.layout.buildDirectory.get().toPath().resolve("tmp/extracted${sourceSet.name}RuntimeMods")
                 val modsTmp = project.layout.buildDirectory.get().toPath().resolve("tmp/extracted${sourceSet.name}RuntimeMods/tmp")
