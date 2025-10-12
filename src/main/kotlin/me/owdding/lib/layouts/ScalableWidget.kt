@@ -3,16 +3,7 @@ package me.owdding.lib.layouts
 import com.teamresourceful.resourcefullib.client.components.CursorWidget
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen
 import me.owdding.lib.extensions.floor
-import me.owdding.lib.platform.screens.BaseParentWidget
-import me.owdding.lib.platform.screens.CharacterEvent
-import me.owdding.lib.platform.screens.KeyEvent
-import me.owdding.lib.platform.screens.MouseButtonEvent
-import me.owdding.lib.platform.screens.charTyped
-import me.owdding.lib.platform.screens.keyPressed
-import me.owdding.lib.platform.screens.keyReleased
-import me.owdding.lib.platform.screens.mouseClicked
-import me.owdding.lib.platform.screens.mouseDragged
-import me.owdding.lib.platform.screens.mouseReleased
+import me.owdding.lib.platform.screens.*
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.events.GuiEventListener
@@ -42,6 +33,12 @@ class ScalableWidget(val original: AbstractWidget) : BaseParentWidget(original.w
     private var scale by observable(1.0) { _, _, scale ->
         super.width = (original.width * scale).floor()
         super.height = (original.height * scale).floor()
+    }
+
+    override fun setPosition(p0: Int, p1: Int) {
+        original.x = (this@ScalableWidget.x / scale).floor()
+        original.y = (this@ScalableWidget.y / scale).floor()
+        super.setPosition(p0, p1)
     }
 
     override fun getWidth(): Int {
