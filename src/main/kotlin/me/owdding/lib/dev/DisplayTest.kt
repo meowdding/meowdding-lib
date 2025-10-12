@@ -1,5 +1,7 @@
 package me.owdding.lib.dev
 
+import me.owdding.lib.builder.DisplayFactory
+import me.owdding.lib.displays.Alignment
 import me.owdding.lib.displays.Displays
 import me.owdding.lib.rendering.text.TextShaders.withTextShader
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
@@ -12,6 +14,7 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.platform.drawString
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.Text.asComponent
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.strikethrough
@@ -52,6 +55,15 @@ object DisplayTest : Screen(CommonComponents.EMPTY) {
             },
             10, 20,
         )
+
+        DisplayFactory.vertical {
+            val width = 200
+            display(Displays.background(0x88FFFFFFu, Displays.empty(width, 5)))
+            val meow = "meow meow so viel meow, mrrp mraow miau :3".asComponent()
+            display(Displays.wrappedText(meow, width, textAlignment = Alignment.START))
+            display(Displays.wrappedText(meow, width, textAlignment = Alignment.CENTER))
+            display(Displays.wrappedText(meow, width, textAlignment = Alignment.END))
+        }.render(graphics, 200, 200)
     }
 
     override fun isPauseScreen(): Boolean {
