@@ -255,14 +255,20 @@ object Displays {
         maxWidth: Int,
         color: () -> UInt = { 0xFFFFFFFFu },
         shadow: Boolean = true,
+        textAlignment: Alignment = Alignment.START,
     ): Display {
         val lines = McFont.split(text, maxWidth)
         return object : Display {
-            override fun getWidth() = maxWidth
+            override fun getWidth() = lines.maxOfOrNull(McFont::width) ?: 0
             override fun getHeight() = lines.size * McFont.height
             override fun render(graphics: GuiGraphics) {
                 lines.forEachIndexed { index, line ->
-                    graphics.drawString(line, 0, index * McFont.height, color().toInt(), shadow)
+                    val x = when (textAlignment) {
+                        Alignment.START -> 0
+                        Alignment.CENTER -> (maxWidth - McFont.width(line)) / 2
+                        Alignment.END -> maxWidth - McFont.width(line)
+                    }
+                    graphics.drawString(line, x, index * McFont.height, color().toInt(), shadow)
                 }
             }
         }
