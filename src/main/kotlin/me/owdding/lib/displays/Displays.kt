@@ -259,7 +259,7 @@ object Displays {
     ): Display {
         val lines = McFont.split(text, maxWidth)
         return object : Display {
-            override fun getWidth() = lines.maxOfOrNull(McFont::width) ?: 0
+            override fun getWidth() = maxWidth
             override fun getHeight() = lines.size * McFont.height
             override fun render(graphics: GuiGraphics) {
                 lines.forEachIndexed { index, line ->
