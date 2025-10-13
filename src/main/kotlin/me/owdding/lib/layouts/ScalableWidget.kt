@@ -21,6 +21,11 @@ class ScalableWidget(val original: AbstractWidget) : BaseParentWidget(original.w
 
     constructor(original: LayoutElement) : this(original.asWidget())
 
+    private var scale by observable(1.0) { _, _, scale ->
+        super.width = (original.width * scale).floor()
+        super.height = (original.height * scale).floor()
+    }
+
     init {
         x = original.x
         y = original.y
@@ -30,15 +35,20 @@ class ScalableWidget(val original: AbstractWidget) : BaseParentWidget(original.w
         addRenderableWidget(original)
     }
 
-    private var scale by observable(1.0) { _, _, scale ->
-        super.width = (original.width * scale).floor()
-        super.height = (original.height * scale).floor()
-    }
-
     override fun setPosition(p0: Int, p1: Int) {
+        super.setPosition(p0, p1)
         original.x = (this@ScalableWidget.x / scale).floor()
         original.y = (this@ScalableWidget.y / scale).floor()
-        super.setPosition(p0, p1)
+    }
+
+    override fun setX(p0: Int) {
+        super.setX(p0)
+        original.x = (this@ScalableWidget.x / scale).floor()
+    }
+
+    override fun setY(p0: Int) {
+        super.setY(p0)
+        original.y = (this@ScalableWidget.y / scale).floor()
     }
 
     override fun getWidth(): Int {
