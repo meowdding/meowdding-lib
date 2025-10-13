@@ -6,6 +6,7 @@ import me.owdding.lib.rendering.world.RenderTypes
 import me.owdding.lib.utils.KnownMods
 import net.irisshaders.iris.api.v0.IrisApi
 import net.irisshaders.iris.api.v0.IrisProgram
+import net.minecraft.client.renderer.RenderType
 
 interface IrisCompatability {
     fun registerPipeline(renderPipeline: RenderPipeline, shaderType: IrisShaderType) {}
