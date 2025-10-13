@@ -1,6 +1,7 @@
 package me.owdding.lib.builder
 
 import earth.terrarium.olympus.client.components.Widgets
+import earth.terrarium.olympus.client.components.buttons.Button
 import earth.terrarium.olympus.client.utils.ListenableState
 import me.owdding.lib.displays.Display
 import me.owdding.lib.displays.Displays
@@ -159,6 +160,12 @@ abstract class LayoutBuilder {
 
     open fun textDisplay(text: String = "", color: UInt = 0x555555u, shadow: Boolean = false, init: MutableComponent.() -> Unit) {
         textDisplay(text, color, shadow, { this }, init)
+    }
+
+    open fun buton(builder: Button.() -> Unit) {
+        val button = Widgets.button()
+        button.builder()
+        widget(button)
     }
 
     open fun textInput(
