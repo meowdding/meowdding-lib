@@ -9,12 +9,15 @@ import net.irisshaders.iris.api.v0.IrisProgram
 
 interface IrisCompatability {
     fun registerPipeline(renderPipeline: RenderPipeline, shaderType: IrisShaderType) {}
+    fun registerRenderType(renderPipeline: RenderType.CompositeRenderType, shaderType: IrisShaderType) {
+        registerPipeline(renderPipeline.renderPipeline, shaderType)
+    }
 
     @Module
     companion object : IrisCompatability by resolve() {
         init {
-            registerPipeline(RenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS.renderPipeline, IrisShaderType.BASIC)
-            registerPipeline(RenderTypes.BLOCK_FILL_QUAD.renderPipeline, IrisShaderType.BASIC)
+            registerRenderType(RenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS, IrisShaderType.BASIC)
+            registerRenderType(RenderTypes.BLOCK_FILL_QUAD, IrisShaderType.BASIC)
         }
     }
 }
