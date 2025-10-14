@@ -22,7 +22,7 @@ import java.awt.Color
 import java.util.*
 import kotlin.random.Random
 
-class MeowddingWaypoint(private val position: Vec3) {
+class MeowddingWaypoint(internal val position: Vec3) {
     constructor(block: BlockPos) : this(Vec3.atBottomCenterOf(block))
     constructor(block: BlockPos, addToHandler: Boolean = true, builder: MeowddingWaypoint.() -> Unit) : this(
         Vec3.atBottomCenterOf(block),
