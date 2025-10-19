@@ -30,7 +30,7 @@ public class AvatarRendererMixin {
         }
 
         var image = CosmeticManager.getImageProvider().get(cosmetic.getCapeTexture());
-        if (image == MissingTextureAtlasSprite.getLocation()) {
+        if (image.equals(MissingTextureAtlasSprite.getLocation())) {
             return;
         }
 
