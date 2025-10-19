@@ -17,7 +17,7 @@ import net.minecraft.network.chat.Component
 import org.joml.Vector2i
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
-import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
+import tech.thatgravyboat.skyblockapi.utils.json.Json.toData
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.reflect.KClass
 
@@ -41,8 +41,8 @@ enum class MiningNodes(override val type: KClass<out TreeNode>) : DispatchHelper
 
         @Subscription
         fun finishRepoLoading(event: FinishRepoLoadingEvent) {
-            _hotm.set(RemoteRepo.getFileContentAsJson("hotm.json")!!.toDataOrThrow(MeowddingLibCodecs.TreeNodeCodec.codec().listOf()))
-            _hotf.set(RemoteRepo.getFileContentAsJson("hotf.json")!!.toDataOrThrow(MeowddingLibCodecs.TreeNodeCodec.codec().listOf()))
+            RemoteRepo.getFileContentAsJson("hotm.json")?.toData(MeowddingLibCodecs.TreeNodeCodec.codec().listOf())?.apply(_hotm::set)
+            RemoteRepo.getFileContentAsJson("hotf.json")?.toData(MeowddingLibCodecs.TreeNodeCodec.codec().listOf())?.apply(_hotf::set)
         }
 
         @IncludedCodec(named = "vec_2i")

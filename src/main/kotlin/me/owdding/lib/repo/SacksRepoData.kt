@@ -5,7 +5,7 @@ import me.owdding.lib.events.FinishRepoLoadingEvent
 import me.owdding.lib.generated.MeowddingLibCodecs
 import me.owdding.repo.RemoteRepo
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
-import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
+import tech.thatgravyboat.skyblockapi.utils.json.Json.toData
 import java.util.concurrent.atomic.AtomicReference
 
 object SacksRepoData {
@@ -21,6 +21,6 @@ object SacksRepoData {
 
     @Subscription
     fun finishRepoLoading(event: FinishRepoLoadingEvent) {
-        _data.setRelease(RemoteRepo.getFileContentAsJson("sacks.json")!!.toDataOrThrow(MeowddingLibCodecs.SackEntryCodec.codec().listOf()))
+        _data.setRelease(RemoteRepo.getFileContentAsJson("sacks.json")?.toData(MeowddingLibCodecs.SackEntryCodec.codec().listOf()) ?: return)
     }
 }
