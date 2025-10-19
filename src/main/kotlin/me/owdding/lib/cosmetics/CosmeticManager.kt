@@ -4,15 +4,16 @@ import com.google.gson.JsonObject
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import me.owdding.ktcodecs.*
+import me.owdding.ktcodecs.FieldName
+import me.owdding.ktcodecs.GenerateCodec
+import me.owdding.ktcodecs.IncludedCodec
+import me.owdding.ktcodecs.Unnamed
 import me.owdding.ktmodules.Module
 import me.owdding.lib.MeowddingLib
-import me.owdding.lib.extensions.associateNotNull
+import me.owdding.lib.events.CosmeticLoadEvent
 import me.owdding.lib.generated.MeowddingLibCodecs
-import me.owdding.lib.utils.CosmeticImageProvider
-import net.minecraft.network.chat.Component
+import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
-import tech.thatgravyboat.skyblockapi.utils.json.Json.toData
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import java.net.URI
 import java.net.http.HttpClient
@@ -29,21 +30,19 @@ const val COSMETIC_VERSION = 1
 @Module
 object CosmeticManager {
 
-    private val _cosmetics: MutableMap<CosmeticId, Cosmetic> = ConcurrentHashMap()
-    val cosmetics: Map<CosmeticId, Cosmetic> get() = _cosmetics
+    private val _cosmetics: MutableMap<String, Cosmetic> = ConcurrentHashMap()
+    val cosmetics: Map<String, Cosmetic> get() = _cosmetics
     val cosmeticList: Collection<Cosmetic> get() = _cosmetics.values
 
     private val _players = ConcurrentHashMap<UUID, PlayerData>()
     val players: Map<UUID, PlayerData> get() = _players
     val playerList: Collection<PlayerData> get() = _players.values
 
-    private val _mlibCosmetics = ConcurrentHashMap<UUID, MlibCosmeticData>()
-    val mlibCosmetics: Map<UUID, MlibCosmeticData> get() = _mlibCosmetics
 
     @JvmStatic
     val imageProvider get() = CosmeticImageProvider
 
-    var client: HttpClient = HttpClient.newBuilder()
+    private var client: HttpClient = HttpClient.newBuilder()
         .connectTimeout(10.seconds.toJavaDuration())
         .followRedirects(HttpClient.Redirect.ALWAYS)
         .build()
@@ -77,29 +76,34 @@ object CosmeticManager {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        this._mlibCosmetics.putAll(
-            playerList.associateNotNull(
-                keySelector = { it.uuid },
-                valueSelector = {
-                    it.data.toData(MeowddingLibCodecs.getCodec<MlibCosmeticData>())?.takeUnless { data -> data == emptyCosmetic }
-                },
-            ),
-        )
+        CosmeticLoadEvent.post(SkyBlockAPI.eventBus)
         MeowddingLib.info("Fetched ${players.size} players and ${cosmetics.size} cosmetics")
     }
+
+    @IncludedCodec(named = "cosmetic_url_type")
+    val COSMETIC_URL: Codec<URI> = Codec.STRING.flatXmap(
+        { string ->
+            runCatching {
+                URI.create(string).takeUnless { it.host != "files.meowdd.ing" }
+            }.getOrNull()?.let {
+                DataResult.success(it)
+            } ?: DataResult.error { "Invalid cosmetic url!" }
+        },
+        { DataResult.success(it.toString()) },
+    )
 
     @GenerateCodec
     internal data class CompletablePlayerData(
         val uuid: UUID,
         @FieldName("extra_data") val extraData: JsonObject,
-        val cosmetics: List<CosmeticId>,
+        val cosmetics: List<String>,
     ) {
         fun complete() = PlayerData(
             uuid,
             JsonObject().apply {
                 extraData.entrySet().forEach { (key, value) -> add(key, value) }
 
-                cosmetics.mapNotNull { it.resolve() }.filter { it.version <= COSMETIC_VERSION }.forEach {
+                cosmetics.mapNotNull { CosmeticManager.cosmetics[it] }.filter { it.version <= COSMETIC_VERSION }.forEach {
                     it.data.entrySet().forEach { (key, value) ->
                         if (key == "version" || key == "id") return@forEach
                         if (has(key)) return@forEach
@@ -115,38 +119,11 @@ object CosmeticManager {
         val data: JsonObject,
     )
 
+
     @GenerateCodec
     data class Cosmetic(
-        val id: CosmeticId,
+        val id: String,
         val version: Int,
         @Unnamed val data: JsonObject,
-    )
-
-    @JvmInline
-    value class CosmeticId(val cosmeticId: String)
-
-    fun CosmeticId.resolve(): Cosmetic? = cosmetics[this]
-
-    @IncludedCodec
-    internal val COSMETIC_ID_CODEC: Codec<CosmeticId> = Codec.STRING.xmap(::CosmeticId, CosmeticId::cosmeticId)
-
-    @GenerateCodec
-    data class MlibCosmeticData(
-        @Lenient val suffix: Component?,
-        @NamedCodec("cosmetic_url_type") @Lenient @FieldName("cape_texture") val capeTexture: URI?,
-    )
-
-    private val emptyCosmetic = MlibCosmeticData(null, null)
-
-    @IncludedCodec(named = "cosmetic_url_type")
-    val URL_KEY: Codec<URI> = Codec.STRING.flatXmap(
-        { string ->
-            runCatching {
-                URI.create(string).takeUnless { it.host != "files.meowdd.ing" }
-            }.getOrNull()?.let {
-                DataResult.success(it)
-            } ?: DataResult.error { "Invalid cosmetic url!" }
-        },
-        { DataResult.success(it.toString()) },
     )
 }

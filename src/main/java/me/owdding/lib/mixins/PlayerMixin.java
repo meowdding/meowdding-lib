@@ -1,6 +1,6 @@
 package me.owdding.lib.mixins;
 
-import me.owdding.lib.cosmetics.CosmeticManager;
+import me.owdding.lib.cosmetics.MlibCosmetics;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,7 +20,7 @@ public abstract class PlayerMixin extends LivingEntity {
 
     @Inject(method = "decorateDisplayNameComponent", at = @At("HEAD"))
     public void modifyPlayerName(MutableComponent displayName, CallbackInfoReturnable<MutableComponent> cir) {
-        final var mlibData = CosmeticManager.INSTANCE.getMlibCosmetics().get(uuid);
+        final var mlibData = MlibCosmetics.getMlibCosmetics().get(uuid);
         if (mlibData == null || mlibData.getSuffix() == null) {
             return;
         }

@@ -1,4 +1,4 @@
-package me.owdding.lib.utils
+package me.owdding.lib.cosmetics
 
 import com.google.common.hash.Hashing
 import com.mojang.blaze3d.platform.NativeImage
@@ -18,7 +18,7 @@ import kotlin.io.path.readBytes
 
 private val HTTP = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NORMAL).build()
 private val CACHE: Path = GlobalStorage.getCacheDirectory(MeowddingLib.MOD_ID).resolve("cosmetics").resolve("textures")
-val CosmeticImageProvider: ImageProvider<URI> = ImageProviders.register(
+internal val CosmeticImageProvider: ImageProvider<URI> = ImageProviders.register(
     "mlib_cosmetic_url",
     ::fetchImage,
     { url -> Hashing.sha256().hashUnencodedChars(url.toString()) },

@@ -1,6 +1,7 @@
 package me.owdding.lib.mixins;
 
 import me.owdding.lib.cosmetics.CosmeticManager;
+import me.owdding.lib.cosmetics.MlibCosmetics;
 import net.minecraft.client.entity.ClientAvatarEntity;
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
@@ -23,17 +24,16 @@ public class AvatarRendererMixin {
         float partialTicks,
         CallbackInfo ci
     ) {
-        final var cosmetic = CosmeticManager.INSTANCE.getMlibCosmetics().get(player.getUUID());
+        final var cosmetic = MlibCosmetics.getMlibCosmetics().get(player.getUUID());
         if (cosmetic == null || cosmetic.getCapeTexture() == null) {
-            System.out.println(cosmetic);
             return;
         }
 
         var image = CosmeticManager.getImageProvider().get(cosmetic.getCapeTexture());
         if (image == MissingTextureAtlasSprite.getLocation()) {
-            System.out.println(image);
             return;
         }
+
         final var skin = renderState.skin;
         renderState.skin = new PlayerSkin(
             skin.body(),

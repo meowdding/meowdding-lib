@@ -1,6 +1,7 @@
 package me.owdding.lib.mixins;
 
 import me.owdding.lib.cosmetics.CosmeticManager;
+import me.owdding.lib.cosmetics.MlibCosmetics;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.entity.state.PlayerRenderState;
@@ -16,7 +17,7 @@ public class PlayerRendererMixin {
 
     @Inject(method = "extractRenderState(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/client/renderer/entity/state/PlayerRenderState;F)V", at = @At("TAIL"))
     public void extractRenderState(AbstractClientPlayer player, PlayerRenderState renderState, float partialTicks, CallbackInfo ci) {
-        final var cosmetic = CosmeticManager.INSTANCE.getMlibCosmetics().get(player.getUUID());
+        final var cosmetic = MlibCosmetics.getMlibCosmetics().get(player.getUUID());
         if (cosmetic == null || cosmetic.getCapeTexture() == null) {
             return;
         }
@@ -25,6 +26,7 @@ public class PlayerRendererMixin {
         if (image == MissingTextureAtlasSprite.getLocation()) {
             return;
         }
+
         final var skin = renderState.skin;
         renderState.skin = new PlayerSkin(
             skin.texture(),
