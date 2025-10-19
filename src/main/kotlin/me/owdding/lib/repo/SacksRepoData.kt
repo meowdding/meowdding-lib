@@ -1,6 +1,7 @@
 package me.owdding.lib.repo
 
 import me.owdding.ktcodecs.GenerateCodec
+import me.owdding.ktmodules.Module
 import me.owdding.lib.events.FinishRepoLoadingEvent
 import me.owdding.lib.generated.MeowddingLibCodecs
 import me.owdding.repo.RemoteRepo
@@ -8,6 +9,7 @@ import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toData
 import java.util.concurrent.atomic.AtomicReference
 
+@Module
 object SacksRepoData {
 
     private val _data = AtomicReference<List<SackEntry>>(emptyList())
