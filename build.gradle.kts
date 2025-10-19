@@ -160,7 +160,9 @@ cloche {
                 implementation(libs.meowdding.remote.repo)
                 compileOnly(rconfig)
                 localRuntime(rconfig)
+                implementation(libs.keval)
 
+                include(libs.keval)
                 include(rlib) { isTransitive = false }
                 include(libs.meowdding.remote.repo)
                 include(olympus) { isTransitive = false }

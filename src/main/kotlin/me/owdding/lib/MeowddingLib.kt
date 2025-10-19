@@ -16,11 +16,14 @@ import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 import java.util.concurrent.CompletableFuture
 
 @Module
 object MeowddingLib : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoResolve() {
 
+    const val MOD_ID = "meowdding-lib"
     private var notifyAboutRepoLoad = false
 
     init {
@@ -39,7 +42,7 @@ object MeowddingLib : ClientModInitializer, MeowddingLogger by MeowddingLogger.a
     private fun finishRepoLoadingEvent() = McClient.runNextTick {
         FinishRepoLoadingEvent.post(SkyBlockAPI.eventBus)
         if (notifyAboutRepoLoad) {
-
+            Text.of("Reloaded repo!").send()
             notifyAboutRepoLoad = false
         }
     }
@@ -60,7 +63,7 @@ object MeowddingLib : ClientModInitializer, MeowddingLogger by MeowddingLogger.a
         }
     }
 
-    fun id(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath("meowdding-lib", path)
+    fun id(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(MOD_ID, path)
 }
 
 @AutoCollect("PreInitModules")

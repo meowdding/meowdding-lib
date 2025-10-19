@@ -10,7 +10,8 @@
     "GlyphRenderTypesMixin",
     "GuiRenderStateMixin",
     "GuiTextRenderStateMixin",
-    "StyleMixin",
-    "LocalPlayerMixin"
+    "LocalPlayerMixin",
+    "PlayerRendererMixin",
+    "StyleMixin"
   ]
 }
