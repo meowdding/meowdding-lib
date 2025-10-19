@@ -31,7 +31,7 @@ object MeowddingWaypointHandler {
     fun getWaypointsWithAllTags(tags: Collection<MeowddingWaypointTag>): List<MeowddingWaypoint> = _waypoints.filter { it.tags.containsAll(tags) }
 
     fun addWaypoint(waypoint: MeowddingWaypoint) {
-        _waypoints.filter { it.uuid == waypoint.uuid }.forEach(::removeWaypoint)
+        _waypoints.filter { it.uuid == waypoint.uuid || it.position == waypoint.position }.forEach(::removeWaypoint)
         _waypoints.add(waypoint)
 
         if (waypoint.inLocatorBar && !McVersionGroup.MC_1_21_5.isActive) {
@@ -100,6 +100,7 @@ object MeowddingWaypointHandler {
         val position = McPlayer.position ?: return
         _waypoints
             .filter { it.removalDistance != null && it.distanceToSqr(position) < (it.removalDistance?.pow(2)?.toInt() ?: Int.MIN_VALUE) }
+            .toList()
             .forEach(::removeWaypoint)
     }
 

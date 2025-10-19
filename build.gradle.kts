@@ -118,6 +118,7 @@ cloche {
         val rlib = dependencies["resourcefullib"]!!
         val rconfig = dependencies["resourcefulconfig"]!!
         val olympus = dependencies["olympus"]!!
+        val iris = dependencies["iris"]!!
 
         fabric("versions:$name") {
             includedClient()
@@ -161,6 +162,8 @@ cloche {
                 compileOnly(rconfig)
                 localRuntime(rconfig)
                 implementation(libs.keval)
+
+                compileOnly(iris)
 
                 include(libs.keval)
                 include(rlib) { isTransitive = false }
@@ -215,6 +218,7 @@ cloche {
         this["resourcefullib"] = libs.resourceful.lib1215
         this["resourcefulconfig"] = libs.resourceful.config1215
         this["olympus"] = libs.olympus.lib1215
+        this["iris"] = libs.iris1215
     }
     createVersion("1.21.8", minecraftVersionRange = {
         start = "1.21.6"
@@ -224,11 +228,13 @@ cloche {
         this["resourcefullib"] = libs.resourceful.lib1218
         this["resourcefulconfig"] = libs.resourceful.config1218
         this["olympus"] = libs.olympus.lib1218
+        this["iris"] = libs.iris1218
     }
     createVersion("1.21.9", endAtSameVersion = false, fabricApiVersion = provider { "0.133.7" }) {
         this["resourcefullib"] = libs.resourceful.lib1219
         this["resourcefulconfig"] = libs.resourceful.config1219
         this["olympus"] = libs.olympus.lib1219
+        this["iris"] = libs.iris1219
     }
 
     mappings {
