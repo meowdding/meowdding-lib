@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicReference
 import kotlin.reflect.KClass
 
 @GenerateDispatchCodec(TreeNode::class)
-enum class MiningNodes(override val type: KClass<out TreeNode>) : DispatchHelper<TreeNode> {
+enum class TreeNodes(override val type: KClass<out TreeNode>) : DispatchHelper<TreeNode> {
     PERK(LevelingTreeNode::class),
     UNLEVELABLE(UnlevelableTreeNode::class),
     ABILITY(AbilityTreeNode::class),
@@ -33,18 +33,6 @@ enum class MiningNodes(override val type: KClass<out TreeNode>) : DispatchHelper
 
     @Module
     companion object {
-        private val _hotm = AtomicReference<List<TreeNode>>()
-        val hotm: List<TreeNode> get() = _hotm.get()
-
-        private val _hotf = AtomicReference<List<TreeNode>>()
-        val hotf: List<TreeNode> get() = _hotf.get()
-
-        @Subscription
-        fun finishRepoLoading(event: FinishRepoLoadingEvent) {
-            RemoteRepo.getFileContentAsJson("hotm.json")?.toData(MeowddingLibCodecs.TreeNodeCodec.codec().listOf())?.apply(_hotm::set)
-            RemoteRepo.getFileContentAsJson("hotf.json")?.toData(MeowddingLibCodecs.TreeNodeCodec.codec().listOf())?.apply(_hotf::set)
-        }
-
         @IncludedCodec(named = "vec_2i")
         val VECTOR_2I: Codec<Vector2i> = Codec.INT.listOf(2, 2).xmap(
             { Vector2i(it[0], it[1]) },
@@ -61,6 +49,24 @@ enum class MiningNodes(override val type: KClass<out TreeNode>) : DispatchHelper
         )
 
         fun getType(id: String) = valueOf(id.uppercase())
+    }
+}
+
+@Module
+object TreeRepoData {
+    private val _hotm = AtomicReference<List<TreeNode>>()
+    val hotm: List<TreeNode> get() = _hotm.get()
+
+    private val _hotf = AtomicReference<List<TreeNode>>()
+    val hotf: List<TreeNode> get() = _hotf.get()
+
+    fun hotmByName(name: String) = hotm.find { it.name == name }
+    fun hotfByName(name: String) = hotf.find { it.name == name }
+
+    @Subscription
+    fun finishRepoLoading(event: FinishRepoLoadingEvent) {
+        RemoteRepo.getFileContentAsJson("hotm.json")?.toData(MeowddingLibCodecs.TreeNodeCodec.codec().listOf())?.apply(_hotm::set)
+        RemoteRepo.getFileContentAsJson("hotf.json")?.toData(MeowddingLibCodecs.TreeNodeCodec.codec().listOf())?.apply(_hotf::set)
     }
 }
 
@@ -86,7 +92,7 @@ data class Context(val hotmLevel: Int = -1, val perkLevel: Int = -1) {
     }
 }
 
-abstract class TreeNode(val type: MiningNodes) {
+abstract class TreeNode(val type: TreeNodes) {
     abstract val name: String
     abstract val id: String
     abstract val location: Vector2i
@@ -95,7 +101,7 @@ abstract class TreeNode(val type: MiningNodes) {
     abstract fun isMaxed(level: Int): Boolean
 }
 
-abstract class LevelableTooltipNode(type: MiningNodes) : TreeNode(type) {
+abstract class LevelableTooltipNode(type: TreeNodes) : TreeNode(type) {
     abstract val rewards: Map<String, String>
     abstract val tooltip: List<String>
 
@@ -127,7 +133,7 @@ abstract class LevelableTooltipNode(type: MiningNodes) : TreeNode(type) {
 }
 
 
-abstract class LevelableTreeNode(type: MiningNodes) : LevelableTooltipNode(type) {
+abstract class LevelableTreeNode(type: TreeNodes) : LevelableTooltipNode(type) {
     abstract val maxLevel: Int
 
     abstract fun costForLevel(level: Int): Pair<CostType, Int>
@@ -141,7 +147,7 @@ data class UnlevelableTreeNode(
     @NamedCodec("vec_2i") override val location: Vector2i,
     @FieldName("reward_formula") val rewardFormula: String = "0",
     val tooltip: List<String>,
-) : TreeNode(MiningNodes.UNLEVELABLE) {
+) : TreeNode(TreeNodes.UNLEVELABLE) {
     private fun evaluate(context: Context): Double? {
         if (rewardFormula.isEmpty() || rewardFormula == "0") return null
 
@@ -172,7 +178,7 @@ data class LevelingTreeNode(
     @FieldName("cost_formula") val costFormula: String,
     @NamedCodec("reward_formula") @FieldName("reward_formula") override val rewards: Map<String, String>,
     override val tooltip: List<String>,
-) : LevelableTreeNode(MiningNodes.PERK) {
+) : LevelableTreeNode(TreeNodes.PERK) {
     override fun costForLevel(level: Int): Pair<CostType, Int> {
         return getPowderType(level) to costFormula.keval {
             includeDefault()
@@ -199,7 +205,7 @@ data class AbilityTreeNode(
     @NamedCodec("vec_2i") override val location: Vector2i,
     @NamedCodec("reward_formula") @FieldName("reward_formula") override val rewards: Map<String, String>,
     override val tooltip: List<String>,
-) : LevelableTooltipNode(MiningNodes.ABILITY) {
+) : LevelableTooltipNode(TreeNodes.ABILITY) {
     override fun isMaxed(level: Int) = level == 3
 }
 
@@ -209,7 +215,7 @@ data class CoreTreeNode(
     override val name: String,
     @NamedCodec("vec_2i") override val location: Vector2i,
     val level: List<CotmLevel>,
-) : LevelableTreeNode(MiningNodes.CORE) {
+) : LevelableTreeNode(TreeNodes.CORE) {
 
     @GenerateCodec
     data class CotmLevel(
@@ -217,10 +223,10 @@ data class CoreTreeNode(
         val include: List<Int> = emptyList(),
         @Compact val reward: List<String>,
     ) {
-        fun tooltip(miningNode: CoreTreeNode): List<String> {
+        fun tooltip(treeNode: CoreTreeNode): List<String> {
             val tooltip = mutableListOf<String>()
 
-            include.map { miningNode.getLevel(it) }.flatMap { it.reward }.forEach { tooltip.add(it) }
+            include.map { treeNode.getLevel(it) }.flatMap { it.reward }.forEach { tooltip.add(it) }
             tooltip.addAll(reward)
 
             return tooltip
@@ -253,7 +259,7 @@ data class TierNode(
     override val name: String,
     @NamedCodec("vec_2i") override val location: Vector2i,
     val rewards: List<String>,
-) : TreeNode(MiningNodes.TIER) {
+) : TreeNode(TreeNodes.TIER) {
     override val id: String = ""
     override fun tooltip(context: Context) = rewards.map {
         TagParser.QUICK_TEXT_SAFE.parseText(it, ParserContext.of())
@@ -266,7 +272,7 @@ data class TierNode(
 data class SpacerNode(
     @NamedCodec("vec_2i") override val location: Vector2i,
     @NamedCodec("vec_2i") val size: Vector2i,
-) : TreeNode(MiningNodes.SPACER) {
+) : TreeNode(TreeNodes.SPACER) {
     override val name: String = ""
     override val id: String = ""
 
