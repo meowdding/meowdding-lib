@@ -74,7 +74,8 @@ object CosmeticManager {
                 },
             )
         } catch (e: Exception) {
-            e.printStackTrace()
+            MeowddingLib.error("Failed to load cosmetics!", e)
+            return
         }
         CosmeticLoadEvent.post(SkyBlockAPI.eventBus)
         MeowddingLib.info("Fetched ${players.size} players and ${cosmetics.size} cosmetics")
