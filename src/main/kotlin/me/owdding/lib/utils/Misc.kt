@@ -1,11 +1,14 @@
 package me.owdding.lib.utils
 
+import com.google.gson.JsonElement
+import com.mojang.serialization.MapCodec
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import net.minecraft.commands.CommandSource
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.player.Player
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
+import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import java.util.*
 
@@ -49,3 +52,5 @@ fun FabricClientCommandSource.toCommandSourceStack(): CommandSourceStack {
         McPlayer.self!!,
     )
 }
+
+internal fun <T : Any> JsonElement.toDataOrThrow(codec: MapCodec<T>) = this.toDataOrThrow(codec.codec())

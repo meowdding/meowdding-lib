@@ -3,13 +3,14 @@
   "mixins": [
   ],
   "client": [
+    "AvatarRendererMixin",
     "FontMixin",
     "FontPipelineHolderMixin",
     "GlyphRenderTypesMixin",
     "GuiRenderStateMixin",
     "GuiTextRenderStateMixin",
-    "StyleMixin",
     "LocalPlayerMixin",
+    "StyleMixin",
     "TextRenderablesMixin"
   ]
 }
