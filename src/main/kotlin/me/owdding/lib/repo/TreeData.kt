@@ -17,7 +17,9 @@ import net.minecraft.network.chat.Component
 import org.joml.Vector2i
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
+import tech.thatgravyboat.skyblockapi.utils.extentions.toTitleCase
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toData
+import tech.thatgravyboat.skyblockapi.utils.text.Text
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.reflect.KClass
 
@@ -294,30 +296,52 @@ enum class CostTypes(override val type: KClass<out CostType>) : DispatchHelper<C
 
 object FreeCostType : CostType(CostTypes.FREE) {
     override val amount: Int? = null
+    override val displayName: Component? = null
+    override val formatting: ChatFormatting? = null
 }
 
-abstract class CostType(val type: CostTypes) {
+sealed class CostType(val type: CostTypes) {
     abstract val amount: Int?
+    abstract val displayName: Component?
+    abstract val formatting: ChatFormatting?
 }
 
 @GenerateCodec
 data class PowderCostType(
     @FieldName("kind") val powderType: PowderType,
     override val amount: Int?,
-) : CostType(CostTypes.POWDER)
+) : CostType(CostTypes.POWDER) {
+    override val displayName: Component = powderType.displayName
+    override val formatting: ChatFormatting = powderType.formatting
+}
 
 @GenerateCodec
 data class WhisperCostType(
     @FieldName("kind") val whisperType: WhisperType,
     override val amount: Int?,
-) : CostType(CostTypes.WHISPER)
+) : CostType(CostTypes.WHISPER) {
+    override val displayName: Component = whisperType.displayName
+    override val formatting: ChatFormatting = whisperType.formatting
+}
 
 enum class PowderType(val formatting: ChatFormatting) {
     MITHRIL(ChatFormatting.DARK_GREEN),
     GEMSTONE(ChatFormatting.LIGHT_PURPLE),
-    GLACITE(ChatFormatting.AQUA);
+    GLACITE(ChatFormatting.AQUA),
+    ;
+
+    val displayName = Text.of(name.toTitleCase()) {
+        append(" Powder")
+        withStyle(formatting)
+    }
 }
 
 enum class WhisperType(val formatting: ChatFormatting) {
     FOREST(ChatFormatting.DARK_AQUA),
+    ;
+
+    val displayName = Text.of(name.toTitleCase()) {
+        append(" Whisper")
+        withStyle(formatting)
+    }
 }
