@@ -293,6 +293,7 @@ publishing {
 
 tasks.named("createCommonApiStub", GenerateStubApi::class) {
     excludes.add(libs.skyblockapi.get().module.toString())
+    excludes.add("com.notkamui")
 }
 
 ksp {
