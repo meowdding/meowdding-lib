@@ -170,6 +170,7 @@ cloche {
                 include(libs.meowdding.remote.repo)
                 include(olympus) { isTransitive = false }
                 include(libs.placeholders) { isTransitive = false }
+                include(libs.meowdding.patches)
 
                 val mods = project.layout.buildDirectory.get().toPath().resolve("tmp/extracted${sourceSet.name}RuntimeMods")
                 val modsTmp = project.layout.buildDirectory.get().toPath().resolve("tmp/extracted${sourceSet.name}RuntimeMods/tmp")
