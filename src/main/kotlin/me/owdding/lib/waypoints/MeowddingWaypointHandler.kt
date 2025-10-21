@@ -13,6 +13,7 @@ import tech.thatgravyboat.skyblockapi.api.events.location.ServerDisconnectEvent
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.McVersionGroup
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
@@ -22,7 +23,7 @@ import kotlin.math.pow
 @Module
 object MeowddingWaypointHandler {
 
-    private var _waypoints: MutableSet<MeowddingWaypoint> = mutableSetOf()
+    private var _waypoints = mutableListOf<MeowddingWaypoint>()
     val waypoints: List<MeowddingWaypoint> get() = _waypoints.toList()
 
     fun getWaypointsWithAnyTags(vararg tags: MeowddingWaypointTag): List<MeowddingWaypoint> = getWaypointsWithAnyTags(tags.toList())
@@ -31,11 +32,17 @@ object MeowddingWaypointHandler {
     fun getWaypointsWithAllTags(tags: Collection<MeowddingWaypointTag>): List<MeowddingWaypoint> = _waypoints.filter { it.tags.containsAll(tags) }
 
     fun addWaypoint(waypoint: MeowddingWaypoint) {
-        _waypoints.filter { it.uuid == waypoint.uuid || it.position == waypoint.position }.forEach(::removeWaypoint)
-        _waypoints.add(waypoint)
+        McClient.self.executeIfPossible {
+            _waypoints.removeIf {
+                if (it.uuid != waypoint.uuid && it.position != waypoint.position) return@removeIf false
+                removeLocatorBar(it)
+                true
+            }
+            _waypoints.add(waypoint)
 
-        if (waypoint.inLocatorBar && !McVersionGroup.MC_1_21_5.isActive) {
-            waypoint.minecraftWaypoint = MinecraftWaypointHandler.addWaypoint(waypoint)
+            if (waypoint.inLocatorBar && !McVersionGroup.MC_1_21_5.isActive) {
+                waypoint.minecraftWaypoint = MinecraftWaypointHandler.addWaypoint(waypoint)
+            }
         }
     }
 
@@ -45,6 +52,10 @@ object MeowddingWaypointHandler {
 
     fun removeWaypoint(waypoint: MeowddingWaypoint) {
         _waypoints.remove(waypoint)
+        removeLocatorBar(waypoint)
+    }
+
+    private fun removeLocatorBar(waypoint: MeowddingWaypoint) {
         if (waypoint.inLocatorBar && !McVersionGroup.MC_1_21_5.isActive) {
             MinecraftWaypointHandler.removeWaypoint(waypoint)
         }
@@ -52,7 +63,10 @@ object MeowddingWaypointHandler {
 
     @Subscription(ServerChangeEvent::class, ServerDisconnectEvent::class, priority = HIGHEST)
     fun clearWaypoints() {
-        _waypoints.toSet().forEach(::removeWaypoint)
+        _waypoints.removeIf {
+            removeLocatorBar(it)
+            true
+        }
     }
 
     @Subscription
@@ -98,10 +112,12 @@ object MeowddingWaypointHandler {
     @Subscription
     fun onTick(event: TickEvent) {
         val position = McPlayer.position ?: return
-        _waypoints
-            .filter { it.removalDistance != null && it.distanceToSqr(position) < (it.removalDistance?.pow(2)?.toInt() ?: Int.MIN_VALUE) }
-            .toList()
-            .forEach(::removeWaypoint)
+        _waypoints.removeIf {
+            val removalDistance = it.removalDistance ?: return@removeIf false
+            if (it.distanceToSqr(position) > removalDistance.pow(2)) return@removeIf false
+            removeLocatorBar(it)
+            true
+        }
     }
 
     @Subscription
@@ -117,7 +133,6 @@ object MeowddingWaypointHandler {
     fun onRender(event: RenderWorldEvent.AfterTranslucent) {
         val position = McPlayer.position ?: return
         _waypoints
-            .toList()
             .filter { it.renderCondition(event) }
             .sortedByDescending { it.distanceToSqr(position) }
             .forEach { it.render(event, true) }
