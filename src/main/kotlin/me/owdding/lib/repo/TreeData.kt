@@ -8,6 +8,8 @@ import eu.pb4.placeholders.api.ParserContext
 import eu.pb4.placeholders.api.parsers.TagParser
 import me.owdding.ktcodecs.*
 import me.owdding.ktmodules.Module
+import me.owdding.lib.MeowddingLib
+import me.owdding.lib.PreInitModule
 import me.owdding.lib.events.FinishRepoLoadingEvent
 import me.owdding.lib.generated.DispatchHelper
 import me.owdding.lib.generated.MeowddingLibCodecs
@@ -18,7 +20,7 @@ import org.joml.Vector2i
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.extentions.toTitleCase
-import tech.thatgravyboat.skyblockapi.utils.json.Json.toData
+import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.reflect.KClass
@@ -54,12 +56,12 @@ enum class TreeNodes(override val type: KClass<out TreeNode>) : DispatchHelper<T
     }
 }
 
-@Module
+@PreInitModule
 object TreeRepoData {
-    private val _hotm = AtomicReference<List<TreeNode>>()
+    private val _hotm = AtomicReference<List<TreeNode>>(emptyList())
     val hotm: List<TreeNode> get() = _hotm.get()
 
-    private val _hotf = AtomicReference<List<TreeNode>>()
+    private val _hotf = AtomicReference<List<TreeNode>>(emptyList())
     val hotf: List<TreeNode> get() = _hotf.get()
 
     fun hotmByName(name: String) = hotm.find { it.name == name }
@@ -67,8 +69,12 @@ object TreeRepoData {
 
     @Subscription
     fun finishRepoLoading(event: FinishRepoLoadingEvent) {
-        RemoteRepo.getFileContentAsJson("hotm.json")?.toData(MeowddingLibCodecs.TreeNodeCodec.codec().listOf())?.apply(_hotm::set)
-        RemoteRepo.getFileContentAsJson("hotf.json")?.toData(MeowddingLibCodecs.TreeNodeCodec.codec().listOf())?.apply(_hotf::set)
+        runCatching {
+            RemoteRepo.getFileContentAsJson("mining/hotm.json")?.toDataOrThrow(MeowddingLibCodecs.TreeNodeCodec.codec().listOf())?.apply(_hotm::set)
+            RemoteRepo.getFileContentAsJson("foraging/hotf.json")?.toDataOrThrow(MeowddingLibCodecs.TreeNodeCodec.codec().listOf())?.apply(_hotf::set)
+        }.onFailure {
+            MeowddingLib.error("Failed to load hotm or hotf data!", it)
+        }
     }
 }
 
