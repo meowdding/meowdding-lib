@@ -13,6 +13,7 @@ import tech.thatgravyboat.skyblockapi.api.events.location.ServerDisconnectEvent
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.McVersionGroup
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
@@ -22,7 +23,7 @@ import kotlin.math.pow
 @Module
 object MeowddingWaypointHandler {
 
-    private var _waypoints: MutableSet<MeowddingWaypoint> = mutableSetOf()
+    private val _waypoints = mutableListOf<MeowddingWaypoint>()
     val waypoints: List<MeowddingWaypoint> get() = _waypoints.toList()
 
     fun getWaypointsWithAnyTags(vararg tags: MeowddingWaypointTag): List<MeowddingWaypoint> = getWaypointsWithAnyTags(tags.toList())
@@ -30,8 +31,12 @@ object MeowddingWaypointHandler {
     fun getWaypointsWithAllTags(vararg tags: MeowddingWaypointTag): List<MeowddingWaypoint> = getWaypointsWithAllTags(tags.toList())
     fun getWaypointsWithAllTags(tags: Collection<MeowddingWaypointTag>): List<MeowddingWaypoint> = _waypoints.filter { it.tags.containsAll(tags) }
 
-    fun addWaypoint(waypoint: MeowddingWaypoint) {
-        _waypoints.filter { it.uuid == waypoint.uuid || it.position == waypoint.position }.forEach(::removeWaypoint)
+    fun addWaypoint(waypoint: MeowddingWaypoint) = onMain {
+        _waypoints.removeIf {
+            if (it.uuid != waypoint.uuid && it.position != waypoint.position) return@removeIf false
+            removeLocatorBar(it)
+            true
+        }
         _waypoints.add(waypoint)
 
         if (waypoint.inLocatorBar && !McVersionGroup.MC_1_21_5.isActive) {
@@ -39,20 +44,29 @@ object MeowddingWaypointHandler {
         }
     }
 
-    fun removeWaypoint(uuid: UUID) {
+    private inline fun onMain(crossinline run: () -> Unit) = McClient.self.executeIfPossible { run() }
+
+    fun removeWaypoint(uuid: UUID) = onMain {
         _waypoints.find { it.uuid == uuid }?.let(::removeWaypoint)
     }
 
-    fun removeWaypoint(waypoint: MeowddingWaypoint) {
+    fun removeWaypoint(waypoint: MeowddingWaypoint) = onMain {
         _waypoints.remove(waypoint)
+        removeLocatorBar(waypoint)
+    }
+
+    private fun removeLocatorBar(waypoint: MeowddingWaypoint) {
         if (waypoint.inLocatorBar && !McVersionGroup.MC_1_21_5.isActive) {
             MinecraftWaypointHandler.removeWaypoint(waypoint)
         }
     }
 
     @Subscription(ServerChangeEvent::class, ServerDisconnectEvent::class, priority = HIGHEST)
-    fun clearWaypoints() {
-        _waypoints.toSet().forEach(::removeWaypoint)
+    fun clearWaypoints() = onMain {
+        _waypoints.removeIf {
+            removeLocatorBar(it)
+            true
+        }
     }
 
     @Subscription
@@ -81,15 +95,21 @@ object MeowddingWaypointHandler {
                 thenCallback("all") { clearWaypoints() }
                 thenCallback("nearest") {
                     val position = McPlayer.position ?: return@thenCallback
-                    _waypoints.minByOrNull { it.distanceToSqr(position) }?.let(::removeWaypoint)
+                    onMain {
+                        _waypoints.minByOrNull { it.distanceToSqr(position) }?.let(::removeWaypoint)
+                    }
                 }
                 thenCallback("uuid uuid", StringArgumentType.string(), MeowddingSuggestionProviders.iterable(_waypoints) { it.uuid.toString() }) {
                     val uuid = this.getArgument("uuid", String::class.java)
-                    _waypoints.find { it.uuid.toString() == uuid }?.let(::removeWaypoint)
+                    onMain {
+                        _waypoints.find { it.uuid.toString() == uuid }?.let(::removeWaypoint)
+                    }
                 }
                 thenCallback("name name", StringArgumentType.greedyString(), MeowddingSuggestionProviders.iterable(_waypoints) { it.name.stripped }) {
                     val name = this.getArgument("name", String::class.java)
-                    _waypoints.find { it.name.stripped.equals(name, ignoreCase = true) }?.let(::removeWaypoint)
+                    onMain {
+                        _waypoints.find { it.name.stripped.equals(name, ignoreCase = true) }?.let(::removeWaypoint)
+                    }
                 }
             }
         }
@@ -98,10 +118,12 @@ object MeowddingWaypointHandler {
     @Subscription
     fun onTick(event: TickEvent) {
         val position = McPlayer.position ?: return
-        _waypoints
-            .filter { it.removalDistance != null && it.distanceToSqr(position) < (it.removalDistance?.pow(2)?.toInt() ?: Int.MIN_VALUE) }
-            .toList()
-            .forEach(::removeWaypoint)
+        _waypoints.removeIf {
+            val removalDistance = it.removalDistance ?: return@removeIf false
+            if (it.distanceToSqr(position) > removalDistance.pow(2)) return@removeIf false
+            removeLocatorBar(it)
+            true
+        }
     }
 
     @Subscription
@@ -117,7 +139,6 @@ object MeowddingWaypointHandler {
     fun onRender(event: RenderWorldEvent.AfterTranslucent) {
         val position = McPlayer.position ?: return
         _waypoints
-            .toList()
             .filter { it.renderCondition(event) }
             .sortedByDescending { it.distanceToSqr(position) }
             .forEach { it.render(event, true) }
