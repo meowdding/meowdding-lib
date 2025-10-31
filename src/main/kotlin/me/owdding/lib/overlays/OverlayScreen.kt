@@ -53,7 +53,7 @@ class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) :
             overlay.render(graphics, mouseX, mouseY, partialTicks)
         }
         if (hovered) {
-            graphics.drawFilledBox(x, y, x + width, y + height, 0x50000000)
+            graphics.drawFilledBox(x, y, width, height, 0x50000000)
             graphics.drawOutline(x - 1, y - 1, width + 2, height + 2, 0xFFFFFFFF.toInt())
             graphics.showTooltip(
                 Text.multiline(
