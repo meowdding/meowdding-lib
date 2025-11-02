@@ -158,10 +158,10 @@ cloche {
                 fabricApi(fabricApiVersion, name)
                 implementation(olympus)
                 implementation(rlib)
-                implementation(libs.meowdding.remote.repo)
+                api(libs.meowdding.remote.repo)
                 compileOnly(rconfig)
                 localRuntime(rconfig)
-                implementation(libs.keval)
+                api(libs.keval)
 
                 compileOnly(iris)
 
