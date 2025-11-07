@@ -10,7 +10,7 @@ class InventoryBuilder(val maxSize: Int = 54) {
     private val items: MutableMap<Int, ItemStack> = mutableMapOf()
 
     fun add(slot: Int, item: ItemStack, init: (TooltipBuilder.() -> Unit)? = null) {
-        check(slot !in 0 until maxSize) { "Inventory Index out of bounds" }
+        check(slot in 0 until maxSize) { "Inventory Index out of bounds" }
         items[slot] = init?.let { item.withTooltip(it) } ?: item
     }
 
