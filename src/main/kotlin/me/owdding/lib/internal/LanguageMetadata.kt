@@ -30,5 +30,5 @@ internal data class LanguageMetadata(
 
 internal object LanguageHelper {
     @JvmStatic
-    val componentKeyList: MutableList<String> = mutableListOf()
+    val componentKeyList: MutableSet<String> = mutableSetOf()
 }
