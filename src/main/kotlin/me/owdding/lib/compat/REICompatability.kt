@@ -45,7 +45,7 @@ object REICompatability : REIClientPlugin {
 object REIRuntimeCompatability {
     fun getReiHoveredItemStack(): ItemStack? {
         if (!KnownMods.REI.installed) return null
-        return runCatching { getItemList() ?: getRecipe() ?: getRecipeFallback() }.getOrNull()
+        return runCatching { getItemList() ?: getRecipe() ?: getRecipeFallback() }.getOrNull()?.takeUnless { it.isEmpty }
     }
 
     private fun getItemList(): ItemStack? {
