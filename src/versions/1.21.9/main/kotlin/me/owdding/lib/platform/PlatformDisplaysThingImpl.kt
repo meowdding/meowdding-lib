@@ -12,13 +12,20 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
 import org.joml.Quaternionf
+import org.joml.RoundingMode
+import org.joml.Vector2f
+import org.joml.Vector2i
 import org.joml.Vector3f
+import org.joml.component1
+import org.joml.component2
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.platform.*
 import tech.thatgravyboat.skyblockapi.utils.extentions.scaled
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import java.lang.Math
+import java.lang.System
 import kotlin.math.atan
 
 actual object PlatformDisplays {
@@ -91,6 +98,12 @@ actual object PlatformDisplays {
             override fun getHeight() = height
 
             override fun render(graphics: GuiGraphics) {
+                val (x, y) = Vector2i(graphics.pose().transformPosition(Vector2f(0f, 0f)), RoundingMode.TRUNCATE)
+                if (
+                    !graphics.containsPointInScissor(x, y) && !graphics.containsPointInScissor(x + width, y) &&
+                    !graphics.containsPointInScissor(x + width, y + height) && !graphics.containsPointInScissor(x, y + height)
+                ) return
+
                 if (showTooltip && !item.isEmpty) {
                     val player = McPlayer.self
                     if (isMouseOver(this, graphics) && player != null) {
