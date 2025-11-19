@@ -6,6 +6,7 @@ import earth.terrarium.cloche.api.metadata.ModMetadata
 import me.owdding.gradle.dependency
 import net.msrandom.minecraftcodev.core.utils.toPath
 import net.msrandom.stubs.GenerateStubApi
+import org.gradle.kotlin.dsl.implementation
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -81,7 +82,10 @@ cloche {
 
     common {
         withPublication()
-        mixins.from("src/mixins/meowdding-lib.mixins.json")
+        mixins.from(
+            "src/mixins/meowdding-lib.mixins.json",
+            "src/mixins/meowdding-lib.compat.mixins.json"
+        )
         accessWideners.from("src/main/mlib.accesswidener")
 
         dependencies {
@@ -96,6 +100,8 @@ cloche {
             compileOnly(libs.rei)
 
             implementation(libs.fabric.language.kotlin)
+            include("com.moulberry:mixinconstraints:1.0.8")
+            implementation("com.moulberry:mixinconstraints:1.0.8")
         }
     }
 

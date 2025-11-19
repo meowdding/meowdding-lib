@@ -1,0 +1,7 @@
+{
+  "package": "me.owdding.lib.mixins.compat",
+  "mixins": [
+    "rei.OverlaySearchFieldAccessor"
+  ],
+  "required": false
+}
