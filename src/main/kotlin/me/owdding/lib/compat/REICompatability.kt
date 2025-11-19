@@ -68,24 +68,27 @@ object REIRuntimeCompatability {
         }.getOrDefault(false)
     }
 
-    // TODO: this still doesnt work properly??????????
+    // Taken from REI, somehow if I try to change anything it just refuses to work
+    private fun shouldReturn(screen: Screen?): Boolean {
+        if (screen == null) return true
+        for (decider in ScreenRegistry.getInstance().getDeciders(screen)) {
+            val result = decider.shouldScreenBeOverlaid(screen)
+            if (result != InteractionResult.PASS) {
+                return result == InteractionResult.FAIL || REIRuntime.getInstance().previousScreen == null
+            }
+        }
+        return true
+    }
+
     private fun getItemList(): ItemStack? {
         fun getStack(listener: GuiEventListener): ItemStack? = when (listener) {
             is Slot -> listener.currentEntry.cheatsAs().value
             !is ContainerEventHandler -> null
             else -> listener.getChildAt(PointHelper.getMouseFloatingX(), PointHelper.getMouseFloatingY()).orElse(null)?.let(::getStack)
         }
-
-        val instance = REIRuntime.getInstance()
-        val screen = McScreen.self ?: return null
-        val deciders = ScreenRegistry.getInstance().getDeciders(screen)
-        if (deciders.isEmpty()) return null
-        val notRendering = deciders.any { it.shouldScreenBeOverlaid(screen) != InteractionResult.PASS }
-        if (notRendering) return null
-        if (instance.previousScreen == null) return null
-        if (!instance.isOverlayVisible) return null
-        val listener = instance.overlay.getOrNull() ?: return null
-        return getStack(listener)
+        val overlay = REIRuntime.getInstance().overlay.getOrNull() ?: return null
+        if (shouldReturn(McScreen.self)) return null
+        return getStack(overlay)
     }
 
     private fun getRecipe(): ItemStack? {
