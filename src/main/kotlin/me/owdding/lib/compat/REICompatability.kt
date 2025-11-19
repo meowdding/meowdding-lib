@@ -1,5 +1,6 @@
 package me.owdding.lib.compat
 
+import me.owdding.lib.mixins.compat.rei.OverlaySearchFieldAccessor
 import me.owdding.lib.utils.KnownMods
 import me.shedaniel.math.Rectangle
 import me.shedaniel.math.impl.PointHelper
@@ -14,10 +15,12 @@ import net.minecraft.client.gui.components.events.ContainerEventHandler
 import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.CancellableSkyBlockEvent
-import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.helpers.McScreen
+import kotlin.jvm.optionals.getOrNull
 
 class REIRenderOverlayEvent(val screen: Screen, private val registrar: (Int, Int, Int, Int) -> Unit) : CancellableSkyBlockEvent() {
 
@@ -43,9 +46,38 @@ object REICompatability : REIClientPlugin {
 }
 
 object REIRuntimeCompatability {
+    val installed get() = KnownMods.REI.installed
     fun getReiHoveredItemStack(): ItemStack? {
-        if (!KnownMods.REI.installed) return null
+        if (!installed) return null
         return runCatching { getItemList() ?: getRecipe() ?: getRecipeFallback() }.getOrNull()?.takeUnless { it.isEmpty }
+    }
+
+    fun getCurrentSearchBar(): String? {
+        if (!installed) return null
+        return runCatching {
+            REIRuntime.getInstance().searchTextField?.text
+        }.getOrNull()
+    }
+
+    fun isSearchBarHighlighting(): Boolean {
+        if (!installed) return false
+        return runCatching {
+            val textField = REIRuntime.getInstance().searchTextField ?: return@runCatching false
+            val accessor = (textField as? OverlaySearchFieldAccessor) ?: return@runCatching false
+            accessor.`mlib$isHighlighting`()
+        }.getOrDefault(false)
+    }
+
+    // Taken from REI, somehow if I try to change anything it just refuses to work
+    private fun shouldReturn(screen: Screen?): Boolean {
+        if (screen == null) return true
+        for (decider in ScreenRegistry.getInstance().getDeciders(screen)) {
+            val result = decider.shouldScreenBeOverlaid(screen)
+            if (result != InteractionResult.PASS) {
+                return result == InteractionResult.FAIL || REIRuntime.getInstance().previousScreen == null
+            }
+        }
+        return true
     }
 
     private fun getItemList(): ItemStack? {
@@ -54,15 +86,17 @@ object REIRuntimeCompatability {
             !is ContainerEventHandler -> null
             else -> listener.getChildAt(PointHelper.getMouseFloatingX(), PointHelper.getMouseFloatingY()).orElse(null)?.let(::getStack)
         }
-
-        val listener = REIRuntime.getInstance().overlay.orElse(null) ?: return null
-        return getStack(listener)
+        val overlay = REIRuntime.getInstance().overlay.getOrNull() ?: return null
+        if (shouldReturn(McScreen.self)) return null
+        return getStack(overlay)
     }
 
-    private fun getRecipe(): ItemStack? = ScreenRegistry.getInstance().getFocusedStack(McClient.self.screen, PointHelper.ofMouse())?.toStack()
+    private fun getRecipe(): ItemStack? {
+        return ScreenRegistry.getInstance().getFocusedStack(McScreen.self, PointHelper.ofMouse())?.toStack()
+    }
 
     private fun getRecipeFallback(): ItemStack? {
-        val screen = McClient.self.screen as? DisplayScreen ?: return null
+        val screen = McScreen.self as? DisplayScreen ?: return null
         return screen.resultsToNotice.firstOrNull()?.toStack()
     }
 
