@@ -18,6 +18,7 @@ private val DEVS = setOf(
     "b75d7e0a-03d0-4c2a-ae47-809b6b808246",
     "a1732122-e22e-4edf-883c-09673eb55de8",
     "ecdf4cc9-0487-4d6f-bf09-8497deaf8b33",
+    "e04c1a7f-017d-4de0-b76d-797cad8f8036",
 )
 
 fun Player.isMeowddingDev(): Boolean = this.stringUUID in DEVS
