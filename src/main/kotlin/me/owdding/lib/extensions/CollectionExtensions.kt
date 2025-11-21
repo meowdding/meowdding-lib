@@ -42,7 +42,7 @@ fun ListMerger<out Component>.applyToTooltip(builder: TooltipBuilder) {
     destination.forEach { builder.add(it) }
 }
 
-data class ListMerger<T>(val original: List<T>, var index: Int = 0) {
+class ListMerger<T>(val original: List<T>, var index: Int = 0) {
     val destination: MutableList<T> = mutableListOf()
 
     fun peek() = original[index]
@@ -58,9 +58,7 @@ data class ListMerger<T>(val original: List<T>, var index: Int = 0) {
     }
 
     fun addUntil(predicate: (T) -> Boolean) {
-        while (index + 1 < original.size && !predicate(peek())) {
-            copy()
-        }
+        while (canRead() && !predicate(peek())) copy()
     }
 
     fun addBeforeNext(predicate: (T) -> Boolean, provider: MutableList<T>.() -> Unit) {
@@ -70,10 +68,9 @@ data class ListMerger<T>(val original: List<T>, var index: Int = 0) {
     }
 
     fun addRemaining() {
-        if (index >= original.size) {
-            return
-        }
+        if (index >= original.size) return
         destination.addAll(original.subList(index, original.size))
+        index = original.size
     }
 
     fun hasNext(predicate: (T) -> Boolean): Boolean = this.original.subList(index, original.size).any(predicate)
