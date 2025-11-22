@@ -76,4 +76,8 @@ class ListMerger<T>(val original: List<T>, var index: Int = 0) {
     fun hasNext(predicate: (T) -> Boolean): Boolean = this.original.subList(index, original.size).any(predicate)
     fun canRead(): Boolean = index < original.size
     fun readSafe(): T? = if (canRead()) read() else null
+
+    // Added for binary compatibility
+    operator fun component0(): List<T> = original
+    operator fun component1(): Int = index
 }
