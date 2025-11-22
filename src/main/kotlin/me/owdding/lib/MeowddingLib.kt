@@ -18,6 +18,8 @@ import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
+import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import java.util.concurrent.CompletableFuture
 
 @Module
@@ -56,10 +58,34 @@ object MeowddingLib : ClientModInitializer, MeowddingLogger by MeowddingLogger.a
 
     @Subscription
     fun command(event: RegisterCommandsEvent) {
-        event.registerWithCallback("meowdding dev reload_repo") {
-            RemoteRepo.invalidate()
-            notifyAboutRepoLoad = true
-            loadRepo()
+        event.register("meowdding dev repo") {
+            then("reload") {
+                callback {
+                    RemoteRepo.invalidate()
+                    notifyAboutRepoLoad = true
+                    loadRepo()
+                }
+                thenCallback("local") {
+                    if (!RemoteRepo.isInitialized()) {
+                        Text.of("Remote Repo hasn't been initialized yet!").send()
+                        return@thenCallback
+                    }
+                    notifyAboutRepoLoad = true
+                    CompletableFuture.runAsync {
+                        finishRepoLoadingEvent()
+                    }
+                }
+            }
+            thenCallback("backup") {
+                RemoteRepo.uninitialize()
+                RemoteRepo.forceBackupRepo = !RemoteRepo.forceBackupRepo
+                Text.of("Toggled backup repo to: ") {
+                    if (RemoteRepo.forceBackupRepo) append("Enabled", TextColor.GREEN)
+                    else append("Disabled", TextColor.RED)
+                }
+                notifyAboutRepoLoad = true
+                loadRepo()
+            }
         }
     }
 
