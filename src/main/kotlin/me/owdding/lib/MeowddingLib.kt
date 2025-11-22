@@ -70,7 +70,10 @@ object MeowddingLib : ClientModInitializer, MeowddingLogger by MeowddingLogger.a
                         Text.of("Remote Repo hasn't been initialized yet!").send()
                         return@thenCallback
                     }
-                    finishRepoLoadingEvent()
+                    notifyAboutRepoLoad = true
+                    CompletableFuture.runAsync {
+                        finishRepoLoadingEvent()
+                    }
                 }
             }
             thenCallback("backup") {
