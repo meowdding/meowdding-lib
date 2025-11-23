@@ -58,7 +58,7 @@ class ListMerger<T>(val original: List<T>, var index: Int = 0) {
     }
 
     fun addUntil(predicate: (T) -> Boolean) {
-        while (canRead() && !predicate(peek())) copy()
+        while (index + 1 < original.size && !predicate(peek())) copy()
     }
 
     fun addBeforeNext(predicate: (T) -> Boolean, provider: MutableList<T>.() -> Unit) {
