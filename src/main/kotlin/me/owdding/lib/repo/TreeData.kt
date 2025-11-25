@@ -78,7 +78,7 @@ object TreeRepoData {
     }
 }
 
-data class Context(val hotmLevel: Int = -1, val perkLevel: Int = -1) {
+data class Context(val treeLevel: Int = -1, val perkLevel: Int = -1) {
     fun configure(kevalBuilder: KevalBuilder) = with(kevalBuilder) {
         function {
             name = "min"
@@ -91,7 +91,11 @@ data class Context(val hotmLevel: Int = -1, val perkLevel: Int = -1) {
         }
         constant {
             name = "hotmLevel"
-            value = hotmLevel.coerceAtLeast(1).toDouble()
+            value = treeLevel.coerceAtLeast(1).toDouble()
+        }
+        constant {
+            name = "hotfLevel"
+            value = treeLevel.coerceAtLeast(1).toDouble()
         }
         constant {
             name = "effectiveLevel"
@@ -330,23 +334,27 @@ data class WhisperCostType(
     override val formatting: ChatFormatting = whisperType.formatting
 }
 
-enum class PowderType(val formatting: ChatFormatting) {
+interface SkillTreeCurrency {
+    val displayName: Component
+}
+
+enum class PowderType(val formatting: ChatFormatting) : SkillTreeCurrency {
     MITHRIL(ChatFormatting.DARK_GREEN),
     GEMSTONE(ChatFormatting.LIGHT_PURPLE),
     GLACITE(ChatFormatting.AQUA),
     ;
 
-    val displayName = Text.of(name.toTitleCase()) {
+    override val displayName = Text.of(name.toTitleCase()) {
         append(" Powder")
         withStyle(formatting)
     }
 }
 
-enum class WhisperType(val formatting: ChatFormatting) {
+enum class WhisperType(val formatting: ChatFormatting) : SkillTreeCurrency {
     FOREST(ChatFormatting.DARK_AQUA),
     ;
 
-    val displayName = Text.of(name.toTitleCase()) {
+    override val displayName = Text.of(name.toTitleCase()) {
         append(" Whisper")
         withStyle(formatting)
     }
