@@ -308,12 +308,14 @@ object FreeCostType : CostType(CostTypes.FREE) {
     override val amount: Int? = null
     override val displayName: Component? = null
     override val formatting: ChatFormatting? = null
+    override val currency: SkillTreeCurrency? = null
 }
 
 sealed class CostType(val type: CostTypes) {
     abstract val amount: Int?
     abstract val displayName: Component?
     abstract val formatting: ChatFormatting?
+    abstract val currency: SkillTreeCurrency?
 }
 
 @GenerateCodec
@@ -323,6 +325,7 @@ data class PowderCostType(
 ) : CostType(CostTypes.POWDER) {
     override val displayName: Component = powderType.displayName
     override val formatting: ChatFormatting = powderType.formatting
+    override val currency: SkillTreeCurrency = powderType
 }
 
 @GenerateCodec
@@ -332,6 +335,7 @@ data class WhisperCostType(
 ) : CostType(CostTypes.WHISPER) {
     override val displayName: Component = whisperType.displayName
     override val formatting: ChatFormatting = whisperType.formatting
+    override val currency: SkillTreeCurrency = whisperType
 }
 
 interface SkillTreeCurrency {
