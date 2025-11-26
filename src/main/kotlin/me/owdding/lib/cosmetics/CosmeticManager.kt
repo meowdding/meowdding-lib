@@ -81,8 +81,8 @@ object CosmeticManager {
             MeowddingLib.error("Failed to load cosmetics!", e)
             return
         }
-        CosmeticLoadEvent.post(SkyBlockAPI.eventBus)
         MeowddingLib.info("Fetched ${players.size} players and ${cosmetics.size} cosmetics")
+        CosmeticLoadEvent.post(SkyBlockAPI.eventBus)
     }
 
     @IncludedCodec(named = "cosmetic_url_type")
