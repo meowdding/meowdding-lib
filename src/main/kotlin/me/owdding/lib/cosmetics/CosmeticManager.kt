@@ -48,7 +48,13 @@ object CosmeticManager {
         .build()
 
     init {
-        CompletableFuture.runAsync { loadData() }
+        CompletableFuture.runAsync {
+            runCatching {
+                loadData()
+            }.onFailure {
+                MeowddingLib.error("Failed to load cosmetics!", it)
+            }
+        }
     }
 
     fun loadData() {
