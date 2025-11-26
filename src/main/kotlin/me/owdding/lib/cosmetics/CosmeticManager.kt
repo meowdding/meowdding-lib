@@ -58,7 +58,11 @@ object CosmeticManager {
             HttpRequest.newBuilder(URI("https://cosmetics.meowdd.ing")).GET().build(),
             HttpResponse.BodyHandlers.ofString(Charsets.UTF_8),
         )
-        if (response.statusCode() != 200) return
+        if (response.statusCode() != 200) {
+            MeowddingLib.error("Failed to fetch cosmetics! Status code: ${response.statusCode()}")
+            MeowddingLib.error(response.body())
+            return
+        }
         val body = response.body().readJson<JsonObject>()
         try {
             body.toDataOrThrow<Unit>(
