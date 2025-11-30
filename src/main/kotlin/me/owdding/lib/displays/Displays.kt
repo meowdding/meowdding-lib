@@ -2,6 +2,7 @@ package me.owdding.lib.displays
 
 import com.mojang.blaze3d.vertex.PoseStack
 import earth.terrarium.olympus.client.images.BuiltinImageProviders
+import me.owdding.lib.displays.circle.roundedTextureDisplay
 import me.owdding.lib.extensions.floor
 import me.owdding.lib.layouts.ScalableWidget
 import me.owdding.lib.platform.PlatformDisplays
@@ -20,7 +21,6 @@ import net.minecraft.util.Mth
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.ItemLike
-import net.msrandom.stub.Stub
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.platform.*
@@ -33,11 +33,7 @@ import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin
 
-
 private const val NO_SPLIT = -1
-
-@Stub
-internal expect fun roundedTextureDisplay(width: Int, height: Int, texture: ResourceLocation): Display
 
 object Displays {
 

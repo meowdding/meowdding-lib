@@ -136,18 +136,17 @@ tasks.withType<KotlinCompile>().configureEach {
     )
 }
 
-/*tasks.processResources {
+tasks.processResources {
     val replacements = mapOf(
         "version" to version,
         "minecraft_start" to versionedCatalog.versions.getOrFallback("minecraft.start", "minecraft"),
         "minecraft_end" to versionedCatalog.versions.getOrFallback("minecraft.end", "minecraft"),
         "fabric_lang_kotlin" to libs.versions.fabric.language.kotlin.get(),
-        "sbapi" to libs.versions.skyblockapi.asProvider().get(),
+        "sbapi" to libs.versions.skyblockapi.get(),
         "rlib" to versionedCatalog.versions["resourceful.lib"],
         "olympus" to versionedCatalog.versions["olympus"],
-        "mlib" to libs.versions.meowdding.lib.get(),
-        "rconfigkt" to libs.versions.rconfigkt.get(),
-        "iris" to libs.versions.iris.get(),
+        "rconfigkt" to libs.versions.resourceful.config.kotlin.get(),
+        "iris" to versionedCatalog["iris"],
         "rconfig" to versionedCatalog.versions["resourceful.config"],
         "placeholder_api" to versionedCatalog.versions["placeholders"]
     )
@@ -156,7 +155,7 @@ tasks.withType<KotlinCompile>().configureEach {
     filesMatching("fabric.mod.json") {
         expand(replacements)
     }
-}*/
+}
 
 
 tasks.withType<ProcessResources>().configureEach {

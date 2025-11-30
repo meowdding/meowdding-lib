@@ -1,7 +1,6 @@
 package me.owdding.lib.utils
 
 import com.mojang.blaze3d.systems.RenderSystem
-import com.mojang.blaze3d.vertex.PoseStack
 import me.owdding.lib.rendering.world.RenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS
 import net.minecraft.client.CameraType
 import net.minecraft.client.gui.Font
@@ -9,12 +8,10 @@ import net.minecraft.client.renderer.*
 import net.minecraft.client.renderer.blockentity.BeaconRenderer
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.ARGB
 import net.minecraft.util.Mth
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
-import net.msrandom.stub.Stub
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
@@ -24,21 +21,6 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import kotlin.math.max
 
-@Stub
-internal expect fun RenderWorldEvent.renderBeaconBeam(
-    poseStack: PoseStack,
-    position: Vec3,
-    bufferSource: MultiBufferSource,
-    texture: ResourceLocation,
-    partialTicks: Float,
-    textureScale: Float,
-    gameTime: Long,
-    yOffset: Int,
-    height: Int,
-    color: Int,
-    beamRadius: Float,
-    glowRadius: Float,
-)
 
 object RenderUtils {
 

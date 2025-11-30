@@ -1,22 +1,34 @@
 package me.owdding.lib.utils
 
+import com.mojang.blaze3d.platform.InputConstants
 import me.owdding.ktmodules.Module
 import me.owdding.lib.platform.screens.KeyEvent
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.minecraft.client.KeyMapping
 import net.minecraft.resources.ResourceLocation
-import net.msrandom.stub.Stub
 import org.lwjgl.glfw.GLFW
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyPressedEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyReleasedEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 
-@Stub
-internal expect fun isDown(key: Int): Boolean
+//? if > 1.21.8
+import me.owdding.lib.platform.screens.into
 
-@Stub
-internal expect fun isMouseKeyDown(key: Int): Boolean
+internal fun isDown(key: Int): Boolean {
+    //? if > 1.21.8 {
+    return InputConstants.isKeyDown(McClient.window, key)
+    //?} else
+     /*return InputConstants.isKeyDown(McClient.window.window, key)*/ 
+}
+
+internal fun isMouseKeyDown(key: Int): Boolean {
+    //? if > 1.21.8 {
+    return (GLFW.glfwGetMouseButton(McClient.window.handle(), key) == 1)
+    //?} else
+    /*return (GLFW.glfwGetMouseButton(McClient.window.window, key) == 1)*/
+}
 
 data class KeyboardInputs(
     val symbols: Set<String>,
@@ -68,11 +80,24 @@ fun keysOf(vararg symbols: String) = KeyboardInputs(
     symbols = symbols.toSet(),
 )
 
-@Stub
-internal expect fun keyMapping(translationKey: String, keyCode: Int, category: ResourceLocation): KeyMapping
+//? if > 1.21.8
+private val categoryCache = mutableMapOf<ResourceLocation, KeyMapping.Category>()
 
-@Stub
-expect fun KeyMapping.matches(event: KeyEvent): Boolean
+internal fun keyMapping(translationKey: String, keyCode: Int, category: ResourceLocation): KeyMapping {
+    //? if > 1.21.8 {
+    val category = categoryCache.getOrPut(category) { KeyMapping.Category(category) }
+    //?} else
+    /*val category = category.toLanguageKey("key.category")*/
+
+    return KeyMapping(translationKey, keyCode, category)
+}
+
+fun KeyMapping.matches(event: KeyEvent): Boolean {
+    //? if > 1.21.8 {
+    return this.matches(event.into())
+    //?} else
+    /*return this.matches(event.key, event.scancode)*/
+}
 
 open class MeowddingKeybind(
     category: ResourceLocation,
