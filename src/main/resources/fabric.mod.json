@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "meowdding-lib",
+  "version": "3.0.13",
+  "name": "Meowdding-Lib",
+  "license": "",
+  "mixins": [
+    "meowdding-lib.mixins.json"
+  ],
+  "entrypoints": {
+    "client": [
+      {
+        "value": "me.owdding.lib.MeowddingLib",
+        "adapter": "kotlin"
+      }
+    ],
+    "rei_client": [
+      {
+        "value": "me.owdding.lib.compat.REICompatability",
+        "adapter": "kotlin"
+      }
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.16.10",
+    "minecraft": ">=${minecraft_start} <=${minecraft_end}",
+    "fabric": "*",
+    "fabric-language-kotlin": ">=${fabric_lang_kotlin}",
+    "resourcefullib": ">=${rlib}",
+    "olympus": ">=${olympus}",
+    "skyblock-api": ">=${sbapi}",
+    "placeholder-api": ">=${placeholder_api}"
+  },
+  "accessWidener": "mlib.accesswidener"
+}

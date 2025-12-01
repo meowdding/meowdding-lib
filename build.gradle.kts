@@ -1,6 +1,5 @@
 @file:Suppress("UnstableApiUsage")
 
-import com.google.devtools.ksp.gradle.KspAATask
 import kotlin.jvm.java
 import net.fabricmc.loom.task.ValidateAccessWidenerTask
 import org.gradle.kotlin.dsl.version
@@ -13,6 +12,7 @@ plugins {
     kotlin("jvm") version "2.2.0"
     id("fabric-loom")
     alias(libs.plugins.kotlin.symbol.processor)
+    alias(libs.plugins.meowdding.auto.mixins)
     `versioned-catalogues`
 }
 
@@ -58,7 +58,7 @@ dependencies {
     implementation(libs.resourceful.config.kotlin)
     includeImplementation(versionedCatalog["olympus"])
     includeImplementation(libs.meowdding.remote.repo)
-    includeImplementation(libs.skyblockapi)
+    implementation(libs.skyblockapi)
 
     includeImplementation(libs.keval)
 
@@ -72,11 +72,14 @@ dependencies {
     ksp(libs.meowdding.ktmodules)
     ksp(libs.meowdding.ktcodecs)
 
+    implementation(libs.hypixelapi)
+
     include(libs.meowdding.patches)
     includeImplementation(libs.meowdding.remote.repo)
+    includeImplementation(libs.moulberry.mixinconstraints)
 
     compileOnly(versionedCatalog["iris"])
-    compileOnly(libs.rei)
+    modCompileOnly(libs.rei)
 }
 
 fun DependencyHandler.includeImplementation(dep: Any) {
@@ -85,7 +88,7 @@ fun DependencyHandler.includeImplementation(dep: Any) {
 }
 
 val mcVersion = stonecutter.current.version.replace(".", "")
-val accessWidenerFile = rootProject.file("src/mlib.accesswidener")
+val accessWidenerFile: File = rootProject.file("src/mlib.accesswidener")
 loom {
     runConfigs["client"].apply {
         ideConfigGenerated(true)
@@ -98,7 +101,10 @@ loom {
     }
 }
 
+val archiveName = "Meowdding-Lib"
+
 ksp {
+    arg("meowdding.project_name", "MeowddingLib")
     arg("meowdding.package", "me.owdding.lib.generated")
 }
 
@@ -106,8 +112,6 @@ java {
     toolchain.languageVersion = JavaLanguageVersion.of(21)
     withSourcesJar()
 }
-
-val archiveName = "Meowdding-Lib"
 
 base {
     archivesName.set("$archiveName-${archivesName.get()}")
@@ -145,9 +149,6 @@ tasks.processResources {
         "sbapi" to libs.versions.skyblockapi.get(),
         "rlib" to versionedCatalog.versions["resourceful.lib"],
         "olympus" to versionedCatalog.versions["olympus"],
-        "rconfigkt" to libs.versions.resourceful.config.kotlin.get(),
-        "iris" to versionedCatalog["iris"],
-        "rconfig" to versionedCatalog.versions["resourceful.config"],
         "placeholder_api" to versionedCatalog.versions["placeholders"]
     )
     inputs.properties(replacements)
@@ -157,6 +158,10 @@ tasks.processResources {
     }
 }
 
+autoMixins {
+    mixinPackage = "me.owdding.lib.mixins"
+    projectName = "meowdding-lib"
+}
 
 tasks.withType<ProcessResources>().configureEach {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE

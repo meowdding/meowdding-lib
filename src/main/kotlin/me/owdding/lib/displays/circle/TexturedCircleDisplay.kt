@@ -63,7 +63,7 @@ class TexturedCircleDisplay(@JvmField val width: Int, @JvmField val height: Int,
     /*private val renderPipeline: RenderPipeline = RenderPipelines.register(
         RenderPipeline.builder(RenderPipelines.GUI_TEXTURED_SNIPPET)
             .withLocation(MeowddingLib.id("circle"))
-            .withFragmentShader(MeowddingLib.id("circle_tex"))
+            .withFragmentShader(MeowddingLib.id("core/circle_tex"))
             .withVertexFormat(DefaultVertexFormat.POSITION_TEX, VertexFormat.Mode.QUADS)
             .withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST)
             .withUniform("uvs", UniformType.VEC4)

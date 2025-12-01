@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Pseudo
 @IfModLoaded("roughlyenoughitems")
-@Mixin(targets = "me.shedaniel.rei.impl.client.gui.widget.search.OverlaySearchField")
+@Mixin(targets = "me.shedaniel.rei.impl.client.gui.widget.search.OverlaySearchField", remap = false)
 public interface OverlaySearchFieldAccessor {
 
     @Accessor(value = "isHighlighting")
