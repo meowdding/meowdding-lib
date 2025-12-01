@@ -1,5 +1,0 @@
-accessWidener v2 named
-accessible method net/minecraft/world/waypoints/Waypoint$Icon <init> (Lnet/minecraft/resources/ResourceKey;Ljava/util/Optional;)V
-accessible method net/minecraft/network/chat/Style <init> (Lnet/minecraft/network/chat/TextColor;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lnet/minecraft/network/chat/ClickEvent;Lnet/minecraft/network/chat/HoverEvent;Ljava/lang/String;Lnet/minecraft/network/chat/FontDescription;)V
-accessible method net/minecraft/network/chat/Style checkEmptyAfterChange (Lnet/minecraft/network/chat/Style;Ljava/lang/Object;Ljava/lang/Object;)Lnet/minecraft/network/chat/Style;
-accessible field net/minecraft/client/renderer/LevelRenderer levelRenderState Lnet/minecraft/client/renderer/state/LevelRenderState;
