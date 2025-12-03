@@ -55,10 +55,10 @@ dependencies {
     includeImplementation(versionedCatalog["resourceful.config"])
     includeImplementation(versionedCatalog["resourceful.lib"])
     includeImplementation(versionedCatalog["placeholders"])
-    implementation(libs.resourceful.config.kotlin)
     includeImplementation(versionedCatalog["olympus"])
     includeImplementation(libs.meowdding.remote.repo)
-    implementation(libs.skyblockapi)
+    modImplementation(libs.resourceful.config.kotlin)
+    modImplementation(libs.skyblockapi)
 
     includeImplementation(libs.keval)
 
