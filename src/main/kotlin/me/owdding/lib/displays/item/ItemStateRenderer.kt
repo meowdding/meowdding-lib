@@ -1,3 +1,4 @@
+//? if > 1.21.5 {
 package me.owdding.lib.displays.item
 
 import com.mojang.blaze3d.platform.Lighting.Entry
@@ -127,3 +128,5 @@ class ItemStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictu
         }
     }
 }
+
+//?}

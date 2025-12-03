@@ -3,8 +3,6 @@ package me.owdding.lib.platform
 import com.mojang.blaze3d.vertex.PoseStack
 import me.owdding.lib.displays.Display
 import me.owdding.lib.displays.Displays.isMouseOver
-import me.owdding.lib.displays.entity.EntityStateRenderer
-import me.owdding.lib.displays.item.ItemStateRenderer
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.inventory.InventoryScreen
 import net.minecraft.network.chat.Component
@@ -31,6 +29,11 @@ import tech.thatgravyboat.skyblockapi.platform.translate
 import tech.thatgravyboat.skyblockapi.utils.extentions.scaled
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import kotlin.math.atan
+
+//? if > 1.21.5 {
+import me.owdding.lib.displays.entity.EntityStateRenderer
+import me.owdding.lib.displays.item.ItemStateRenderer
+//?}
 
 internal object PlatformDisplays {
     fun entity(

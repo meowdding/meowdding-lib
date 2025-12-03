@@ -1,3 +1,4 @@
+//? if > 1.21.5 {
 package me.owdding.lib.displays.entity
 
 import com.mojang.blaze3d.platform.Lighting
@@ -140,3 +141,5 @@ class EntityStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPic
         }
     }
 }
+
+//?}

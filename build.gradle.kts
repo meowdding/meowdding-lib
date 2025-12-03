@@ -72,7 +72,7 @@ dependencies {
     ksp(libs.meowdding.ktmodules)
     ksp(libs.meowdding.ktcodecs)
 
-    implementation(libs.hypixelapi)
+    modImplementation(libs.hypixelapi)
 
     include(libs.meowdding.patches)
     includeImplementation(libs.meowdding.remote.repo)
