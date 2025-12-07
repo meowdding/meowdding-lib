@@ -16,6 +16,12 @@ fun RenderPipeline.Builder.withShaderDefine(name: String, array: FloatArray): Re
     return this
 }
 
+fun RenderPipeline.Builder.withShaderDefine(name: String, vector2f: Vector2f): RenderPipeline.Builder {
+    val accessor = this as RenderPipelineBuilderAccessor
+    accessor.`meowddinglib$define`(name, "vec2(${vector2f.x}, ${vector2f.y})")
+    return this
+}
+
 fun RenderPipeline.Builder.withShaderDefine(name: String, array: Array<Vector2f>): RenderPipeline.Builder {
     val accessor = this as RenderPipelineBuilderAccessor
     accessor.`meowddinglib$define`(name, "vec2[](${array.joinToString(", ") { (x, y) -> "vec2($x, $y)" }})")

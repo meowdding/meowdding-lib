@@ -9,6 +9,8 @@ precision highp int;
 uniform sampler2D Sampler0;
 
 const vec4 colors[] = COLORS;
+const vec2 direction = DIRECTION;
+const float speed = SPEED;
 
 in float sphericalVertexDistance;
 in float cylindricalVertexDistance;
@@ -39,7 +41,7 @@ void main() {
 
     if (length(finalColor.rgb) != 0.0) {
         vec2 coords = gl_FragCoord.xy;
-        finalColor = vec4(SMOOTHY(float(int(coords.x + (GameTime * 24000) * 2) % 500) / 500.0).rgb, 1) * vertexColor;
+        finalColor = vec4(SMOOTHY(float(int(length(coords + (direction * GameTime * 24000 * speed) * 2)) % 500) / 500.0).rgb, 1) * vertexColor;
     }
 
     fragColor = apply_fog(

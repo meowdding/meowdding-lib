@@ -4,6 +4,8 @@ precision highp int;
 uniform sampler2D Sampler0;
 
 const vec4 colors[] = COLORS;
+const vec2 direction = DIRECTION;
+const float speed = SPEED;
 
 uniform vec4 ColorModulator;
 uniform float FogStart;
@@ -36,6 +38,5 @@ void main() {
         discard;
     }
     vec2 coords = gl_FragCoord.xy;
-
-    fragColor = vec4(SMOOTHY(float(int(coords.x + (GameTime * 24000) * 2) % 500) / 500.0).rgb, 1) * vertexColor;
+    fragColor = vec4(SMOOTHY(float(int(length(coords + (direction * GameTime * 24000 * speed) * 2)) % 500) / 500.0).rgb, 1) * vertexColor;
 }
