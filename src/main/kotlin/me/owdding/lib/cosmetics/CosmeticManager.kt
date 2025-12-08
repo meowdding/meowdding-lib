@@ -7,7 +7,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.owdding.ktcodecs.FieldName
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.IncludedCodec
-import me.owdding.ktcodecs.Unnamed
+import me.owdding.ktcodecs.Inline
 import me.owdding.ktmodules.Module
 import me.owdding.lib.MeowddingLib
 import me.owdding.lib.events.CosmeticLoadEvent
@@ -19,7 +19,7 @@ import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
-import java.util.*
+import java.util.UUID
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.time.Duration.Companion.seconds
@@ -135,6 +135,6 @@ object CosmeticManager {
     data class Cosmetic(
         val id: String,
         val version: Int,
-        @Unnamed val data: JsonObject,
+        @Inline val data: JsonObject,
     )
 }
