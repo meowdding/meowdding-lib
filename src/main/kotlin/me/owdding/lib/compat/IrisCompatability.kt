@@ -6,13 +6,20 @@ import me.owdding.lib.rendering.world.RenderTypes
 import me.owdding.lib.utils.KnownMods
 import net.irisshaders.iris.api.v0.IrisApi
 import net.irisshaders.iris.api.v0.IrisProgram
-import net.minecraft.client.renderer.RenderType
+import net.minecraft.client.renderer.rendertype.RenderType
 
 interface IrisCompatability {
     fun registerPipeline(renderPipeline: RenderPipeline, shaderType: IrisShaderType) {}
-    fun registerRenderType(renderPipeline: RenderType.CompositeRenderType, shaderType: IrisShaderType) {
+
+    //? if > 1.21.10 {
+    fun registerRenderType(renderPipeline: RenderType, shaderType: IrisShaderType) {
+        registerPipeline(renderPipeline.pipeline(), shaderType)
+    }
+    //?} else {
+    /*fun registerRenderType(renderPipeline: RenderType.CompositeRenderType, shaderType: IrisShaderType) {
         registerPipeline(renderPipeline.renderPipeline, shaderType)
     }
+    *///?}
 
     @Module
     companion object : IrisCompatability by resolve() {

@@ -1,16 +1,14 @@
+//~ named_identifier
 package me.owdding.lib.mixins;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import java.util.Objects;
 import me.owdding.lib.helper.TextShaderHolder;
 import me.owdding.lib.rendering.text.TextShader;
-import net.minecraft.network.chat.ClickEvent;
-import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextColor;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.*;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,11 +17,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-//? if > 1.21.8
-import net.minecraft.network.chat.FontDescription;
-
-import java.util.Objects;
 
 @Mixin(Style.class)
 public abstract class StyleMixin implements TextShaderHolder {
@@ -36,7 +29,7 @@ public abstract class StyleMixin implements TextShaderHolder {
     //? if > 1.21.8 {
     FontDescription font;
     //?} else
-    /*ResourceLocation font;*/
+    /*Identifier font;*/
     @Shadow
     @Final
     @Nullable
@@ -111,8 +104,8 @@ public abstract class StyleMixin implements TextShaderHolder {
         //? if > 1.21.8 {
         target = "(Lnet/minecraft/network/chat/TextColor;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lnet/minecraft/network/chat/ClickEvent;Lnet/minecraft/network/chat/HoverEvent;Ljava/lang/String;Lnet/minecraft/network/chat/FontDescription;)Lnet/minecraft/network/chat/Style;"
         //?} else {
-         /*target = "(Lnet/minecraft/network/chat/TextColor;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lnet/minecraft/network/chat/ClickEvent;Lnet/minecraft/network/chat/HoverEvent;Ljava/lang/String;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/network/chat/Style;"
-        *///?}
+        /*target = "(Lnet/minecraft/network/chat/TextColor;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lnet/minecraft/network/chat/ClickEvent;Lnet/minecraft/network/chat/HoverEvent;Ljava/lang/String;Lnet/minecraft/resources/Identifier;)Lnet/minecraft/network/chat/Style;"
+       *///?}
     )
     )
     public Style copy(
@@ -126,7 +119,7 @@ public abstract class StyleMixin implements TextShaderHolder {
         ClickEvent clickEvent,
         HoverEvent hoverEvent,
         String insertion,
-        /*? if > 1.21.8 {*/ FontDescription fontDescription, /*?} else {*/ /*ResourceLocation font, *//*?}*/
+        /*? if > 1.21.8 {*/ FontDescription fontDescription, /*?} else {*/ /*Identifier font, *//*?}*/
         Operation<Style> original
     ) {
         var previous = meowddinglib$SHADER.get();

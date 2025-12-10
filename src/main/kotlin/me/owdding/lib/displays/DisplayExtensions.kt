@@ -3,7 +3,7 @@ package me.owdding.lib.displays
 import com.mojang.blaze3d.platform.InputConstants
 import earth.terrarium.olympus.client.components.buttons.Button
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import tech.thatgravyboat.skyblockapi.utils.builders.TooltipBuilder
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
@@ -56,7 +56,7 @@ fun List<List<Any>>.asTable(spacing: Int = 0): Display =
             it.map {
                 when (it) {
                     is Display -> it
-                    is ResourceLocation -> Displays.sprite(it, 12, 12)
+                    is Identifier -> Displays.sprite(it, 12, 12)
                     else -> Displays.text(it.toString(), color = { 0x555555u }, shadow = false)
                 }
             }

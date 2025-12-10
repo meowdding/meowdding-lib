@@ -1,16 +1,18 @@
 package me.owdding.lib.utils
 
+//? if > 1.21.10
 import com.google.gson.JsonElement
 import com.mojang.serialization.MapCodec
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import net.minecraft.commands.CommandSource
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.network.chat.Component
+import net.minecraft.server.permissions.PermissionSet
 import net.minecraft.world.entity.player.Player
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import tech.thatgravyboat.skyblockapi.utils.text.Text
-import java.util.*
+import java.util.UUID
 
 private val DEVS = setOf(
     "503450fc-72c2-4e87-8243-94e264977437",
@@ -46,7 +48,7 @@ fun FabricClientCommandSource.toCommandSourceStack(): CommandSourceStack {
         McPlayer.position!!,
         this@toCommandSourceStack.rotation,
         null,
-        0,
+        /*? if > 1.21.10 {*/ PermissionSet.ALL_PERMISSIONS, /*?} else {*//*0*//*?}*/
         "FakeServerCommandSource",
         Text.of("FakeServerCommandSource"),
         null,

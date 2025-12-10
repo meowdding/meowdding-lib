@@ -1,6 +1,7 @@
 //? if > 1.21.5 {
 package me.owdding.lib.displays.entity
 
+//? if > 1.21.8
 import com.mojang.blaze3d.platform.Lighting
 import com.mojang.blaze3d.vertex.PoseStack
 import earth.terrarium.olympus.client.pipelines.pips.OlympusPictureInPictureRenderState
@@ -12,6 +13,7 @@ import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.entity.EntityRenderer
 import net.minecraft.client.renderer.entity.state.EntityRenderState
+import net.minecraft.client.renderer.state.CameraRenderState
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
@@ -22,9 +24,6 @@ import org.joml.component2
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.platform.getTranslation
 import java.util.function.Function
-
-//? if > 1.21.8
-import net.minecraft.client.renderer.state.CameraRenderState
 
 class EntityStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictureRenderer<EntityStateRenderer.State>(buffer) {
 
@@ -106,7 +105,8 @@ class EntityStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPic
             val state = this.createRenderState()
             this.extractRenderState(entity, state, 1f)
 
-            state.hitboxesRenderState = null
+            //? < 1.21.10
+            /*state.hitboxesRenderState = null*/
             state.x = 0.0
             state.y = 0.0
             state.z = 0.0

@@ -1,20 +1,22 @@
 //? if > 1.21.5 {
 package me.owdding.lib.displays.circle
 
-import com.mojang.blaze3d.systems.RenderSystem
+//? if > 1.21.10
+//? if < 1.21.11
+/*import net.minecraft.client.renderer.texture.AbstractTexture*/
+//? if > 1.21.8
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.Tesselator
 import com.mojang.blaze3d.vertex.VertexFormat
 import earth.terrarium.olympus.client.pipelines.renderer.PipelineRenderer
+import earth.terrarium.olympus.client.utils.TextureUtils
 import me.owdding.lib.rendering.MeowddingPipState
 import net.minecraft.client.gui.navigation.ScreenRectangle
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer
 import net.minecraft.client.renderer.MultiBufferSource
-import net.minecraft.client.renderer.texture.AbstractTexture
-//? if > 1.21.8
 import net.minecraft.data.AtlasIds
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import org.joml.Matrix3x2f
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import java.util.function.Function
@@ -42,12 +44,17 @@ class TexturedCircleRenderer(buffer: MultiBufferSource.BufferSource) : PictureIn
         //?} else
         /*val sprite = McClient.self.guiSprites.getSprite(state.texture)*/
 
-        val abstractTexture: AbstractTexture = McClient.self.textureManager.getTexture(sprite.atlasLocation())
-
-
+        //? > 1.21.10 {
+        val texture = TextureUtils.single(sprite.atlasLocation())
+        //?} else {
+        /*val abstractTexture: AbstractTexture = McClient.self.textureManager.getTexture(sprite.atlasLocation())
         RenderSystem.setShaderTexture(0, abstractTexture.textureView)
+        *///?}
+
 
         PipelineRenderer.builder(TexturedCirclePipeline.PIPELINE, buffer.buildOrThrow())
+            //? > 1.21.10
+            .textures(texture)
             .uniform(TexturedCirclePipeline.UNIFORM_STORAGE, TexturedCircleUniform(sprite.u0, sprite.u1, sprite.v0, sprite.v1))
             .color(-1)
             .draw()
@@ -62,7 +69,7 @@ data class TexturedCircleState(
     override val bounds: ScreenRectangle,
     override val scissorArea: ScreenRectangle?,
     override val pose: Matrix3x2f,
-    val texture: ResourceLocation,
+    val texture: Identifier,
 ) : MeowddingPipState<TexturedCircleState>() {
     override fun getFactory(): Function<MultiBufferSource.BufferSource, PictureInPictureRenderer<TexturedCircleState>> =
         Function { buffer -> TexturedCircleRenderer(buffer) }

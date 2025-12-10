@@ -1,20 +1,19 @@
 package me.owdding.lib.utils
 
+//? if > 1.21.8
 import com.mojang.blaze3d.platform.InputConstants
 import me.owdding.ktmodules.Module
 import me.owdding.lib.platform.screens.KeyEvent
+import me.owdding.lib.platform.screens.into
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.minecraft.client.KeyMapping
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import org.lwjgl.glfw.GLFW
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyPressedEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyReleasedEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
-
-//? if > 1.21.8
-import me.owdding.lib.platform.screens.into
 
 internal fun isDown(key: Int): Boolean {
     //? if > 1.21.8 {
@@ -81,9 +80,9 @@ fun keysOf(vararg symbols: String) = KeyboardInputs(
 )
 
 //? if > 1.21.8
-private val categoryCache = mutableMapOf<ResourceLocation, KeyMapping.Category>()
+private val categoryCache = mutableMapOf<Identifier, KeyMapping.Category>()
 
-internal fun keyMapping(translationKey: String, keyCode: Int, category: ResourceLocation): KeyMapping {
+internal fun keyMapping(translationKey: String, keyCode: Int, category: Identifier): KeyMapping {
     //? if > 1.21.8 {
     val category = categoryCache.getOrPut(category) { KeyMapping.Category(category) }
     //?} else
@@ -100,7 +99,7 @@ fun KeyMapping.matches(event: KeyEvent): Boolean {
 }
 
 open class MeowddingKeybind(
-    category: ResourceLocation,
+    category: Identifier,
     translationKey: String,
     keyCode: Int,
     private val allowMultipleExecutions: Boolean = false,

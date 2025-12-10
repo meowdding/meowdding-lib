@@ -1,8 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
-import kotlin.jvm.java
+import net.fabricmc.loom.task.RemapJarTask
 import net.fabricmc.loom.task.ValidateAccessWidenerTask
-import org.gradle.kotlin.dsl.version
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -17,32 +16,26 @@ plugins {
 }
 
 repositories {
-    maven(url = "https://repo.hypixel.net/repository/Hypixel/")
-    maven(url = "https://maven.msrandom.net/repository/cloche")
-    maven(url = "https://maven.msrandom.net/repository/root")
-    maven(url = "https://api.modrinth.com/maven")
-    maven(url = "https://api.modrinth.com/maven")
-    maven(url = "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
-    maven(url = "https://maven.teamresourceful.com/repository/maven-public/")
-    maven(url = "https://maven.shedaniel.me/")
-    mavenCentral()
-    mavenLocal()
-}
+    fun scopedMaven(url: String, vararg paths: String) = maven(url) { content { paths.forEach(::includeGroupAndSubgroups) } }
 
-configurations {
-    modImplementation {
-        attributes.attribute(Attribute.of("earth.terrarium.cloche.modLoader", String::class.java), "fabric")
-    }
+    scopedMaven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1", "me.djtheredstoner")
+    scopedMaven("https://repo.hypixel.net/repository/Hypixel", "net.hypixel")
+    scopedMaven("https://maven.parchmentmc.org/", "org.parchmentmc")
+    scopedMaven("https://api.modrinth.com/maven", "maven.modrinth")
+    scopedMaven(
+        "https://maven.teamresourceful.com/repository/maven-public/",
+        "earth.terrarium",
+        "com.teamresourceful",
+        "tech.thatgravyboat",
+        "me.owdding",
+        "com.terraformersmc"
+    )
+    scopedMaven("https://maven.nucleoid.xyz/", "eu.pb4")
+    scopedMaven(url = "https://maven.shedaniel.me/", "me.shedaniel", "dev.architectury")
+    mavenCentral()
 }
 
 dependencies {
-    attributesSchema {
-        attribute(Attribute.of("earth.terrarium.cloche.minecraftVersion", String::class.java)) {
-            disambiguationRules.add(ClocheDisambiguationRule::class) {
-                params(versionedCatalog.versions.getOrFallback("sbapi-mc-version", "minecraft").toString())
-            }
-        }
-    }
 
     minecraft(versionedCatalog["minecraft"])
     mappings(loom.layered {
@@ -52,17 +45,21 @@ dependencies {
         })
     })
 
+    modImplementation(versionedCatalog["fabric.api"])
+
     includeImplementation(versionedCatalog["resourceful.config"])
     includeImplementation(versionedCatalog["resourceful.lib"])
     includeImplementation(versionedCatalog["placeholders"])
     includeImplementation(versionedCatalog["olympus"])
     includeImplementation(libs.meowdding.remote.repo)
     modImplementation(libs.resourceful.config.kotlin)
-    modImplementation(libs.skyblockapi)
 
-    includeImplementation(libs.keval)
+    api(libs.skyblockapi) {
+        capabilities { requireCapability("tech.thatgravyboat:skyblock-api-${stonecutter.current.version}") }
+    }
 
-    modImplementation(versionedCatalog["fabric.api"])
+    includeImplementation(libs.keval, false)
+
     modImplementation(libs.fabric.language.kotlin)
     compileOnly(libs.fabric.loader)
 
@@ -82,9 +79,9 @@ dependencies {
     modCompileOnly(libs.rei)
 }
 
-fun DependencyHandler.includeImplementation(dep: Any) {
+fun DependencyHandler.includeImplementation(dep: Any, remap: Boolean = true) {
     include(dep)
-    modImplementation(dep)
+    if (remap) modImplementation(dep) else implementation(dep)
 }
 
 val mcVersion = stonecutter.current.version.replace(".", "")
@@ -136,7 +133,8 @@ tasks.withType<KotlinCompile>().configureEach {
     compilerOptions.optIn.add("kotlin.time.ExperimentalTime")
     compilerOptions.freeCompilerArgs.addAll(
         "-Xcontext-parameters",
-        "-Xcontext-sensitive-resolution"
+        "-Xcontext-sensitive-resolution",
+        "-Xnullability-annotations=@org.jspecify.annotations:ignore"
     )
 }
 
@@ -188,6 +186,15 @@ idea {
 
 tasks.withType<ValidateAccessWidenerTask> { enabled = false }
 
+tasks.named<Jar>("jar") {
+    archiveClassifier = "${stonecutter.current.version}-dev"
+}
+
 tasks.named<Jar>("sourcesJar") {
+    archiveClassifier = "${stonecutter.current.version}-sources"
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+tasks.named<RemapJarTask>("remapJar") {
+    archiveClassifier = stonecutter.current.version
 }

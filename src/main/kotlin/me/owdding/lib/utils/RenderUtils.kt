@@ -1,17 +1,22 @@
 package me.owdding.lib.utils
 
-import com.mojang.blaze3d.systems.RenderSystem
+//? < 1.21.11
+/*import com.mojang.blaze3d.systems.RenderSystem*/
+//? > 1.21.10
 import me.owdding.lib.rendering.world.RenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS
 import net.minecraft.client.CameraType
 import net.minecraft.client.gui.Font
-import net.minecraft.client.renderer.*
+import net.minecraft.client.renderer.LightTexture
+import net.minecraft.client.renderer.ShapeRenderer
 import net.minecraft.client.renderer.blockentity.BeaconRenderer
+import net.minecraft.client.renderer.rendertype.RenderTypes
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.util.ARGB
 import net.minecraft.util.Mth
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
+import net.minecraft.world.phys.shapes.Shapes
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
@@ -85,13 +90,25 @@ object RenderUtils {
         color: Int,
     ) {
         atCamera {
-            ShapeRenderer.addChainedFilledBoxVertices(
+            //? > 1.21.10 {
+            ShapeRenderer.renderShape(
+                poseStack,
+                buffer.getBuffer(BLOCK_FILL_TRIANGLE_THROUGH_WALLS),
+                Shapes.create(
+                    position.minX - 0.005, position.minY - 0.005, position.minZ - 0.005,
+                    position.maxX + 0.005, position.maxY + 0.005, position.maxZ + 0.005,
+                ),
+                0.0, 0.0, 0.0, color, 1f,
+            )
+            //?} else {
+            /*ShapeRenderer.addChainedFilledBoxVertices(
                 poseStack,
                 buffer.getBuffer(BLOCK_FILL_TRIANGLE_THROUGH_WALLS),
                 position.minX - 0.005, position.minY - 0.005, position.minZ - 0.005,
                 position.maxX + 0.005, position.maxY + 0.005, position.maxZ + 0.005,
                 ARGB.redFloat(color), ARGB.greenFloat(color), ARGB.blueFloat(color), ARGB.alphaFloat(color).coerceAtMost(0.6f),
             )
+            *///?}
         }
     }
 
@@ -105,15 +122,17 @@ object RenderUtils {
 
     fun RenderWorldEvent.render3dLine(start: Vec3, end: Vec3, color: Int, width: Float = 5f) {
         atCamera {
-            RenderSystem.lineWidth(width)
+            //? < 1.21.11
+            /*RenderSystem.lineWidth(width)*/
 
             val entry = poseStack.last()
-            val buffer = buffer.getBuffer(RenderType.lineStrip())
+            val buffer = buffer.getBuffer(RenderTypes.lines())
             val normal = end.toVector3f().sub(start.toVector3f()).normalize()
             buffer.addVertex(entry, start.toVector3f()).setColor(color).setNormal(entry, normal)
             buffer.addVertex(entry, end.toVector3f()).setColor(color).setNormal(entry, normal)
 
-            RenderSystem.lineWidth(1f)
+            //? < 1.21.11
+            /*RenderSystem.lineWidth(1f)*/
         }
     }
 

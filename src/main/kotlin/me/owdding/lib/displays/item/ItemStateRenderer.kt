@@ -3,6 +3,7 @@ package me.owdding.lib.displays.item
 
 import com.mojang.blaze3d.platform.Lighting.Entry
 import com.mojang.blaze3d.systems.RenderSystem
+import com.mojang.blaze3d.textures.FilterMode
 import com.mojang.blaze3d.textures.GpuTextureView
 import com.mojang.blaze3d.vertex.PoseStack
 import earth.terrarium.olympus.client.pipelines.pips.OlympusPictureInPictureRenderState
@@ -24,7 +25,7 @@ import org.joml.Matrix3x2f
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
-import java.util.*
+import java.util.Objects
 import java.util.function.Function
 
 class ItemStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictureRenderer<ItemStateRenderer.State>(buffer) {
@@ -61,7 +62,11 @@ class ItemStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictu
         gui.submitBlitToCurrentLayer(
             BlitRenderState(
                 RenderPipelines.GUI_TEXTURED_PREMULTIPLIED_ALPHA,
-                TextureSetup.singleTexture(this.textureView!!),
+                TextureSetup.singleTexture(
+                    this.textureView!!,
+                    //? > 1.21.10
+                    RenderSystem.getSamplerCache().getRepeat(FilterMode.LINEAR),
+                ),
                 state.pose(), state.x0(), state.y0(), state.x0() + 16, state.y0() + 16,
                 0.0F, 1.0F, 1.0F, 0.0F, -1,
                 state.scissorArea(),

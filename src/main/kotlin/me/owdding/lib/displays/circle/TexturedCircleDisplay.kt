@@ -1,5 +1,14 @@
 package me.owdding.lib.displays.circle
 
+
+//? if > 1.21.5 {
+import me.owdding.lib.displays.Display
+import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.navigation.ScreenRectangle
+import net.minecraft.resources.Identifier
+
+//?} else {
+/*import earth.terrarium.olympus.client.pipelines.PipelineRenderer
 import com.mojang.blaze3d.pipeline.RenderPipeline
 import com.mojang.blaze3d.platform.DepthTestFunction
 import com.mojang.blaze3d.shaders.UniformType
@@ -8,19 +17,12 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.Tesselator
 import com.mojang.blaze3d.vertex.VertexFormat
 import me.owdding.lib.MeowddingLib
-import me.owdding.lib.displays.Display
-import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.client.renderer.texture.AbstractTexture
-import net.minecraft.resources.ResourceLocation
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+ *///?}
 
-//? if > 1.21.5 {
-import net.minecraft.client.gui.navigation.ScreenRectangle
-//?} else
-/*import earth.terrarium.olympus.client.pipelines.PipelineRenderer*/
-
-class TexturedCircleDisplay(@JvmField val width: Int, @JvmField val height: Int, private val texture: ResourceLocation) : Display {
+class TexturedCircleDisplay(@JvmField val width: Int, @JvmField val height: Int, private val texture: Identifier) : Display {
     override fun getHeight(): Int = height
     override fun getWidth(): Int = width
 
@@ -74,7 +76,7 @@ class TexturedCircleDisplay(@JvmField val width: Int, @JvmField val height: Int,
 
 }
 
-internal fun roundedTextureDisplay(width: Int, height: Int, texture: ResourceLocation): Display {
+internal fun roundedTextureDisplay(width: Int, height: Int, texture: Identifier): Display {
     return TexturedCircleDisplay(width, height, texture)
 
 }

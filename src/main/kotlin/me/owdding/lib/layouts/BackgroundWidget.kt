@@ -7,14 +7,14 @@ import me.owdding.lib.displays.asLayer
 import me.owdding.lib.displays.asWidget
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.layouts.LayoutElement
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 class BackgroundWidget(backgroundWidget: LayoutElement, widget: LayoutElement, val padding: Int = 0) : BaseParentWidget(), ContainerBypass {
     val body = widget.asWidget()
     val background = backgroundWidget.asWidget()
 
     constructor(background: Display, widget: LayoutElement, padding: Int = 0) : this(background.asWidget(), widget, padding)
-    constructor(resourceLocation: ResourceLocation, widget: LayoutElement, padding: Int = 0) : this(
+    constructor(resourceLocation: Identifier, widget: LayoutElement, padding: Int = 0) : this(
         Displays.sprite(
             resourceLocation,
             widget.width + padding * 2,
@@ -23,7 +23,7 @@ class BackgroundWidget(backgroundWidget: LayoutElement, widget: LayoutElement, v
         widget, padding,
     )
 
-    constructor(vararg resourceLocation: ResourceLocation, widget: LayoutElement, padding: Int = 0) : this(
+    constructor(vararg resourceLocation: Identifier, widget: LayoutElement, padding: Int = 0) : this(
         resourceLocation.map {
             Displays.sprite(
                 it,
