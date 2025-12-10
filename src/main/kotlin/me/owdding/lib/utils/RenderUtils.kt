@@ -8,7 +8,7 @@ import net.minecraft.client.gui.Font
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.ShapeRenderer
 import net.minecraft.client.renderer.blockentity.BeaconRenderer
-import net.minecraft.client.renderer.rendertype.RenderType as RenderTypes
+import net.minecraft.client.renderer.rendertype.RenderTypes
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.util.ARGB
