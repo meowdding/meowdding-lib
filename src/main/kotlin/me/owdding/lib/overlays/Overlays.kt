@@ -58,7 +58,7 @@ object Overlays {
 
             if (isOverlayScreen(screen, mouseX.toInt(), mouseY.toInt()) && rect.contains(mouseX.toInt(), mouseY.toInt())) {
                 if (it.isEditingOverlay()) return@forEach
-                graphics.drawFilledBox(rect.x, rect.y, rect.right, rect.bottom, 0x50000000)
+                graphics.drawFilledBox(rect.x, rect.y, rect.width, rect.height, 0x50000000)
                 graphics.drawOutline(rect.x - 1, rect.y - 1, rect.width + 2, rect.height + 2, 0xFFFFFFFF.toInt())
                 if (it.properties.isNotEmpty()) {
                     graphics.showTooltip(
