@@ -3,6 +3,7 @@ package me.owdding.lib.displays.item
 
 import com.mojang.blaze3d.platform.Lighting.Entry
 import com.mojang.blaze3d.systems.RenderSystem
+//? > 1.21.10
 import com.mojang.blaze3d.textures.FilterMode
 import com.mojang.blaze3d.textures.GpuTextureView
 import com.mojang.blaze3d.vertex.PoseStack

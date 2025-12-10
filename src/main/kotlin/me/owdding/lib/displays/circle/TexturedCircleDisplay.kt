@@ -1,12 +1,12 @@
 package me.owdding.lib.displays.circle
 
 
-//? if > 1.21.5 {
+import net.minecraft.resources.Identifier
 import me.owdding.lib.displays.Display
 import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.client.gui.navigation.ScreenRectangle
-import net.minecraft.resources.Identifier
 
+//? if > 1.21.5 {
+import net.minecraft.client.gui.navigation.ScreenRectangle
 //?} else {
 /*import earth.terrarium.olympus.client.pipelines.PipelineRenderer
 import com.mojang.blaze3d.pipeline.RenderPipeline

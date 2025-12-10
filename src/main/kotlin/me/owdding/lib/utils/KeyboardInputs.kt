@@ -1,9 +1,9 @@
 package me.owdding.lib.utils
 
-//? if > 1.21.8
 import com.mojang.blaze3d.platform.InputConstants
 import me.owdding.ktmodules.Module
 import me.owdding.lib.platform.screens.KeyEvent
+//? if > 1.21.8
 import me.owdding.lib.platform.screens.into
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.minecraft.client.KeyMapping

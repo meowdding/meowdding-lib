@@ -1,20 +1,22 @@
 //? if > 1.21.5 {
 package me.owdding.lib.displays.circle
 
-//? if > 1.21.10
-//? if < 1.21.11
-/*import net.minecraft.client.renderer.texture.AbstractTexture*/
-//? if > 1.21.8
+//? < 1.21.11
+/*import com.mojang.blaze3d.systems.RenderSystem*/
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.Tesselator
 import com.mojang.blaze3d.vertex.VertexFormat
 import earth.terrarium.olympus.client.pipelines.renderer.PipelineRenderer
+//? > 1.21.10
 import earth.terrarium.olympus.client.utils.TextureUtils
 import me.owdding.lib.rendering.MeowddingPipState
 import net.minecraft.client.gui.navigation.ScreenRectangle
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer
 import net.minecraft.client.renderer.MultiBufferSource
+//? < 1.21.11
+/*import net.minecraft.client.renderer.texture.AbstractTexture*/
+//? > 1.21.8
 import net.minecraft.data.AtlasIds
 import net.minecraft.resources.Identifier
 import org.joml.Matrix3x2f

@@ -1,10 +1,8 @@
-@file:Suppress("unused")
-
 package me.owdding.lib.rendering.text
 
-//? if > 1.21.10 {
 import com.mojang.blaze3d.pipeline.RenderPipeline
 import me.owdding.lib.helper.TextShaderHolder
+//? > 1.21.10
 import net.minecraft.client.renderer.rendertype.RenderSetup
 import net.minecraft.client.renderer.rendertype.RenderType
 import net.minecraft.network.chat.MutableComponent
@@ -13,7 +11,7 @@ import net.minecraft.resources.Identifier
 import net.minecraft.util.Util
 import java.util.function.BiFunction
 
-//?} else {
+//? < 1.21.11 {
 /*import net.minecraft.client.renderer.rendertype.RenderType.CompositeState
 import net.minecraft.client.renderer.RenderStateShard
 import net.minecraft.client.renderer.RenderStateShard.TextureStateShard

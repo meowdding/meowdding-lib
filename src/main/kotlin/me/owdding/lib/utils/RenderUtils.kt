@@ -2,20 +2,20 @@ package me.owdding.lib.utils
 
 //? < 1.21.11
 /*import com.mojang.blaze3d.systems.RenderSystem*/
-//? > 1.21.10
 import me.owdding.lib.rendering.world.RenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS
 import net.minecraft.client.CameraType
 import net.minecraft.client.gui.Font
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.ShapeRenderer
 import net.minecraft.client.renderer.blockentity.BeaconRenderer
-import net.minecraft.client.renderer.rendertype.RenderTypes
+import net.minecraft.client.renderer.rendertype.RenderType as RenderTypes
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.util.ARGB
 import net.minecraft.util.Mth
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
+//? > 1.21.10
 import net.minecraft.world.phys.shapes.Shapes
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -25,7 +25,6 @@ import tech.thatgravyboat.skyblockapi.platform.drawString
 import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import kotlin.math.max
-
 
 object RenderUtils {
 

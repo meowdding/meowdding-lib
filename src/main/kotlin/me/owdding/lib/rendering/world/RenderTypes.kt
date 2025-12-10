@@ -1,16 +1,16 @@
 package me.owdding.lib.rendering.world
 
-//? if > 1.21.10 {
 import com.mojang.blaze3d.pipeline.RenderPipeline
 import com.mojang.blaze3d.platform.DepthTestFunction
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.VertexFormat
 import net.minecraft.client.renderer.RenderPipelines
-import net.minecraft.client.renderer.rendertype.LayeringTransform
+//? > 1.21.10 {
 import net.minecraft.client.renderer.rendertype.RenderSetup
+import net.minecraft.client.renderer.rendertype.LayeringTransform
+//?}
 import net.minecraft.client.renderer.rendertype.RenderType
 
-//?}
 
 object RenderTypes {
 

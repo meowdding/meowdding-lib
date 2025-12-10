@@ -1,7 +1,6 @@
 //? if > 1.21.5 {
 package me.owdding.lib.displays.entity
 
-//? if > 1.21.8
 import com.mojang.blaze3d.platform.Lighting
 import com.mojang.blaze3d.vertex.PoseStack
 import earth.terrarium.olympus.client.pipelines.pips.OlympusPictureInPictureRenderState
@@ -13,6 +12,7 @@ import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.entity.EntityRenderer
 import net.minecraft.client.renderer.entity.state.EntityRenderState
+//? if > 1.21.8
 import net.minecraft.client.renderer.state.CameraRenderState
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.Entity

@@ -1,8 +1,6 @@
 package me.owdding.lib.overlays
 
 import me.owdding.ktmodules.Module
-import me.owdding.lib.events.FinishRepoLoadingEvent
-import me.owdding.lib.repo.EnchantmentRepoData
 import net.minecraft.client.gui.screens.ChatScreen
 import net.minecraft.client.gui.screens.Screen
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -24,22 +22,7 @@ object Overlays {
         overlays.add(overlay)
     }
 
-    val enchantmentCategories = mutableMapOf<String, List<EnchantmentRepoData.ParsedEnchantmentData>>()
-
-    @Subscription
-    fun onRepoLoad(event: FinishRepoLoadingEvent) {
-        enchantmentCategories.clear()
-        enchantmentCategories.putAll(
-            EnchantmentRepoData.data.flatMap {
-                it.applicableTo.map { requirement ->
-                    requirement to it
-                }
-            }.groupBy { (key) -> key }.toMap().mapValues { (_, pairs) -> pairs.map { (_, data) -> data } },
-        )
-    }
-
     private fun isOverlayScreen(screen: Screen?, mouseX: Int, mouseY: Int): Boolean {
-
         return (screen is ChatScreen && !isWithinChatBounds(mouseX, mouseY)) || screen is EditOverlaysScreen
     }
 

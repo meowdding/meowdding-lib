@@ -3,17 +3,36 @@ package me.owdding.lib.mixins;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+//? > 1.21.5
 import me.owdding.lib.accessor.FontPipelineHolder;
 import me.owdding.lib.helper.TextShaderHolder;
 import me.owdding.lib.rendering.text.TextShaders;
+//? > 1.21.8
 import net.minecraft.client.gui.font.TextRenderable;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.ARGB;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+//? > 1.21.5 {
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+//?}
+
+//? < 1.21.9
+/*import net.minecraft.client.gui.font.glyphs.BakedGlyph;*/
+//? < 1.21.6 {
+/*import me.owdding.lib.helper.TextShaderMixinHelper;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import org.joml.Matrix4f;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Shadow;
+*///?}
 
 @Mixin(
     targets = /*? if > 1.21.5 {*/ "net.minecraft.client.gui.Font$PreparedTextBuilder" /*?} else {*/ /*"net.minecraft.client.gui.Font$StringRenderOutput" *//*?}*/
