@@ -4,6 +4,12 @@ import net.fabricmc.loom.task.RemapJarTask
 import net.fabricmc.loom.task.ValidateAccessWidenerTask
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.lang.classfile.Attributes.sourceFile
+import kotlin.io.path.Path
+import kotlin.io.path.absolutePathString
+import kotlin.io.path.createParentDirectories
+import kotlin.io.path.readBytes
+import kotlin.io.path.writeBytes
 
 plugins {
     idea
@@ -115,11 +121,26 @@ base {
 }
 
 tasks.named("build") {
+
+    val files = tasks.named("remapJar").map { it.outputs.files }
+    inputs.properties(
+        "project_name" to project.name,
+        "project_dir" to rootProject.projectDir.toPath().absolutePathString(),
+        "mc_version" to project.stonecutter.current.version,
+        "version" to project.version.toString(),
+        "archive_name" to archiveName
+    )
+
     doLast {
-        val sourceFile = rootProject.projectDir.resolve("versions/${project.name}/build/libs/${archiveName}-${stonecutter.current.version}-$version.jar")
-        val targetFile = rootProject.projectDir.resolve("build/libs/${archiveName}-$version-${stonecutter.current.version}.jar")
-        targetFile.parentFile.mkdirs()
-        targetFile.writeBytes(sourceFile.readBytes())
+        val from = files.get().files.first().toPath()
+        val projectDir = this.inputs.properties["project_dir"].toString()
+        val version = this.inputs.properties["version"]
+        val mcVersion = this.inputs.properties["mc_version"]
+        val archiveName = this.inputs.properties["archive_name"]
+
+        val targetFile = Path(projectDir).resolve("build/libs/${archiveName}-$version-${mcVersion}.jar")
+        targetFile.createParentDirectories()
+        targetFile.writeBytes(from.readBytes())
     }
 }
 
@@ -187,14 +208,17 @@ idea {
 tasks.withType<ValidateAccessWidenerTask> { enabled = false }
 
 tasks.named<Jar>("jar") {
+    archiveBaseName = archiveName
     archiveClassifier = "${stonecutter.current.version}-dev"
 }
 
 tasks.named<Jar>("sourcesJar") {
+    archiveBaseName = archiveName
     archiveClassifier = "${stonecutter.current.version}-sources"
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
 tasks.named<RemapJarTask>("remapJar") {
+    archiveBaseName = archiveName
     archiveClassifier = stonecutter.current.version
 }
