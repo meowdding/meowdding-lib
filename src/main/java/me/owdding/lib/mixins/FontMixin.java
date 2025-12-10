@@ -54,9 +54,11 @@ public class FontMixin {
     //? if > 1.21.5 {
     @Inject(method = "addGlyph", at = @At("HEAD"))
     private void applyGlyph(
-        //? if > 1.21.8 {
-        TextRenderable instance,
-        //?} else
+        //? > 1.21.10 {
+        TextRenderable.Styled instance,
+        //?} else if > 1.21.8 {
+        /*TextRenderable instance,
+         *///?} else
         /*BakedGlyph.GlyphInstance instance,*/
         CallbackInfo ci
     ) {
@@ -69,7 +71,7 @@ public class FontMixin {
 
     @Inject(method = "addEffect", at = @At("HEAD"))
     private void applyEffewct(
-        //? if > 1.21.8 {
+        //? > 1.21.8 {
         TextRenderable effect,
         //?} else
         /*BakedGlyph.Effect effect,*/

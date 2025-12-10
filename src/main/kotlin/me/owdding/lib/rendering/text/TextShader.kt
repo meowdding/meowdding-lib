@@ -9,6 +9,7 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Style
 import net.minecraft.resources.Identifier
 import net.minecraft.util.Util
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 import java.util.function.BiFunction
 
 //? < 1.21.11 {

@@ -9,6 +9,8 @@ import java.util.Objects;
 import me.owdding.lib.helper.TextShaderHolder;
 import me.owdding.lib.rendering.text.TextShader;
 import net.minecraft.network.chat.*;
+//? < 1.21.9
+/*import net.minecraft.resources.Identifier;*/
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -98,16 +100,14 @@ public abstract class StyleMixin implements TextShaderHolder {
         "applyFormats",
         "applyLegacyFormat",
         "applyTo"
-    }, at =
-    @At(
+    }, at = @At(
         value = "NEW",
         //? if > 1.21.8 {
         target = "(Lnet/minecraft/network/chat/TextColor;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lnet/minecraft/network/chat/ClickEvent;Lnet/minecraft/network/chat/HoverEvent;Ljava/lang/String;Lnet/minecraft/network/chat/FontDescription;)Lnet/minecraft/network/chat/Style;"
         //?} else {
         /*target = "(Lnet/minecraft/network/chat/TextColor;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lnet/minecraft/network/chat/ClickEvent;Lnet/minecraft/network/chat/HoverEvent;Ljava/lang/String;Lnet/minecraft/resources/Identifier;)Lnet/minecraft/network/chat/Style;"
        *///?}
-    )
-    )
+    ))
     public Style copy(
         TextColor textColor,
         Integer shadowColor,

@@ -1,9 +1,7 @@
 #version 150
 
-//? if > 1.21.5 {
-!moj_import <minecraft:dynamictransforms.glsl>
-!moj_import <minecraft:projection.glsl>
-//?}
+//!moj_import <minecraft:dynamictransforms.glsl>
+//!moj_import <minecraft:projection.glsl>
 
 uniform sampler2D Sampler0;
 

@@ -1,12 +1,10 @@
 #version 150
 precision highp int;
 
-//? if > 1.21.5 {
-!moj_import <minecraft:dynamictransforms.glsl>
-!moj_import <minecraft:projection.glsl>
-!moj_import <minecraft:globals.glsl>
-!moj_import <minecraft:fog.glsl>
-//?}
+//!moj_import <minecraft:dynamictransforms.glsl>
+//!moj_import <minecraft:projection.glsl>
+//!moj_import <minecraft:globals.glsl>
+//!moj_import <minecraft:fog.glsl>
 
 uniform sampler2D Sampler0;
 
@@ -69,6 +67,6 @@ void main() {
     //?} else {
     /*vec2 coords = gl_FragCoord.xy;
 
-    fragColor = vec4(SMOOTHY(float(int(coords.x + (GameTime * 24000) * 2) % 500) / 500.0).rgb, 1) * vertexColor;
+    fragColor = vec4(SMOOTHY(float(int(length(coords + (direction * GameTime * 24000 * speed) * 2)) % 500) / 500.0).rgb, 1) * vertexColor;
     *///?}
 }

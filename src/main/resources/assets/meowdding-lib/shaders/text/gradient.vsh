@@ -1,9 +1,7 @@
 #version 150
 
-//? if > 1.21.5 {
-!moj_import <minecraft:dynamictransforms.glsl>
-!moj_import <minecraft:projection.glsl>
-//?}
+//!moj_import <minecraft:dynamictransforms.glsl>
+//!moj_import <minecraft:projection.glsl>
 //!moj_import <minecraft:fog.glsl>
 
 in vec3 Position;
@@ -30,6 +28,7 @@ void main() {
     cylindricalVertexDistance = fog_cylindrical_distance(Position);
     //?} else
     /*vertexDistance = fog_distance(Position, FogShape);*/
-    vertexColor = Color * texture(Sampler0, UV2);
+
+    vertexColor = Color;
     texCoord0 = UV0;
 }
