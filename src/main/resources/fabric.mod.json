@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "meowdding-lib",
-  "version": "3.0.13",
+  "version": "${version}",
   "name": "Meowdding-Lib",
   "license": "",
   "mixins": [
