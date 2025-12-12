@@ -16,7 +16,7 @@ import net.fabricmc.loader.api.ModContainer
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.Tooltip
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import tech.thatgravyboat.skyblockapi.utils.extentions.asList
 import tech.thatgravyboat.skyblockapi.utils.extentions.asMap
 import tech.thatgravyboat.skyblockapi.utils.http.Http
@@ -51,7 +51,7 @@ internal class HiddenElement(
     val message: String?,
 ) : ResourcefulConfigElement {
     override fun search(p0: Predicate<String>): Boolean = false
-    override fun renderer(): ResourceLocation = HiddenElementRenderer.ID
+    override fun renderer(): Identifier = HiddenElementRenderer.ID
 }
 
 internal class HiddenElementRenderer(element: ResourcefulConfigElement) : ResourcefulConfigElementRenderer {
@@ -82,7 +82,7 @@ internal class HiddenElementRenderer(element: ResourcefulConfigElement) : Resour
 
     companion object {
 
-        val ID = ResourceLocation.fromNamespaceAndPath("mlib", "hidden_element_renderer")
+        val ID = Identifier.fromNamespaceAndPath("mlib", "hidden_element_renderer")
 
         fun register() {
             ResourcefulConfigUI.registerElementRenderer(

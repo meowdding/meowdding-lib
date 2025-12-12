@@ -11,7 +11,7 @@ import me.owdding.lib.rendering.text.TextShader
 import me.owdding.lib.utils.MeowddingPipelines
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.network.chat.TextColor
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.util.ARGB
 import org.joml.Vector2f
 import org.joml.Vector4f
@@ -23,7 +23,7 @@ class GradientTextShader(val gradientProvider: GradientProvider, val direction: 
     constructor(vararg colors: TextColor) : this(colors.map { it.value })
     constructor(vararg colors: TextColor, direction: Direction = Direction.RIGHT, speed: Float = 1f) : this(colors.map { it.value }, direction, speed)
 
-    override val id: ResourceLocation = ID
+    override val id: Identifier = ID
 
     override val pipeline: RenderPipeline = RenderPipelines.register(
         RenderPipeline.builder(RenderPipelines.TEXT_SNIPPET, RenderPipelines.FOG_SNIPPET, MeowddingPipelines.GAME_TIME_SNIPPET)

@@ -1,251 +1,145 @@
 @file:Suppress("UnstableApiUsage")
-@file:OptIn(ExperimentalPathApi::class)
 
-import com.google.devtools.ksp.gradle.KspTask
-import earth.terrarium.cloche.api.metadata.ModMetadata
-import me.owdding.gradle.dependency
-import net.msrandom.minecraftcodev.core.utils.toPath
-import net.msrandom.stubs.GenerateStubApi
-import org.gradle.kotlin.dsl.implementation
+import net.fabricmc.loom.task.RemapJarTask
+import net.fabricmc.loom.task.ValidateAccessWidenerTask
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.nio.file.StandardOpenOption
-import java.util.zip.ZipFile
-import kotlin.io.path.*
+import kotlin.io.path.Path
+import kotlin.io.path.absolutePathString
+import kotlin.io.path.createParentDirectories
+import kotlin.io.path.readBytes
+import kotlin.io.path.writeBytes
 
 plugins {
+    idea
     java
     kotlin("jvm") version "2.2.0"
-    alias(libs.plugins.terrarium.cloche)
-    id("maven-publish")
+    id("fabric-loom")
     alias(libs.plugins.kotlin.symbol.processor)
-    id("me.owdding.gradle") version "1.1.1"
+    alias(libs.plugins.meowdding.auto.mixins)
+    `versioned-catalogues`
 }
 
 repositories {
-    maven(url = "https://repo.hypixel.net/repository/Hypixel/")
-    maven(url = "https://maven.msrandom.net/repository/cloche")
-    maven(url = "https://maven.msrandom.net/repository/root")
-    maven(url = "https://api.modrinth.com/maven")
-    maven(url = "https://api.modrinth.com/maven")
-    maven(url = "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
-    maven(url = "https://maven.teamresourceful.com/repository/maven-public/")
-    maven(url = "https://maven.shedaniel.me/")
-    mavenLocal()
-}
+    fun scopedMaven(url: String, vararg paths: String) = maven(url) { content { paths.forEach(::includeGroupAndSubgroups) } }
 
-tasks.withType<KotlinCompile>().configureEach {
-    compilerOptions {
-        languageVersion = KotlinVersion.KOTLIN_2_2
-        freeCompilerArgs.addAll(
-            "-Xmulti-platform",
-            "-Xno-check-actual",
-            "-Xexpect-actual-classes",
-            "-Xopt-in=kotlin.time.ExperimentalTime",
-        )
-    }
-
-}
-val kspAll: Configuration by configurations.creating {
-    isCanBeResolved = true
-    isCanBeConsumed = true
+    scopedMaven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1", "me.djtheredstoner")
+    scopedMaven("https://repo.hypixel.net/repository/Hypixel", "net.hypixel")
+    scopedMaven("https://maven.parchmentmc.org/", "org.parchmentmc")
+    scopedMaven("https://api.modrinth.com/maven", "maven.modrinth")
+    scopedMaven(
+        "https://maven.teamresourceful.com/repository/maven-public/",
+        "earth.terrarium",
+        "com.teamresourceful",
+        "tech.thatgravyboat",
+        "me.owdding",
+        "com.terraformersmc"
+    )
+    scopedMaven("https://maven.nucleoid.xyz/", "eu.pb4")
+    scopedMaven(url = "https://maven.shedaniel.me/", "me.shedaniel", "dev.architectury")
+    mavenCentral()
 }
 
 dependencies {
-    kspAll(libs.meowdding.ktmodules)
-    kspAll(libs.meowdding.ktcodecs)
-    kspAll("net.msrandom:kmp-actual-stubs-processor:1.0.5-meowwwwwwwwwwwwww") {
-        version { strictly("1.0.5-meowwwwwwwwwwwwww") }
-        isTransitive = false
+
+    minecraft(versionedCatalog["minecraft"])
+    mappings(loom.layered {
+        officialMojangMappings()
+        parchment(variantOf(versionedCatalog["parchment"]) {
+            artifactType("zip")
+        })
+    })
+
+    modImplementation(versionedCatalog["fabric.api"])
+
+    includeImplementation(versionedCatalog["resourceful.config"])
+    includeImplementation(versionedCatalog["resourceful.lib"])
+    includeImplementation(versionedCatalog["placeholders"])
+    includeImplementation(versionedCatalog["olympus"])
+    includeImplementation(libs.meowdding.remote.repo)
+    modImplementation(libs.resourceful.config.kotlin)
+
+    api(libs.skyblockapi) {
+        capabilities { requireCapability("tech.thatgravyboat:skyblock-api-${stonecutter.current.version}") }
     }
+
+    includeImplementation(libs.keval, false)
+
+    modImplementation(libs.fabric.language.kotlin)
+    compileOnly(libs.fabric.loader)
 
     compileOnly(libs.meowdding.ktmodules)
     compileOnly(libs.meowdding.ktcodecs)
-    compileOnly(libs.kotlin.stdlib)
-    configurations.forEach {
-        if (it.name.startsWith("ksp") && !it.name.contains("classpath", true) && !it.name.contains("all", true)) {
-            kspAll.allDependencies.forEach { dependency -> add(it.name, dependency) }
-        }
+
+    ksp(libs.meowdding.ktmodules)
+    ksp(libs.meowdding.ktcodecs)
+
+    modImplementation(libs.hypixelapi)
+
+    include(libs.meowdding.patches)
+    includeImplementation(libs.meowdding.remote.repo)
+    includeImplementation(libs.moulberry.mixinconstraints)
+
+    compileOnly(versionedCatalog["iris"])
+    modCompileOnly(libs.rei)
+}
+
+fun DependencyHandler.includeImplementation(dep: Any, remap: Boolean = true) {
+    include(dep)
+    if (remap) modImplementation(dep) else implementation(dep)
+}
+
+val mcVersion = stonecutter.current.version.replace(".", "")
+val accessWidenerFile: File = rootProject.file("src/mlib.accesswidener")
+loom {
+    runConfigs["client"].apply {
+        ideConfigGenerated(true)
+        runDir = "../../run"
+        vmArg("-Dfabric.modsFolder=" + '"' + "${mcVersion}Mods" + '"')
+    }
+
+    if (accessWidenerFile.exists()) {
+        accessWidenerPath.set(accessWidenerFile)
     }
 }
 
-cloche {
-    metadata {
-        modId = "meowdding-lib"
-        name = "Meowdding-Lib"
-        license = ""
-        clientOnly = true
+val archiveName = "Meowdding-Lib"
 
-        custom("modmenu" to mapOf("badges" to listOf("library")))
-    }
+ksp {
+    arg("meowdding.project_name", "MeowddingLib")
+    arg("meowdding.package", "me.owdding.lib.generated")
+}
 
-    common {
-        withPublication()
-        mixins.from(
-            "src/mixins/meowdding-lib.mixins.json",
-            "src/mixins/meowdding-lib.compat.mixins.json"
-        )
-        accessWideners.from("src/main/mlib.accesswidener")
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+    withSourcesJar()
+}
 
-        dependencies {
-            compileOnly(libs.meowdding.ktcodecs)
-            compileOnly(libs.meowdding.ktmodules)
+base {
+    archivesName.set("$archiveName-${archivesName.get()}")
+}
 
-            implementation(libs.hypixelapi) // included in skyblockapi
-            implementation(libs.skyblockapi)
-            implementation(libs.placeholders) { isTransitive = false }
-            implementation(libs.resourceful.config.kotlin)
+tasks.named("build") {
 
-            compileOnly(libs.rei)
+    val files = tasks.named("remapJar").map { it.outputs.files }
+    inputs.properties(
+        "project_name" to project.name,
+        "project_dir" to rootProject.projectDir.toPath().absolutePathString(),
+        "mc_version" to project.stonecutter.current.version,
+        "version" to project.version.toString(),
+        "archive_name" to archiveName
+    )
 
-            implementation(libs.fabric.language.kotlin)
-            include("com.moulberry:mixinconstraints:1.0.8")
-            implementation("com.moulberry:mixinconstraints:1.0.8")
-        }
-    }
+    doLast {
+        val from = files.get().files.first().toPath()
+        val projectDir = this.inputs.properties["project_dir"].toString()
+        val version = this.inputs.properties["version"]
+        val mcVersion = this.inputs.properties["mc_version"]
+        val archiveName = this.inputs.properties["archive_name"]
 
-    fun createVersion(
-        name: String,
-        version: String = name,
-        loaderVersion: Provider<String> = libs.versions.fabric.loader,
-        fabricApiVersion: Provider<String> = libs.versions.fabric.api,
-        endAtSameVersion: Boolean = true,
-        minecraftVersionRange: ModMetadata.VersionRange.() -> Unit = {
-            start = version
-            if (endAtSameVersion) {
-                end = version
-                endExclusive = false
-            }
-        },
-        dependencies: MutableMap<String, Provider<MinimalExternalModuleDependency>>.() -> Unit = { },
-    ) {
-        val dependencies = mutableMapOf<String, Provider<MinimalExternalModuleDependency>>().apply(dependencies)
-        val rlib = dependencies["resourcefullib"]!!
-        val rconfig = dependencies["resourcefulconfig"]!!
-        val olympus = dependencies["olympus"]!!
-        val iris = dependencies["iris"]!!
-
-        fabric("versions:$name") {
-            includedClient()
-            minecraftVersion = version
-            this.loaderVersion = loaderVersion.get()
-
-            accessWideners.from(project.layout.projectDirectory.file("src/versions/$name/${name.replace(".", "")}.accesswidener"))
-
-            mixins.from("src/mixins/meowdding-lib.${name.replace(".", "")}.mixins.json")
-
-            metadata {
-                entrypoint("client") {
-                    adapter = "kotlin"
-                    value = "me.owdding.lib.MeowddingLib"
-                }
-                entrypoint("rei_client") {
-                    adapter = "kotlin"
-                    value = "me.owdding.lib.compat.REICompatability"
-                }
-
-                dependency {
-                    modId = "minecraft"
-                    required = true
-                    version(minecraftVersionRange)
-                }
-                dependency("fabric")
-                dependency("fabricloader", libs.versions.fabric.loader)
-                dependency("fabric-language-kotlin", libs.versions.fabric.language.kotlin)
-                dependency("resourcefullib", rlib.map { it.version!! })
-                dependency("olympus", olympus.map { it.version!! })
-                dependency("skyblock-api", libs.versions.skyblockapi)
-                dependency("placeholder-api", libs.versions.placeholders)
-
-            }
-
-            dependencies {
-                fabricApi(fabricApiVersion, name)
-                implementation(olympus)
-                implementation(rlib)
-                api(libs.meowdding.remote.repo)
-                compileOnly(rconfig)
-                localRuntime(rconfig)
-                api(libs.keval)
-
-                compileOnly(iris)
-
-                include(libs.keval)
-                include(rlib) { isTransitive = false }
-                include(libs.meowdding.remote.repo)
-                include(olympus) { isTransitive = false }
-                include(libs.placeholders) { isTransitive = false }
-                include(libs.meowdding.patches)
-
-                val mods = project.layout.buildDirectory.get().toPath().resolve("tmp/extracted${sourceSet.name}RuntimeMods")
-                val modsTmp = project.layout.buildDirectory.get().toPath().resolve("tmp/extracted${sourceSet.name}RuntimeMods/tmp")
-
-                mods.deleteRecursively()
-                modsTmp.createDirectories()
-                mods.createDirectories()
-
-                fun extractMods(file: java.nio.file.Path) {
-                    println("Adding runtime mod ${file.name}")
-                    val extracted = mods.resolve(file.name)
-                    file.copyTo(extracted, overwrite = true)
-                    if (!file.fileName.endsWith(".disabled.jar")) {
-                        modRuntimeOnly(files(extracted))
-                    }
-                    ZipFile(extracted.toFile()).use {
-                        it.entries().asIterator().forEach { file ->
-                            val name = file.name.replace(File.separator, "/")
-                            if (name.startsWith("META-INF/jars/") && name.endsWith(".jar")) {
-                                val data = it.getInputStream(file).readAllBytes()
-                                val file = modsTmp.resolve(name.substringAfterLast("/"))
-                                file.writeBytes(data, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE)
-                                extractMods(file)
-                            }
-                        }
-                    }
-                }
-
-                project.layout.projectDirectory.toPath().resolve("run/${sourceSet.name}Mods").takeIf { it.exists() }
-                    ?.listDirectoryEntries()?.filter { it.isRegularFile() }?.forEach { file ->
-                        extractMods(file)
-                    }
-
-                modsTmp.deleteRecursively()
-            }
-
-            runs {
-                client {
-                    jvmArgs("-Dmeowdding.overlay.test=true")
-                }
-            }
-        }
-    }
-
-    createVersion("1.21.5", fabricApiVersion = provider { "0.127.1" }) {
-        this["resourcefullib"] = libs.resourceful.lib1215
-        this["resourcefulconfig"] = libs.resourceful.config1215
-        this["olympus"] = libs.olympus.lib1215
-        this["iris"] = libs.iris1215
-    }
-    createVersion("1.21.8", minecraftVersionRange = {
-        start = "1.21.6"
-        end = "1.21.8"
-        endExclusive = false
-    }) {
-        this["resourcefullib"] = libs.resourceful.lib1218
-        this["resourcefulconfig"] = libs.resourceful.config1218
-        this["olympus"] = libs.olympus.lib1218
-        this["iris"] = libs.iris1218
-    }
-    createVersion("1.21.9", endAtSameVersion = false, fabricApiVersion = provider { "0.133.7" }) {
-        this["resourcefullib"] = libs.resourceful.lib1219
-        this["resourcefulconfig"] = libs.resourceful.config1219
-        this["olympus"] = libs.olympus.lib1219
-        this["iris"] = libs.iris1219
-    }
-
-    mappings {
-        official()
+        val targetFile = Path(projectDir).resolve("build/libs/${archiveName}-$version-${mcVersion}.jar")
+        targetFile.createParentDirectories()
+        targetFile.writeBytes(from.readBytes())
     }
 }
 
@@ -256,63 +150,74 @@ tasks.withType<JavaCompile>().configureEach {
 
 tasks.withType<KotlinCompile>().configureEach {
     compilerOptions.jvmTarget.set(JvmTarget.JVM_21)
+    compilerOptions.optIn.add("kotlin.time.ExperimentalTime")
+    compilerOptions.freeCompilerArgs.addAll(
+        "-Xcontext-parameters",
+        "-Xcontext-sensitive-resolution",
+        "-Xnullability-annotations=@org.jspecify.annotations:warn"
+    )
 }
 
-tasks.withType<KspTask> {
-    outputs.upToDateWhen { false }
-}
+tasks.processResources {
+    val replacements = mapOf(
+        "version" to version,
+        "minecraft_start" to versionedCatalog.versions.getOrFallback("minecraft.start", "minecraft"),
+        "minecraft_end" to versionedCatalog.versions.getOrFallback("minecraft.end", "minecraft"),
+        "fabric_lang_kotlin" to libs.versions.fabric.language.kotlin.get(),
+        "sbapi" to libs.versions.skyblockapi.get(),
+        "rlib" to versionedCatalog.versions["resourceful.lib"],
+        "olympus" to versionedCatalog.versions["olympus"],
+        "placeholder_api" to versionedCatalog.versions["placeholders"]
+    )
+    inputs.properties(replacements)
 
-tasks.withType<Jar> {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-
-java {
-    withSourcesJar()
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            from(components["java"])
-
-            pom {
-                name.set("MeowddingLib")
-                url.set("https://github.com/meowdding/meowdding-lib")
-
-                scm {
-                    connection.set("git:https://github.com/meowdding/meowdding-lib.git")
-                    developerConnection.set("git:https://github.com/meowdding/meowdding-lib.git")
-                    url.set("https://github.com/meowdding/meowdding-lib")
-                }
-            }
-        }
-    }
-    repositories {
-        maven {
-            setUrl("https://maven.teamresourceful.com/repository/thatgravyboat/")
-            credentials {
-                username = System.getenv("MAVEN_USER") ?: providers.gradleProperty("maven_username").orNull
-                password = System.getenv("MAVEN_PASS") ?: providers.gradleProperty("maven_password").orNull
-            }
-        }
+    filesMatching("fabric.mod.json") {
+        expand(replacements)
     }
 }
 
-tasks.named("createCommonApiStub", GenerateStubApi::class) {
-    excludes.add(libs.skyblockapi.get().module.toString())
-    excludes.add("com.notkamui")
+autoMixins {
+    mixinPackage = "me.owdding.lib.mixins"
+    projectName = "meowdding-lib"
 }
 
-ksp {
-    this@ksp.excludedSources.from(sourceSets.getByName("versions1215").kotlin.srcDirs)
-    this@ksp.excludedSources.from(sourceSets.getByName("versions1218").kotlin.srcDirs)
-    this@ksp.excludedSources.from(sourceSets.getByName("versions1219").kotlin.srcDirs)
-    arg("actualStubDir", project.layout.buildDirectory.dir("generated/ksp/main/stubs").get().asFile.absolutePath)
+tasks.withType<ProcessResources>().configureEach {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    filesMatching(listOf("**/*.fsh", "**/*.vsh")) {
+        // `#` is used for all versions, `!` is used for multiversioned imports
+        filter { if (it.startsWith("//#moj_import") || it.startsWith("//!moj_import")) "#${it.substring(3)}" else it }
+    }
+    with(copySpec {
+        from(rootProject.file("src/lang")).include("*.json").into("assets/meowdding-lib/lang")
+    })
+    with(copySpec {
+        from(accessWidenerFile)
+    })
 }
 
-meowdding {
-    setupClocheClasspathFix()
-    projectName = "MeowddingLib"
-    generatedPackage = "me.owdding.lib.generated"
-    hasAccessWideners = true
+idea {
+    module {
+        isDownloadJavadoc = true
+        isDownloadSources = true
+
+        excludeDirs.add(file("run"))
+    }
+}
+
+tasks.withType<ValidateAccessWidenerTask> { enabled = false }
+
+tasks.named<Jar>("jar") {
+    archiveBaseName = archiveName
+    archiveClassifier = "${stonecutter.current.version}-dev"
+}
+
+tasks.named<Jar>("sourcesJar") {
+    archiveBaseName = archiveName
+    archiveClassifier = "${stonecutter.current.version}-sources"
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+tasks.named<RemapJarTask>("remapJar") {
+    archiveBaseName = archiveName
+    archiveClassifier = stonecutter.current.version
 }

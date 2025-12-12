@@ -2,10 +2,10 @@ package me.owdding.lib.displays
 
 import com.mojang.blaze3d.vertex.PoseStack
 import earth.terrarium.olympus.client.images.BuiltinImageProviders
+import me.owdding.lib.displays.circle.roundedTextureDisplay
 import me.owdding.lib.extensions.floor
 import me.owdding.lib.layouts.ScalableWidget
 import me.owdding.lib.platform.PlatformDisplays
-import net.minecraft.Util
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.PlayerFaceRenderer
 import net.minecraft.client.gui.components.Renderable
@@ -14,13 +14,13 @@ import net.minecraft.locale.Language
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.FormattedText
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.util.FormattedCharSequence
 import net.minecraft.util.Mth
+import net.minecraft.util.Util
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.ItemLike
-import net.msrandom.stub.Stub
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.platform.*
@@ -33,11 +33,7 @@ import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin
 
-
 private const val NO_SPLIT = -1
-
-@Stub
-internal expect fun roundedTextureDisplay(width: Int, height: Int, texture: ResourceLocation): Display
 
 object Displays {
 
@@ -88,7 +84,7 @@ object Displays {
         }
     }
 
-    fun background(sprite: ResourceLocation, display: Display, color: Int = -1): Display {
+    fun background(sprite: Identifier, display: Display, color: Int = -1): Display {
         return object : Display {
             override fun getWidth() = display.getWidth()
             override fun getHeight() = display.getHeight()
@@ -117,7 +113,7 @@ object Displays {
         }
     }
 
-    fun background(sprite: ResourceLocation, width: Int, height: Int): Display {
+    fun background(sprite: Identifier, width: Int, height: Int): Display {
         return background(sprite, empty(width, height))
     }
 
@@ -160,7 +156,7 @@ object Displays {
         }
     }
 
-    fun face(texture: () -> ResourceLocation, size: Int = 8): Display {
+    fun face(texture: () -> Identifier, size: Int = 8): Display {
         return object : Display {
             override fun getWidth(): Int = size
             override fun getHeight(): Int = size
@@ -171,7 +167,7 @@ object Displays {
         }
     }
 
-    fun sprite(sprite: ResourceLocation, width: Int, height: Int): Display {
+    fun sprite(sprite: Identifier, width: Int, height: Int): Display {
         return object : Display {
             override fun getWidth() = width
             override fun getHeight() = height
@@ -477,5 +473,5 @@ object Displays {
         ) && showTooltips
     }
 
-    fun circleTexture(width: Int, height: Int, resourceLocation: ResourceLocation) = roundedTextureDisplay(width, height, resourceLocation)
+    fun circleTexture(width: Int, height: Int, resourceLocation: Identifier) = roundedTextureDisplay(width, height, resourceLocation)
 }

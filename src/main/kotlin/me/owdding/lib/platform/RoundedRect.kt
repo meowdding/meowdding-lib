@@ -1,10 +1,9 @@
 package me.owdding.lib.platform
 
+import earth.terrarium.olympus.client.pipelines.RoundedRectangle
 import net.minecraft.client.gui.GuiGraphics
-import net.msrandom.stub.Stub
 
-@Stub
-expect fun GuiGraphics.drawRoundedRectangle(
+fun GuiGraphics.drawRoundedRectangle(
     x: Int,
     y: Int,
     width: Int,
@@ -13,4 +12,11 @@ expect fun GuiGraphics.drawRoundedRectangle(
     borderColor: UInt,
     borderRadius: Float,
     borderWidth: Int,
-)
+) {
+    //? 1.21.5 {
+    /*RoundedRectangle.drawRelative(
+    *///?} else
+    RoundedRectangle.draw(
+        this, x, y, width, height, backgroundColor.toInt(), borderColor.toInt(), borderRadius, borderWidth
+    )
+}

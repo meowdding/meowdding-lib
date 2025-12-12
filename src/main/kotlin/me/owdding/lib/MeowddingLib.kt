@@ -11,7 +11,7 @@ import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.repo.RemoteRepo
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.loader.api.FabricLoader
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
@@ -89,7 +89,7 @@ object MeowddingLib : ClientModInitializer, MeowddingLogger by MeowddingLogger.a
         }
     }
 
-    fun id(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(MOD_ID, path)
+    fun id(path: String): Identifier = Identifier.fromNamespaceAndPath(MOD_ID, path)
 }
 
 @AutoCollect("PreInitModules")
