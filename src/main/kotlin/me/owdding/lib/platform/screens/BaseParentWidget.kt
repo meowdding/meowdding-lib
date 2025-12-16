@@ -39,7 +39,7 @@ abstract class BaseParentWidget : BaseParentWidget {
         /*super.onDrag(event.x, event.y, deltaX, deltaY)*/
     }
 
-    open fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+    open fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean = false): Boolean {
         //? > 1.21.8 {
         return super.mouseClicked(event.into(), doubleClick)
         //?} else
