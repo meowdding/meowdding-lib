@@ -18,11 +18,11 @@ uniform float FogStart;
 uniform float FogEnd;
 uniform vec4 FogColor;
 uniform float GameTime;
+*///?}
 
-in float vertexDistance;
-*///?} else {
-
-
+//? if 1.21.5 {
+/*in float vertexDistance;*/
+//?} else {
 in float sphericalVertexDistance;
 in float cylindricalVertexDistance;
 //?}
