@@ -16,7 +16,7 @@ abstract class Overlay(parent: Screen?) : Overlay(parent) {
     private var lastButton = 0
     *///?}
 
-    open fun mouseClicked(mouseEvent: MouseButtonEvent, doubleClicked: Boolean): Boolean {
+    open fun mouseClicked(mouseEvent: MouseButtonEvent, doubleClicked: Boolean = false): Boolean {
         //? if > 1.21.8 {
         return super.mouseClicked(mouseEvent.into(), doubleClicked)
         //?} else

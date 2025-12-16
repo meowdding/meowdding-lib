@@ -18,7 +18,7 @@ abstract class BaseParentWidget : BaseParentWidget {
     private var lastButton = 0
      *///?}
 
-    open fun onClick(event: MouseButtonEvent, doubleClick: Boolean) {
+    open fun onClick(event: MouseButtonEvent, doubleClick: Boolean = false) {
         //? if > 1.21.8 {
         super.onClick(event.into(), doubleClick)
         //?} else
