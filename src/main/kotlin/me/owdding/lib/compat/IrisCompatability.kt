@@ -7,6 +7,7 @@ import me.owdding.lib.utils.KnownMods
 import net.irisshaders.iris.api.v0.IrisApi
 import net.irisshaders.iris.api.v0.IrisProgram
 import net.minecraft.client.renderer.rendertype.RenderType
+import net.minecraft.client.renderer.rendertype.RenderTypes as MinecraftRenderTypes
 
 interface IrisCompatability {
     fun registerPipeline(renderPipeline: RenderPipeline, shaderType: IrisShaderType) {}
@@ -26,6 +27,7 @@ interface IrisCompatability {
         init {
             registerRenderType(RenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS, IrisShaderType.BASIC)
             registerRenderType(RenderTypes.BLOCK_FILL_QUAD, IrisShaderType.BASIC)
+            registerRenderType(MinecraftRenderTypes.debugFilledBox(), IrisShaderType.BASIC)
         }
     }
 }
