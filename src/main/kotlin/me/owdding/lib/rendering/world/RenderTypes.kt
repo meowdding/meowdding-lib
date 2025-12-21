@@ -66,4 +66,31 @@ object RenderTypes {
     )
 *///?}
 
+
+    private val debugFilledBox = RenderPipeline.builder(RenderPipelines.DEBUG_FILLED_SNIPPET)
+        .withLocation("pipeline/debug_filled_box")
+        .build()
+
+    val DEBUG_FILLED_BOX =
+        //? if > 1.21.10 {
+        RenderType.create(
+            "mlib/debug_filled_box",
+            RenderSetup.builder(debugFilledBox)
+                .sortOnUpload()
+                .setLayeringTransform(LayeringTransform.VIEW_OFFSET_Z_LAYERING)
+                .createRenderSetup(),
+        )
+    //?} else {
+    /*RenderType.create(
+        "mlib/debug_filled_box",
+        1536,
+        false,
+        true,
+        debugFilledBox,
+        RenderType.CompositeState.builder()
+            .setLayeringState(RenderType.VIEW_OFFSET_Z_LAYERING)
+            .createCompositeState(false),
+    )
+     */
+    //?}
 }

@@ -26,6 +26,7 @@ interface IrisCompatability {
         init {
             registerRenderType(RenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS, IrisShaderType.BASIC)
             registerRenderType(RenderTypes.BLOCK_FILL_QUAD, IrisShaderType.BASIC)
+            registerRenderType(RenderTypes.DEBUG_FILLED_BOX, IrisShaderType.BASIC)
         }
     }
 }
