@@ -67,7 +67,6 @@ object RenderTypes {
 *///?}
 
 
-    // Not sure if this is needed, this is an exact copy of the DEBUG_FILLED_BOX pipeline
     private val debugFilledBox = RenderPipeline.builder(RenderPipelines.DEBUG_FILLED_SNIPPET)
         .withLocation("pipeline/debug_filled_box")
         .build()
