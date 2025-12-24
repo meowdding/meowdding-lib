@@ -56,14 +56,14 @@ dependencies {
     includeImplementation(versionedCatalog["resourceful.lib"])
     includeImplementation(versionedCatalog["placeholders"])
     includeImplementation(versionedCatalog["olympus"])
-    includeImplementation(libs.meowdding.remote.repo)
+    includeImplementation(libs.meowdding.remote.repo, remap = false)
     modImplementation(libs.resourceful.config.kotlin)
 
     api(libs.skyblockapi) {
         capabilities { requireCapability("tech.thatgravyboat:skyblock-api-${stonecutter.current.version}") }
     }
 
-    includeImplementation(libs.keval, false)
+    includeImplementation(libs.keval, remap = false)
 
     modImplementation(libs.fabric.language.kotlin)
     compileOnly(libs.fabric.loader)
@@ -77,16 +77,19 @@ dependencies {
     modImplementation(libs.hypixelapi)
 
     include(libs.meowdding.patches)
-    includeImplementation(libs.meowdding.remote.repo)
     includeImplementation(libs.moulberry.mixinconstraints)
 
     compileOnly(versionedCatalog["iris"])
     modCompileOnly(libs.rei)
 }
 
-fun DependencyHandler.includeImplementation(dep: Any, remap: Boolean = true) {
+fun DependencyHandler.includeImplementation(dep: Any, transitive: Boolean = true, remap: Boolean = true) {
     include(dep)
-    if (remap) modImplementation(dep) else implementation(dep)
+    when {
+        transitive && !remap -> api(dep)
+        remap -> modImplementation(dep)
+        else -> implementation(dep)
+    }
 }
 
 val mcVersion = stonecutter.current.version.replace(".", "")
