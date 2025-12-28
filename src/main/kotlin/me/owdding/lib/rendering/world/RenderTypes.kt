@@ -40,6 +40,31 @@ object RenderTypes {
     )
 *///?}
 
+    private val linesThroughWalls = RenderPipeline.builder(RenderPipelines.LINES_SNIPPET)
+        .withLocation("pipeline/lines")
+        .withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST)
+        .build()
+
+    val NO_DEPTH_LINES: RenderType =
+        //? if > 1.21.10 {
+        RenderType.create(
+            "mlib/lines/through_walls",
+            RenderSetup.builder(linesThroughWalls)
+                .setLayeringTransform(LayeringTransform.VIEW_OFFSET_Z_LAYERING)
+                .bufferSize(1536)
+                .createRenderSetup()
+        )
+    //?} else {
+    /*RenderType.create(
+        "mlib/lines/through_walls",
+        1536,
+        linesThroughWalls,
+        RenderType.CompositeState.builder()
+            .setLayeringState(RenderType.VIEW_OFFSET_Z_LAYERING)
+            .createCompositeState(false),
+    )
+*///?}
+
     private val blockFillQuad = RenderPipeline.builder(RenderPipelines.DEBUG_FILLED_SNIPPET)
         .withLocation("pipeline/debug_filled_box")
         .withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS)
@@ -91,6 +116,6 @@ object RenderTypes {
             .setLayeringState(RenderType.VIEW_OFFSET_Z_LAYERING)
             .createCompositeState(false),
     )
-     */
-    //?}
+     
+    *///?}
 }
