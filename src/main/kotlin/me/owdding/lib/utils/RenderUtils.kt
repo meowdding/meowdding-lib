@@ -3,19 +3,20 @@ package me.owdding.lib.utils
 //? < 1.21.11
 /*import com.mojang.blaze3d.systems.RenderSystem*/
 import me.owdding.lib.rendering.world.RenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS
+import me.owdding.lib.rendering.world.RenderTypes.NO_DEPTH_LINES
 import net.minecraft.client.CameraType
 import net.minecraft.client.gui.Font
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.ShapeRenderer
 import net.minecraft.client.renderer.blockentity.BeaconRenderer
-import net.minecraft.client.renderer.rendertype.RenderTypes
+import net.minecraft.client.renderer.rendertype.RenderType as RenderTypes
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.util.ARGB
 import net.minecraft.util.Mth
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
-//? > 1.21.10
+
 import net.minecraft.world.phys.shapes.Shapes
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -25,6 +26,13 @@ import tech.thatgravyboat.skyblockapi.platform.drawString
 import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import kotlin.math.max
+
+@Suppress("unused")
+enum class OutlineType(val outline: Boolean = false, val fill: Boolean = false) {
+    OUTLINE(outline = true),
+    FILL(fill = true),
+    FILL_OUTLINE(outline = true, fill = true),
+}
 
 object RenderUtils {
 
@@ -67,6 +75,38 @@ object RenderUtils {
                 backgroundColor = 0x70000000.toUInt(),
                 light = LightTexture.FULL_BRIGHT,
             )
+        }
+    }
+
+    fun RenderWorldEvent.renderBox(
+        aabb: AABB,
+        outlineType: OutlineType,
+        color: Int,
+        lineWidth: Float = 1f,
+        fillMaxAlpha: Int = 100,
+    ) {
+        atCamera {
+            val shape = Shapes.create(
+                aabb.minX - 0.005, aabb.minY - 0.005, aabb.minZ - 0.005,
+                aabb.maxX + 0.005, aabb.maxY + 0.005, aabb.maxZ + 0.005,
+            )
+            if (outlineType.fill) {
+                val fillColor = ARGB.color(ARGB.alpha(color).coerceAtMost(fillMaxAlpha), color)
+                ShapeRenderer.renderShape(
+                    poseStack,
+                    buffer.getBuffer(BLOCK_FILL_TRIANGLE_THROUGH_WALLS),
+                    shape,
+                    0.0, 0.0, 0.0, fillColor, /*? if > 1.21.10 {*/ 1f, /*?}*/
+                )
+            }
+            if (outlineType.outline) {
+                ShapeRenderer.renderShape(
+                    poseStack,
+                    buffer.getBuffer(NO_DEPTH_LINES),
+                    shape,
+                    0.0, 0.0, 0.0, color, /*? if > 1.21.10 {*/ lineWidth, /*?}*/
+                )
+            }
         }
     }
 
