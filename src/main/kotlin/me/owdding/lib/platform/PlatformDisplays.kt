@@ -27,8 +27,6 @@ import kotlin.math.atan
 //? if > 1.21.5 {
 import me.owdding.lib.displays.entity.EntityStateRenderer
 import me.owdding.lib.displays.item.ItemStateRenderer
-
-//?}
 //?} else
 /*import net.minecraft.client.gui.screens.inventory.InventoryScreen*/
 
