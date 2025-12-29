@@ -5,12 +5,11 @@ import com.mojang.blaze3d.platform.DepthTestFunction
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.VertexFormat
 import net.minecraft.client.renderer.RenderPipelines
-//? > 1.21.10
+//? > 1.21.10 {
 import net.minecraft.client.renderer.rendertype.LayeringTransform
 import net.minecraft.client.renderer.rendertype.RenderSetup
 //?}
 import net.minecraft.client.renderer.rendertype.RenderType
-
 
 object RenderTypes {
 
@@ -91,6 +90,5 @@ object RenderTypes {
             .setLayeringState(RenderType.VIEW_OFFSET_Z_LAYERING)
             .createCompositeState(false),
     )
-     
-    *///?}
+*///?}
 }
