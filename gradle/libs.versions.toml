@@ -12,7 +12,7 @@ gson = "2.12.1"
 resourceful-config-kotlin = "3.5.15"
 
 # Dependencies
-skyblockapi = "4.0.0-beta.5"
+skyblockapi = "4.0.2"
 hypixelapi = "1.0.1+build.1+mc1.21"
 placeholders = "2.6.1+1.21.5"
 rei = "20.0.811"

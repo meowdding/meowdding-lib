@@ -1,15 +1,15 @@
 package me.owdding.lib.platform
 
+//? if > 1.21.5 {
 import com.mojang.blaze3d.vertex.PoseStack
 import me.owdding.lib.displays.Display
 import me.owdding.lib.displays.Displays.isMouseOver
+import me.owdding.lib.displays.entity.EntityStateRenderer
+import me.owdding.lib.displays.item.ItemStateRenderer
 import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.client.gui.screens.inventory.InventoryScreen
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.TooltipFlag
 import org.joml.Quaternionf
 import org.joml.RoundingMode
 import org.joml.Vector2f
@@ -17,23 +17,18 @@ import org.joml.Vector2i
 import org.joml.Vector3f
 import org.joml.component1
 import org.joml.component2
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
-import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
-import tech.thatgravyboat.skyblockapi.platform.drawString
-import tech.thatgravyboat.skyblockapi.platform.getScale
-import tech.thatgravyboat.skyblockapi.platform.pushPop
-import tech.thatgravyboat.skyblockapi.platform.scale
-import tech.thatgravyboat.skyblockapi.platform.showTooltip
-import tech.thatgravyboat.skyblockapi.platform.translate
+import tech.thatgravyboat.skyblockapi.platform.*
 import tech.thatgravyboat.skyblockapi.utils.extentions.scaled
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import java.lang.Math
+import java.lang.System
 import kotlin.math.atan
 
-//? if > 1.21.5 {
-import me.owdding.lib.displays.entity.EntityStateRenderer
-import me.owdding.lib.displays.item.ItemStateRenderer
-//?}
+//?} else
+/*import net.minecraft.client.gui.screens.inventory.InventoryScreen*/
 
 internal object PlatformDisplays {
     fun entity(
@@ -131,16 +126,10 @@ internal object PlatformDisplays {
                 if (showTooltip && !item.isEmpty) {
                     val player = McPlayer.self
                     if (isMouseOver(this, graphics) && player != null) {
-                        graphics.showTooltip(
-                            Text.multiline(
-                                item.getTooltipLines(
-                                    Item.TooltipContext.of(McLevel.self),
-                                    player,
-                                    TooltipFlag.NORMAL,
-                                ),
-                            ),
-                            1000,
-                        )
+                        //? > 1.21.5 {
+                        graphics.setTooltipForNextFrame(McFont.self, item, McClient.mouse.first.toInt(), McClient.mouse.second.toInt())
+                        //?} else
+                        /*graphics.renderTooltip(McFont.self, item, McClient.mouse.first.toInt(), McClient.mouse.second.toInt())*/
                     }
                 }
 

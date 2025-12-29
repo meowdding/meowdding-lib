@@ -21,8 +21,8 @@ uniform float GameTime;
 *///?}
 
 //? if 1.21.5 {
-/*in float vertexDistance;*/
-//?} else {
+/*in float vertexDistance;
+*///?} else {
 in float sphericalVertexDistance;
 in float cylindricalVertexDistance;
 //?}

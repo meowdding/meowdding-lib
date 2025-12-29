@@ -11,12 +11,12 @@ import org.spongepowered.asm.mixin.Unique;
     "net.minecraft.client.gui.Font$PreparedTextBuilder",
 
     //? if < 1.21.9 {
-    //"net.minecraft.client.gui.font.glyphs.BakedGlyph$GlyphInstance",
-    //"net.minecraft.client.gui.font.glyphs.BakedGlyph$Effect",
-    //? } else {
+    /*"net.minecraft.client.gui.font.glyphs.BakedGlyph$GlyphInstance",
+    "net.minecraft.client.gui.font.glyphs.BakedGlyph$Effect",
+    *///?} else {
     "net.minecraft.client.gui.font.glyphs.BakedSheetGlyph$GlyphInstance",
     "net.minecraft.client.gui.font.glyphs.BakedSheetGlyph$EffectInstance",
-    //? }
+    //?}
 })
 public class FontPipelineHolderMixin implements FontPipelineHolder {
 
