@@ -1,11 +1,8 @@
 package me.owdding.lib.platform
 
-//? if > 1.21.5 {
 import com.mojang.blaze3d.vertex.PoseStack
 import me.owdding.lib.displays.Display
 import me.owdding.lib.displays.Displays.isMouseOver
-import me.owdding.lib.displays.entity.EntityStateRenderer
-import me.owdding.lib.displays.item.ItemStateRenderer
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.LivingEntity
@@ -27,6 +24,11 @@ import java.lang.Math
 import java.lang.System
 import kotlin.math.atan
 
+//? if > 1.21.5 {
+import me.owdding.lib.displays.entity.EntityStateRenderer
+import me.owdding.lib.displays.item.ItemStateRenderer
+
+//?}
 //?} else
 /*import net.minecraft.client.gui.screens.inventory.InventoryScreen*/
 
