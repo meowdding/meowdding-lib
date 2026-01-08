@@ -10,6 +10,12 @@ plugins {
 
 stonecutter active "1.21.11"
 
+stonecutter handlers {
+    configure("fsh", "vsh") {
+        commenter = line("//")
+    }
+}
+
 stonecutter parameters {
     swaps["mod_version"] = "\"" + property("version") + "\";"
     swaps["minecraft"] = "\"" + node.metadata.version + "\";"
