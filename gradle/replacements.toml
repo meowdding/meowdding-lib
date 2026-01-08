@@ -21,17 +21,17 @@ to = "import net.minecraft.util.ResourceLocationPattern as IdentifierPattern"
 reverseRegex = "import net.minecraft.util.ResourceLocationPattern as IdentifierPattern"
 reverse = "import net.minecraft.util.IdentifierPattern"
 
-[criterion]
-type = "string"
-condition = "< 1.21.11"
-from = "import net.minecraft.advancements.criterion"
-to = "import net.minecraft.advancements.critereon"
-
 [render_type]
 type = "string"
 condition = "< 1.21.11"
 from = "import net.minecraft.client.renderer.rendertype.RenderType"
 to = "import net.minecraft.client.renderer.RenderType"
+
+[criterion]
+type = "string"
+condition = "< 1.21.11"
+from = "import net.minecraft.advancements.criterion"
+to = "import net.minecraft.advancements.critereon"
 
 [util]
 type = "string"
@@ -44,5 +44,5 @@ type = "regex"
 condition = "< 1.21.11"
 regex = "import net.minecraft.client.renderer.RenderTypes(?!;)"
 to = "import net.minecraft.client.renderer.RenderType as RenderTypes"
-reverseRegex = "import net.minecraft.client.renderer.RenderType as RenderTypes"
-reverse = "import net.minecraft.client.renderer.RenderTypes"
+reverseRegex = "import net.minecraft.client.renderer.rendertype.RenderType as RenderTypes"
+reverse = "import net.minecraft.client.renderer.rendertype.RenderTypes"

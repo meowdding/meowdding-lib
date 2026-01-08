@@ -10,7 +10,7 @@ import me.owdding.lib.helper.TextShaderHolder;
 import me.owdding.lib.rendering.text.TextShader;
 import net.minecraft.network.chat.*;
 //? < 1.21.9
-/*import net.minecraft.resources.Identifier;*/
+//import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -31,7 +31,7 @@ public abstract class StyleMixin implements TextShaderHolder {
     //? if > 1.21.8 {
     FontDescription font;
     //?} else
-    /*Identifier font;*/
+    //Identifier font;
     @Shadow
     @Final
     @Nullable

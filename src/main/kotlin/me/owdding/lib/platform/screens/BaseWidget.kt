@@ -23,42 +23,42 @@ abstract class BaseWidget : BaseWidget {
         //? if > 1.21.8 {
         super.onClick(event.into(), doubleClick)
         //?} else
-        /*super.onClick(event.x, event.y)*/
+        //super.onClick(event.x, event.y)
     }
 
     open fun onRelease(event: MouseButtonEvent) {
         //? if > 1.21.8 {
         super.onRelease(event.into())
         //?} else
-        /*super.onRelease(event.x, event.y)*/
+        //super.onRelease(event.x, event.y)
     }
 
     open fun onDrag(event: MouseButtonEvent, deltaX: Double, deltaY: Double) {
         //? if > 1.21.8 {
         super.onDrag(event.into(), deltaX, deltaY)
         //?} else
-        /*super.onDrag(event.x, event.y, deltaX, deltaY)*/
+        //super.onDrag(event.x, event.y, deltaX, deltaY)
     }
 
     open fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
         //? > 1.21.8 {
         return super.mouseClicked(event.into(), doubleClick)
         //?} else
-        /*return super.mouseClicked(event.x, event.y, event.button)*/
+        //return super.mouseClicked(event.x, event.y, event.button)
     }
 
     open fun mouseReleased(event: MouseButtonEvent): Boolean {
         //? if > 1.21.8 {
         return super.mouseReleased(event.into())
         //?} else
-        /*return super.mouseReleased(event.x, event.y, event.button)*/
+        //return super.mouseReleased(event.x, event.y, event.button)
     }
 
     open fun mouseDragged(event: MouseButtonEvent, deltaX: Double, deltaY: Double): Boolean {
         //? if > 1.21.8 {
         return super.mouseDragged(event.into(), deltaX, deltaY)
         //?} else
-        /*return super.mouseDragged(event.x, event.y, event.button, deltaX, deltaY)*/
+        //return super.mouseDragged(event.x, event.y, event.button, deltaX, deltaY)
     }
 
 
@@ -66,28 +66,28 @@ abstract class BaseWidget : BaseWidget {
         //? if > 1.21.8 {
         return super.isValidClickButton(info.into())
         //?} else
-        /*return super.isValidClickButton(info.button)*/
+        //return super.isValidClickButton(info.button)
     }
 
     open fun keyPressed(event: KeyEvent): Boolean {
         //? if > 1.21.8 {
         return super.keyPressed(event.into())
         //?} else
-        /*return super.keyPressed(event.key, event.scancode, event.modifiers)*/
+        //return super.keyPressed(event.key, event.scancode, event.modifiers)
     }
 
     open fun keyReleased(event: KeyEvent): Boolean {
         //? if > 1.21.8 {
         return super.keyReleased(event.into())
         //?} else
-        /*return super.keyReleased(event.key, event.scancode, event.modifiers)*/
+        //return super.keyReleased(event.key, event.scancode, event.modifiers)
     }
 
     open fun charTyped(event: CharacterEvent): Boolean {
         //? if > 1.21.8 {
         return super.charTyped(event.into())
         //?} else
-        /*return super.charTyped(event.codepoint.toChar(), event.modifiers)*/
+        //return super.charTyped(event.codepoint.toChar(), event.modifiers)
     }
 
 

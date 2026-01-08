@@ -10,6 +10,12 @@ plugins {
 
 stonecutter active "1.21.11"
 
+stonecutter handlers {
+    configure("fsh", "vsh") {
+        commenter = line("//")
+    }
+}
+
 stonecutter parameters {
     swaps["mod_version"] = "\"" + property("version") + "\";"
     swaps["minecraft"] = "\"" + node.metadata.version + "\";"
@@ -18,7 +24,6 @@ stonecutter parameters {
         replace("// moj_import <", "//!moj_import <")
     }
 
-    filters.include("**/*.fsh", "**/*.vsh")
     Replacements.read(project).replacements.forEach { (name, replacement) ->
         when (replacement) {
             is StringReplacement if replacement.named -> replacements.string(name) {
@@ -28,8 +33,10 @@ stonecutter parameters {
 
             is RegexReplacement if replacement.named -> replacements.regex(name) {
                 direction = eval(current.version, replacement.condition)
-                replace(replacement.regex, replacement.to)
-                reverse(replacement.reverseRegex, replacement.reverse)
+                replace(
+                    replacement.regex to replacement.to,
+                    replacement.reverseRegex to replacement.reverse
+                )
             }
 
             is StringReplacement -> replacements.string {
@@ -39,8 +46,10 @@ stonecutter parameters {
 
             is RegexReplacement -> replacements.regex {
                 direction = eval(current.version, replacement.condition)
-                replace(replacement.regex, replacement.to)
-                reverse(replacement.reverseRegex, replacement.reverse)
+                replace(
+                    replacement.regex to replacement.to,
+                    replacement.reverseRegex to replacement.reverse
+                )
             }
         }
     }

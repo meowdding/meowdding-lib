@@ -13,16 +13,16 @@ const vec2 direction = DIRECTION;
 const float speed = SPEED;
 
 //? if 1.21.5 {
-/*uniform vec4 ColorModulator;
-uniform float FogStart;
-uniform float FogEnd;
-uniform vec4 FogColor;
-uniform float GameTime;
-*///?}
+//uniform vec4 ColorModulator;
+//uniform float FogStart;
+//uniform float FogEnd;
+//uniform vec4 FogColor;
+//uniform float GameTime;
+//?}
 
 //? if 1.21.5 {
-/*in float vertexDistance;
-*///?} else {
+//in float vertexDistance;
+//?} else {
 in float sphericalVertexDistance;
 in float cylindricalVertexDistance;
 //?}
@@ -65,8 +65,8 @@ void main() {
         FogColor
     );
     //?} else {
-    /*vec2 coords = gl_FragCoord.xy;
-
-    fragColor = vec4(SMOOTHY(float(int(length(coords + (direction * GameTime * 24000 * speed) * 2)) % 500) / 500.0).rgb, 1) * vertexColor;
-    *///?}
+    //vec2 coords = gl_FragCoord.xy;
+    //
+    //fragColor = vec4(SMOOTHY(float(int(length(coords + (direction * GameTime * 24000 * speed) * 2)) % 500) / 500.0).rgb, 1) * vertexColor;
+    //?}
 }

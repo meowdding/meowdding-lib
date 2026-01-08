@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 //? if 1.21.5
-/*import me.owdding.lib.helper.TextShaderMixinHelper;*/
+//import me.owdding.lib.helper.TextShaderMixinHelper;
 
 @Mixin(GlyphRenderTypes.class)
 public class GlyphRenderTypesMixin {
@@ -31,7 +31,7 @@ public class GlyphRenderTypesMixin {
     @Inject(method = "select", at = @At("HEAD"), cancellable = true)
     private void select(CallbackInfoReturnable<RenderType> cir) {
         //? if 1.21.5
-        /*if (TextShaderMixinHelper.skip) return;*/
+        //if (TextShaderMixinHelper.skip) return;
         var shader = TextShaders.getActiveShader();
         if (shader != null) {
             cir.setReturnValue(shader.getRenderType(meowdding$texture));
