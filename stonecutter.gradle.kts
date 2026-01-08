@@ -24,7 +24,6 @@ stonecutter parameters {
         replace("// moj_import <", "//!moj_import <")
     }
 
-    filters.include("**/*.fsh", "**/*.vsh")
     Replacements.read(project).replacements.forEach { (name, replacement) ->
         when (replacement) {
             is StringReplacement if replacement.named -> replacements.string(name) {

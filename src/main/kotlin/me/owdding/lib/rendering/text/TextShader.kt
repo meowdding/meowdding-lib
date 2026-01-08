@@ -20,6 +20,12 @@ import net.minecraft.util.TriState
 
 val TEXT_RENDER_TYPE_CACHE: BiFunction<TextShader, Identifier, RenderType> =
     Util.memoize<TextShader, Identifier, RenderType> { shader, location ->
+        //? if 1.21.5 {
+        /*val shard = TextureStateShard(location, TriState.FALSE, false)
+        *///?} else if < 1.21.11 {
+        /*val shard = TextureStateShard(location, false)
+        *///? }
+
         //? if > 1.21.10 {
         RenderType.create(
             "meowddinglib/fon_shader",
@@ -37,7 +43,7 @@ val TEXT_RENDER_TYPE_CACHE: BiFunction<TextShader, Identifier, RenderType> =
             false,
             shader.pipeline,
             CompositeState.builder()
-                .setTextureState(TextureStateShard(location, /*? if 1.21.5 >>*/ /*TriState.FALSE,*/ false))
+                .setTextureState(shard)
                 .setLightmapState(RenderStateShard.LIGHTMAP)
                 .createCompositeState(false),
         )
