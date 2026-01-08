@@ -34,8 +34,10 @@ stonecutter parameters {
 
             is RegexReplacement if replacement.named -> replacements.regex(name) {
                 direction = eval(current.version, replacement.condition)
-                replace(replacement.regex, replacement.to)
-                reverse(replacement.reverseRegex, replacement.reverse)
+                replace(
+                    replacement.regex to replacement.to,
+                    replacement.reverseRegex to replacement.reverse
+                )
             }
 
             is StringReplacement -> replacements.string {
@@ -45,8 +47,10 @@ stonecutter parameters {
 
             is RegexReplacement -> replacements.regex {
                 direction = eval(current.version, replacement.condition)
-                replace(replacement.regex, replacement.to)
-                reverse(replacement.reverseRegex, replacement.reverse)
+                replace(
+                    replacement.regex to replacement.to,
+                    replacement.reverseRegex to replacement.reverse
+                )
             }
         }
     }

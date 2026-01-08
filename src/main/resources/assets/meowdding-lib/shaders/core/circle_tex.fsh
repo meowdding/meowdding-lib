@@ -10,11 +10,11 @@ layout (std140) uniform MLibTexturedCircleUniform {
     vec4 uvs;
 };
 //?} else {
-/*uniform vec4 ColorModulator;
-uniform vec2 ScreenSize;
-
-uniform vec4 uvs;
-*///?}
+//uniform vec4 ColorModulator;
+//uniform vec2 ScreenSize;
+//
+//uniform vec4 uvs;
+//?}
 
 in vec2 texCoord0;
 in vec4 vertexColor;

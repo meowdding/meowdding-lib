@@ -10,6 +10,6 @@ object MeowddingPipelines {
         //? if > 1.21.5 {
         .withUniform("Globals", UniformType.UNIFORM_BUFFER)
         //?} else
-        /*.withUniform("GameTime", UniformType.FLOAT)*/
+        //.withUniform("GameTime", UniformType.FLOAT)
         .buildSnippet()
 }

@@ -9,7 +9,7 @@ import java.util.Optional
 
 typealias MinecraftWaypoint = Waypoint
 //?} else
-/*interface MinecraftWaypoint*/
+//interface MinecraftWaypoint
 
 object MinecraftWaypointHandler {
 
@@ -25,13 +25,13 @@ object MinecraftWaypointHandler {
 
         return trackedWaypoint
         //?} else
-        /*error()*/
+        //error()
     }
     fun removeWaypoint(waypoint: MeowddingWaypoint): Boolean {
         //? if > 1.21.5 {
         return waypoint.minecraftWaypoint?.let { McClient.connection?.waypointManager?.untrackWaypoint(it as TrackedWaypoint) } != null
         //?} else
-        /*error()*/
+        //error()
     }
 
     //? if 1.21.5 {

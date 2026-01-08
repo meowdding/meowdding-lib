@@ -1,7 +1,7 @@
 package me.owdding.lib.utils
 
 //? < 1.21.11
-/*import com.mojang.blaze3d.systems.RenderSystem*/
+//import com.mojang.blaze3d.systems.RenderSystem
 import me.owdding.lib.rendering.world.RenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS
 import net.minecraft.client.CameraType
 import net.minecraft.client.gui.Font
@@ -122,7 +122,7 @@ object RenderUtils {
     fun RenderWorldEvent.render3dLine(start: Vec3, end: Vec3, color: Int, width: Float = 5f) {
         atCamera {
             //? < 1.21.11
-            /*RenderSystem.lineWidth(width)*/
+            //RenderSystem.lineWidth(width)
 
             val entry = poseStack.last()
             val buffer = buffer.getBuffer(RenderTypes.lines())
@@ -131,7 +131,7 @@ object RenderUtils {
             buffer.addVertex(entry, end.toVector3f()).setColor(color).setNormal(entry, normal)
 
             //? < 1.21.11
-            /*RenderSystem.lineWidth(1f)*/
+            //RenderSystem.lineWidth(1f)
         }
     }
 

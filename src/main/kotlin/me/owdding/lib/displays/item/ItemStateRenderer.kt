@@ -52,7 +52,7 @@ class ItemStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictu
         item.itemStackRenderState().submit(stack, featureRenderer.submitNodeStorage, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0)
         featureRenderer.renderAllFeatures()
         //?} else
-        /*item.itemStackRenderState().render(stack, this.bufferSource, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY)*/
+        //item.itemStackRenderState().render(stack, this.bufferSource, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY)
     }
 
     override fun getTranslateY(height: Int, ignored: Int): Float {

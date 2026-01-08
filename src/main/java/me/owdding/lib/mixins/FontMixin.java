@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 //?}
 
 //? < 1.21.9
-/*import net.minecraft.client.gui.font.glyphs.BakedGlyph;*/
+//import net.minecraft.client.gui.font.glyphs.BakedGlyph;
 //? < 1.21.6 {
 /*import me.owdding.lib.helper.TextShaderMixinHelper;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -59,7 +59,7 @@ public class FontMixin {
         //?} else if > 1.21.8 {
         /*TextRenderable instance,
          *///?} else
-        /*BakedGlyph.GlyphInstance instance,*/
+        //BakedGlyph.GlyphInstance instance,
         CallbackInfo ci
     ) {
         var holder = FontPipelineHolder.getHolder(instance);
@@ -74,7 +74,7 @@ public class FontMixin {
         //? > 1.21.8 {
         TextRenderable effect,
         //?} else
-        /*BakedGlyph.Effect effect,*/
+        //BakedGlyph.Effect effect,
         CallbackInfo ci
     ) {
         var holder = FontPipelineHolder.getHolder(effect);

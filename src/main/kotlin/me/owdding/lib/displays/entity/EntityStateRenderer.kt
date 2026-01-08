@@ -106,7 +106,7 @@ class EntityStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPic
             this.extractRenderState(entity, state, 1f)
 
             //? < 1.21.10
-            /*state.hitboxesRenderState = null*/
+            //state.hitboxesRenderState = null
             state.x = 0.0
             state.y = 0.0
             state.z = 0.0

@@ -9,7 +9,6 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Style
 import net.minecraft.resources.Identifier
 import net.minecraft.util.Util
-import tech.thatgravyboat.skyblockapi.helpers.McClient
 import java.util.function.BiFunction
 
 //? < 1.21.11 {
@@ -38,7 +37,7 @@ val TEXT_RENDER_TYPE_CACHE: BiFunction<TextShader, Identifier, RenderType> =
             false,
             shader.pipeline,
             CompositeState.builder()
-                .setTextureState(TextureStateShard(location, /^? if 1.21.5 >>^/ /^TriState.FALSE,^/ false))
+                .setTextureState(TextureStateShard(location, /*? if 1.21.5 >>*/ /*TriState.FALSE,*/ false))
                 .setLightmapState(RenderStateShard.LIGHTMAP)
                 .createCompositeState(false),
         )

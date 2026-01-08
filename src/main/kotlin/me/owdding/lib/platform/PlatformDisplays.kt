@@ -28,7 +28,7 @@ import kotlin.math.atan
 import me.owdding.lib.displays.entity.EntityStateRenderer
 import me.owdding.lib.displays.item.ItemStateRenderer
 //?} else
-/*import net.minecraft.client.gui.screens.inventory.InventoryScreen*/
+//import net.minecraft.client.gui.screens.inventory.InventoryScreen
 
 internal object PlatformDisplays {
     fun entity(
@@ -129,7 +129,7 @@ internal object PlatformDisplays {
                         //? > 1.21.5 {
                         graphics.setTooltipForNextFrame(McFont.self, item, McClient.mouse.first.toInt(), McClient.mouse.second.toInt())
                         //?} else
-                        /*graphics.renderTooltip(McFont.self, item, McClient.mouse.first.toInt(), McClient.mouse.second.toInt())*/
+                        //graphics.renderTooltip(McFont.self, item, McClient.mouse.first.toInt(), McClient.mouse.second.toInt())
                     }
                 }
 
@@ -144,7 +144,7 @@ internal object PlatformDisplays {
                         graphics.renderItem(item, 0, 0)
                     }
                     //?} else
-                    /*graphics.renderItem(item, 0, 0)*/
+                    //graphics.renderItem(item, 0, 0)
 
                     val stackSize = item.count
                     if ((showStackSize && stackSize > 1) || customStackText != null) {
@@ -181,7 +181,7 @@ internal object PlatformDisplays {
             override fun render(graphics: GuiGraphics) {
                 graphics.pushPop {
                     //? if 1.21.5
-                    /*operations(graphics.pose())*/
+                    //operations(graphics.pose())
                     display.render(graphics)
                 }
             }

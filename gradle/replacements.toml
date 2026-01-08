@@ -27,12 +27,6 @@ condition = "< 1.21.11"
 from = "import net.minecraft.advancements.criterion"
 to = "import net.minecraft.advancements.critereon"
 
-[render_type]
-type = "string"
-condition = "< 1.21.11"
-from = "import net.minecraft.client.renderer.rendertype.RenderType"
-to = "import net.minecraft.client.renderer.RenderType"
-
 [util]
 type = "string"
 condition = "< 1.21.11"
@@ -42,7 +36,15 @@ to = "net.minecraft.Util"
 [replacements]
 type = "regex"
 condition = "< 1.21.11"
-regex = "import net.minecraft.client.renderer.RenderTypes(?!;)"
+regex = "import net.minecraft.client.renderer.rendertype.RenderTypes(?!;)"
 to = "import net.minecraft.client.renderer.RenderType as RenderTypes"
 reverseRegex = "import net.minecraft.client.renderer.RenderType as RenderTypes"
-reverse = "import net.minecraft.client.renderer.RenderTypes"
+reverse = "import net.minecraft.client.renderer.rendertype.RenderTypes"
+
+[render_type]
+type = "regex"
+condition = "< 1.21.11"
+regex = "import net.minecraft.client.renderer.rendertype.RenderType(?![^; ])"
+to = "import net.minecraft.client.renderer.RenderType"
+reverseRegex = "import net.minecraft.client.renderer.RenderType(?![^; ])"
+reverse = "import net.minecraft.client.renderer.rendertype.RenderType"

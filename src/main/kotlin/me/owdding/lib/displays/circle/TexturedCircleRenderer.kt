@@ -2,7 +2,7 @@
 package me.owdding.lib.displays.circle
 
 //? < 1.21.11
-/*import com.mojang.blaze3d.systems.RenderSystem*/
+//import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.Tesselator
@@ -15,7 +15,7 @@ import net.minecraft.client.gui.navigation.ScreenRectangle
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer
 import net.minecraft.client.renderer.MultiBufferSource
 //? < 1.21.11
-/*import net.minecraft.client.renderer.texture.AbstractTexture*/
+//import net.minecraft.client.renderer.texture.AbstractTexture
 //? > 1.21.8
 import net.minecraft.data.AtlasIds
 import net.minecraft.resources.Identifier
@@ -44,7 +44,7 @@ class TexturedCircleRenderer(buffer: MultiBufferSource.BufferSource) : PictureIn
         //? > 1.21.8 {
          val sprite = McClient.self.atlasManager.getAtlasOrThrow(AtlasIds.GUI).getSprite(state.texture)
         //?} else
-        /*val sprite = McClient.self.guiSprites.getSprite(state.texture)*/
+        //val sprite = McClient.self.guiSprites.getSprite(state.texture)
 
         //? > 1.21.10 {
         val texture = TextureUtils.single(sprite.atlasLocation())
