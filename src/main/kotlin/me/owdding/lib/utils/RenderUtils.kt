@@ -2,6 +2,7 @@ package me.owdding.lib.utils
 
 //? < 1.21.11
 /*import com.mojang.blaze3d.systems.RenderSystem*/
+
 import me.owdding.lib.rendering.world.RenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS
 import me.owdding.lib.rendering.world.RenderTypes.NO_DEPTH_LINES
 import net.minecraft.client.CameraType
@@ -9,14 +10,13 @@ import net.minecraft.client.gui.Font
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.ShapeRenderer
 import net.minecraft.client.renderer.blockentity.BeaconRenderer
-import net.minecraft.client.renderer.rendertype.RenderType as RenderTypes
+import net.minecraft.client.renderer.rendertype.RenderTypes
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.util.ARGB
 import net.minecraft.util.Mth
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
-
 import net.minecraft.world.phys.shapes.Shapes
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -78,6 +78,52 @@ object RenderUtils {
         }
     }
 
+    internal fun RenderWorldEvent.renderBox(aabb: AABB, color: Int, fillMaxAlpha: Int) {
+        val fillColor = ARGB.color(ARGB.alpha(color).coerceAtMost(fillMaxAlpha), color)
+
+        val last = poseStack.last()
+        val consumer = buffer.getBuffer(me.owdding.lib.rendering.world.RenderTypes.BLOCK_FILL_QUAD)
+        val minX = aabb.minX.toFloat();
+        val minY = aabb.minY.toFloat();
+        val minZ = aabb.minZ.toFloat();
+        val maxX = aabb.maxX.toFloat();
+        val maxY = aabb.maxY.toFloat();
+        val maxZ = aabb.maxZ.toFloat();
+
+        fun Int.alpha() = ARGB.color(255, this)
+
+        consumer.addVertex(last, minX, minY, minZ).setColor(0xFF0000.alpha())
+        consumer.addVertex(last, maxX, minY, minZ).setColor(0xFF0000.alpha())
+        consumer.addVertex(last, maxX, minY, maxZ).setColor(0xFF0000.alpha())
+        consumer.addVertex(last, minX, minY, maxZ).setColor(0xFF0000.alpha())
+
+        consumer.addVertex(last, minX, maxY, minZ).setColor(0x00FF00.alpha())
+        consumer.addVertex(last, maxX, maxY, minZ).setColor(0x00FF00.alpha())
+        consumer.addVertex(last, maxX, minY, minZ).setColor(0x00FF00.alpha())
+        consumer.addVertex(last, minX, minY, minZ).setColor(0x00FF00.alpha())
+
+        consumer.addVertex(last, minX, minY, minZ).setColor(0x0000FF.alpha())
+        consumer.addVertex(last, minX, minY, maxZ).setColor(0x0000FF.alpha())
+        consumer.addVertex(last, minX, maxY, maxZ).setColor(0x0000FF.alpha())
+        consumer.addVertex(last, minX, maxY, minZ).setColor(0x0000FF.alpha())
+
+
+        consumer.addVertex(last, maxX, maxY, minZ).setColor(0x00FFFF.alpha())
+        consumer.addVertex(last, maxX, maxY, maxZ).setColor(0x00FFFF.alpha())
+        consumer.addVertex(last, maxX, minY, maxZ).setColor(0x00FFFF.alpha())
+        consumer.addVertex(last, maxX, minY, minZ).setColor(0x00FFFF.alpha())
+
+        consumer.addVertex(last, minX, minY, maxZ).setColor(0xFFFF00.alpha())
+        consumer.addVertex(last, maxX, minY, maxZ).setColor(0xFFFF00.alpha())
+        consumer.addVertex(last, maxX, maxY, maxZ).setColor(0xFFFF00.alpha())
+        consumer.addVertex(last, minX, maxY, maxZ).setColor(0xFFFF00.alpha())
+
+        consumer.addVertex(last, maxX, maxY, maxZ).setColor(0xFF00FF.alpha())
+        consumer.addVertex(last, maxX, maxY, minZ).setColor(0xFF00FF.alpha())
+        consumer.addVertex(last, minX, maxY, minZ).setColor(0xFF00FF.alpha())
+        consumer.addVertex(last, minX, maxY, maxZ).setColor(0xFF00FF.alpha())
+    }
+
     fun RenderWorldEvent.renderBox(
         aabb: AABB,
         outlineType: OutlineType,
@@ -91,13 +137,7 @@ object RenderUtils {
                 aabb.maxX + 0.005, aabb.maxY + 0.005, aabb.maxZ + 0.005,
             )
             if (outlineType.fill) {
-                val fillColor = ARGB.color(ARGB.alpha(color).coerceAtMost(fillMaxAlpha), color)
-                ShapeRenderer.renderShape(
-                    poseStack,
-                    buffer.getBuffer(BLOCK_FILL_TRIANGLE_THROUGH_WALLS),
-                    shape,
-                    0.0, 0.0, 0.0, fillColor, /*? if > 1.21.10 {*/ 1f, /*?}*/
-                )
+                renderBox(aabb, color, fillMaxAlpha)
             }
             if (outlineType.outline) {
                 ShapeRenderer.renderShape(
