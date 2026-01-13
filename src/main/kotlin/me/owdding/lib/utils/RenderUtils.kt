@@ -92,36 +92,36 @@ object RenderUtils {
 
         fun Int.alpha() = ARGB.color(255, this)
 
-        consumer.addVertex(last, minX, minY, minZ).setColor(0xFF0000.alpha())
-        consumer.addVertex(last, maxX, minY, minZ).setColor(0xFF0000.alpha())
-        consumer.addVertex(last, maxX, minY, maxZ).setColor(0xFF0000.alpha())
-        consumer.addVertex(last, minX, minY, maxZ).setColor(0xFF0000.alpha())
+        consumer.addVertex(last, minX, minY, minZ).setColor(fillColor)
+        consumer.addVertex(last, maxX, minY, minZ).setColor(fillColor)
+        consumer.addVertex(last, maxX, minY, maxZ).setColor(fillColor)
+        consumer.addVertex(last, minX, minY, maxZ).setColor(fillColor)
 
-        consumer.addVertex(last, minX, maxY, minZ).setColor(0x00FF00.alpha())
-        consumer.addVertex(last, maxX, maxY, minZ).setColor(0x00FF00.alpha())
-        consumer.addVertex(last, maxX, minY, minZ).setColor(0x00FF00.alpha())
-        consumer.addVertex(last, minX, minY, minZ).setColor(0x00FF00.alpha())
+        consumer.addVertex(last, minX, maxY, minZ).setColor(fillColor)
+        consumer.addVertex(last, maxX, maxY, minZ).setColor(fillColor)
+        consumer.addVertex(last, maxX, minY, minZ).setColor(fillColor)
+        consumer.addVertex(last, minX, minY, minZ).setColor(fillColor)
 
-        consumer.addVertex(last, minX, minY, minZ).setColor(0x0000FF.alpha())
-        consumer.addVertex(last, minX, minY, maxZ).setColor(0x0000FF.alpha())
-        consumer.addVertex(last, minX, maxY, maxZ).setColor(0x0000FF.alpha())
-        consumer.addVertex(last, minX, maxY, minZ).setColor(0x0000FF.alpha())
+        consumer.addVertex(last, minX, minY, minZ).setColor(fillColor)
+        consumer.addVertex(last, minX, minY, maxZ).setColor(fillColor)
+        consumer.addVertex(last, minX, maxY, maxZ).setColor(fillColor)
+        consumer.addVertex(last, minX, maxY, minZ).setColor(fillColor)
 
 
-        consumer.addVertex(last, maxX, maxY, minZ).setColor(0x00FFFF.alpha())
-        consumer.addVertex(last, maxX, maxY, maxZ).setColor(0x00FFFF.alpha())
-        consumer.addVertex(last, maxX, minY, maxZ).setColor(0x00FFFF.alpha())
-        consumer.addVertex(last, maxX, minY, minZ).setColor(0x00FFFF.alpha())
+        consumer.addVertex(last, maxX, maxY, minZ).setColor(fillColor)
+        consumer.addVertex(last, maxX, maxY, maxZ).setColor(fillColor)
+        consumer.addVertex(last, maxX, minY, maxZ).setColor(fillColor)
+        consumer.addVertex(last, maxX, minY, minZ).setColor(fillColor)
 
-        consumer.addVertex(last, minX, minY, maxZ).setColor(0xFFFF00.alpha())
-        consumer.addVertex(last, maxX, minY, maxZ).setColor(0xFFFF00.alpha())
-        consumer.addVertex(last, maxX, maxY, maxZ).setColor(0xFFFF00.alpha())
-        consumer.addVertex(last, minX, maxY, maxZ).setColor(0xFFFF00.alpha())
+        consumer.addVertex(last, minX, minY, maxZ).setColor(fillColor)
+        consumer.addVertex(last, maxX, minY, maxZ).setColor(fillColor)
+        consumer.addVertex(last, maxX, maxY, maxZ).setColor(fillColor)
+        consumer.addVertex(last, minX, maxY, maxZ).setColor(fillColor)
 
-        consumer.addVertex(last, maxX, maxY, maxZ).setColor(0xFF00FF.alpha())
-        consumer.addVertex(last, maxX, maxY, minZ).setColor(0xFF00FF.alpha())
-        consumer.addVertex(last, minX, maxY, minZ).setColor(0xFF00FF.alpha())
-        consumer.addVertex(last, minX, maxY, maxZ).setColor(0xFF00FF.alpha())
+        consumer.addVertex(last, maxX, maxY, maxZ).setColor(fillColor)
+        consumer.addVertex(last, maxX, maxY, minZ).setColor(fillColor)
+        consumer.addVertex(last, minX, maxY, minZ).setColor(fillColor)
+        consumer.addVertex(last, minX, maxY, maxZ).setColor(fillColor)
     }
 
     fun RenderWorldEvent.renderBox(
