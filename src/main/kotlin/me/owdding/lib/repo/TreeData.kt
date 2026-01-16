@@ -359,7 +359,7 @@ enum class WhisperType(val formatting: ChatFormatting) : SkillTreeCurrency {
     ;
 
     override val displayName = Text.of(name.toTitleCase()) {
-        append(" Whisper")
+        append(" Whispers")
         withStyle(formatting)
     }
 }
