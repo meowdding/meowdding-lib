@@ -15,10 +15,19 @@ public class GuiTextRenderStateMixin {
     private Font.PreparedText ensurePrepared(Operation<Font.PreparedText> original) {
         var holder = FontPipelineHolder.getHolder(this);
         if (holder != null) {
-            FontPipelineHolder.ACTIVE_PIPELINE.set(holder.meowddinglib$getPipeline());
-            var preparedText = original.call();
-            FontPipelineHolder.ACTIVE_PIPELINE.remove();
-            return preparedText;
+            var pipeline = FontPipelineHolder.ACTIVE_PIPELINE;
+
+            var previous = pipeline.get();
+            var next = holder.meowddinglib$getPipeline();
+
+            var changed = previous != next;
+            if(changed) pipeline.set(next);
+
+            try {
+                return original.call();
+            } finally {
+                if(changed) pipeline.set(previous);
+            }
         }
         return original.call();
     }
