@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 public interface FontPipelineHolder {
 
-    ThreadLocal<RenderPipeline> ACTIVE_PIPELINE = ThreadLocal.withInitial(() -> null);
+    ThreadLocal<RenderPipeline> ACTIVE_PIPELINE = new ThreadLocal<>();
 
     @Nullable RenderPipeline meowddinglib$getPipeline();
 
