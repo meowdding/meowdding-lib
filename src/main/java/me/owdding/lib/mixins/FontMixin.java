@@ -86,17 +86,25 @@ public class FontMixin {
 
     @WrapMethod(method = "accept")
     public boolean accept(int $$0, Style style, int $$2, Operation<Boolean> original) {
-        var previous = FontPipelineHolder.ACTIVE_PIPELINE.get();
-        var previousShader = TextShaders.getActiveShader();
-        if ((Object) style instanceof TextShaderHolder holder && holder.meowddinglib$getTextShader() != null) {
-            FontPipelineHolder.ACTIVE_PIPELINE.set(holder.meowddinglib$getTextShader().getPipeline());
-            TextShaders.setActiveShader(holder.meowddinglib$getTextShader());
-        }
-        var result = original.call($$0, style, $$2);
-        FontPipelineHolder.ACTIVE_PIPELINE.set(previous);
-        TextShaders.setActiveShader(previousShader);
+        var pipeline = FontPipelineHolder.ACTIVE_PIPELINE;
 
-        return result;
+        var previous = pipeline.get();
+        var previousShader = TextShaders.getActiveShader();
+
+        if ((Object) style instanceof TextShaderHolder holder) {
+            var shader = holder.meowddinglib$getTextShader();
+            if(shader != null) {
+                pipeline.set(shader.getPipeline());
+                TextShaders.setActiveShader(shader);
+            }
+        }
+
+        try {
+            return original.call($$0, style, $$2);
+        } finally {
+            pipeline.set(previous);
+            TextShaders.setActiveShader(previousShader);
+        }
     }
     //?} else {
     /*@WrapOperation(method = "finish", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/font/glyphs/BakedGlyph;renderType(Lnet/minecraft/client/gui/Font$DisplayMode;)Lnet/minecraft/client/renderer/RenderType;", ordinal = 0))
