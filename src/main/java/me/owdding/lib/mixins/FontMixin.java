@@ -93,18 +93,17 @@ public class FontMixin {
 
         if ((Object) style instanceof TextShaderHolder holder) {
             var shader = holder.meowddinglib$getTextShader();
-            if(shader != null) {
+            if (shader != null) {
                 pipeline.set(shader.getPipeline());
                 TextShaders.setActiveShader(shader);
             }
         }
 
-        try {
-            return original.call($$0, style, $$2);
-        } finally {
-            pipeline.set(previous);
-            TextShaders.setActiveShader(previousShader);
-        }
+        var result = original.call($$0, style, $$2);
+        pipeline.set(previous);
+        TextShaders.setActiveShader(previousShader);
+
+        return result;
     }
     //?} else {
     /*@WrapOperation(method = "finish", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/font/glyphs/BakedGlyph;renderType(Lnet/minecraft/client/gui/Font$DisplayMode;)Lnet/minecraft/client/renderer/RenderType;", ordinal = 0))

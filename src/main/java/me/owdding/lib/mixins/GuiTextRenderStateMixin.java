@@ -21,13 +21,12 @@ public class GuiTextRenderStateMixin {
             var next = holder.meowddinglib$getPipeline();
 
             var changed = previous != next;
-            if(changed) pipeline.set(next);
+            if (changed) pipeline.set(next);
 
-            try {
-                return original.call();
-            } finally {
-                if(changed) pipeline.set(previous);
-            }
+            var result = original.call();
+            if (changed) pipeline.set(previous);
+
+            return result;
         }
         return original.call();
     }
