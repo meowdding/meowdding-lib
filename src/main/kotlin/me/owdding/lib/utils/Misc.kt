@@ -26,6 +26,9 @@ private val DEVS = setOf(
 fun Player.isMeowddingDev(): Boolean = this.stringUUID in DEVS
 fun UUID.isMeowddingDev(): Boolean = this.toString() in DEVS
 
+@Suppress("UNCHECKED_CAST", "NOTHING_TO_INLINE")
+inline fun <T> Any?.unsafeCast(): T = this as T
+
 fun FabricClientCommandSource.toCommandSourceStack(): CommandSourceStack {
     return CommandSourceStack(
         object : CommandSource {
