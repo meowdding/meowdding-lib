@@ -162,7 +162,14 @@ abstract class LayoutBuilder {
         textDisplay(text, color, shadow, { this }, init)
     }
 
+    @Deprecated("Use the one without the typo", ReplaceWith("button(builder)"))
     open fun buton(builder: Button.() -> Unit) {
+        val button = Widgets.button()
+        button.builder()
+        widget(button)
+    }
+
+    open fun button(builder: Button.() -> Unit) {
         val button = Widgets.button()
         button.builder()
         widget(button)
