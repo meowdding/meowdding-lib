@@ -1,17 +1,19 @@
 package me.owdding.lib
 
+import com.mojang.serialization.Codec
 import me.owdding.ktmodules.AutoCollect
 import me.owdding.ktmodules.Module
 import me.owdding.lib.compat.HiddenElementRenderer
 import me.owdding.lib.events.FinishRepoLoadingEvent
 import me.owdding.lib.events.StartRepoLoadingEvent
+import me.owdding.lib.generated.MeowddingLibCodecs
 import me.owdding.lib.generated.MeowddingLibModules
 import me.owdding.lib.generated.MeowddingLibPreInitModules
 import me.owdding.lib.utils.MeowddingLogger
+import me.owdding.lib.utils.mod.MeowddingMod
+import me.owdding.lib.utils.unsafeCast
 import me.owdding.repo.RemoteRepo
-import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.loader.api.FabricLoader
-import net.minecraft.resources.Identifier
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
@@ -23,13 +25,11 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import java.util.concurrent.CompletableFuture
 
 @Module
-object MeowddingLib : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoResolve() {
-
-    const val MOD_ID = "meowdding-lib"
+object MeowddingLib : MeowddingMod("meowdding-lib") {
     private var notifyAboutRepoLoad = false
 
     init {
-        MeowddingLibPreInitModules.init { SkyBlockAPI.eventBus.register(it) }
+        registerEvents(MeowddingLibPreInitModules.collected)
     }
 
     override fun onInitializeClient() {
@@ -37,9 +37,11 @@ object MeowddingLib : ClientModInitializer, MeowddingLogger by MeowddingLogger.a
             HiddenElementRenderer.register()
         }
 
-        MeowddingLibModules.init { SkyBlockAPI.eventBus.register(it) }
+        registerEvents(MeowddingLibModules.collected)
         loadRepo()
     }
+
+    override fun <T : Any> getCodec(clazz: Class<T>): Codec<T> = MeowddingLibCodecs.getCodec(clazz).unsafeCast()
 
     private fun finishRepoLoadingEvent() = McClient.runNextTick {
         FinishRepoLoadingEvent.post(SkyBlockAPI.eventBus)
@@ -52,7 +54,7 @@ object MeowddingLib : ClientModInitializer, MeowddingLogger by MeowddingLogger.a
     private fun loadRepo() {
         StartRepoLoadingEvent.post(SkyBlockAPI.eventBus)
         CompletableFuture.runAsync {
-            RemoteRepo.initialize(FabricLoader.getInstance().configDir.resolveSibling("meowdding-repo-cache"), callback = ::finishRepoLoadingEvent)
+            RemoteRepo.initialize(McClient.config.resolveSibling("meowdding-repo-cache"), callback = ::finishRepoLoadingEvent)
         }
     }
 
@@ -88,8 +90,6 @@ object MeowddingLib : ClientModInitializer, MeowddingLogger by MeowddingLogger.a
             }
         }
     }
-
-    fun id(path: String): Identifier = Identifier.fromNamespaceAndPath(MOD_ID, path)
 }
 
 @AutoCollect("PreInitModules")

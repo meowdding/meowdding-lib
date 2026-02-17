@@ -28,7 +28,7 @@ val TEXT_RENDER_TYPE_CACHE: BiFunction<TextShader, Identifier, RenderType> =
 
         //? if > 1.21.10 {
         RenderType.create(
-            "meowddinglib/fon_shader",
+            "meowddinglib/font_shader",
             RenderSetup.builder(shader.pipeline)
                 .bufferSize(786432)
                 .useLightmap()
