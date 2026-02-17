@@ -115,7 +115,7 @@ class ItemStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictu
             item: ItemStack,
             x: Int, y: Int,
         ) {
-            if (item.isEmpty) return
+            if (item.isEmpty || McLevel.hasLevel) return
 
             val state = TrackingItemStackRenderState()
             McClient.self.itemModelResolver.updateForTopItem(state, item, ItemDisplayContext.GUI, McLevel.self, McPlayer.self, 0)
