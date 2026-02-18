@@ -9,10 +9,11 @@ import me.owdding.lib.events.StartRepoLoadingEvent
 import me.owdding.lib.generated.MeowddingLibCodecs
 import me.owdding.lib.generated.MeowddingLibModules
 import me.owdding.lib.generated.MeowddingLibPreInitModules
-import me.owdding.lib.utils.MeowddingLogger
+import me.owdding.lib.generated.MeowddingLibPostInitModules
 import me.owdding.lib.utils.mod.MeowddingMod
 import me.owdding.lib.utils.unsafeCast
 import me.owdding.repo.RemoteRepo
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents
 import net.fabricmc.loader.api.FabricLoader
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -38,7 +39,11 @@ object MeowddingLib : MeowddingMod("meowdding-lib") {
         }
 
         registerEvents(MeowddingLibModules.collected)
+    }
+
+    override fun postInit() {
         loadRepo()
+        registerEvents(MeowddingLibPostInitModules.collected)
     }
 
     override fun <T : Any> getCodec(clazz: Class<T>): Codec<T> = MeowddingLibCodecs.getCodec(clazz).unsafeCast()
@@ -95,4 +100,9 @@ object MeowddingLib : MeowddingMod("meowdding-lib") {
 @AutoCollect("PreInitModules")
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)
-annotation class PreInitModule
+internal annotation class PreInitModule
+
+@AutoCollect("PostInitModules")
+@Target(AnnotationTarget.CLASS)
+@Retention(AnnotationRetention.SOURCE)
+internal annotation class PostInitModule

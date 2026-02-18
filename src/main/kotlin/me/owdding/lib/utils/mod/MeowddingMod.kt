@@ -6,6 +6,7 @@ import me.owdding.lib.utils.mod.data.MeowddingFolderStorageData
 import me.owdding.lib.utils.mod.data.MeowddingProfileStorageData
 import me.owdding.lib.utils.mod.data.MeowddingStorageData
 import net.fabricmc.api.ClientModInitializer
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents
 import net.fabricmc.loader.api.FabricLoader
 import net.fabricmc.loader.api.ModContainer
 import net.minecraft.resources.Identifier
@@ -33,6 +34,17 @@ abstract class MeowddingMod(
 
     protected fun <T : Any> registerEvents(list: Iterable<T>) = list.forEach(SkyBlockAPI.eventBus::register)
 
+    open fun preInit() {}
+
+    open fun postInit() {
+    }
+
+    init {
+        preInit()
+        ClientLifecycleEvents.CLIENT_STARTED.register {
+            postInit()
+        }
+    }
 
     //region Storage Data
     inline fun <reified T : Any> storage(

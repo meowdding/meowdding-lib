@@ -8,8 +8,8 @@ import me.owdding.ktcodecs.FieldName
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.IncludedCodec
 import me.owdding.ktcodecs.Inline
-import me.owdding.ktmodules.Module
 import me.owdding.lib.MeowddingLib
+import me.owdding.lib.PostInitModule
 import me.owdding.lib.events.CosmeticLoadEvent
 import me.owdding.lib.generated.MeowddingLibCodecs
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
@@ -27,7 +27,7 @@ import kotlin.time.toJavaDuration
 
 const val COSMETIC_VERSION = 1
 
-@Module
+@PostInitModule
 object CosmeticManager {
 
     private val _cosmetics: MutableMap<String, Cosmetic> = ConcurrentHashMap()
