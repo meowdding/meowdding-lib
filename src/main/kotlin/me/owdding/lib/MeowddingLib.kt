@@ -49,6 +49,7 @@ object MeowddingLib : MeowddingMod("meowdding-lib") {
     override fun <T : Any> getCodec(clazz: Class<T>): Codec<T> = MeowddingLibCodecs.getCodec(clazz).unsafeCast()
 
     private fun finishRepoLoadingEvent() = McClient.runNextTick {
+        debug("Finished loading repo!")
         FinishRepoLoadingEvent.post(SkyBlockAPI.eventBus)
         if (notifyAboutRepoLoad) {
             Text.of("Reloaded repo!").send()
@@ -57,6 +58,7 @@ object MeowddingLib : MeowddingMod("meowdding-lib") {
     }
 
     private fun loadRepo() {
+        debug("Start loading repo")
         StartRepoLoadingEvent.post(SkyBlockAPI.eventBus)
         CompletableFuture.runAsync {
             RemoteRepo.initialize(McClient.config.resolveSibling("meowdding-repo-cache"), callback = ::finishRepoLoadingEvent)

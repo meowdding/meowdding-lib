@@ -5,8 +5,9 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 interface MeowddingLogger {
-
     companion object {
+        internal val logAll: Boolean = java.lang.Boolean.getBoolean("meowdding.debug.log")
+
         internal val STACK_WALKER = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE)
         fun named(name: String): MeowddingLogger = MeowddingLoggerImpl(LoggerFactory.getLogger(name))
         fun autoResolve(): MeowddingLogger = MeowddingLoggerImpl(LoggerFactory.getLogger(STACK_WALKER.callerClass.simpleName))
@@ -96,23 +97,40 @@ interface MeowddingLogger {
 annotation class FeatureName(val name: String)
 
 internal data class MeowddingLoggerImpl(val logger: Logger, val defaultPrefix: String? = null) : MeowddingLogger {
+    enum class LogLevel(val noError: Logger.(String) -> Unit, val error: Logger.(String, Throwable) -> Unit) {
+        TRACE(Logger::trace, Logger::trace),
+        DEBUG(Logger::debug, Logger::debug),
+        INFO(Logger::info, Logger::info),
+        WARN(Logger::warn, Logger::warn),
+        ERROR(Logger::error, Logger::error),
+    }
+
     fun mergedPrefix(prefix: String?) = listOfNotNull(defaultPrefix, prefix).joinToString("/")
 
     private fun wrapMessage(message: String, prefix: String?): String {
         val prefix = mergedPrefix(prefix).takeUnless { it.isBlank() }
-        if (FabricLoader.getInstance().isDevelopmentEnvironment) {
-            return "${prefix?.let { "<$it> " } ?: ""}$message"
+        return if (FabricLoader.getInstance().isDevelopmentEnvironment) {
+            "${prefix?.let { "<$it> " } ?: ""}$message"
         } else {
-            return "[${logger.name}${prefix?.let { "/$it" } ?: ""}] $message"
+            "[${logger.name}${prefix?.let { "/$it" } ?: ""}] $message"
         }
     }
 
-    private fun log(message: String, throwable: Throwable?, prefix: String?, noError: (String) -> Unit, error: (String, Throwable) -> Unit) {
-        val message = wrapMessage(message, prefix)
-        if (throwable != null) {
-            error(message, throwable)
+    private fun log(message: String, throwable: Throwable?, prefix: String?, logLevel: LogLevel) {
+        val level = if (MeowddingLogger.logAll) {
+            listOf(logLevel, LogLevel.INFO).max()
         } else {
-            noError(message)
+            logLevel
+        }
+
+        val message = if (level != logLevel) {
+            "[${logLevel.name}] ${wrapMessage(message, prefix)}"
+        } else wrapMessage(message, prefix)
+
+        if (throwable != null) {
+            level.error(logger, message, throwable)
+        } else {
+            level.noError(logger, message)
         }
     }
 
@@ -120,14 +138,14 @@ internal data class MeowddingLoggerImpl(val logger: Logger, val defaultPrefix: S
         return MeowddingLoggerImpl(logger, mergedPrefix(name))
     }
 
-    override fun trace(message: String, throwable: Throwable?, prefix: String?) = log(message, throwable, prefix, logger::trace, logger::trace)
+    override fun trace(message: String, throwable: Throwable?, prefix: String?) = log(message, throwable, prefix, LogLevel.TRACE)
 
-    override fun debug(message: String, throwable: Throwable?, prefix: String?) = log(message, throwable, prefix, logger::debug, logger::debug)
+    override fun debug(message: String, throwable: Throwable?, prefix: String?) = log(message, throwable, prefix, LogLevel.DEBUG)
 
-    override fun info(message: String, throwable: Throwable?, prefix: String?) = log(message, throwable, prefix, logger::info, logger::info)
+    override fun info(message: String, throwable: Throwable?, prefix: String?) = log(message, throwable, prefix, LogLevel.INFO)
 
-    override fun warn(message: String, throwable: Throwable?, prefix: String?) = log(message, throwable, prefix, logger::warn, logger::warn)
+    override fun warn(message: String, throwable: Throwable?, prefix: String?) = log(message, throwable, prefix, LogLevel.WARN)
 
-    override fun error(message: String, throwable: Throwable?, prefix: String?) = log(message, throwable, prefix, logger::error, logger::error)
+    override fun error(message: String, throwable: Throwable?, prefix: String?) = log(message, throwable, prefix, LogLevel.ERROR)
 
 }
