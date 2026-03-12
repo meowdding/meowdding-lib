@@ -1,4 +1,3 @@
-//? if > 1.21.5 {
 package me.owdding.lib.rendering
 
 import earth.terrarium.olympus.client.pipelines.pips.OlympusPictureInPictureRenderState
@@ -35,4 +34,3 @@ abstract class MeowddingPipState<T : OlympusPictureInPictureRenderState<T>>() : 
     override fun scale() = scale
     override fun bounds() = bounds
 }
-//?}

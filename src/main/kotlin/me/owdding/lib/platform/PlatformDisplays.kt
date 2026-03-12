@@ -3,6 +3,8 @@ package me.owdding.lib.platform
 import com.mojang.blaze3d.vertex.PoseStack
 import me.owdding.lib.displays.Display
 import me.owdding.lib.displays.Displays.isMouseOver
+import me.owdding.lib.displays.entity.EntityStateRenderer
+import me.owdding.lib.displays.item.ItemStateRenderer
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.LivingEntity
@@ -21,14 +23,7 @@ import tech.thatgravyboat.skyblockapi.platform.*
 import tech.thatgravyboat.skyblockapi.utils.extentions.scaled
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import java.lang.Math
-import java.lang.System
 import kotlin.math.atan
-
-//? if > 1.21.5 {
-import me.owdding.lib.displays.entity.EntityStateRenderer
-import me.owdding.lib.displays.item.ItemStateRenderer
-//?} else
-//import net.minecraft.client.gui.screens.inventory.InventoryScreen
 
 internal object PlatformDisplays {
     fun entity(
@@ -74,22 +69,8 @@ internal object PlatformDisplays {
                 val entityScale = entity.scale
                 val scaledSize = scale / entityScale
 
-                //? if > 1.21.5 {
                 val positionOffset = Vector3f(0.0f, (-centerY / scaledSize) + entity.boundingBox.ysize.toFloat() / 2f, 0.0f)
                 EntityStateRenderer.draw(graphics, entity, width, height, scaledSize, positionOffset, baseRotation, tiltRotation)
-                //?} else {
-                /*val positionOffset = Vector3f(0.0f, entity.bbHeight / 2.0f * entityScale, 0.0f)
-                InventoryScreen.renderEntityInInventory(
-                    graphics,
-                    centerX,
-                    centerY,
-                    scaledSize,
-                    positionOffset,
-                    baseRotation,
-                    tiltRotation,
-                    entity,
-                )
-                *///?}
 
                 entity.yBodyRot = originalBodyRotation
                 entity.yRot = originalYRotation
@@ -113,10 +94,6 @@ internal object PlatformDisplays {
             override fun getHeight() = height
 
             override fun render(graphics: GuiGraphics) {
-                //? if 1.21.5 {
-                /*val x = graphics.pose().last().pose().m30().toInt()
-                val y = graphics.pose().last().pose().m31().toInt()
-                *///?} else
                 val (x, y) = Vector2i(graphics.pose().transformPosition(Vector2f(0f, 0f)), RoundingMode.TRUNCATE)
                 if (
                     !graphics.containsPointInScissor(x, y) && !graphics.containsPointInScissor(x + width, y) &&
@@ -126,25 +103,19 @@ internal object PlatformDisplays {
                 if (showTooltip && !item.isEmpty) {
                     val player = McPlayer.self
                     if (isMouseOver(this, graphics) && player != null) {
-                        //? > 1.21.5 {
                         graphics.setTooltipForNextFrame(McFont.self, item, McClient.mouse.first.toInt(), McClient.mouse.second.toInt())
-                        //?} else
-                        //graphics.renderTooltip(McFont.self, item, McClient.mouse.first.toInt(), McClient.mouse.second.toInt())
                     }
                 }
 
                 graphics.pushPop {
                     graphics.scale(width / 16f, height / 16f)
 
-                    //? if > 1.21.5 {
                     val scale = graphics.getScale()
                     if (scale.x > 1f || scale.y > 1f) {
                         ItemStateRenderer.draw(graphics, item, 0, 0)
                     } else {
                         graphics.renderItem(item, 0, 0)
                     }
-                    //?} else
-                    //graphics.renderItem(item, 0, 0)
 
                     val stackSize = item.count
                     if ((showStackSize && stackSize > 1) || customStackText != null) {
@@ -180,8 +151,6 @@ internal object PlatformDisplays {
             override fun getHeight() = display.getHeight()
             override fun render(graphics: GuiGraphics) {
                 graphics.pushPop {
-                    //? if 1.21.5
-                    //operations(graphics.pose())
                     display.render(graphics)
                 }
             }

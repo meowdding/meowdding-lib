@@ -24,7 +24,6 @@ internal fun RenderWorldEvent.renderBeaconBeam(
 ) {
     atCamera {
         translate(position)
-        //? if > 1.21.8 {
         BeaconRenderer.submitBeaconBeam(
             poseStack,
             McClient.self.gameRenderer.featureRenderDispatcher.submitNodeStorage,
@@ -37,11 +36,5 @@ internal fun RenderWorldEvent.renderBeaconBeam(
             beamRadius,
             glowRadius,
         )
-        //?} else {
-        /*BeaconRenderer.renderBeaconBeam(
-            poseStack, bufferSource, texture, partialTicks, textureScale, gameTime, yOffset, height, color,
-            beamRadius, glowRadius,
-        )
-        *///?}
     }
 }

@@ -16,17 +16,11 @@ import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 
 internal fun isDown(key: Int): Boolean {
-    //? if > 1.21.8 {
     return InputConstants.isKeyDown(McClient.window, key)
-    //?} else
-     //return InputConstants.isKeyDown(McClient.window.window, key) 
 }
 
 internal fun isMouseKeyDown(key: Int): Boolean {
-    //? if > 1.21.8 {
     return (GLFW.glfwGetMouseButton(McClient.window.handle(), key) == 1)
-    //?} else
-    //return (GLFW.glfwGetMouseButton(McClient.window.window, key) == 1)
 }
 
 data class KeyboardInputs(
@@ -79,23 +73,16 @@ fun keysOf(vararg symbols: String) = KeyboardInputs(
     symbols = symbols.toSet(),
 )
 
-//? if > 1.21.8
 private val categoryCache = mutableMapOf<Identifier, KeyMapping.Category>()
 
 internal fun keyMapping(translationKey: String, keyCode: Int, category: Identifier): KeyMapping {
-    //? if > 1.21.8 {
     val category = categoryCache.getOrPut(category) { KeyMapping.Category(category) }
-    //?} else
-    //val category = category.toLanguageKey("key.category")
 
     return KeyMapping(translationKey, keyCode, category)
 }
 
 fun KeyMapping.matches(event: KeyEvent): Boolean {
-    //? if > 1.21.8 {
     return this.matches(event.into())
-    //?} else
-    //return this.matches(event.key, event.scancode)
 }
 
 open class MeowddingKeybind(

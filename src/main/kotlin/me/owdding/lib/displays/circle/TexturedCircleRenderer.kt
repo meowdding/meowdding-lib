@@ -1,4 +1,3 @@
-//? if > 1.21.5 {
 package me.owdding.lib.displays.circle
 
 //? < 1.21.11
@@ -16,7 +15,6 @@ import net.minecraft.client.gui.render.pip.PictureInPictureRenderer
 import net.minecraft.client.renderer.MultiBufferSource
 //? < 1.21.11
 //import net.minecraft.client.renderer.texture.AbstractTexture
-//? > 1.21.8
 import net.minecraft.data.AtlasIds
 import net.minecraft.resources.Identifier
 import org.joml.Matrix3x2f
@@ -41,17 +39,9 @@ class TexturedCircleRenderer(buffer: MultiBufferSource.BufferSource) : PictureIn
         buffer.addVertex(scaledWidth, scaledHeight, 0f).setUv(1f, 1f).setColor(-1)
         buffer.addVertex(scaledWidth, 0f, 0f).setUv(1f, -1f).setColor(-1)
 
-        //? > 1.21.8 {
          val sprite = McClient.self.atlasManager.getAtlasOrThrow(AtlasIds.GUI).getSprite(state.texture)
-        //?} else
-        //val sprite = McClient.self.guiSprites.getSprite(state.texture)
 
-        //? > 1.21.10 {
         val texture = TextureUtils.single(sprite.atlasLocation())
-        //?} else {
-        /*val abstractTexture: AbstractTexture = McClient.self.textureManager.getTexture(sprite.atlasLocation())
-        RenderSystem.setShaderTexture(0, abstractTexture.textureView)
-        *///?}
 
 
         PipelineRenderer.builder(TexturedCirclePipeline.PIPELINE, buffer.buildOrThrow())
@@ -84,4 +74,3 @@ data class TexturedCircleState(
     override val y0: Int = bounds.top()
     override val y1: Int = bounds.bottom()
 }
-//?}

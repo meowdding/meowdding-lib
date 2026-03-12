@@ -20,9 +20,7 @@ import net.minecraft.util.TriState
 
 val TEXT_RENDER_TYPE_CACHE: BiFunction<TextShader, Identifier, RenderType> =
     Util.memoize<TextShader, Identifier, RenderType> { shader, location ->
-        //? if 1.21.5 {
-        /*val shard = TextureStateShard(location, TriState.FALSE, false)
-        *///?} else if < 1.21.11 {
+        //? if < 1.21.11 {
         /*val shard = TextureStateShard(location, false)
         *///? }
 

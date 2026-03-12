@@ -1,4 +1,3 @@
-//? if > 1.21.5 {
 package me.owdding.lib.mixins;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
@@ -31,4 +30,3 @@ public class GuiTextRenderStateMixin {
         return original.call();
     }
 }
-//?}

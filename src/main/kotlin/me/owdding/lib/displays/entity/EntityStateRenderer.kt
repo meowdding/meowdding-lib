@@ -1,4 +1,3 @@
-//? if > 1.21.5 {
 package me.owdding.lib.displays.entity
 
 import com.mojang.blaze3d.platform.Lighting
@@ -12,7 +11,6 @@ import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.entity.EntityRenderer
 import net.minecraft.client.renderer.entity.state.EntityRenderState
-//? if > 1.21.8
 import net.minecraft.client.renderer.state.CameraRenderState
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.Entity
@@ -43,7 +41,6 @@ class EntityStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPic
         stack.translate(state.translation.x, state.translation.y, state.translation.z)
         stack.mulPose(state.rotation)
 
-        //? if > 1.21.8 {
         val cameraState = CameraRenderState()
         val featureRenderer = renderer.featureRenderDispatcher
         if (state.cameraAngle != null) {
@@ -54,16 +51,6 @@ class EntityStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPic
         //featureRenderer.renderAllFeatures()
         dispatcher.submit(state.state, cameraState, 0.0, 0.0, 0.0, stack, featureRenderer.submitNodeStorage)
         featureRenderer.renderAllFeatures()
-        //?} else {
-        /*if (state.cameraAngle != null) {
-            dispatcher.overrideCameraOrientation(state.cameraAngle.conjugate(Quaternionf()).rotateY(Mth.PI))
-        }
-
-        dispatcher.setRenderShadow(false)
-        dispatcher.render(state.state, 0.0, 0.0, 0.0, stack, this.bufferSource, 15728880)
-        dispatcher.setRenderShadow(true)
-        *///?}
-
     }
 
     override fun getTextureLabel(): String = "meowdding_lib_entity_state"
@@ -105,8 +92,6 @@ class EntityStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPic
             val state = this.createRenderState()
             this.extractRenderState(entity, state, 1f)
 
-            //? < 1.21.10
-            //state.hitboxesRenderState = null
             state.x = 0.0
             state.y = 0.0
             state.z = 0.0
@@ -141,5 +126,3 @@ class EntityStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPic
         }
     }
 }
-
-//?}

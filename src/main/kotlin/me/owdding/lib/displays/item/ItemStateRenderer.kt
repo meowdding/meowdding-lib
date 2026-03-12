@@ -1,4 +1,3 @@
-//? if > 1.21.5 {
 package me.owdding.lib.displays.item
 
 import com.mojang.blaze3d.platform.Lighting.Entry
@@ -47,12 +46,9 @@ class ItemStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictu
 
         McClient.self.gameRenderer.lighting.setupFor(if (item.itemStackRenderState().usesBlockLight()) Entry.ITEMS_3D else Entry.ITEMS_FLAT)
 
-        //? if > 1.21.8 {
         val featureRenderer = McClient.self.gameRenderer.featureRenderDispatcher
         item.itemStackRenderState().submit(stack, featureRenderer.submitNodeStorage, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0)
         featureRenderer.renderAllFeatures()
-        //?} else
-        //item.itemStackRenderState().render(stack, this.bufferSource, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY)
     }
 
     override fun getTranslateY(height: Int, ignored: Int): Float {
@@ -134,5 +130,3 @@ class ItemStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictu
         }
     }
 }
-
-//?}

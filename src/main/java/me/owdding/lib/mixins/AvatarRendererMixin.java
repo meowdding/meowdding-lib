@@ -1,4 +1,3 @@
-//? if > 1.21.8 {
 package me.owdding.lib.mixins;
 
 import me.owdding.lib.cosmetics.CosmeticManager;
@@ -45,4 +44,4 @@ public class AvatarRendererMixin {
         );
     }
 
-}//?}
+}

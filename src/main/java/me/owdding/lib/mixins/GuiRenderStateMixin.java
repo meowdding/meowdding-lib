@@ -1,4 +1,3 @@
-//? if > 1.21.5 {
 package me.owdding.lib.mixins;
 
 import me.owdding.lib.accessor.FontPipelineHolder;
@@ -25,5 +24,3 @@ public class GuiRenderStateMixin {
         holder.meowddinglib$setPipeline(shader.getPipeline());
     }
 }
-
-//?}

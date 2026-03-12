@@ -1,4 +1,3 @@
-//? if > 1.21.5 {
 package me.owdding.lib.mixins;
 
 import com.mojang.blaze3d.pipeline.RenderPipeline;
@@ -9,14 +8,8 @@ import org.spongepowered.asm.mixin.Unique;
 @Mixin(targets = {
     "net.minecraft.client.gui.render.state.GuiTextRenderState",
     "net.minecraft.client.gui.Font$PreparedTextBuilder",
-
-    //? if < 1.21.9 {
-    /*"net.minecraft.client.gui.font.glyphs.BakedGlyph$GlyphInstance",
-    "net.minecraft.client.gui.font.glyphs.BakedGlyph$Effect",
-    *///?} else {
     "net.minecraft.client.gui.font.glyphs.BakedSheetGlyph$GlyphInstance",
     "net.minecraft.client.gui.font.glyphs.BakedSheetGlyph$EffectInstance",
-    //?}
 })
 public class FontPipelineHolderMixin implements FontPipelineHolder {
 
@@ -33,4 +26,3 @@ public class FontPipelineHolderMixin implements FontPipelineHolder {
         this.meowddinglib$pipeline = pipeline;
     }
 }
-//?}
