@@ -1,4 +1,3 @@
-//? if > 1.21.5 {
 #version 150
 
 //!moj_import <minecraft:dynamictransforms.glsl>
@@ -17,4 +16,3 @@ void main() {
     texCoord0 = UV0;
     vertexColor = Color;
 }
-//?}

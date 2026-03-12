@@ -11,17 +11,8 @@ in ivec2 UV2;
 
 uniform sampler2D Sampler0;
 
-//? if 1.21.5 {
-//uniform mat4 ModelViewMat;
-//uniform mat4 ProjMat;
-//uniform int FogShape;
-//?}
-
-//? if > 1.21.5 {
 out float sphericalVertexDistance;
 out float cylindricalVertexDistance;
-//?} else
-//out float vertexDistance;
 
 out vec4 vertexColor;
 out vec2 texCoord0;
@@ -29,11 +20,8 @@ out vec2 texCoord0;
 void main() {
     gl_Position = ProjMat * ModelViewMat * vec4(Position, 1.0);
 
-    //? if > 1.21.5 {
     sphericalVertexDistance = fog_spherical_distance(Position);
     cylindricalVertexDistance = fog_cylindrical_distance(Position);
-    //?} else
-    //vertexDistance = fog_distance(Position, FogShape);
     vertexColor = Color;
     texCoord0 = UV0;
 }
