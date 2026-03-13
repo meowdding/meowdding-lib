@@ -22,7 +22,13 @@ public class FontMixin {
     private final int meowddinglib$shadow = ARGB.scaleRGB(0xFFFFFFFF, 0.25f);
 
     @Inject(method = "addGlyph", at = @At("HEAD"))
-    private void applyGlyph(TextRenderable.Styled instance, CallbackInfo ci) {
+    private void applyGlyph(
+        //? > 1.21.10 {
+        TextRenderable instance,
+        //?} else
+        //TextRenderable instance,
+        CallbackInfo ci
+    ) {
         var holder = FontPipelineHolder.getHolder(instance);
         if (holder == null) {
             return;

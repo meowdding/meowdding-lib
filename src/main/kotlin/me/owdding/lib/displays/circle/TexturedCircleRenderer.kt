@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.Tesselator
 import com.mojang.blaze3d.vertex.VertexFormat
 import earth.terrarium.olympus.client.pipelines.renderer.PipelineRenderer
+//? > 1.21.10
 import earth.terrarium.olympus.client.utils.TextureUtils
 import me.owdding.lib.rendering.MeowddingPipState
 import net.minecraft.client.gui.navigation.ScreenRectangle
@@ -40,7 +41,12 @@ class TexturedCircleRenderer(buffer: MultiBufferSource.BufferSource) : PictureIn
 
          val sprite = McClient.self.atlasManager.getAtlasOrThrow(AtlasIds.GUI).getSprite(state.texture)
 
+        //? > 1.21.10 {
         val texture = TextureUtils.single(sprite.atlasLocation())
+        //?} else {
+        /*val abstractTexture: AbstractTexture = McClient.self.textureManager.getTexture(sprite.atlasLocation())
+        RenderSystem.setShaderTexture(0, abstractTexture.textureView)
+        *///?}
 
         PipelineRenderer.builder(TexturedCirclePipeline.PIPELINE, buffer.buildOrThrow())
             //? > 1.21.10
