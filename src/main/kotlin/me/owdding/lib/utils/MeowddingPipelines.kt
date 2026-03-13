@@ -7,9 +7,6 @@ object MeowddingPipelines {
 
     val GAME_TIME_SNIPPET: RenderPipeline.Snippet = RenderPipeline
         .builder()
-        //? if > 1.21.5 {
         .withUniform("Globals", UniformType.UNIFORM_BUFFER)
-        //?} else
-        //.withUniform("GameTime", UniformType.FLOAT)
         .buildSnippet()
 }

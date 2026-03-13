@@ -1,4 +1,3 @@
-//? if > 1.21.5 {
 package me.owdding.lib.accessor;
 
 import com.mojang.blaze3d.pipeline.RenderPipeline;
@@ -16,4 +15,3 @@ public interface FontPipelineHolder {
         return instance instanceof FontPipelineHolder holder ? holder : null;
     }
 }
-//?}

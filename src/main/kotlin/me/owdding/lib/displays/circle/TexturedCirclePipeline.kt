@@ -1,4 +1,3 @@
-//? if > 1.21.5 {
 package me.owdding.lib.displays.circle
 
 import com.mojang.blaze3d.buffers.Std140Builder
@@ -52,4 +51,3 @@ object TexturedCirclePipeline {
             .build(),
     )
 }
-//?}

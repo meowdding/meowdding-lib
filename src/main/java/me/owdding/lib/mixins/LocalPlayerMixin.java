@@ -1,4 +1,3 @@
-//? if > 1.21.5 {
 package me.owdding.lib.mixins;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
@@ -36,5 +35,3 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
         original.call(progress, total, level);
     }
 }
-
-//?}

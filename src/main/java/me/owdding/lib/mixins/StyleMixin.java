@@ -9,8 +9,6 @@ import java.util.Objects;
 import me.owdding.lib.helper.TextShaderHolder;
 import me.owdding.lib.rendering.text.TextShader;
 import net.minecraft.network.chat.*;
-//? < 1.21.9
-//import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -28,10 +26,7 @@ public abstract class StyleMixin implements TextShaderHolder {
     @Shadow
     @Final
     @Nullable
-    //? if > 1.21.8 {
     FontDescription font;
-    //?} else
-    //Identifier font;
     @Shadow
     @Final
     @Nullable
@@ -102,11 +97,7 @@ public abstract class StyleMixin implements TextShaderHolder {
         "applyTo"
     }, at = @At(
         value = "NEW",
-        //? if > 1.21.8 {
         target = "(Lnet/minecraft/network/chat/TextColor;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lnet/minecraft/network/chat/ClickEvent;Lnet/minecraft/network/chat/HoverEvent;Ljava/lang/String;Lnet/minecraft/network/chat/FontDescription;)Lnet/minecraft/network/chat/Style;"
-        //?} else {
-        /*target = "(Lnet/minecraft/network/chat/TextColor;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lnet/minecraft/network/chat/ClickEvent;Lnet/minecraft/network/chat/HoverEvent;Ljava/lang/String;Lnet/minecraft/resources/Identifier;)Lnet/minecraft/network/chat/Style;"
-       *///?}
     ))
     public Style copy(
         TextColor textColor,
@@ -119,7 +110,7 @@ public abstract class StyleMixin implements TextShaderHolder {
         ClickEvent clickEvent,
         HoverEvent hoverEvent,
         String insertion,
-        /*? if > 1.21.8 {*/ FontDescription fontDescription, /*?} else {*/ /*Identifier font, *//*?}*/
+        FontDescription fontDescription,
         Operation<Style> original
     ) {
         var previous = meowddinglib$SHADER.get();
@@ -135,7 +126,7 @@ public abstract class StyleMixin implements TextShaderHolder {
             clickEvent,
             hoverEvent,
             insertion,
-            /*? if > 1.21.8 {*/ fontDescription /*?} else {*/ /*font *//*?}*/
+            fontDescription
         );
         meowddinglib$SHADER.set(previous);
         return style;

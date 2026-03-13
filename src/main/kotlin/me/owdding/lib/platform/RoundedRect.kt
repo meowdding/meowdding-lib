@@ -13,9 +13,6 @@ fun GuiGraphics.drawRoundedRectangle(
     borderRadius: Float,
     borderWidth: Int,
 ) {
-    //? 1.21.5 {
-    /*RoundedRectangle.drawRelative(
-    *///?} else
     RoundedRectangle.draw(
         this, x, y, width, height, backgroundColor.toInt(), borderColor.toInt(), borderRadius, borderWidth
     )

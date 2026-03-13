@@ -1,4 +1,3 @@
-//? if > 1.21.8 {
 package me.owdding.lib.mixins;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
@@ -22,5 +21,3 @@ public class TextRenderablesMixin {
         return Objects.requireNonNullElseGet(pipeline, original::call);
     }
 }
-
-//?}
