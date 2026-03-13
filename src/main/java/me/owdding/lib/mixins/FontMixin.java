@@ -24,7 +24,7 @@ public class FontMixin {
     @Inject(method = "addGlyph", at = @At("HEAD"))
     private void applyGlyph(
         //? > 1.21.10 {
-        TextRenderable instance,
+        TextRenderable.Styled instance,
         //?} else
         //TextRenderable instance,
         CallbackInfo ci
