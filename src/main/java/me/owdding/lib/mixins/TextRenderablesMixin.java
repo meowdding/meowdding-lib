@@ -28,7 +28,13 @@ public class TextRenderablesMixin {
     }
 
     @SuppressWarnings("ConstantValue")
-    @WrapOperation(method = "renderType", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/font/GlyphRenderTypes;select(Lnet/minecraft/client/gui/Font$DisplayMode;)Lnet/minecraft/client/renderer/rendertype/RenderType;"))
+    @WrapOperation(
+        method = "renderType",
+        //? > 1.21.10 {
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/font/GlyphRenderTypes;select(Lnet/minecraft/client/gui/Font$DisplayMode;)Lnet/minecraft/client/renderer/rendertype/RenderType;")
+        //?} else
+        //at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/font/GlyphRenderTypes;select(Lnet/minecraft/client/gui/Font$DisplayMode;)Lnet/minecraft/client/renderer/RenderType;")
+    )
     private RenderType meowddinglib$usePipeline(GlyphRenderTypes instance, Font.DisplayMode displayMode, Operation<RenderType> original) {
         var holder = FontPipelineHolder.getHolder(this);
         var pipeline = holder != null ? holder.meowddinglib$getPipeline() : null;
