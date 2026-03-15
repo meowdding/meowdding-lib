@@ -18,41 +18,47 @@ import net.minecraft.client.renderer.RenderStateShard.TextureStateShard
 import net.minecraft.util.TriState
 *///?}
 
-val TEXT_RENDER_TYPE_CACHE: BiFunction<TextShader, Identifier, RenderType> =
-    Util.memoize<TextShader, Identifier, RenderType> { shader, location ->
-        //? if < 1.21.11 {
-        /*val shard = TextureStateShard(location, false)
-        *///? }
+val TEXT_RENDER_TYPE_CACHE: BiFunction<RenderPipeline, Identifier, RenderType> = Util.memoize { pipeline, location ->
+    //? if < 1.21.11 {
+    /*val shard = TextureStateShard(location, false)
+    *///? }
 
-        //? if > 1.21.10 {
-        RenderType.create(
-            "meowddinglib/font_shader",
-            RenderSetup.builder(shader.pipeline)
-                .bufferSize(786432)
-                .useLightmap()
-                .withTexture("Sampler0", location)
-                .createRenderSetup(),
-        )
-        //?} else {
-        /*RenderType.create(
-            "meowddinglib/font_shader",
-            786432,
-            false,
-            false,
-            shader.pipeline,
-            CompositeState.builder()
-                .setTextureState(shard)
-                .setLightmapState(RenderStateShard.LIGHTMAP)
-                .createCompositeState(false),
-        )
-        *///?}
-    }
+    //? if > 1.21.10 {
+    RenderType.create(
+        "meowddinglib/font_shader",
+        RenderSetup.builder(pipeline)
+            .bufferSize(786432)
+            .useLightmap()
+            .withTexture("Sampler0", location)
+            .createRenderSetup(),
+    )
+    //?} else {
+    /*RenderType.create(
+        "meowddinglib/font_shader",
+        786432,
+        false,
+        false,
+        pipeline,
+        CompositeState.builder()
+            .setTextureState(shard)
+            .setLightmapState(RenderStateShard.LIGHTMAP)
+            .createCompositeState(false),
+    )
+    *///?}
+}
 
 fun createTextRenderType(
     shader: TextShader,
     location: Identifier,
 ): RenderType {
-    return TEXT_RENDER_TYPE_CACHE.apply(shader, location)
+    return TEXT_RENDER_TYPE_CACHE.apply(shader.pipeline, location)
+}
+
+fun createTextRenderType(
+    pipeline: RenderPipeline,
+    location: Identifier,
+): RenderType {
+    return TEXT_RENDER_TYPE_CACHE.apply(pipeline, location)
 }
 
 fun Style.textShader(): TextShader? {
