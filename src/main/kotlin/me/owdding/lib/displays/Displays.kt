@@ -356,6 +356,7 @@ object Displays {
             override fun getWidth(): Int = if (width == -1) renderable.width else width
             override fun getHeight(): Int = if (height == -1) renderable.height else height
             override fun extract(graphics: GuiGraphicsExtractor) {
+                //~ if >= 26.1 'render' -> 'extractRenderState'
                 renderable.extractRenderState(graphics, -1, -1, 0f)
             }
         }

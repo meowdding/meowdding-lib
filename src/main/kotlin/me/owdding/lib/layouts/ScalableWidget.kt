@@ -71,7 +71,7 @@ class ScalableWidget(val original: AbstractWidget) : BaseParentWidget(original.w
             original.y = (this@ScalableWidget.y / scale).floor()
             this@ScalableWidget.updateWidthHeight()
             currentScale.addLast(scale)
-            //~ if >= 26.1 'render' -> 'extractWidgetRenderState'
+            //~ if >= 26.1 'render' -> 'extractRenderState'
             original.extractRenderState(guiGraphics, (mouseX / scale).floor(), (mouseY / scale).floor(), partialTick)
             currentScale.removeLast()
         }

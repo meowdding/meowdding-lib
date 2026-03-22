@@ -17,6 +17,7 @@ class DisplayWidget(private val display: Display): BaseWidget() {
         height = display.getHeight()
     }
 
+    //~ if >= 26.1 'renderWidget' -> 'extractWidgetRenderState'
     override fun extractWidgetRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         display.extract(graphics, x, y)
         renderer.render(graphics, WidgetRendererContext<DisplayWidget?>(this, mouseX, mouseY), partialTicks)

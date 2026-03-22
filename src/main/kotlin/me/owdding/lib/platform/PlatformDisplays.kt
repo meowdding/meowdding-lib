@@ -114,7 +114,7 @@ internal object PlatformDisplays {
                     if (scale.x > 1f || scale.y > 1f) {
                         ItemStateRenderer.extract(graphics, item, 0, 0)
                     } else {
-                        //~ if >= 26.1 'renderItem' -> 'item'
+                        //~ if >= 26.1 'renderItem(' -> 'item('
                         graphics.item(item, 0, 0)
                     }
 

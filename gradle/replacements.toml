@@ -42,7 +42,7 @@ to = "net.minecraft.Util"
 [replacements]
 type = "regex"
 condition = "< 1.21.11"
-regex = "import net.minecraft.client.renderer.RenderTypes(?!;)"
+regex = "import net.minecraft.client.renderer.rendertype.RenderTypes(?!;)"
 to = "import net.minecraft.client.renderer.RenderType as RenderTypes"
 reverseRegex = "import net.minecraft.client.renderer.rendertype.RenderType as RenderTypes"
 reverse = "import net.minecraft.client.renderer.rendertype.RenderTypes"

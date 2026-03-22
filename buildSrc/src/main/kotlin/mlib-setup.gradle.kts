@@ -66,7 +66,7 @@ val archiveName = "Meowdding-Lib"
 
 tasks.named("build") {
 
-    val files = tasks.named("remapJar").map { it.outputs.files }
+    val files = tasks.named(if(isUnobfuscated()) "jar" else "remapJar").map { it.outputs.files }
     inputs.properties(
         "project_name" to project.name,
         "project_dir" to rootProject.projectDir.toPath().absolutePathString(),
@@ -101,7 +101,7 @@ tasks.withType<KotlinCompile>().configureEach {
     )
 }
 
-val accessWidenerFile = rootProject.file(if (isUnobfuscated()) "src/mlib.accesswidener" else "src/mlib.obg.accesswidener")
+val accessWidenerFile = rootProject.file(if (isUnobfuscated()) "src/mlib.accesswidener" else "src/mlib.obf.accesswidener")
 
 tasks.withType<ProcessResources>().configureEach {
     filteringCharset = "UTF-8"

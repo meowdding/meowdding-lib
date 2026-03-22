@@ -37,9 +37,12 @@ object DisplayTest : Screen(CommonComponents.EMPTY) {
 
     val entity = Displays.entity(RemotePlayer(McClient.self.level!!, McPlayer.self!!.gameProfile), 50, 100, 100 / 3)
 
+    //~ if >= 26.1 'render' -> 'extractRenderState'
     override fun extractRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
+        //~ if >= 26.1 'render' -> 'extractRenderState'
         super.extractRenderState(graphics, mouseX, mouseY, partialTicks)
 
+        //~ if >= 26.1 'render' -> 'extract'
         entity.extract(graphics, 300, 100)
 
         shaders.forEachIndexed { index, shader ->
@@ -66,6 +69,7 @@ object DisplayTest : Screen(CommonComponents.EMPTY) {
             display(Displays.wrappedText(meow, width, textAlignment = Alignment.START).withOutline())
             display(Displays.wrappedText(meow, width, textAlignment = Alignment.CENTER).withOutline())
             display(Displays.wrappedText(meow, width, textAlignment = Alignment.END).withOutline())
+        //~ if >= 26.1 'render' -> 'render'
         }.extract(graphics, 200, 200)
     }
 

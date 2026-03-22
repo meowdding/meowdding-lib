@@ -49,6 +49,6 @@ class BackgroundWidget(backgroundWidget: LayoutElement, widget: LayoutElement, v
         body.setPosition(this.x + padding, this.y + padding)
 
         //~ if >= 26.1 'renderWidget' -> 'extractWidgetRenderState'
-        super.extractRenderState(graphics, mouseX, mouseY, partialTicks)
+        super.extractWidgetRenderState(graphics, mouseX, mouseY, partialTicks)
     }
 }

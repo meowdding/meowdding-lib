@@ -1,3 +1,6 @@
+import net.fabricmc.loom.task.ValidateAccessWidenerTask
+import org.gradle.kotlin.dsl.withType
+
 plugins {
     id("net.fabricmc.fabric-loom-remap")
     `mlib-setup`
@@ -26,3 +29,5 @@ loom {
         accessWidenerPath.set(accessWidenerFile)
     }
 }
+
+tasks.withType<ValidateAccessWidenerTask> { enabled = false }
