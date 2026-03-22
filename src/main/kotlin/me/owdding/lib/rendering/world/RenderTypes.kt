@@ -1,7 +1,12 @@
 package me.owdding.lib.rendering.world
 
+//? >= 26.1
+import com.mojang.blaze3d.pipeline.DepthStencilState
 import com.mojang.blaze3d.pipeline.RenderPipeline
-import com.mojang.blaze3d.platform.DepthTestFunction
+//? >= 26.1
+import com.mojang.blaze3d.platform.CompareOp
+//? < 26.1
+//import com.mojang.blaze3d.platform.DepthTestFunction
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.VertexFormat
 import net.minecraft.client.renderer.RenderPipelines
@@ -16,7 +21,10 @@ object RenderTypes {
     private val blockFillTriangleThroughWalls = RenderPipeline.builder(RenderPipelines.DEBUG_FILLED_SNIPPET)
         .withLocation("pipeline/debug_filled_box")
         .withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.TRIANGLE_STRIP)
-        .withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST)
+        //? >= 26.1
+        .withDepthStencilState(DepthStencilState(CompareOp.ALWAYS_PASS, false))
+        //? < 26.1
+        //.withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST)
         .build()
 
     val BLOCK_FILL_TRIANGLE_THROUGH_WALLS =
@@ -42,7 +50,10 @@ object RenderTypes {
     private val blockFillQuad = RenderPipeline.builder(RenderPipelines.DEBUG_FILLED_SNIPPET)
         .withLocation("pipeline/debug_filled_box")
         .withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS)
-        .withDepthBias(-1f, -10f)
+        //? >= 26.1
+        .withDepthStencilState(DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false, -1f, -10f))
+        //? < 26.1
+        //.withDepthBias(-1f, -10f)
         .build()
 
     val BLOCK_FILL_QUAD =

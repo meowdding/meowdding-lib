@@ -7,14 +7,17 @@ import com.mojang.blaze3d.textures.FilterMode
 import com.mojang.blaze3d.textures.GpuTextureView
 import com.mojang.blaze3d.vertex.PoseStack
 import earth.terrarium.olympus.client.pipelines.pips.OlympusPictureInPictureRenderState
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.navigation.ScreenRectangle
 import net.minecraft.client.gui.render.TextureSetup
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer
-import net.minecraft.client.gui.render.state.BlitRenderState
-import net.minecraft.client.gui.render.state.GuiItemRenderState
-import net.minecraft.client.gui.render.state.GuiRenderState
-import net.minecraft.client.renderer.LightTexture
+//~ if >= 26.1 'gui.render.state' -> 'renderer.state.gui' {
+import net.minecraft.client.renderer.state.gui.BlitRenderState
+import net.minecraft.client.renderer.state.gui.GuiItemRenderState
+import net.minecraft.client.renderer.state.gui.GuiRenderState
+//~ }
+//~ if >= 26.1 'client.renderer.LightTexture' -> 'util.LightCoordsUtil as LightTexture'
+import net.minecraft.util.LightCoordsUtil as LightTexture
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.client.renderer.item.TrackingItemStackRenderState
@@ -25,6 +28,7 @@ import org.joml.Matrix3x2f
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
+import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import java.util.Objects
 import java.util.function.Function
 
@@ -56,7 +60,8 @@ class ItemStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictu
     }
 
     override fun blitTexture(state: State, gui: GuiRenderState) {
-        gui.submitBlitToCurrentLayer(
+        //~ if >= 26.1 'submit' -> 'add'
+        gui.addBlitToCurrentLayer(
             BlitRenderState(
                 RenderPipelines.GUI_TEXTURED_PREMULTIPLIED_ALPHA,
                 TextureSetup.singleTexture(
@@ -106,8 +111,8 @@ class ItemStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictu
     }
 
     companion object {
-        fun draw(
-            graphics: GuiGraphics,
+        fun extract(
+            graphics: GuiGraphicsExtractor,
             item: ItemStack,
             x: Int, y: Int,
         ) {
@@ -116,10 +121,12 @@ class ItemStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictu
             val state = TrackingItemStackRenderState()
             McClient.self.itemModelResolver.updateForTopItem(state, item, ItemDisplayContext.GUI, McLevel.self, McPlayer.self, 0)
 
-            graphics.guiRenderState.submitPicturesInPictureState(
+            //~ if >= 26.1 'submit' -> 'add'
+            graphics.guiRenderState.addPicturesInPictureState(
                 State(
                     GuiItemRenderState(
-                        item.item.name.toString(),
+                        //? < 26.1
+                        //item.item.name.toString(),
                         Matrix3x2f(graphics.pose()),
                         state,
                         x, y,

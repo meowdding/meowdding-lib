@@ -101,7 +101,7 @@ tasks.withType<KotlinCompile>().configureEach {
     )
 }
 
-val accessWidenerFile = rootProject.file("src/sbapi.accesswidener")
+val accessWidenerFile = rootProject.file(if (isUnobfuscated()) "src/mlib.accesswidener" else "src/mlib.obg.accesswidener")
 
 tasks.withType<ProcessResources>().configureEach {
     filteringCharset = "UTF-8"
@@ -115,6 +115,7 @@ tasks.withType<ProcessResources>().configureEach {
     })
     with(copySpec {
         from(accessWidenerFile)
+        rename { it.replace(".obf", "") }
     })
 }
 
@@ -236,13 +237,11 @@ dependencies {
     "ksp"(versionedCatalog["meowdding.ktmodules"])
     "ksp"(versionedCatalog["meowdding.ktcodecs"])
 
-    maybeModImplementation(versionedCatalog["hypixelapi"])
-
     "include"(versionedCatalog["meowdding.patches"])
     includeImplementation(versionedCatalog["moulberry.mixinconstraints"])
 
     "compileOnly"(versionedCatalog["iris"])
-    maybeModRuntimeOnly(versionedCatalog["rei"])
+    maybeModCompileOnly(versionedCatalog["rei"])
 }
 
 fun DependencyHandlerScope.includeImplementation(dep: Any, transitive: Boolean = true, remap: Boolean = true) {

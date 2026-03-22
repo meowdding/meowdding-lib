@@ -13,8 +13,7 @@ gson = "2.12.1"
 resourceful-config-kotlin = "3.5.15"
 
 # Dependencies
-skyblockapi = "4.0.13+26.1-rc2+build.1"
-hypixelapi = "1.0.1+build.1+mc1.21"
+skyblockapi = "4.0.13+26.1-rc2+build.2"
 placeholders = "2.6.1+1.21.5"
 rei = "20.0.811"
 
@@ -32,7 +31,6 @@ fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-l
 fabric-language-kotlin = { module = "net.fabricmc:fabric-language-kotlin", version.ref = "fabric-language-kotlin" }
 
 skyblockapi = { module = "tech.thatgravyboat:skyblock-api", version.ref = "skyblockapi" }
-hypixelapi = { module = "maven.modrinth:hypixel-mod-api", version.ref = "hypixelapi" }
 placeholders = { module = "eu.pb4:placeholder-api", version.ref = "placeholders" }
 rei = { module = "me.shedaniel:RoughlyEnoughItems-api-fabric", version.ref = "rei" }
 

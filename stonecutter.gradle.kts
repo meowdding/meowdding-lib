@@ -9,12 +9,12 @@ plugins {
     `maven-publish`
 }
 
-stonecutter active "1.21.11"
+stonecutter active "26.1"
 
 stonecutter handlers {
-    configure("fsh", "vsh") {
-        commenter = line("//")
-    }
+    //configure("fsh", "vsh") {
+    //    commenter = line("//")
+    //}
 }
 
 stonecutter parameters {
@@ -23,25 +23,18 @@ stonecutter parameters {
 
     Replacements.read(project).replacements.forEach { (name, replacement) ->
         when (replacement) {
-            is StringReplacement if replacement.named -> replacements.string(name) {
-                direction = eval(current.version, replacement.condition)
-                replace(replacement.from, replacement.to)
-            }
-
-            is RegexReplacement if replacement.named -> replacements.regex(name) {
-                direction = eval(current.version, replacement.condition)
-                replace(
-                    replacement.regex to replacement.to,
-                    replacement.reverseRegex to replacement.reverse
-                )
-            }
-
-            is StringReplacement -> replacements.string {
+            is StringReplacement  -> replacements.string {
+                if (replacement.named) {
+                    id = name
+                }
                 direction = eval(current.version, replacement.condition)
                 replace(replacement.from, replacement.to)
             }
 
             is RegexReplacement -> replacements.regex {
+                if (replacement.named) {
+                    id = name
+                }
                 direction = eval(current.version, replacement.condition)
                 replace(
                     replacement.regex to replacement.to,

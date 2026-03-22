@@ -49,7 +49,10 @@ object REIRuntimeCompatability {
     val installed get() = KnownMods.REI.installed
     fun getReiHoveredItemStack(): ItemStack? {
         if (!installed) return null
-        return runCatching { getItemList() ?: getRecipe() ?: getRecipeFallback() }.getOrNull()?.takeUnless { it.isEmpty }
+        //? >= 26.1
+        return null
+        //? < 26.1
+        //return runCatching { getItemList() ?: getRecipe() ?: getRecipeFallback() }.getOrNull()?.takeUnless { it.isEmpty }
     }
 
     fun getCurrentSearchBar(): String? {
@@ -67,7 +70,8 @@ object REIRuntimeCompatability {
             accessor.`mlib$isHighlighting`()
         }.getOrDefault(false)
     }
-
+    //? < 26.1 {
+    /*
     // Taken from REI, somehow if I try to change anything it just refuses to work
     private fun shouldReturn(screen: Screen?): Boolean {
         if (screen == null) return true
@@ -101,4 +105,5 @@ object REIRuntimeCompatability {
     }
 
     private fun EntryStack<*>.toStack(): ItemStack? = this.value as? ItemStack ?: this.cheatsAs().value
+    *///? }
 }

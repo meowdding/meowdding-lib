@@ -1,6 +1,10 @@
 package me.owdding.lib.rendering.text.builtin
 
+//? >= 26.1
+import com.mojang.blaze3d.pipeline.DepthStencilState
 import com.mojang.blaze3d.pipeline.RenderPipeline
+//? >= 26.1
+import com.mojang.blaze3d.platform.CompareOp
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
@@ -31,7 +35,10 @@ class GradientTextShader(val gradientProvider: GradientProvider, val direction: 
             .withVertexShader(MeowddingLib.id("text/gradient"))
             .withFragmentShader(MeowddingLib.id("text/gradient"))
             .withSampler("Sampler0")
-            .withDepthBias(-1.0f, -10.0f)
+            //? >= 26.1
+            .withDepthStencilState(DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false, -1f, -10f))
+            //? < 26.1
+            //.withDepthBias(-1.0f, -10.0f)
             .withShaderDefine(
                 "COLORS",
                 gradientProvider

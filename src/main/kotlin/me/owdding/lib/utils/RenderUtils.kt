@@ -5,7 +5,8 @@ package me.owdding.lib.utils
 import me.owdding.lib.rendering.world.RenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS
 import net.minecraft.client.CameraType
 import net.minecraft.client.gui.Font
-import net.minecraft.client.renderer.LightTexture
+//~ if >= 26.1 'client.renderer.LightTexture' -> 'util.LightCoordsUtil as LightTexture'
+import net.minecraft.util.LightCoordsUtil as LightTexture
 import net.minecraft.client.renderer.ShapeRenderer
 import net.minecraft.client.renderer.blockentity.BeaconRenderer
 import net.minecraft.client.renderer.rendertype.RenderTypes
@@ -128,7 +129,11 @@ object RenderUtils {
             val buffer = buffer.getBuffer(RenderTypes.lines())
             val normal = end.toVector3f().sub(start.toVector3f()).normalize()
             buffer.addVertex(entry, start.toVector3f()).setColor(color).setNormal(entry, normal)
+            //? >= 26.1
+            buffer.setLineWidth(width)
             buffer.addVertex(entry, end.toVector3f()).setColor(color).setNormal(entry, normal)
+            //? >= 26.1
+            buffer.setLineWidth(width)
 
             //? < 1.21.11
             //RenderSystem.lineWidth(1f)
@@ -138,7 +143,7 @@ object RenderUtils {
     fun RenderWorldEvent.renderBeaconBeam(position: Vec3, color: Int) {
         renderBeaconBeam(
             poseStack, position, buffer, BeaconRenderer.BEAM_LOCATION,
-            0f, Mth.PI, McLevel.self.gameTime, 0, McLevel.self.maxY * 2,
+            0f, Mth.PI, McLevel.self?.gameTime ?: 0, 0, (McLevel.self?.maxY ?: 255) * 2,
             ARGB.opaque(color), 0.2f, 0.25f,
         )
     }

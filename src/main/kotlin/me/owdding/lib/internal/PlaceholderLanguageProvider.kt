@@ -74,7 +74,8 @@ object PlaceholderLanguageProvider : TagLikeParser.Provider {
         }
     }
 
-    fun parse(text: String, args: Array<Any?>): Component = PARSER.parseText(text, ParserContext.of(
+    //~ if >= 26.1 'parseText' -> 'parseComponent'
+    fun parse(text: String, args: Array<Any?>): Component = PARSER.parseComponent(text, ParserContext.of(
         KEY, Function { key ->
             val index = key.toIntOrNull()
             if (index != null && index in args.indices) {

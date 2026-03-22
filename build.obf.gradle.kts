@@ -3,7 +3,6 @@ plugins {
     `mlib-setup`
 }
 
-
 dependencies {
     mappings(loom.layered {
         officialMojangMappings()
@@ -11,4 +10,19 @@ dependencies {
             artifactType("zip")
         })
     })
+}
+
+val mcVersion = stonecutter.current.version.replace(".", "")
+val accessWidenerFile = rootProject.file("src/mlib.obf.accesswidener")
+
+loom {
+    runConfigs["client"].apply {
+        ideConfigGenerated(true)
+        runDir = "../../run"
+        vmArg("-Dfabric.modsFolder=\"${mcVersion}Mods\"")
+    }
+
+    if (accessWidenerFile.exists()) {
+        accessWidenerPath.set(accessWidenerFile)
+    }
 }
