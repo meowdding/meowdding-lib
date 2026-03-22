@@ -4,15 +4,16 @@ fabric-loader = "0.16.10"
 fabric-language-kotlin = "1.13.4+kotlin.2.2.0"
 fabric-api = "0.133.4"
 
-kotlin = "2.2.0"
-kotlin-symbol-processor = "2.2.0-2.0.2"
+kotlin = "2.3.0"
+kotlin-gradle-plugin = "2.3.0"
+kotlin-symbol-processor = "2.3.5"
 keval = "1.1.1"
 gson = "2.12.1"
 
 resourceful-config-kotlin = "3.5.15"
 
 # Dependencies
-skyblockapi = "4.0.2"
+skyblockapi = "4.0.13+26.1-rc2+build.1"
 hypixelapi = "1.0.1+build.1+mc1.21"
 placeholders = "2.6.1+1.21.5"
 rei = "20.0.811"
@@ -47,6 +48,12 @@ kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.re
 keval = { module = "com.notkamui.libs:keval", version.ref = "keval" }
 
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-gradle-plugin" }
+kotlin-gradle-plugin-api = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin-api", version.ref = "kotlin-gradle-plugin" }
+
+[bundles]
+kotlin-gradle-plugin = ["kotlin-gradle-plugin", "kotlin-gradle-plugin-api"]
 
 [plugins]
 meowdding-auto-mixins = { id = "me.owdding.auto-mixins", version.ref = "meowdding-auto-mixins" }

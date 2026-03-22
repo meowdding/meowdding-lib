@@ -3,8 +3,9 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
 
 plugins {
     id("dev.kikugie.stonecutter")
-    id("fabric-loom") version "1.14-SNAPSHOT" apply false
-    kotlin("jvm") version "2.2.0" apply false
+    id("net.fabricmc.fabric-loom-remap") version "1.15-SNAPSHOT" apply false
+    id("net.fabricmc.fabric-loom") version "1.15-SNAPSHOT" apply false
+    kotlin("jvm") apply false
     `maven-publish`
 }
 
@@ -57,7 +58,7 @@ val sbapiComponent = componentFactory.adhoc("sbapi")
 val minecraftVersionAttribute = Attribute.of("net.minecraft.version", String::class.java)
 val remappedAttribute = Attribute.of("net.fabricmc.remapped", String::class.java)
 
-stonecutter.versions.forEach { (project, version) ->
+listOf<Pair<String, String>>().forEach { (project, version) ->
     val gradleFriendlyVersion = version.replace(".", "")
     val project = project(project)
     val remappedApiElements = configurations.create(gradleFriendlyVersion + "remappedApiElements") {
