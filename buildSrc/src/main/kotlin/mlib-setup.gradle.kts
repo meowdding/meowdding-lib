@@ -215,7 +215,8 @@ dependencies {
     includeImplementation(versionedCatalog["resourceful.lib"])
     includeImplementation(versionedCatalog["placeholders"])
     includeImplementation(versionedCatalog["olympus"])
-    includeImplementation(versionedCatalog["meowdding.remote.repo"])
+    "include"(versionedCatalog["meowdding.remote.repo"])
+    maybeModApi(versionedCatalog["meowdding.remote.repo"]) // makes it transitive -> consuming mods don't need to add a dependency on it
     maybeModImplementation(versionedCatalog["resourceful.config.kotlin"])
 
 
