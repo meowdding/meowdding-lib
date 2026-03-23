@@ -71,7 +71,7 @@ stonecutter.versions.forEach { (project, version) ->
             attributes {
                 attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage.JAVA_API))
                 attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
-                attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, selectIfObfuscated(25, 21))
+                attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, selectIfObfuscated(21, 25))
                 attribute(TargetJvmEnvironment.TARGET_JVM_ENVIRONMENT_ATTRIBUTE, objects.named(TargetJvmEnvironment.STANDARD_JVM))
                 attribute(KotlinPlatformType.attribute, KotlinPlatformType.jvm)
                 attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category.LIBRARY))
@@ -96,7 +96,7 @@ stonecutter.versions.forEach { (project, version) ->
             attributes {
                 attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage.JAVA_RUNTIME))
                 attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
-                attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, selectIfObfuscated(25, 21))
+                attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, selectIfObfuscated(21, 25))
                 attribute(TargetJvmEnvironment.TARGET_JVM_ENVIRONMENT_ATTRIBUTE, objects.named(TargetJvmEnvironment.STANDARD_JVM))
                 attribute(KotlinPlatformType.attribute, KotlinPlatformType.jvm)
                 attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category.LIBRARY))
@@ -133,7 +133,7 @@ stonecutter.versions.forEach { (project, version) ->
         attributes {
             attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage.JAVA_API))
             attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
-            attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, selectIfObfuscated(25, 21))
+            attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, selectIfObfuscated(21, 25))
             attribute(TargetJvmEnvironment.TARGET_JVM_ENVIRONMENT_ATTRIBUTE, objects.named(TargetJvmEnvironment.STANDARD_JVM))
             attribute(KotlinPlatformType.attribute, KotlinPlatformType.jvm)
             attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category.LIBRARY))
@@ -160,7 +160,7 @@ stonecutter.versions.forEach { (project, version) ->
         attributes {
             attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage.JAVA_RUNTIME))
             attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
-            attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, selectIfObfuscated(25, 21))
+            attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, selectIfObfuscated(21, 25))
             attribute(TargetJvmEnvironment.TARGET_JVM_ENVIRONMENT_ATTRIBUTE, objects.named(TargetJvmEnvironment.STANDARD_JVM))
             attribute(KotlinPlatformType.attribute, KotlinPlatformType.jvm)
             attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category.LIBRARY))
