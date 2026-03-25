@@ -1,6 +1,6 @@
 [versions]
 minecraft-range = "26.1.x"
-minecraft = "26.1-rc-1"
+minecraft = "26.1"
 
 sbapi-mc-version = "26.1"
 fabric-api = "0.144.0+26.1"
@@ -24,12 +24,3 @@ resourceful-config = { module = "com.teamresourceful.resourcefulconfig:resourcef
 iris = { module = "maven.modrinth:iris", version = "1.9.1+1.21.7-fabric" }
 olympus = { module = "earth.terrarium.olympus:olympus-fabric-26.1-rc-1", version.ref = "olympus" }
 placeholders = { module = "eu.pb4:placeholder-api", version.ref = "placeholders" }
-
-
-hypixel-modapi = { module = "net.hypixel:mod-api", version.ref = "hypixel-modapi" }
-#todo change back to maven.modrinth once hypixel updates
-hypixel-modapi-fabric = { module = "net.hypixel:FabricModAPI", version.ref = "hypixel-modapi-fabric" }
-
-#https://maven.teamresourceful.com/repository/maven-public/net/hypixel/FabricModAPI/1.0.1+build.dev+mc26.1-pre-1-custom.26.1-port/FabricModAPI-1.0.1+build.dev+mc26.1-pre-1-custom.26.1-port.pom
-[bundles]
-hypixel = ["hypixel-modapi", "hypixel-modapi-fabric"]
