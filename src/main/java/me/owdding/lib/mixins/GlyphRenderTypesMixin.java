@@ -3,6 +3,9 @@ package me.owdding.lib.mixins;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import com.mojang.blaze3d.pipeline.RenderPipeline;
+import me.owdding.lib.helper.TextShaderRenderTypeHolder;
+import me.owdding.lib.rendering.text.TextShaderKt;
 import me.owdding.lib.rendering.text.TextShaders;
 import net.minecraft.client.gui.font.GlyphRenderTypes;
 import net.minecraft.client.renderer.rendertype.RenderType;
@@ -14,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(GlyphRenderTypes.class)
-public class GlyphRenderTypesMixin {
+public class GlyphRenderTypesMixin implements TextShaderRenderTypeHolder {
 
     @Unique
     private Identifier meowdding$texture;
@@ -29,8 +32,12 @@ public class GlyphRenderTypesMixin {
     private void select(CallbackInfoReturnable<RenderType> cir) {
         var shader = TextShaders.getActiveShader();
         if (shader != null) {
-            cir.setReturnValue(shader.getRenderType(meowdding$texture));
+            cir.setReturnValue(meowddinglib$getRenderType(shader.getPipeline()));
         }
     }
 
+    @Override
+    public RenderType meowddinglib$getRenderType(RenderPipeline pipeline) {
+        return TextShaderKt.createTextRenderType(pipeline, meowdding$texture);
+    }
 }
