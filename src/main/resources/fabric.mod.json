@@ -31,8 +31,5 @@
     "skyblock-api": ">=${sbapi}",
     "placeholder-api": ">=${placeholder_api}"
   },
-  "provides": [
-    "fabric"
-  ],
   "accessWidener": "mlib.accesswidener"
 }
