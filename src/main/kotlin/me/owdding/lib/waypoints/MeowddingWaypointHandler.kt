@@ -39,7 +39,7 @@ object MeowddingWaypointHandler {
         }
         _waypoints.add(waypoint)
 
-        if (waypoint.inLocatorBar && !McVersionGroup.MC_1_21_5.isActive) {
+        if (waypoint.inLocatorBar) {
             waypoint.minecraftWaypoint = MinecraftWaypointHandler.addWaypoint(waypoint)
         }
     }
@@ -56,7 +56,7 @@ object MeowddingWaypointHandler {
     }
 
     private fun removeLocatorBar(waypoint: MeowddingWaypoint) {
-        if (waypoint.inLocatorBar && !McVersionGroup.MC_1_21_5.isActive) {
+        if (waypoint.inLocatorBar) {
             MinecraftWaypointHandler.removeWaypoint(waypoint)
         }
     }
