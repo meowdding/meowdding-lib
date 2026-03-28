@@ -145,7 +145,7 @@ private fun lockEntry(entry: ResourcefulConfigValueEntry, data: JsonElement) {
                 EntryType.STRING -> element.asString
                 EntryType.BOOLEAN -> element.asBoolean
                 EntryType.ENUM -> entry.objectType().enumConstants.find { (it as? Enum<*>)?.name == element.asString } as? Enum<*>
-                EntryType.OBJECT -> null
+                else -> null
             }
         }
 
@@ -161,7 +161,7 @@ private fun lockEntry(entry: ResourcefulConfigValueEntry, data: JsonElement) {
             EntryType.STRING -> entry.string = data.asString
             EntryType.BOOLEAN -> entry.boolean = data.asBoolean
             EntryType.ENUM -> entry.enum = entry.objectType().enumConstants.find { (it as? Enum<*>)?.name == data.asString } as? Enum<*>
-            EntryType.OBJECT -> {}
+            else -> {}
         }
     }
 }

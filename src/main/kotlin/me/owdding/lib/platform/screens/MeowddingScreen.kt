@@ -1,6 +1,10 @@
 package me.owdding.lib.platform.screens
 
-import com.teamresourceful.resourcefullib.client.screens.BaseCursorScreen
+//? >= 26.1 {
+import net.minecraft.client.gui.screens.Screen as BaseScreen
+//? } else {
+//import com.teamresourceful.resourcefullib.client.screens.BaseCursorScreen as BaseScreen
+//? }
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
 import org.jetbrains.annotations.ApiStatus
@@ -11,7 +15,7 @@ import net.minecraft.client.input.KeyEvent as McKeyEvent
 import net.minecraft.client.input.MouseButtonEvent as McMouseButtonEvent
 
 @ApiStatus.Internal
-open class ParameterLessScreen : BaseCursorScreen {
+open class ParameterLessScreen : BaseScreen {
     constructor() : super(CommonComponents.EMPTY)
     constructor(name: Component) : this()
     constructor(name: String) : this()

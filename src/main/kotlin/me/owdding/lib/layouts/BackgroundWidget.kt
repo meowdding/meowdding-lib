@@ -5,7 +5,7 @@ import me.owdding.lib.displays.Display
 import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.asLayer
 import me.owdding.lib.displays.asWidget
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.resources.Identifier
 
@@ -43,10 +43,12 @@ class BackgroundWidget(backgroundWidget: LayoutElement, widget: LayoutElement, v
     override fun getWidth() = body.width + padding * 2
     override fun getHeight() = body.height + padding * 2
 
-    override fun renderWidget(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
+    //~ if >= 26.1 'renderWidget' -> 'extractWidgetRenderState'
+    override fun extractWidgetRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         background.setPosition(this.x, this.y)
         body.setPosition(this.x + padding, this.y + padding)
 
-        super.renderWidget(graphics, mouseX, mouseY, partialTicks)
+        //~ if >= 26.1 'renderWidget' -> 'extractWidgetRenderState'
+        super.extractWidgetRenderState(graphics, mouseX, mouseY, partialTicks)
     }
 }

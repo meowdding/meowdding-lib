@@ -6,8 +6,9 @@ import me.owdding.lib.displays.circle.roundedTextureDisplay
 import me.owdding.lib.extensions.floor
 import me.owdding.lib.layouts.ScalableWidget
 import me.owdding.lib.platform.PlatformDisplays
-import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.client.gui.components.PlayerFaceRenderer
+import net.minecraft.client.gui.GuiGraphicsExtractor
+//~ if >= 26.1 'PlayerFaceRenderer as PlayerFaceExtractor' -> 'PlayerFaceExtractor'
+import net.minecraft.client.gui.components.PlayerFaceExtractor
 import net.minecraft.client.gui.components.Renderable
 import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.locale.Language
@@ -43,7 +44,7 @@ object Displays {
         return object : Display {
             override fun getWidth() = width
             override fun getHeight() = height
-            override fun render(graphics: GuiGraphics) {}
+            override fun extract(graphics: GuiGraphicsExtractor) {}
         }
     }
 
@@ -51,8 +52,8 @@ object Displays {
         return object : Display {
             override fun getWidth() = display().getWidth()
             override fun getHeight() = display().getHeight()
-            override fun render(graphics: GuiGraphics) {
-                display().render(graphics)
+            override fun extract(graphics: GuiGraphicsExtractor) {
+                display().extract(graphics)
             }
         }
     }
@@ -61,9 +62,9 @@ object Displays {
         return object : Display {
             override fun getWidth() = width
             override fun getHeight() = height
-            override fun render(graphics: GuiGraphics) {
+            override fun extract(graphics: GuiGraphicsExtractor) {
                 graphics.scissor(0, 0, width, height) {
-                    display.render(graphics)
+                    display.extract(graphics)
                 }
             }
         }
@@ -73,13 +74,13 @@ object Displays {
         return object : Display {
             override fun getWidth() = display.getWidth()
             override fun getHeight() = display.getHeight()
-            override fun render(graphics: GuiGraphics) {
+            override fun extract(graphics: GuiGraphicsExtractor) {
                 graphics.drawFilledBox(
                     0, 0,
                     getWidth(), getHeight(),
                     color.toInt(),
                 )
-                display.render(graphics)
+                display.extract(graphics)
             }
         }
     }
@@ -88,7 +89,7 @@ object Displays {
         return object : Display {
             override fun getWidth() = display.getWidth()
             override fun getHeight() = display.getHeight()
-            override fun render(graphics: GuiGraphics) {
+            override fun extract(graphics: GuiGraphicsExtractor) {
                 graphics.drawSprite(
                     sprite,
                     0,
@@ -97,7 +98,7 @@ object Displays {
                     display.getHeight(),
                     color.and(0xFFFFFF).or(0xFF000000u.toInt()),
                 )
-                display.render(graphics)
+                display.extract(graphics)
             }
         }
     }
@@ -106,9 +107,9 @@ object Displays {
         return object : Display {
             override fun getWidth() = display.getWidth()
             override fun getHeight() = display.getHeight()
-            override fun render(graphics: GuiGraphics) {
+            override fun extract(graphics: GuiGraphicsExtractor) {
                 graphics.drawTexture(BuiltinImageProviders.URL.get(uri), 0, 0, display.getWidth(), display.getHeight())
-                display.render(graphics)
+                display.extract(graphics)
             }
         }
     }
@@ -129,8 +130,8 @@ object Displays {
         return object : Display {
             override fun getWidth() = left + display.getWidth() + right
             override fun getHeight() = top + display.getHeight() + bottom
-            override fun render(graphics: GuiGraphics) {
-                display.render(graphics, left, top)
+            override fun extract(graphics: GuiGraphicsExtractor) {
+                display.extract(graphics, left, top)
             }
         }
     }
@@ -139,8 +140,8 @@ object Displays {
         return object : Display {
             override fun getWidth() = if (width == -1) display.getWidth() else width
             override fun getHeight() = if (height == -1) display.getHeight() else height
-            override fun render(graphics: GuiGraphics) {
-                display.render(graphics, (getWidth() - display.getWidth()) / 2, (getHeight() - display.getHeight()) / 2)
+            override fun extract(graphics: GuiGraphicsExtractor) {
+                display.extract(graphics, (getWidth() - display.getWidth()) / 2, (getHeight() - display.getHeight()) / 2)
             }
         }
     }
@@ -149,8 +150,8 @@ object Displays {
         return object : Display {
             override fun getWidth() = display.getWidth() + 2
             override fun getHeight() = display.getHeight() + 2
-            override fun render(graphics: GuiGraphics) {
-                display.render(graphics, 1, 1)
+            override fun extract(graphics: GuiGraphicsExtractor) {
+                display.extract(graphics, 1, 1)
                 graphics.drawOutline(0, 0, getWidth(), getHeight(), color().toInt())
             }
         }
@@ -161,8 +162,9 @@ object Displays {
             override fun getWidth(): Int = size
             override fun getHeight(): Int = size
 
-            override fun render(graphics: GuiGraphics) {
-                PlayerFaceRenderer.draw(graphics, texture(), 0, 0, 8, true, false, -1)
+            override fun extract(graphics: GuiGraphicsExtractor) {
+                //~ if >= 26.1 'draw' -> 'extractRenderState'
+                PlayerFaceExtractor.extractRenderState(graphics, texture(), 0, 0, 8, true, false, -1)
             }
         }
     }
@@ -171,7 +173,7 @@ object Displays {
         return object : Display {
             override fun getWidth() = width
             override fun getHeight() = height
-            override fun render(graphics: GuiGraphics) {
+            override fun extract(graphics: GuiGraphicsExtractor) {
                 graphics.drawSprite(sprite, 0, 0, width, height, -1)
             }
         }
@@ -189,7 +191,7 @@ object Displays {
 
             override fun getWidth() = component.width
             override fun getHeight() = McFont.height
-            override fun render(graphics: GuiGraphics) {
+            override fun extract(graphics: GuiGraphicsExtractor) {
                 graphics.drawString(component, 0, 0, color().toInt(), shadow)
             }
         }
@@ -199,7 +201,7 @@ object Displays {
         return object : Display {
             override fun getWidth() = component().width
             override fun getHeight() = McFont.height
-            override fun render(graphics: GuiGraphics) {
+            override fun extract(graphics: GuiGraphicsExtractor) {
                 graphics.drawString(component(), 0, 0, color().toInt(), shadow)
             }
         }
@@ -218,7 +220,7 @@ object Displays {
         return object : Display {
             override fun getWidth() = width
             override fun getHeight() = height
-            override fun render(graphics: GuiGraphics) {
+            override fun extract(graphics: GuiGraphicsExtractor) {
                 lines.forEachIndexed { index, line ->
                     graphics.drawString(line, 0, index * McFont.height, color().toInt(), shadow)
                 }
@@ -234,7 +236,7 @@ object Displays {
         return object : Display {
             override fun getWidth() = McFont.width(sequence)
             override fun getHeight() = McFont.height
-            override fun render(graphics: GuiGraphics) {
+            override fun extract(graphics: GuiGraphicsExtractor) {
                 graphics.drawString(sequence, 0, 0, color().toInt(), shadow)
             }
         }
@@ -257,7 +259,7 @@ object Displays {
         return object : Display {
             override fun getWidth() = maxWidth
             override fun getHeight() = lines.size * McFont.height
-            override fun render(graphics: GuiGraphics) {
+            override fun extract(graphics: GuiGraphicsExtractor) {
                 lines.forEachIndexed { index, line ->
                     val x = when (textAlignment) {
                         Alignment.START -> 0
@@ -278,7 +280,7 @@ object Displays {
         return object : Display {
             override fun getWidth() = displays.sumOf { it.getWidth() } + spacing * (displays.size - 1)
             override fun getHeight() = displays.maxOfOrNull { it.getHeight() } ?: 0
-            override fun render(graphics: GuiGraphics) {
+            override fun extract(graphics: GuiGraphicsExtractor) {
                 val maxHeight = getHeight()
                 var currentX = 0
 
@@ -290,7 +292,7 @@ object Displays {
                     }
 
                     graphics.translated(currentX, yOffset) {
-                        display.render(graphics)
+                        display.extract(graphics)
                         currentX += display.getWidth() + spacing
                     }
                 }
@@ -307,7 +309,7 @@ object Displays {
             override fun getWidth() = displays.maxOfOrNull { it.getWidth() } ?: 0
             override fun getHeight() = displays.sumOf { it.getHeight() } + spacing * (displays.size - 1)
 
-            override fun render(graphics: GuiGraphics) {
+            override fun extract(graphics: GuiGraphicsExtractor) {
                 val maxWidth = getWidth()
                 var currentY = 0
 
@@ -318,7 +320,7 @@ object Displays {
                         Alignment.END -> maxWidth - display.getWidth()
                     }
                     graphics.translated(xOffset, currentY) {
-                        display.render(graphics)
+                        display.extract(graphics)
                         currentY += display.getHeight() + spacing
                     }
                 }
@@ -353,8 +355,9 @@ object Displays {
         return object : Display {
             override fun getWidth(): Int = if (width == -1) renderable.width else width
             override fun getHeight(): Int = if (height == -1) renderable.height else height
-            override fun render(graphics: GuiGraphics) {
-                renderable.render(graphics, -1, -1, 0f)
+            override fun extract(graphics: GuiGraphicsExtractor) {
+                //~ if >= 26.1 'render' -> 'extractRenderState'
+                renderable.extractRenderState(graphics, -1, -1, 0f)
             }
         }
     }
@@ -363,8 +366,8 @@ object Displays {
         return object : Display {
             override fun getWidth() = displays.maxOfOrNull { it.getWidth() } ?: 0
             override fun getHeight() = displays.maxOfOrNull { it.getHeight() } ?: 0
-            override fun render(graphics: GuiGraphics) {
-                displays.forEach { it.render(graphics) }
+            override fun extract(graphics: GuiGraphicsExtractor) {
+                displays.forEach { it.extract(graphics) }
             }
         }
     }
@@ -398,7 +401,7 @@ object Displays {
             override fun getHeight(): Int = table.sumOf { it.maxOf { it.getHeight() } } + (table.size - 1) * spacing
             override fun getWidth(): Int = columnWidths.sum() + (columnWidths.size - 1) * spacing
 
-            override fun render(graphics: GuiGraphics) {
+            override fun extract(graphics: GuiGraphicsExtractor) {
                 var currentY = 0
 
                 table.forEach { row ->
@@ -408,7 +411,7 @@ object Displays {
                     graphics.translated(0, currentY) {
                         row.forEachIndexed { col, element ->
                             graphics.translated(currentX) {
-                                element.render(graphics)
+                                element.extract(graphics)
                             }
                             currentX += columnWidths[col] + spacing
                         }
@@ -423,8 +426,8 @@ object Displays {
         return object : Display {
             override fun getWidth() = display.getWidth()
             override fun getHeight() = display.getHeight()
-            override fun render(graphics: GuiGraphics) {
-                display.render(graphics)
+            override fun extract(graphics: GuiGraphicsExtractor) {
+                display.extract(graphics)
 
                 if (isMouseOver(display, graphics)) {
                     graphics.showTooltip(component)
@@ -438,7 +441,7 @@ object Displays {
             override fun getWidth() = maxWidth ?: original.getWidth()
             override fun getHeight() = original.getHeight()
 
-            override fun render(graphics: GuiGraphics) {
+            override fun extract(graphics: GuiGraphicsExtractor) {
                 graphics.pushPop {
                     val seconds = Util.getMillis().toDouble() / 1000.0
                     graphics.scissor(0, 0, getWidth(), getHeight()) {
@@ -449,7 +452,7 @@ object Displays {
                             val g = Mth.lerp(f, 0.0, overhang.toDouble())
                             graphics.translate(-g, 0)
                         }
-                        original.render(graphics)
+                        original.extract(graphics)
                     }
                 }
             }
@@ -462,7 +465,7 @@ object Displays {
         showTooltips = true
     }
 
-    fun isMouseOver(display: Display, graphics: GuiGraphics): Boolean {
+    fun isMouseOver(display: Display, graphics: GuiGraphicsExtractor): Boolean {
         val translation = graphics.getTranslation()
         val (mouseX, mouseY) = McClient.mouse
         val xRange = translation.x..(translation.x + (display.getWidth() * ScalableWidget.getCurrentScale()).floor())

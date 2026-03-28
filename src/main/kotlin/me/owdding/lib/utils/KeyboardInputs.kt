@@ -5,7 +5,8 @@ import me.owdding.ktmodules.Module
 import me.owdding.lib.platform.screens.KeyEvent
 //? if > 1.21.8
 import me.owdding.lib.platform.screens.into
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
+//~ if >= 26.1 'keybinding.v1.KeyBindingHelper as KeyMappingHelper' -> 'keymapping.v1.KeyMappingHelper'
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper
 import net.minecraft.client.KeyMapping
 import net.minecraft.resources.Identifier
 import org.lwjgl.glfw.GLFW
@@ -98,7 +99,8 @@ open class MeowddingKeybind(
         }
     }
 
-    val key: KeyMapping = KeyBindingHelper.registerKeyBinding(keyMapping(translationKey, keyCode, category))
+    //~ if >= 26.1 'registerKeyBinding' -> 'registerKeyMapping'
+    val key: KeyMapping = KeyMappingHelper.registerKeyMapping(keyMapping(translationKey, keyCode, category))
 
     val isDown get() = key.isDown
 

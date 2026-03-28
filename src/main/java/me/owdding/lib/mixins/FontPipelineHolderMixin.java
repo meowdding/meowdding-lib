@@ -6,7 +6,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(targets = {
-    "net.minecraft.client.gui.render.state.GuiTextRenderState",
+    //~ if >= 26.1 'gui.render.state' -> 'renderer.state.gui'
+    "net.minecraft.client.renderer.state.gui.GuiTextRenderState",
     "net.minecraft.client.gui.Font$PreparedTextBuilder",
     "net.minecraft.client.gui.font.glyphs.BakedSheetGlyph$GlyphInstance",
     "net.minecraft.client.gui.font.glyphs.BakedSheetGlyph$EffectInstance",

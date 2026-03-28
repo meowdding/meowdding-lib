@@ -1,10 +1,8 @@
 package me.owdding.lib.layouts
 
-import com.teamresourceful.resourcefullib.client.components.CursorWidget
-import com.teamresourceful.resourcefullib.client.screens.CursorScreen
 import me.owdding.lib.extensions.floor
 import me.owdding.lib.platform.screens.*
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.layouts.LayoutElement
@@ -17,7 +15,7 @@ import java.util.*
 import kotlin.properties.Delegates.observable
 
 
-class ScalableWidget(val original: AbstractWidget) : BaseParentWidget(original.width, original.height), Scalable, CursorWidget {
+class ScalableWidget(val original: AbstractWidget) : BaseParentWidget(original.width, original.height), Scalable {
 
     constructor(original: LayoutElement) : this(original.asWidget())
 
@@ -66,13 +64,15 @@ class ScalableWidget(val original: AbstractWidget) : BaseParentWidget(original.w
         height = (original.height * scale).floor()
     }
 
-    override fun renderWidget(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
+    //~ if >= 26.1 'renderWidget' -> 'extractWidgetRenderState'
+    override fun extractWidgetRenderState(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
         guiGraphics.scaled(scale, scale) {
             original.x = (this@ScalableWidget.x / scale).floor()
             original.y = (this@ScalableWidget.y / scale).floor()
             this@ScalableWidget.updateWidthHeight()
             currentScale.addLast(scale)
-            original.render(guiGraphics, (mouseX / scale).floor(), (mouseY / scale).floor(), partialTick)
+            //~ if >= 26.1 'render' -> 'extractRenderState'
+            original.extractRenderState(guiGraphics, (mouseX / scale).floor(), (mouseY / scale).floor(), partialTick)
             currentScale.removeLast()
         }
     }
@@ -140,10 +140,6 @@ class ScalableWidget(val original: AbstractWidget) : BaseParentWidget(original.w
 
     override fun updateWidgetNarration(narrationElementOutput: NarrationElementOutput) {
         original.updateNarration(narrationElementOutput)
-    }
-
-    override fun getCursor(): CursorScreen.Cursor? {
-        return (original as? CursorWidget)?.cursor
     }
 
     companion object {

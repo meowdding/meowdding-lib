@@ -5,7 +5,7 @@ import me.owdding.lib.displays.Display
 import me.owdding.lib.displays.Displays.isMouseOver
 import me.owdding.lib.displays.entity.EntityStateRenderer
 import me.owdding.lib.displays.item.ItemStateRenderer
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.ItemStack
@@ -38,7 +38,7 @@ internal object PlatformDisplays {
         return object : Display {
             override fun getWidth() = width
             override fun getHeight() = height
-            override fun render(graphics: GuiGraphics) {
+            override fun extract(graphics: GuiGraphicsExtractor) {
                 val centerX = width / 2f
                 val centerY = height / 2f
                 val eyesX = mouseX.takeIf { !it.isNaN() } ?: centerX
@@ -70,7 +70,7 @@ internal object PlatformDisplays {
                 val scaledSize = scale / entityScale
 
                 val positionOffset = Vector3f(0.0f, (-centerY / scaledSize) + entity.boundingBox.ysize.toFloat() / 2f, 0.0f)
-                EntityStateRenderer.draw(graphics, entity, width, height, scaledSize, positionOffset, baseRotation, tiltRotation)
+                EntityStateRenderer.extract(graphics, entity, width, height, scaledSize, positionOffset, baseRotation, tiltRotation)
 
                 entity.yBodyRot = originalBodyRotation
                 entity.yRot = originalYRotation
@@ -93,7 +93,7 @@ internal object PlatformDisplays {
             override fun getWidth() = width
             override fun getHeight() = height
 
-            override fun render(graphics: GuiGraphics) {
+            override fun extract(graphics: GuiGraphicsExtractor) {
                 val (x, y) = Vector2i(graphics.pose().transformPosition(Vector2f(0f, 0f)), RoundingMode.TRUNCATE)
                 if (
                     !graphics.containsPointInScissor(x, y) && !graphics.containsPointInScissor(x + width, y) &&
@@ -112,9 +112,10 @@ internal object PlatformDisplays {
 
                     val scale = graphics.getScale()
                     if (scale.x > 1f || scale.y > 1f) {
-                        ItemStateRenderer.draw(graphics, item, 0, 0)
+                        ItemStateRenderer.extract(graphics, item, 0, 0)
                     } else {
-                        graphics.renderItem(item, 0, 0)
+                        //~ if >= 26.1 'renderItem(' -> 'item('
+                        graphics.item(item, 0, 0)
                     }
 
                     val stackSize = item.count
@@ -149,9 +150,9 @@ internal object PlatformDisplays {
             // Does not account for scaling
             override fun getWidth() = display.getWidth()
             override fun getHeight() = display.getHeight()
-            override fun render(graphics: GuiGraphics) {
+            override fun extract(graphics: GuiGraphicsExtractor) {
                 graphics.pushPop {
-                    display.render(graphics)
+                    display.extract(graphics)
                 }
             }
         }

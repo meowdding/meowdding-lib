@@ -5,7 +5,7 @@ import com.mojang.serialization.MapCodec
 import me.owdding.lib.PreInitModule
 import me.owdding.lib.events.RegisterTextShaderEvent
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.resources.Identifier
 import org.jetbrains.annotations.ApiStatus
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
@@ -18,7 +18,7 @@ object TextShaders {
         @JvmStatic get
         @JvmStatic @ApiStatus.Internal set
 
-    fun GuiGraphics.withTextShader(shader: TextShader?, action: () -> Unit) = pushPop(shader, action)
+    fun GuiGraphicsExtractor.withTextShader(shader: TextShader?, action: () -> Unit) = pushPop(shader, action)
 
     fun pushPop(shader: TextShader?, action: () -> Unit) {
         activeShader = shader

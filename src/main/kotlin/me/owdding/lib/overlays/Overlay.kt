@@ -2,7 +2,7 @@ package me.owdding.lib.overlays
 
 import earth.terrarium.olympus.client.ui.context.ContextMenu
 import me.owdding.lib.mixins.OverlayAccessor
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
@@ -24,8 +24,16 @@ interface Overlay {
             return Rect(x, y, bounds.first, bounds.second)
         }
 
-    fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int) {}
-    fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) = render(graphics, mouseX, mouseY)
+    //? < 26.1 {
+    @Deprecated(message = "Outdated naming", replaceWith = ReplaceWith("extract"))
+    fun render(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) = extract(graphics, mouseX, mouseY)
+    //? }
+    fun extract(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {}
+    //? < 26.1 {
+    @Deprecated(message = "Outdated naming", replaceWith = ReplaceWith("extract"))
+    fun render(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) = extract(graphics, mouseX, mouseY, partialTicks)
+    //? }
+    fun extract(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) = extract(graphics, mouseX, mouseY)
 
     fun onRightClick() = ContextMenu.open {
         it.dangerButton(Text.translatable("mlib.overlay.edit.reset")) {

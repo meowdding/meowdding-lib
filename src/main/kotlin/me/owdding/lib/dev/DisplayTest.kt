@@ -6,7 +6,7 @@ import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.withOutline
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
 import me.owdding.lib.rendering.text.textShader
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.player.RemotePlayer
 import net.minecraft.network.chat.CommonComponents
@@ -37,10 +37,13 @@ object DisplayTest : Screen(CommonComponents.EMPTY) {
 
     val entity = Displays.entity(RemotePlayer(McClient.self.level!!, McPlayer.self!!.gameProfile), 50, 100, 100 / 3)
 
-    override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
-        super.render(graphics, mouseX, mouseY, partialTicks)
+    //~ if >= 26.1 'render' -> 'extractRenderState'
+    override fun extractRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
+        //~ if >= 26.1 'render' -> 'extractRenderState'
+        super.extractRenderState(graphics, mouseX, mouseY, partialTicks)
 
-        entity.render(graphics, 300, 100)
+        //~ if >= 26.1 'render' -> 'extract'
+        entity.extract(graphics, 300, 100)
 
         shaders.forEachIndexed { index, shader ->
             val text = Text.of("Hello, ") {
@@ -66,7 +69,8 @@ object DisplayTest : Screen(CommonComponents.EMPTY) {
             display(Displays.wrappedText(meow, width, textAlignment = Alignment.START).withOutline())
             display(Displays.wrappedText(meow, width, textAlignment = Alignment.CENTER).withOutline())
             display(Displays.wrappedText(meow, width, textAlignment = Alignment.END).withOutline())
-        }.render(graphics, 200, 200)
+        //~ if >= 26.1 'render' -> 'render'
+        }.extract(graphics, 200, 200)
     }
 
     override fun isPauseScreen(): Boolean {

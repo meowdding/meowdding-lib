@@ -130,7 +130,8 @@ abstract class LevelableTooltipNode(type: TreeNodes) : TreeNode(type) {
         val replacement = evaluate(context)
 
         return tooltip.map {
-            TagParser.QUICK_TEXT_SAFE.parseText(
+            //~ if >= 26.1 'parseText' -> 'parseComponent'
+            TagParser.QUICK_TEXT_SAFE.parseComponent(
                 it.let {
                     var text = it
                     replacement.forEach { entry ->
@@ -173,7 +174,8 @@ data class UnlevelableTreeNode(
         val replacement = evaluate(context)?.toFormattedString() ?: ""
 
         return tooltip.map {
-            TagParser.QUICK_TEXT_SAFE.parseText(it.replace("%reward%", replacement), ParserContext.of())
+            //~ if >= 26.1 'parseText' -> 'parseComponent'
+            TagParser.QUICK_TEXT_SAFE.parseComponent(it.replace("%reward%", replacement), ParserContext.of())
         }
     }
 
@@ -256,7 +258,8 @@ data class CoreTreeNode(
 
     override fun tooltip(context: Context): List<Component> {
         return getLevel(context.perkLevel).tooltip(this).map {
-            TagParser.QUICK_TEXT_SAFE.parseText(it, ParserContext.of())
+            //~ if >= 26.1 'parseText' -> 'parseComponent'
+            TagParser.QUICK_TEXT_SAFE.parseComponent(it, ParserContext.of())
         }
     }
 
@@ -274,7 +277,8 @@ data class TierNode(
 ) : TreeNode(TreeNodes.TIER) {
     override val id: String = ""
     override fun tooltip(context: Context) = rewards.map {
-        TagParser.QUICK_TEXT_SAFE.parseText(it, ParserContext.of())
+        //~ if >= 26.1 'parseText' -> 'parseComponent'
+        TagParser.QUICK_TEXT_SAFE.parseComponent(it, ParserContext.of())
     }
 
     override fun isMaxed(level: Int) = level >= (location.y + 1)

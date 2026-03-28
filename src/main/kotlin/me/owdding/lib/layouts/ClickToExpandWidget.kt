@@ -8,7 +8,7 @@ import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.Displays.background
 import me.owdding.lib.platform.screens.BaseParentWidget
 import me.owdding.lib.platform.screens.MouseButtonEvent
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.layouts.LayoutElement
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import kotlin.math.max
@@ -50,14 +50,18 @@ class ClickToExpandWidget(title: LayoutElement, body: LayoutElement, val onClick
         return super.mouseClicked(event, doubleClick)
     }
 
-    override fun renderWidget(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
+    //~ if >= 26.1 'renderWidget' -> 'extractWidgetRenderState'
+    override fun extractWidgetRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         title.setPosition(this.x, this.y)
-        title.render(graphics, mouseX, mouseY, partialTicks)
+        //~ if >= 26.1 'render' -> 'extractRenderState'
+        title.extractRenderState(graphics, mouseX, mouseY, partialTicks)
         if (expanded) {
             body.setPosition(this.x + bodyOffset, this.y + title.height)
-            body.render(graphics, mouseX, mouseY, partialTicks)
+            //~ if >= 26.1 'render' -> 'extractRenderState'
+            body.extractRenderState(graphics, mouseX, mouseY, partialTicks)
         }
 
-        super.renderWidget(graphics, mouseX, mouseY, partialTicks)
+        //~ if >= 26.1 'renderWidget' -> 'extractRenderState'
+        super.extractRenderState(graphics, mouseX, mouseY, partialTicks)
     }
 }

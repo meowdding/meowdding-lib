@@ -7,14 +7,19 @@ import me.owdding.lib.platform.screens.MeowddingScreen
 import me.owdding.lib.platform.screens.MouseButtonEvent
 import me.owdding.lib.utils.keys
 import me.owdding.lib.utils.keysOf
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.screens.ChatScreen
 import net.minecraft.client.gui.screens.Screen
 import org.lwjgl.glfw.GLFW
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
-import tech.thatgravyboat.skyblockapi.platform.*
+import tech.thatgravyboat.skyblockapi.platform.drawFilledBox
+import tech.thatgravyboat.skyblockapi.platform.drawOutline
+import tech.thatgravyboat.skyblockapi.platform.pushPop
+import tech.thatgravyboat.skyblockapi.platform.scale
+import tech.thatgravyboat.skyblockapi.platform.showTooltip
+import tech.thatgravyboat.skyblockapi.platform.translate
 import tech.thatgravyboat.skyblockapi.utils.text.CommonText
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
@@ -41,8 +46,10 @@ class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) :
     private var relativeX = 0
     private var relativeY = 0
 
-    override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
-        super.render(graphics, mouseX, mouseY, partialTicks)
+    //~ if >= 26.1 'render' -> 'extractRenderState'
+    override fun extractRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
+        //~ if >= 26.1 'render' -> 'extractRenderState'
+        super.extractRenderState(graphics, mouseX, mouseY, partialTicks)
         val (x, y) = overlay.position
         val (width, height) = overlay.bounds * overlay.position.scale
 
@@ -66,14 +73,19 @@ class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) :
         }
 
         val center = (this.width / 2f).toInt()
-        graphics.drawCenteredString(font, "X: ${overlay.position.x}, Y: ${overlay.position.y}", center, this.height - 40, -1)
-        graphics.drawCenteredString(font, "Scale: ${overlay.position.scale}", center, this.height - 30, -1)
-        graphics.drawCenteredString(font, "Use +/- to scale, arrow keys to move around.", center, this.height - 20, -1)
+        //~ if >= 26.1 'drawCenteredString' -> 'centeredText' {
+        graphics.centeredText(font, "X: ${overlay.position.x}, Y: ${overlay.position.y}", center, this.height - 40, -1)
+        graphics.centeredText(font, "Scale: ${overlay.position.scale}", center, this.height - 30, -1)
+        graphics.centeredText(font, "Use +/- to scale, arrow keys to move around.", center, this.height - 20, -1)
+        //~ }
     }
 
-    override fun renderBackground(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
-        this.renderMenuBackground(guiGraphics)
+    //~ if >= 26.1 'render' -> 'extract' {
+    override fun extractBackground(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
+        this.extractMenuBackground(guiGraphics)
     }
+    //~ }
+
 
     override fun mouseDragged(mouseEvent: MouseButtonEvent, deltaX: Double, deltaY: Double): Boolean {
         if (dragging) {

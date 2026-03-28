@@ -3,8 +3,13 @@ package me.owdding.lib.displays.circle
 import com.mojang.blaze3d.buffers.Std140Builder
 import com.mojang.blaze3d.buffers.Std140SizeCalculator
 import com.mojang.blaze3d.pipeline.BlendFunction
+//? >= 26.1
+import com.mojang.blaze3d.pipeline.DepthStencilState
 import com.mojang.blaze3d.pipeline.RenderPipeline
-import com.mojang.blaze3d.platform.DepthTestFunction
+//? >= 26.1
+import com.mojang.blaze3d.platform.CompareOp
+//? < 26.1
+//import com.mojang.blaze3d.platform.DepthTestFunction
 import com.mojang.blaze3d.shaders.UniformType
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.VertexFormat
@@ -41,8 +46,12 @@ object TexturedCirclePipeline {
             .withVertexShader(id("core/circle_tex"))
             .withFragmentShader(id("core/circle_tex"))
             .withCull(false)
-            .withDepthTestFunction(DepthTestFunction.LEQUAL_DEPTH_TEST)
+            //? >= 26.1
+            .withDepthStencilState(DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false))
+            //? < 26.1 {
+            /*.withDepthTestFunction(DepthTestFunction.LEQUAL_DEPTH_TEST)
             .withBlend(BlendFunction.TRANSLUCENT)
+            *///? }
             .withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
             .withSampler("Sampler0")
             .withUniform(UNIFORM_NAME, UniformType.UNIFORM_BUFFER)

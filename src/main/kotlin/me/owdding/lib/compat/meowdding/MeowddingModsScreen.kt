@@ -2,7 +2,11 @@ package me.owdding.lib.compat.meowdding
 
 import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
 import com.teamresourceful.resourcefulconfig.common.config.Configurations
-import com.teamresourceful.resourcefullib.client.screens.BaseCursorScreen
+//? >= 26.1 {
+import net.minecraft.client.gui.screens.Screen as BaseScreen
+//? } else {
+//import com.teamresourceful.resourcefullib.client.screens.BaseCursorScreen as BaseScreen
+//? }
 import earth.terrarium.olympus.client.components.base.ListWidget
 import earth.terrarium.olympus.client.utils.ListenableState
 import me.owdding.ktmodules.Module
@@ -30,7 +34,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.net.URI
 import kotlin.jvm.optionals.getOrNull
 
-class MeowddingModsScreen : BaseCursorScreen(Text.of("Meowdding Mods")) {
+class MeowddingModsScreen : BaseScreen(Text.of("Meowdding Mods")) {
 
     val background = MeowddingLib.id("background")
     val maxFeatureWidth by lazy { (MeowddingFeatures.features.flatMap { it.value }.maxOfOrNull { McFont.width(it) } ?: 0) + 5 }

@@ -3,15 +3,18 @@ package me.owdding.lib.displays.entity
 import com.mojang.blaze3d.platform.Lighting
 import com.mojang.blaze3d.vertex.PoseStack
 import earth.terrarium.olympus.client.pipelines.pips.OlympusPictureInPictureRenderState
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.navigation.ScreenRectangle
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer
-import net.minecraft.client.gui.render.state.pip.PictureInPictureRenderState
-import net.minecraft.client.renderer.LightTexture
+//~ if >= 26.1 'gui.render.state' -> 'renderer.state.gui'
+import net.minecraft.client.renderer.state.gui.pip.PictureInPictureRenderState
+//~ if >= 26.1 'client.renderer.LightTexture' -> 'util.LightCoordsUtil as LightTexture'
+import net.minecraft.util.LightCoordsUtil as LightTexture
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.entity.EntityRenderer
 import net.minecraft.client.renderer.entity.state.EntityRenderState
-import net.minecraft.client.renderer.state.CameraRenderState
+//~ if >= 26.1 'state' -> 'state.level'
+import net.minecraft.client.renderer.state.level.CameraRenderState
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
@@ -99,8 +102,8 @@ class EntityStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPic
             return state
         }
 
-        fun draw(
-            graphics: GuiGraphics,
+        fun extract(
+            graphics: GuiGraphicsExtractor,
             entity: LivingEntity,
             width: Int, height: Int, scale: Float,
             translation: Vector3f, rotation: Quaternionf, cameraAngle: Quaternionf?,
@@ -122,7 +125,8 @@ class EntityStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPic
                 graphics.scissorStack.peek(),
                 PictureInPictureRenderState.getBounds(x0, y0, x1, y1, graphics.scissorStack.peek()),
             )
-            graphics.guiRenderState.submitPicturesInPictureState(state)
+            //~ if >= 26.1 'submit' -> 'add'
+            graphics.guiRenderState.addPicturesInPictureState(state)
         }
     }
 }
