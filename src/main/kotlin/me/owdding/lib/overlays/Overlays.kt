@@ -51,7 +51,7 @@ object Overlays {
             graphics.pushPop {
                 graphics.translate(x.toFloat(), y.toFloat())
                 graphics.scale(it.position.scale, it.position.scale)
-                it.render(graphics, mouseX.toInt(), mouseY.toInt(), event.partialTicks)
+                it.extract(graphics, mouseX.toInt(), mouseY.toInt(), event.partialTicks)
             }
 
             val rect = it.editBounds * it.position.scale
