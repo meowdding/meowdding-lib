@@ -34,7 +34,7 @@ class DisplayWidget(private val display: Display): BaseWidget() {
         fun <T : AbstractWidget> displayRenderer(display: Display) = WidgetRenderer<T> { graphics, context, _ ->
             graphics.translated(context.x, context.y) {
                 graphics.scale(context.width.toFloat() / display.getWidth().toFloat(), context.height.toFloat() / display.getHeight().toFloat())
-                display.render(graphics, 0, 0)
+                display.extract(graphics, 0, 0)
             }
         }
     }

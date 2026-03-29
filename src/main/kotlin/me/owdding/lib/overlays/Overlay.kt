@@ -25,14 +25,14 @@ interface Overlay {
         }
 
     //? < 26.1 {
-    @Deprecated(message = "Outdated naming", replaceWith = ReplaceWith("extract"))
+    /*@Deprecated(message = "Outdated naming", replaceWith = ReplaceWith("extract"))
     fun render(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) = extract(graphics, mouseX, mouseY)
-    //? }
+    *///? }
     fun extract(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {}
     //? < 26.1 {
-    @Deprecated(message = "Outdated naming", replaceWith = ReplaceWith("extract"))
+    /*@Deprecated(message = "Outdated naming", replaceWith = ReplaceWith("extract"))
     fun render(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) = extract(graphics, mouseX, mouseY, partialTicks)
-    //? }
+    *///? }
     fun extract(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) = extract(graphics, mouseX, mouseY)
 
     fun onRightClick() = ContextMenu.open {
