@@ -211,10 +211,10 @@ dependencies {
 
     maybeModImplementation(versionedCatalog["fabric.api"])
 
-    includeImplementation(versionedCatalog["resourceful.config"])
-    includeImplementation(versionedCatalog["resourceful.lib"])
+    maybeModImplementation(versionedCatalog["resourceful.config"])
+    maybeModImplementation(versionedCatalog["resourceful.lib"])
     includeImplementation(versionedCatalog["placeholders"])
-    includeImplementation(versionedCatalog["olympus"])
+    maybeModImplementation(versionedCatalog["olympus"])
     "include"(versionedCatalog["meowdding.remote.repo"])
     maybeModApi(versionedCatalog["meowdding.remote.repo"]) // makes it transitive -> consuming mods don't need to add a dependency on it
     maybeModImplementation(versionedCatalog["resourceful.config.kotlin"])
