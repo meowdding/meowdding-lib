@@ -71,8 +71,8 @@ object REIRuntimeCompatability {
         }.getOrDefault(false)
     }
     //? < 26.1 {
-    /*
-    // Taken from REI, somehow if I try to change anything it just refuses to work
+
+    /*// Taken from REI, somehow if I try to change anything it just refuses to work
     private fun shouldReturn(screen: Screen?): Boolean {
         if (screen == null) return true
         for (decider in ScreenRegistry.getInstance().getDeciders(screen)) {

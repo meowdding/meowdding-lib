@@ -3,8 +3,8 @@ package me.owdding.lib.platform.screens
 //? >= 26.1 {
 import net.minecraft.client.gui.screens.Screen as BaseScreen
 //? } else {
-//import com.teamresourceful.resourcefullib.client.screens.BaseCursorScreen as BaseScreen
-//? }
+/*import com.teamresourceful.resourcefullib.client.screens.BaseCursorScreen as BaseScreen
+*///? }
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
 import org.jetbrains.annotations.ApiStatus

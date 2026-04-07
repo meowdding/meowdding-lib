@@ -5,8 +5,8 @@ import com.teamresourceful.resourcefulconfig.common.config.Configurations
 //? >= 26.1 {
 import net.minecraft.client.gui.screens.Screen as BaseScreen
 //? } else {
-//import com.teamresourceful.resourcefullib.client.screens.BaseCursorScreen as BaseScreen
-//? }
+/*import com.teamresourceful.resourcefullib.client.screens.BaseCursorScreen as BaseScreen
+*///? }
 import earth.terrarium.olympus.client.components.base.ListWidget
 import earth.terrarium.olympus.client.utils.ListenableState
 import me.owdding.ktmodules.Module

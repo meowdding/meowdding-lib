@@ -19,12 +19,17 @@ interface Display {
 
     //? < 26.1 {
     /*@Deprecated(message = "Outdated naming", replaceWith = ReplaceWith("extract"))
-    fun render(graphics: GuiGraphicsExtractor, x: Int, y: Int, alignmentX: Float = 0f, alignmentY: Float = 0f): Unit = extract(graphics, x, y, alignmentX, alignmentY)
-
+    fun render(graphics: GuiGraphicsExtractor, x: Int, y: Int, alignmentX: Float = 0f, alignmentY: Float = 0f): Unit = _extract(graphics, x, y, alignmentX, alignmentY)
     *///? }
-    fun extract(graphics: GuiGraphicsExtractor, x: Int, y: Int, alignmentX: Float = 0f, alignmentY: Float = 0f): Unit {
-        graphics.translated((x - getWidth() * alignmentX).toInt(), (y - getHeight() * alignmentY).toInt()) {
-            extract(graphics)
-        }
+    fun extract(graphics: GuiGraphicsExtractor, x: Int, y: Int, alignmentX: Float = 0f, alignmentY: Float = 0f) {
+        @Suppress("DEPRECATION")
+        //~ if >= 26.1 'render' -> '_extract'
+        _extract(graphics, x, y, alignmentX, alignmentY)
+    }
+}
+
+private fun Display._extract(graphics: GuiGraphicsExtractor, x: Int, y: Int, alignmentX: Float = 0f, alignmentY: Float = 0f) {
+    graphics.translated((x - getWidth() * alignmentX).toInt(), (y - getHeight() * alignmentY).toInt()) {
+        extract(graphics)
     }
 }
