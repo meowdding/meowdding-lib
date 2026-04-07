@@ -1,12 +1,21 @@
 package me.owdding.lib.overlays
 
 import earth.terrarium.olympus.client.ui.context.ContextMenu
+import me.owdding.lib.displays.Display
 import me.owdding.lib.mixins.OverlayAccessor
+import net.minecraft.client.gui.components.ChatComponent.getWidth
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
+import tech.thatgravyboat.skyblockapi.utils.extentions.translated
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+
+
+private fun Overlay._extract(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
+    extract(graphics, mouseX, mouseY)
+}
+
 
 interface Overlay {
 
@@ -28,12 +37,16 @@ interface Overlay {
     /*@Deprecated(message = "Outdated naming", replaceWith = ReplaceWith("extract"))
     fun render(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) = extract(graphics, mouseX, mouseY)
     *///? }
-    fun extract(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {}
+    fun extract(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int): Unit
+    //? < 26.1
+    //= @Suppress("DEPRECATION_ERROR") render(graphics, mouseX, mouseY)
+
     //? < 26.1 {
     /*@Deprecated(message = "Outdated naming", replaceWith = ReplaceWith("extract"))
-    fun render(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) = extract(graphics, mouseX, mouseY, partialTicks)
+    fun render(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) = _extract(graphics, mouseX, mouseY, partialTicks)
     *///? }
-    fun extract(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) = extract(graphics, mouseX, mouseY)
+    //~ if >= 26.1 'render' -> '_extract'
+    fun extract(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) = _extract(graphics, mouseX, mouseY, partialTicks)
 
     fun onRightClick() = ContextMenu.open {
         it.dangerButton(Text.translatable("mlib.overlay.edit.reset")) {
