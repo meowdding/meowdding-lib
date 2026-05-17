@@ -22,6 +22,7 @@ import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.player.PlayerModelType
 import net.minecraft.world.entity.player.PlayerSkin
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toData
 import java.net.URI
 import java.util.*
@@ -84,6 +85,7 @@ object MlibCosmetics {
     }
 
     fun tryApplySmallModifier(cosmetic: MlibCosmeticData, state: AvatarRenderState) {
+        if (!LocationAPI.isOnSkyBlock) return
         state.setData(BABY_MODIFIER_DATA_KEY, cosmetic.small ?: false)
         if (cosmetic.small == true) {
             state.ageScale = 0.5f
