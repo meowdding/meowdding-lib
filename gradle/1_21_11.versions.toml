@@ -13,6 +13,9 @@ resourceful-config-kotlin = "3.11.0"
 olympus = "1.7.0"
 placeholders = "2.8.1+1.21.10"
 
+hypixel-modapi = "1.0.1"
+hypixel-modapi-fabric = "1.0.1+build.1+mc1.21"
+
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
 
