@@ -7,6 +7,8 @@ fabric-api = "0.138.3+1.21.10"
 
 resourceful-lib = "3.9.1"
 resourceful-config = "3.9.0"
+resourceful-config-kotlin = "3.5.15"
+
 olympus = "1.6.1"
 placeholders = "2.8.1+1.21.10"
 
@@ -18,6 +20,8 @@ fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fab
 
 resourceful-lib = { module = "com.teamresourceful.resourcefullib:resourcefullib-fabric-1.21.9", version.ref = "resourceful-lib" }
 resourceful-config = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-1.21.9", version.ref = "resourceful-config" }
+resourceful-config-kotlin = { module = "com.teamresourceful.resourcefulconfigkt:resourcefulconfigkt-fabric-1.21.5", version.ref = "resourceful-config-kotlin" }
+
 iris = { module = "maven.modrinth:iris", version = "1.9.1+1.21.7-fabric" }
 olympus = { module = "earth.terrarium.olympus:olympus-fabric-1.21.9", version.ref = "olympus" }
 placeholders = { module = "eu.pb4:placeholder-api", version.ref = "placeholders" }
