@@ -27,11 +27,16 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
      * This causes the experience bar to always be displayed, even when another bar renderer should take priority.
      */
     @WrapMethod(method = "setExperienceValues")
-    private void preventExperienceDisplayStartTick(float progress, int total, int level, Operation<Void> original) {
-        if (this.experienceProgress == progress && this.totalExperience == total && this.experienceLevel == level
+    private void preventExperienceDisplayStartTick(
+        float experienceProgress,
+        int totalExp,
+        int experienceLevel,
+        Operation<Void> original
+    ) {
+        if (this.experienceProgress == experienceProgress && this.totalExperience == totalExp && this.experienceLevel == experienceLevel
             && this.connection.getWaypointManager().hasWaypoints()) {
             return;
         }
-        original.call(progress, total, level);
+        original.call(experienceProgress, totalExp, experienceLevel);
     }
 }
