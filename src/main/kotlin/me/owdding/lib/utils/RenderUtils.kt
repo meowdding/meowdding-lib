@@ -2,11 +2,11 @@ package me.owdding.lib.utils
 
 //? < 1.21.11
 //import com.mojang.blaze3d.systems.RenderSystem
+//~ if >= 26.1 'client.renderer.LightTexture' -> 'util.LightCoordsUtil as LightTexture'
+//? > 1.21.10
 import me.owdding.lib.rendering.world.RenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS
 import net.minecraft.client.CameraType
 import net.minecraft.client.gui.Font
-//~ if >= 26.1 'client.renderer.LightTexture' -> 'util.LightCoordsUtil as LightTexture'
-import net.minecraft.util.LightCoordsUtil as LightTexture
 import net.minecraft.client.renderer.ShapeRenderer
 import net.minecraft.client.renderer.blockentity.BeaconRenderer
 import net.minecraft.client.renderer.rendertype.RenderTypes
@@ -16,7 +16,6 @@ import net.minecraft.util.ARGB
 import net.minecraft.util.Mth
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
-//? > 1.21.10
 import net.minecraft.world.phys.shapes.Shapes
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -26,6 +25,7 @@ import tech.thatgravyboat.skyblockapi.platform.drawString
 import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import kotlin.math.max
+import net.minecraft.util.LightCoordsUtil as LightTexture
 
 object RenderUtils {
 
@@ -129,10 +129,10 @@ object RenderUtils {
             val buffer = buffer.getBuffer(RenderTypes.lines())
             val normal = end.toVector3f().sub(start.toVector3f()).normalize()
             buffer.addVertex(entry, start.toVector3f()).setColor(color).setNormal(entry, normal)
-            //? >= 26.1
+            //? >= 1.21.11
             buffer.setLineWidth(width)
             buffer.addVertex(entry, end.toVector3f()).setColor(color).setNormal(entry, normal)
-            //? >= 26.1
+            //? >= 1.21.11
             buffer.setLineWidth(width)
 
             //? < 1.21.11
@@ -143,7 +143,7 @@ object RenderUtils {
     fun RenderWorldEvent.renderBeaconBeam(position: Vec3, color: Int) {
         renderBeaconBeam(
             poseStack, position, buffer, BeaconRenderer.BEAM_LOCATION,
-            0f, Mth.PI, McLevel.self?.gameTime ?: 0, 0, (McLevel.self?.maxY ?: 255) * 2,
+            0f, Mth.PI, McLevel.selfOrNull?.gameTime ?: 0, 0, (McLevel.selfOrNull?.maxY ?: 255) * 2,
             ARGB.opaque(color), 0.2f, 0.25f,
         )
     }
