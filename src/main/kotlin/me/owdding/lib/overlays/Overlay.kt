@@ -68,7 +68,7 @@ interface Overlay {
     }
 
     fun setScale(scale: Float) {
-        position.scale = (scale * 10f).toInt() / 10f
+        position.scale = ((scale * 10f).toInt() / 10f).coerceAtLeast(0.1f)
     }
 
     fun isEditing(): Boolean {
