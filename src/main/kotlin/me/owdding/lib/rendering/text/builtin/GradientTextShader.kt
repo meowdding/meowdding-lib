@@ -88,7 +88,7 @@ fun interface GradientProvider {
     fun getColors(): List<Int>
 
     companion object {
-        val CODEC: Codec<GradientProvider> = Codec.INT.listOf().xmap(
+        val CODEC: Codec<GradientProvider> = Codec.INT.listOf(1, Int.MAX_VALUE).xmap(
             { GradientProvider { it } },
             { it.getColors() },
         )
