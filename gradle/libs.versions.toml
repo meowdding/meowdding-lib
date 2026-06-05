@@ -16,6 +16,7 @@ resourceful-config-kotlin = "3.5.15"
 skyblockapi = "4.1.0"
 placeholders = "2.6.1+1.21.5"
 rei = "20.0.811"
+skyblock-item-list = "0.0.1-SNAPSHOT"
 
 meowdding-remote-repo = "1.0.9"
 meowdding-ktmodules = "1.0.6"
@@ -33,6 +34,7 @@ fabric-language-kotlin = { module = "net.fabricmc:fabric-language-kotlin", versi
 skyblockapi = { module = "tech.thatgravyboat:skyblock-api", version.ref = "skyblockapi" }
 placeholders = { module = "eu.pb4:placeholder-api", version.ref = "placeholders" }
 rei = { module = "me.shedaniel:RoughlyEnoughItems-api-fabric", version.ref = "rei" }
+skyblock-item-list = { module = "com.operationpotato:skyblock-item-list", version.ref = "skyblock-item-list" }
 
 resourceful-config-kotlin = { module = "com.teamresourceful.resourcefulconfigkt:resourcefulconfigkt-fabric-1.21.5", version.ref = "resourceful-config-kotlin" }
 

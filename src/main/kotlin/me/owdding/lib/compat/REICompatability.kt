@@ -1,5 +1,6 @@
 package me.owdding.lib.compat
 
+import me.owdding.lib.events.ItemListRegisterExclusionZonesEvent
 import me.owdding.lib.mixins.compat.rei.OverlaySearchFieldAccessor
 import me.owdding.lib.utils.KnownMods
 import me.shedaniel.math.Rectangle
@@ -22,6 +23,7 @@ import tech.thatgravyboat.skyblockapi.api.events.base.CancellableSkyBlockEvent
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import kotlin.jvm.optionals.getOrNull
 
+@Deprecated("Use ItemListRegisterExclusionZonesEvent for more compatability", ReplaceWith("me.owdding.lib.events.ItemListRegisterExclusionZonesEvent"))
 class REIRenderOverlayEvent(val screen: Screen, private val registrar: (Int, Int, Int, Int) -> Unit) : CancellableSkyBlockEvent() {
 
     fun register(x: Int, y: Int, width: Int, height: Int) {
@@ -39,14 +41,18 @@ object REICompatability : REIClientPlugin {
             val hide = REIRenderOverlayEvent(screen) { x, y, width, height ->
                 areas.add(Rectangle(x, y, width, height))
             }.post(SkyBlockAPI.eventBus)
+            val newEventHide = ItemListRegisterExclusionZonesEvent(screen) { x, y, width, height ->
+                areas.add(Rectangle(x, y, width, height))
+            }.post(SkyBlockAPI.eventBus)
 
-            if (hide) listOf(Rectangle(0, 0, screen.width, screen.height)) else areas
+            if (hide || newEventHide) listOf(Rectangle(0, 0, screen.width, screen.height)) else areas
         }
     }
 }
 
 object REIRuntimeCompatability {
     val installed get() = KnownMods.REI.installed
+
     fun getReiHoveredItemStack(): ItemStack? {
         if (!installed) return null
         //? >= 26.1
@@ -70,8 +76,8 @@ object REIRuntimeCompatability {
             accessor.`mlib$isHighlighting`()
         }.getOrDefault(false)
     }
-    //? < 26.1 {
 
+    //? < 26.1 {
     /*// Taken from REI, somehow if I try to change anything it just refuses to work
     private fun shouldReturn(screen: Screen?): Boolean {
         if (screen == null) return true

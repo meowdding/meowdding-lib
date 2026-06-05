@@ -12,6 +12,7 @@ enum class KnownMods(val modId: String) {
     SKYBLOCK_PV("skyblockpv"),
     SKYOCEAN("skyocean"),
     SKYBLOCK_RPC("skyblockrpc"),
+    CATHARSIS("catharsis"),
 
     // Other SkyBlock
     SKYBLOCKER("skyblocker"),
@@ -27,6 +28,7 @@ enum class KnownMods(val modId: String) {
 
     // General Mods
     REI("roughlyenoughitems"),
+    SKYBLOCK_ITEM_LIST("skyblock-item-list")
     ;
 
     val installed by lazy { FabricLoader.getInstance().isModLoaded(modId) }

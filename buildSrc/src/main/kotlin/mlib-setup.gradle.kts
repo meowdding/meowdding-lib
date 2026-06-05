@@ -52,6 +52,7 @@ repositories {
     )
     scopedMaven("https://maven.nucleoid.xyz/", "eu.pb4")
     scopedMaven(url = "https://maven.shedaniel.me/", "me.shedaniel", "dev.architectury")
+    maven("https://maven.pkg.github.com/OperationPotato/ItemList") // TODO: use actual maven once setup
     mavenCentral()
 }
 fun makeAlias(configuration: String) = if (isUnobfuscated()) configuration else "mod" + configuration.replaceFirstChar { it.uppercase() }
@@ -243,6 +244,7 @@ dependencies {
 
     "compileOnly"(versionedCatalog["iris"])
     maybeModCompileOnly(versionedCatalog["rei"])
+    maybeModCompileOnly(versionedCatalog["skyblock-item-list"])
 }
 
 fun DependencyHandlerScope.includeImplementation(dep: Any, transitive: Boolean = true, remap: Boolean = true) {
