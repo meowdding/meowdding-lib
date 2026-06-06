@@ -2,10 +2,7 @@ package me.owdding.lib.compat
 
 import com.operationpotato.itemlist.api.ExclusionZoneManager
 import com.operationpotato.itemlist.api.Plugin
-import me.owdding.lib.compat.REICompatability.provide
 import me.owdding.lib.utils.KnownMods
-import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen
-import net.minecraft.client.gui.screens.inventory.InventoryScreen
 import net.minecraft.world.item.ItemStack
 
 object SBILCompatability : Plugin {
@@ -22,8 +19,8 @@ object SBILRuntimeCompatability {
     fun getHoveredItemStack(): ItemStack? {
         if (!installed) return null
         //? >= 26.1
-        return null
+        return null // TODO
         //? < 26.1
-        //return null // TODO
+        //return null
     }
 }

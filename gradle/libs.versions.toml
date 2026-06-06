@@ -34,7 +34,7 @@ fabric-language-kotlin = { module = "net.fabricmc:fabric-language-kotlin", versi
 skyblockapi = { module = "tech.thatgravyboat:skyblock-api", version.ref = "skyblockapi" }
 placeholders = { module = "eu.pb4:placeholder-api", version.ref = "placeholders" }
 rei = { module = "me.shedaniel:RoughlyEnoughItems-api-fabric", version.ref = "rei" }
-skyblock-item-list = { module = "com.operationpotato:skyblock-item-list", version.ref = "skyblock-item-list" }
+skyblock-item-list = { module = "com.operationpotato:skyblock-item-list-api", version.ref = "skyblock-item-list" }
 
 resourceful-config-kotlin = { module = "com.teamresourceful.resourcefulconfigkt:resourcefulconfigkt-fabric-1.21.5", version.ref = "resourceful-config-kotlin" }
 
