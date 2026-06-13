@@ -19,6 +19,12 @@
         "value": "me.owdding.lib.compat.REICompatability",
         "adapter": "kotlin"
       }
+    ],
+    "skyblock-item-list": [
+      {
+        "value": "me.owdding.lib.compat.SBILCompatability",
+        "adapter": "kotlin"
+      }
     ]
   },
   "depends": {
