@@ -19,6 +19,12 @@
         "value": "me.owdding.lib.compat.REICompatability",
         "adapter": "kotlin"
       }
+    ],
+    "iconographic:imc/item": [
+      {
+        "adapter": "kotlin",
+        "value": "me.owdding.lib.compat.IconographicCompat::setupItemCompat"
+      }
     ]
   },
   "depends": {

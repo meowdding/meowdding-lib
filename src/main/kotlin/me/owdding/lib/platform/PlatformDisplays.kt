@@ -1,6 +1,7 @@
 package me.owdding.lib.platform
 
 import com.mojang.blaze3d.vertex.PoseStack
+import me.owdding.lib.compat.IconographicCompat
 import me.owdding.lib.displays.Display
 import me.owdding.lib.displays.Displays.isMouseOver
 import me.owdding.lib.displays.entity.EntityStateRenderer
@@ -103,7 +104,9 @@ internal object PlatformDisplays {
                 if (showTooltip && !item.isEmpty) {
                     val player = McPlayer.self
                     if (isMouseOver(this, graphics) && player != null) {
-                        graphics.setTooltipForNextFrame(McFont.self, item, McClient.mouse.first.toInt(), McClient.mouse.second.toInt())
+                        IconographicCompat.withItem(item) {
+                            graphics.setTooltipForNextFrame(McFont.self, item, McClient.mouse.first.toInt(), McClient.mouse.second.toInt())
+                        }
                     }
                 }
 
