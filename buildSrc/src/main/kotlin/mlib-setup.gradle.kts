@@ -52,7 +52,7 @@ repositories {
     )
     scopedMaven("https://maven.nucleoid.xyz/", "eu.pb4")
     scopedMaven(url = "https://maven.shedaniel.me/", "me.shedaniel", "dev.architectury")
-    scopedMaven("https://maven.operationpotato.com/", "com.operationpotato")
+    scopedMaven("https://maven.operationpotato.com/snapshots", "com.operationpotato")
     mavenCentral()
 }
 fun makeAlias(configuration: String) = if (isUnobfuscated()) configuration else "mod" + configuration.replaceFirstChar { it.uppercase() }
