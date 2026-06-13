@@ -16,7 +16,7 @@ resourceful-config-kotlin = "3.5.15"
 skyblockapi = "4.1.0"
 placeholders = "2.6.1+1.21.5"
 rei = "20.0.811"
-skyblock-item-list = "0.0.1-SNAPSHOT"
+skyblock-item-list = "0.0.4+26.1.2-SNAPSHOT"
 
 meowdding-remote-repo = "1.0.9"
 meowdding-ktmodules = "1.0.6"

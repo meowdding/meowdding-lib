@@ -1,5 +1,6 @@
 package me.owdding.lib.compat
 
+import me.owdding.lib.events.ItemListHoveredItemKeyPressEvent
 import me.owdding.lib.events.ItemListRegisterExclusionZonesEvent
 import me.owdding.lib.mixins.compat.rei.OverlaySearchFieldAccessor
 import me.owdding.lib.utils.KnownMods
@@ -16,10 +17,12 @@ import net.minecraft.client.gui.components.events.ContainerEventHandler
 import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.client.input.KeyEvent
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.CancellableSkyBlockEvent
+import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyPressedEvent
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import kotlin.jvm.optionals.getOrNull
 
@@ -34,6 +37,11 @@ class REIRenderOverlayEvent(val screen: Screen, private val registrar: (Int, Int
 }
 
 object REICompatability : REIClientPlugin {
+
+    init {
+        //? < 26.1
+        //SkyBlockAPI.eventBus.register<ScreenKeyPressedEvent.Post> { event -> REIRuntimeCompatability.keyPressed(event) }
+    }
 
     override fun registerExclusionZones(zones: ExclusionZones) {
         zones.register(Screen::class.java) { screen ->
@@ -53,12 +61,13 @@ object REICompatability : REIClientPlugin {
 object REIRuntimeCompatability {
     val installed get() = KnownMods.REI.installed
 
+    @Deprecated("Use ItemListRegisterExclusionZonesEvent for more compatability", ReplaceWith("me.owdding.lib.events.ItemListHoveredItemKeyPressEvent"))
     fun getReiHoveredItemStack(): ItemStack? {
         if (!installed) return null
         //? >= 26.1
         return null
         //? < 26.1
-        //return runCatching { getItemList() ?: getRecipe() ?: getRecipeFallback() }.getOrNull()?.takeUnless { it.isEmpty }
+        //return getHoveredItemStack()
     }
 
     fun getCurrentSearchBar(): String? {
@@ -88,6 +97,18 @@ object REIRuntimeCompatability {
             }
         }
         return true
+    }
+
+    internal fun keyPressed(event: ScreenKeyPressedEvent.Post) {
+        ItemListHoveredItemKeyPressEvent(
+            event.screen,
+            getHoveredItemStack(),
+            KeyEvent(event.key, event.scanCode, event.modifiers)
+        )
+    }
+
+    private fun getHoveredItemStack(): ItemStack? {
+        return runCatching { getItemList() ?: getRecipe() ?: getRecipeFallback() }.getOrNull()?.takeUnless { it.isEmpty }
     }
 
     private fun getItemList(): ItemStack? {
