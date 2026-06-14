@@ -1,7 +1,6 @@
 package me.owdding.lib.compat
 
-import me.owdding.lib.events.ItemListHoveredItemKeyPressEvent
-import me.owdding.lib.events.ItemListRegisterExclusionZonesEvent
+import me.owdding.lib.events.ItemListEvent
 import me.owdding.lib.mixins.compat.rei.OverlaySearchFieldAccessor
 import me.owdding.lib.utils.KnownMods
 import me.shedaniel.math.Rectangle
@@ -49,7 +48,7 @@ object REICompatability : REIClientPlugin {
             val hide = REIRenderOverlayEvent(screen) { x, y, width, height ->
                 areas.add(Rectangle(x, y, width, height))
             }.post(SkyBlockAPI.eventBus)
-            val newEventHide = ItemListRegisterExclusionZonesEvent(screen) { x, y, width, height ->
+            val newEventHide = ItemListEvent.RegisterExclusionZonesEvent(screen) { x, y, width, height ->
                 areas.add(Rectangle(x, y, width, height))
             }.post(SkyBlockAPI.eventBus)
 
