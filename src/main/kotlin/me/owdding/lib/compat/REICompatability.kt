@@ -51,11 +51,14 @@ object REICompatability : REIClientPlugin {
             val hide = REIRenderOverlayEvent(screen) { x, y, width, height ->
                 areas.add(Rectangle(x, y, width, height))
             }.post(SkyBlockAPI.eventBus)
-            val newEventHide = ItemListEvent.RegisterExclusionZones(screen) { x, y, width, height ->
+
+            val excludedEvent = ItemListEvent.RegisterExcludedScreen(screen).apply { post(SkyBlockAPI.eventBus) }
+
+            ItemListEvent.RegisterExclusionZones(screen) { x, y, width, height ->
                 areas.add(Rectangle(x, y, width, height))
             }.post(SkyBlockAPI.eventBus)
 
-            if (hide || newEventHide) listOf(Rectangle(0, 0, screen.width, screen.height)) else areas
+            if (hide || excludedEvent.isExcluded) listOf(Rectangle(0, 0, screen.width, screen.height)) else areas
         }
     }
 }
