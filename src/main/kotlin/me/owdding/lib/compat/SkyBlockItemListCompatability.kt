@@ -1,3 +1,4 @@
+//? >= 26.1 {
 package me.owdding.lib.compat
 
 import com.operationpotato.itemlist.api.ExclusionZoneManager
@@ -18,7 +19,7 @@ object SBILCompatability : Plugin {
     override fun registerExclusionZones(exclusionZoneManager: ExclusionZoneManager) {
         exclusionZoneManager.addProvider(Screen::class.java) { screen ->
             val areas = mutableListOf<Rect2i>()
-            val hide = ItemListEvent.RegisterExclusionZonesEvent(screen) { x, y, width, height ->
+            val hide = ItemListEvent.RegisterExclusionZones(screen) { x, y, width, height ->
                 areas.add(Rect2i(x, y, width, height))
             }.post(SkyBlockAPI.eventBus)
             if (hide) listOf(Rect2i(0, 0, screen.width, screen.height)) else areas
@@ -27,7 +28,7 @@ object SBILCompatability : Plugin {
 
     override fun registerHoveredItems(hoveredItemManager: HoveredItemManager) {
         hoveredItemManager.addConsumer { screen, stack, event ->
-            ItemListEvent.HoveredItemKeyPressEvent(screen, stack, event).post(SkyBlockAPI.eventBus)
+            ItemListEvent.HoveredItemKeyPress(screen, stack, event).post(SkyBlockAPI.eventBus)
         }
     }
 
@@ -35,7 +36,7 @@ object SBILCompatability : Plugin {
         manager.addProvider { recipeObj, stack ->
             val recipe = recipeObj as? Recipe<*> ?: return@addProvider Optional.empty()
             val buttons = mutableListOf<AbstractWidget>()
-            ItemListEvent.RecipeButtonAddEvent(recipe, stack) { button: AbstractWidget ->
+            ItemListEvent.RecipeButtonAdd(recipe, stack) { button: AbstractWidget ->
                 buttons.add(button)
             }
             Optional.ofNullable(buttons.firstOrNull()) // TODO: change to provideMultiple once that is released
@@ -46,3 +47,4 @@ object SBILCompatability : Plugin {
 object SBILRuntimeCompatability {
     val installed get() = KnownMods.SKYBLOCK_ITEM_LIST.installed
 }
+//?}

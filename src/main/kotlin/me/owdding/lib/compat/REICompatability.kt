@@ -4,26 +4,14 @@ import me.owdding.lib.events.ItemListEvent
 import me.owdding.lib.mixins.compat.rei.OverlaySearchFieldAccessor
 import me.owdding.lib.utils.KnownMods
 import me.shedaniel.math.Rectangle
-import me.shedaniel.math.impl.PointHelper
 import me.shedaniel.rei.api.client.REIRuntime
-import me.shedaniel.rei.api.client.gui.screen.DisplayScreen
-import me.shedaniel.rei.api.client.gui.widgets.Slot
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin
 import me.shedaniel.rei.api.client.registry.screen.ExclusionZones
-import me.shedaniel.rei.api.client.registry.screen.ScreenRegistry
-import me.shedaniel.rei.api.common.entry.EntryStack
-import net.minecraft.client.gui.components.events.ContainerEventHandler
-import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.client.gui.screens.Screen
-import net.minecraft.client.input.KeyEvent
-import net.minecraft.world.InteractionResult
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.CancellableSkyBlockEvent
-import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyPressedEvent
-import tech.thatgravyboat.skyblockapi.helpers.McScreen
-import kotlin.jvm.optionals.getOrNull
 
 @Deprecated("Use ItemListRegisterExclusionZonesEvent for more compatability", ReplaceWith("me.owdding.lib.events.ItemListRegisterExclusionZonesEvent"))
 class REIRenderOverlayEvent(val screen: Screen, private val registrar: (Int, Int, Int, Int) -> Unit) : CancellableSkyBlockEvent() {
@@ -48,7 +36,7 @@ object REICompatability : REIClientPlugin {
             val hide = REIRenderOverlayEvent(screen) { x, y, width, height ->
                 areas.add(Rectangle(x, y, width, height))
             }.post(SkyBlockAPI.eventBus)
-            val newEventHide = ItemListEvent.RegisterExclusionZonesEvent(screen) { x, y, width, height ->
+            val newEventHide = ItemListEvent.RegisterExclusionZones(screen) { x, y, width, height ->
                 areas.add(Rectangle(x, y, width, height))
             }.post(SkyBlockAPI.eventBus)
 
@@ -99,7 +87,7 @@ object REIRuntimeCompatability {
     }
 
     internal fun keyPressed(event: ScreenKeyPressedEvent.Post) {
-        ItemListHoveredItemKeyPressEvent(
+        ItemListEvent.HoveredItemKeyPress(
             event.screen,
             getHoveredItemStack(),
             KeyEvent(event.key, event.scanCode, event.modifiers)
