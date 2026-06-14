@@ -13,6 +13,21 @@ import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.CancellableSkyBlockEvent
 
+//? < 26.1 {
+/*import me.shedaniel.math.impl.PointHelper
+import me.shedaniel.rei.api.client.gui.screen.DisplayScreen
+import me.shedaniel.rei.api.client.gui.widgets.Slot
+import me.shedaniel.rei.api.client.registry.screen.ScreenRegistry
+import me.shedaniel.rei.api.common.entry.EntryStack
+import net.minecraft.client.gui.components.events.ContainerEventHandler
+import net.minecraft.client.gui.components.events.GuiEventListener
+import net.minecraft.client.input.KeyEvent
+import net.minecraft.world.InteractionResult
+import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyPressedEvent
+import tech.thatgravyboat.skyblockapi.helpers.McScreen
+import kotlin.jvm.optionals.getOrNull
+*///?}
+
 @Deprecated("Use ItemListRegisterExclusionZonesEvent for more compatability", ReplaceWith("me.owdding.lib.events.ItemListRegisterExclusionZonesEvent"))
 class REIRenderOverlayEvent(val screen: Screen, private val registrar: (Int, Int, Int, Int) -> Unit) : CancellableSkyBlockEvent() {
 
