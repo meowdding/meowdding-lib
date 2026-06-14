@@ -20,6 +20,12 @@
         "adapter": "kotlin"
       }
     ],
+    "skyblock-item-list": [
+      {
+        "value": "me.owdding.lib.compat.SBILCompatability",
+        "adapter": "kotlin"
+      }
+    ],
     "iconographic:imc/item": [
       {
         "adapter": "kotlin",

@@ -13,6 +13,7 @@ gson = "2.12.1"
 skyblockapi = "4.1.11"
 placeholders = "2.6.1+1.21.5"
 rei = "20.0.811"
+skyblock-item-list = "0.0.4+26.1.2-SNAPSHOT"
 
 meowdding-remote-repo = "1.0.9"
 meowdding-ktmodules = "1.0.6"
@@ -30,6 +31,7 @@ fabric-language-kotlin = { module = "net.fabricmc:fabric-language-kotlin", versi
 skyblockapi = { module = "tech.thatgravyboat:skyblock-api", version.ref = "skyblockapi" }
 placeholders = { module = "eu.pb4:placeholder-api", version.ref = "placeholders" }
 rei = { module = "me.shedaniel:RoughlyEnoughItems-api-fabric", version.ref = "rei" }
+skyblock-item-list = { module = "com.operationpotato:skyblock-item-list-api", version.ref = "skyblock-item-list" }
 
 meowdding-ktmodules = { module = "me.owdding.ktmodules:KtModules", version.ref = "meowdding-ktmodules" }
 meowdding-ktcodecs = { module = "me.owdding.ktcodecs:KtCodecs", version.ref = "meowdding-ktcodecs" }
