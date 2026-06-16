@@ -18,11 +18,16 @@ class AbstractContainerScreenMixin extends Screen {
 
     @Inject(method = "mouseScrolled", at = @At("TAIL"), cancellable = true)
     void passScrollToParent(double mouseX, double mouseY, double scrollX, double scrollY, CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(this.getChildAt(mouseX, mouseY)
+        if (cir.getReturnValue()) return;
+
+        boolean handled = this.getChildAt(mouseX, mouseY)
             .filter((listener) -> listener instanceof ContainerBypass)
             .filter((guiEventListener) -> guiEventListener.mouseScrolled(mouseX, mouseY, scrollX, scrollY))
-            .isPresent()
-        );
+            .isPresent();
+
+        if (handled) {
+            cir.setReturnValue(true);
+        }
     }
 }
 

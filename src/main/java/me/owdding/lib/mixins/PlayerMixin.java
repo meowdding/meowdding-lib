@@ -18,13 +18,19 @@ public abstract class PlayerMixin extends LivingEntity {
         super(entityType, level);
     }
 
-    @Inject(method = "decorateDisplayNameComponent", at = @At("HEAD"))
-    public void modifyPlayerName(MutableComponent displayName, CallbackInfoReturnable<MutableComponent> cir) {
+    @Inject(
+        method = "decorateDisplayNameComponent",
+        at = @At("HEAD")
+    )
+    public void modifyPlayerName(
+        MutableComponent nameComponent,
+        CallbackInfoReturnable<MutableComponent> cir
+    ) {
         final var mlibData = MlibCosmetics.getMlibCosmetics().get(uuid);
         if (mlibData == null || mlibData.getSuffix() == null) {
             return;
         }
 
-        displayName.append(" ").append(mlibData.getSuffix());
+        nameComponent.append(" ").append(mlibData.getSuffix());
     }
 }
