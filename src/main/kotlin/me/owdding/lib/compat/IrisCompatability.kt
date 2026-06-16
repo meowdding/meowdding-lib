@@ -11,15 +11,9 @@ import net.minecraft.client.renderer.rendertype.RenderType
 interface IrisCompatability {
     fun registerPipeline(renderPipeline: RenderPipeline, shaderType: IrisShaderType) {}
 
-    //? if > 1.21.10 {
     fun registerRenderType(renderPipeline: RenderType, shaderType: IrisShaderType) {
         registerPipeline(renderPipeline.pipeline(), shaderType)
     }
-    //?} else {
-    /*fun registerRenderType(renderPipeline: RenderType.CompositeRenderType, shaderType: IrisShaderType) {
-        registerPipeline(renderPipeline.renderPipeline, shaderType)
-    }
-    *///?}
 
     @Module
     companion object : IrisCompatability by resolve() {

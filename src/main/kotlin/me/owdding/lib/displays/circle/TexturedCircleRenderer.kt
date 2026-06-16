@@ -1,20 +1,16 @@
 package me.owdding.lib.displays.circle
 
-//? < 1.21.11
-//import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.Tesselator
 import com.mojang.blaze3d.vertex.VertexFormat
 import earth.terrarium.olympus.client.pipelines.renderer.PipelineRenderer
-//? > 1.21.10
 import earth.terrarium.olympus.client.utils.TextureUtils
 import me.owdding.lib.rendering.MeowddingPipState
 import net.minecraft.client.gui.navigation.ScreenRectangle
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer
 import net.minecraft.client.renderer.MultiBufferSource
-//? < 1.21.11
-//import net.minecraft.client.renderer.texture.AbstractTexture
+
 import net.minecraft.data.AtlasIds
 import net.minecraft.resources.Identifier
 import org.joml.Matrix3x2f
@@ -41,15 +37,9 @@ class TexturedCircleRenderer(buffer: MultiBufferSource.BufferSource) : PictureIn
 
          val sprite = McClient.self.atlasManager.getAtlasOrThrow(AtlasIds.GUI).getSprite(state.texture)
 
-        //? > 1.21.10 {
         val texture = TextureUtils.single(sprite.atlasLocation())
-        //?} else {
-        /*val abstractTexture: AbstractTexture = McClient.self.textureManager.getTexture(sprite.atlasLocation())
-        RenderSystem.setShaderTexture(0, abstractTexture.textureView)
-        *///?}
 
         PipelineRenderer.builder(TexturedCirclePipeline.PIPELINE, buffer.buildOrThrow())
-            //? > 1.21.10
             .textures(texture)
             .uniform(TexturedCirclePipeline.UNIFORM_STORAGE, TexturedCircleUniform(sprite.u0, sprite.u1, sprite.v0, sprite.v1))
             .color(-1)

@@ -2,7 +2,6 @@ package me.owdding.lib.rendering.text
 
 import com.mojang.blaze3d.pipeline.RenderPipeline
 import me.owdding.lib.helper.TextShaderHolder
-//? > 1.21.10
 import net.minecraft.client.renderer.rendertype.RenderSetup
 import net.minecraft.client.renderer.rendertype.RenderType
 import net.minecraft.network.chat.MutableComponent
@@ -11,19 +10,7 @@ import net.minecraft.resources.Identifier
 import net.minecraft.util.Util
 import java.util.function.BiFunction
 
-//? < 1.21.11 {
-/*import net.minecraft.client.renderer.rendertype.RenderType.CompositeState
-import net.minecraft.client.renderer.RenderStateShard
-import net.minecraft.client.renderer.RenderStateShard.TextureStateShard
-import net.minecraft.util.TriState
-*///?}
-
 val TEXT_RENDER_TYPE_CACHE: BiFunction<RenderPipeline, Identifier, RenderType> = Util.memoize { pipeline, location ->
-    //? if < 1.21.11 {
-    /*val shard = TextureStateShard(location, false)
-    *///? }
-
-    //? if > 1.21.10 {
     RenderType.create(
         "meowddinglib/font_shader",
         RenderSetup.builder(pipeline)
@@ -32,19 +19,6 @@ val TEXT_RENDER_TYPE_CACHE: BiFunction<RenderPipeline, Identifier, RenderType> =
             .withTexture("Sampler0", location)
             .createRenderSetup(),
     )
-    //?} else {
-    /*RenderType.create(
-        "meowddinglib/font_shader",
-        786432,
-        false,
-        false,
-        pipeline,
-        CompositeState.builder()
-            .setTextureState(shard)
-            .setLightmapState(RenderStateShard.LIGHTMAP)
-            .createCompositeState(false),
-    )
-    *///?}
 }
 
 fun createTextRenderType(

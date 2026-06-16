@@ -3,7 +3,6 @@ package me.owdding.lib.utils
 import com.mojang.blaze3d.platform.InputConstants
 import me.owdding.ktmodules.Module
 import me.owdding.lib.platform.screens.KeyEvent
-//? if > 1.21.8
 import me.owdding.lib.platform.screens.into
 //~ if >= 26.1 'keybinding.v1.KeyBindingHelper as KeyMappingHelper' -> 'keymapping.v1.KeyMappingHelper'
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper
