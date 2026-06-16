@@ -12,9 +12,7 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.CancellableSkyBlockEvent
-
-//? < 26.1 {
-/*import me.shedaniel.math.impl.PointHelper
+import me.shedaniel.math.impl.PointHelper
 import me.shedaniel.rei.api.client.gui.screen.DisplayScreen
 import me.shedaniel.rei.api.client.gui.widgets.Slot
 import me.shedaniel.rei.api.client.registry.screen.ScreenRegistry
@@ -26,7 +24,6 @@ import net.minecraft.world.InteractionResult
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyPressedEvent
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import kotlin.jvm.optionals.getOrNull
-*///?}
 
 @Deprecated("Use ItemListRegisterExclusionZonesEvent for more compatability", ReplaceWith("me.owdding.lib.events.ItemListRegisterExclusionZonesEvent"))
 class REIRenderOverlayEvent(val screen: Screen, private val registrar: (Int, Int, Int, Int) -> Unit) : CancellableSkyBlockEvent() {
@@ -41,8 +38,7 @@ class REIRenderOverlayEvent(val screen: Screen, private val registrar: (Int, Int
 object REICompatability : REIClientPlugin {
 
     init {
-        //? < 26.1
-        //SkyBlockAPI.eventBus.register<ScreenKeyPressedEvent.Post> { event -> REIRuntimeCompatability.keyPressed(event) }
+        SkyBlockAPI.eventBus.register<ScreenKeyPressedEvent.Post> { event -> REIRuntimeCompatability.keyPressed(event) }
     }
 
     override fun registerExclusionZones(zones: ExclusionZones) {
@@ -69,10 +65,7 @@ object REIRuntimeCompatability {
     @Deprecated("Use ItemListRegisterExclusionZonesEvent for more compatability", ReplaceWith("me.owdding.lib.events.ItemListHoveredItemKeyPressEvent"))
     fun getReiHoveredItemStack(): ItemStack? {
         if (!installed) return null
-        //? >= 26.1
-        return null
-        //? < 26.1
-        //return getHoveredItemStack()
+        return getHoveredItemStack()
     }
 
     fun getCurrentSearchBar(): String? {
@@ -91,8 +84,7 @@ object REIRuntimeCompatability {
         }.getOrDefault(false)
     }
 
-    //? < 26.1 {
-    /*// Taken from REI, somehow if I try to change anything it just refuses to work
+    // Taken from REI, somehow if I try to change anything it just refuses to work
     private fun shouldReturn(screen: Screen?): Boolean {
         if (screen == null) return true
         for (decider in ScreenRegistry.getInstance().getDeciders(screen)) {
@@ -137,5 +129,4 @@ object REIRuntimeCompatability {
     }
 
     private fun EntryStack<*>.toStack(): ItemStack? = this.value as? ItemStack ?: this.cheatsAs().value
-    *///? }
 }
