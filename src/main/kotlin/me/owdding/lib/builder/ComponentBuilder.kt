@@ -50,12 +50,15 @@ abstract class ComponentBuilder {
 class SingularLineComponentBuilder : ComponentBuilder()
 
 class MultilineComponentBuilder : ComponentBuilder() {
+    private var isFirstLine = true
+
     fun newLine() {
         component.append(CommonText.NEWLINE)
     }
 
     override fun component(component: MutableComponent, init: MutableComponent.() -> Unit) {
+        if (!isFirstLine) newLine()
         super.component(component, init)
-        newLine()
+        isFirstLine = false
     }
 }
