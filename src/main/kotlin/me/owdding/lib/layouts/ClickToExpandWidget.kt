@@ -61,7 +61,7 @@ class ClickToExpandWidget(title: LayoutElement, body: LayoutElement, val onClick
             body.extractRenderState(graphics, mouseX, mouseY, partialTicks)
         }
 
-        //~ if >= 26.1 'renderWidget' -> 'extractRenderState'
-        super.extractRenderState(graphics, mouseX, mouseY, partialTicks)
+        //~ if >= 26.1 'renderWidget' -> 'extractWidgetRenderState'
+        super.extractWidgetRenderState(graphics, mouseX, mouseY, partialTicks)
     }
 }
