@@ -50,18 +50,14 @@ class ClickToExpandWidget(title: LayoutElement, body: LayoutElement, val onClick
         return super.mouseClicked(event, doubleClick)
     }
 
-    //~ if >= 26.1 'renderWidget' -> 'extractWidgetRenderState'
     override fun extractWidgetRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         title.setPosition(this.x, this.y)
-        //~ if >= 26.1 'render' -> 'extractRenderState'
         title.extractRenderState(graphics, mouseX, mouseY, partialTicks)
         if (expanded) {
             body.setPosition(this.x + bodyOffset, this.y + title.height)
-            //~ if >= 26.1 'render' -> 'extractRenderState'
             body.extractRenderState(graphics, mouseX, mouseY, partialTicks)
         }
 
-        //~ if >= 26.1 'renderWidget' -> 'extractWidgetRenderState'
         super.extractWidgetRenderState(graphics, mouseX, mouseY, partialTicks)
     }
 }

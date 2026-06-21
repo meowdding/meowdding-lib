@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import me.owdding.lib.accessor.FontPipelineHolder;
 import net.minecraft.client.gui.Font;
-//~ if >= 26.1 'gui.render.state' -> 'renderer.state.gui'
 import net.minecraft.client.renderer.state.gui.GuiTextRenderState;
 import org.spongepowered.asm.mixin.Mixin;
 

@@ -1,10 +1,12 @@
 package me.owdding.lib.rendering.text.builtin
 
-//? >= 26.1
+//? >= 26.2
+import com.mojang.blaze3d.pipeline.BindGroupLayout
 import com.mojang.blaze3d.pipeline.DepthStencilState
 import com.mojang.blaze3d.pipeline.RenderPipeline
-//? >= 26.1
 import com.mojang.blaze3d.platform.CompareOp
+//? 26.1
+//import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
@@ -12,11 +14,16 @@ import me.owdding.lib.MeowddingLib
 import me.owdding.lib.extensions.withShaderDefine
 import me.owdding.lib.generated.EnumCodec
 import me.owdding.lib.rendering.text.TextShader
-import me.owdding.lib.utils.MeowddingPipelines
+//? 26.1
+//import me.owdding.lib.utils.MeowddingPipelines
+import net.minecraft.client.gui.Font
+//? >= 26.2
+import net.minecraft.client.renderer.BindGroupLayouts
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.network.chat.TextColor
 import net.minecraft.resources.Identifier
 import net.minecraft.util.ARGB
+import net.minecraft.util.Util
 import org.joml.Vector2f
 import org.joml.Vector4f
 
@@ -29,33 +36,100 @@ class GradientTextShader(val gradientProvider: GradientProvider, val direction: 
 
     override val id: Identifier = ID
 
-    override val pipeline: RenderPipeline = RenderPipelines.register(
-        RenderPipeline.builder(RenderPipelines.TEXT_SNIPPET, RenderPipelines.FOG_SNIPPET, MeowddingPipelines.GAME_TIME_SNIPPET)
-            .withLocation(MeowddingLib.id("gradient_text"))
-            .withVertexShader(MeowddingLib.id("text/gradient"))
-            .withFragmentShader(MeowddingLib.id("text/gradient"))
-            .withSampler("Sampler0")
-            //? >= 26.1
-            .withDepthStencilState(DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false, -1f, -10f))
-            //? < 26.1
-            //.withDepthBias(-1.0f, -10.0f)
-            .withShaderDefine(
-                "COLORS",
-                gradientProvider
-                    .getColors()
-                    .map { color -> Vector4f(ARGB.redFloat(color), ARGB.greenFloat(color), ARGB.blueFloat(color), ARGB.alphaFloat(color)) }
-                    .toTypedArray(),
-            )
-            .withShaderDefine(
-                "DIRECTION",
-                direction.vec,
-            )
-            .withShaderDefine(
-                "SPEED",
-                speed,
-            )
-            .build(),
-    )
+    //? >= 26.2 {
+    private val layout = BindGroupLayout.builder()
+        .build()
+
+
+    override val pipeline: (Font.DisplayMode?, Boolean) -> RenderPipeline = Util.memoize<Font.DisplayMode?, Boolean, RenderPipeline> { displayMode, grayscale ->
+        RenderPipelines.register(
+            RenderPipeline.builder(
+                *buildList {
+                    when (displayMode) {
+                        Font.DisplayMode.NORMAL, Font.DisplayMode.POLYGON_OFFSET -> {
+                            add(RenderPipelines.WORLD_TEXT_SNIPPET)
+                        }
+
+                        Font.DisplayMode.SEE_THROUGH -> {
+                            add(RenderPipelines.TEXT_SNIPPET)
+                        }
+
+                        null -> {
+                            add(RenderPipelines.GUI_TEXT_SNIPPET)
+                        }
+                    }
+                }.toTypedArray(),
+            ).withLocation(MeowddingLib.id("gradient_text/${displayMode?.name?.lowercase()}${if (grayscale) "_grayscale" else ""}"))
+                .withVertexShader(MeowddingLib.id("text/gradient"))
+                .withFragmentShader(MeowddingLib.id("text/gradient"))
+                .withBindGroupLayout(layout)
+                .apply {
+                    if (grayscale) {
+                        withShaderDefine("IS_GRAYSCALE")
+                    }
+
+                    when (displayMode) {
+                        Font.DisplayMode.SEE_THROUGH -> {
+                            withShaderDefine("IS_SEE_THROUGH")
+                        }
+
+                        Font.DisplayMode.POLYGON_OFFSET -> {
+                            withDepthStencilState(DepthStencilState(CompareOp.GREATER_THAN_OR_EQUAL, true, 1.0F, 10.0F))
+                        }
+
+                        null -> {
+                            withShaderDefine("IS_GUI")
+                        }
+
+                        else -> {}
+                    }
+                }
+                .withBindGroupLayout(BindGroupLayouts.GLOBALS)
+                .withShaderDefine(
+                    "COLORS",
+                    gradientProvider
+                        .getColors()
+                        .map { color -> Vector4f(ARGB.redFloat(color), ARGB.greenFloat(color), ARGB.blueFloat(color), ARGB.alphaFloat(color)) }
+                        .toTypedArray(),
+                )
+                .withShaderDefine(
+                    "DIRECTION",
+                    direction.vec,
+                )
+                .withShaderDefine(
+                    "SPEED",
+                    speed,
+                )
+                .build(),
+        )
+    }::apply
+
+    //? } else {
+    //override val pipeline: RenderPipeline = RenderPipelines.register(
+    //    RenderPipeline.builder(RenderPipelines.TEXT_SNIPPET, RenderPipelines.FOG_SNIPPET, MeowddingPipelines.GAME_TIME_SNIPPET)
+    //        .withLocation(MeowddingLib.id("gradient_text"))
+    //        .withVertexShader(MeowddingLib.id("text/gradient"))
+    //        .withFragmentShader(MeowddingLib.id("text/gradient"))
+    //        .withSampler("Sampler0")
+    //        .withDepthStencilState(DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false, -1f, -10f))
+    //        .withShaderDefine(
+    //            "COLORS",
+    //            gradientProvider
+    //                .getColors()
+    //                .map { color -> Vector4f(ARGB.redFloat(color), ARGB.greenFloat(color), ARGB.blueFloat(color), ARGB.alphaFloat(color)) }
+    //                .toTypedArray(),
+    //        )
+    //        .withShaderDefine(
+    //            "DIRECTION",
+    //            direction.vec,
+    //        )
+    //        .withShaderDefine(
+    //            "SPEED",
+    //            speed,
+    //        )
+    //        .build(),
+    //)
+    //? }
 
     override val useWhite: Boolean get() = true
     override val hasShadow: Boolean get() = true

@@ -6,15 +6,12 @@ import earth.terrarium.olympus.client.pipelines.pips.OlympusPictureInPictureRend
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.navigation.ScreenRectangle
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer
-//~ if >= 26.1 'gui.render.state' -> 'renderer.state.gui'
-import net.minecraft.client.renderer.state.gui.pip.PictureInPictureRenderState
-//~ if >= 26.1 'client.renderer.LightTexture' -> 'util.LightCoordsUtil as LightTexture'
-import net.minecraft.util.LightCoordsUtil as LightTexture
-import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.entity.EntityRenderer
 import net.minecraft.client.renderer.entity.state.EntityRenderState
-//~ if >= 26.1 'state' -> 'state.level'
+import net.minecraft.client.renderer.state.gui.pip.PictureInPictureRenderState
 import net.minecraft.client.renderer.state.level.CameraRenderState
+import net.minecraft.util.LightCoordsUtil
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
@@ -24,9 +21,9 @@ import org.joml.component1
 import org.joml.component2
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.platform.getTranslation
-import java.util.function.Function
+import java.util.function.Supplier
 
-class EntityStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictureRenderer<EntityStateRenderer.State>(buffer) {
+class EntityStateRenderer() : PictureInPictureRenderer<EntityStateRenderer.State>() {
 
     private var lastState: State? = null
 
@@ -36,24 +33,21 @@ class EntityStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPic
         return lastState != null && lastState == state
     }
 
-    override fun renderToTexture(state: State, stack: PoseStack) {
+    override fun renderToTexture(state: State, stack: PoseStack, submitNodeCollector: SubmitNodeCollector) {
         val dispatcher = McClient.self.entityRenderDispatcher
         val renderer = McClient.self.gameRenderer
 
-        renderer.lighting.setupFor(Lighting.Entry.ENTITY_IN_UI)
+        renderer.lighting().setupFor(Lighting.Entry.ENTITY_IN_UI)
         stack.translate(state.translation.x, state.translation.y, state.translation.z)
         stack.mulPose(state.rotation)
 
         val cameraState = CameraRenderState()
-        val featureRenderer = renderer.featureRenderDispatcher
         if (state.cameraAngle != null) {
             cameraState.orientation = state.cameraAngle.conjugate(Quaternionf()).rotateY(Mth.PI)
         }
 
-        state.state.lightCoords = LightTexture.FULL_BRIGHT
-        //featureRenderer.renderAllFeatures()
-        dispatcher.submit(state.state, cameraState, 0.0, 0.0, 0.0, stack, featureRenderer.submitNodeStorage)
-        featureRenderer.renderAllFeatures()
+        state.state.lightCoords = LightCoordsUtil.FULL_BRIGHT
+        dispatcher.submit(state.state, cameraState, 0.0, 0.0, 0.0, stack, submitNodeCollector)
     }
 
     override fun getTextureLabel(): String = "meowdding_lib_entity_state"
@@ -66,8 +60,7 @@ class EntityStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPic
         val scissor: ScreenRectangle?, val bounds: ScreenRectangle?,
     ) : OlympusPictureInPictureRenderState<State> {
 
-        override fun getFactory(): Function<MultiBufferSource.BufferSource, PictureInPictureRenderer<State>> =
-            Function { EntityStateRenderer(it) }
+        override fun getFactory(): Supplier<PictureInPictureRenderer<State>> = Supplier { EntityStateRenderer() }
 
         override fun x0(): Int = x0
         override fun x1(): Int = x1
@@ -125,7 +118,6 @@ class EntityStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPic
                 graphics.scissorStack.peek(),
                 PictureInPictureRenderState.getBounds(x0, y0, x1, y1, graphics.scissorStack.peek()),
             )
-            //~ if >= 26.1 'submit' -> 'add'
             graphics.guiRenderState.addPicturesInPictureState(state)
         }
     }

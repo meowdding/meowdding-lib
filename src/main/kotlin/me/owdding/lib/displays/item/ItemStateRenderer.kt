@@ -2,24 +2,24 @@ package me.owdding.lib.displays.item
 
 import com.mojang.blaze3d.platform.Lighting.Entry
 import com.mojang.blaze3d.systems.RenderSystem
-//? > 1.21.10
 import com.mojang.blaze3d.textures.FilterMode
 import com.mojang.blaze3d.textures.GpuTextureView
 import com.mojang.blaze3d.vertex.PoseStack
 import earth.terrarium.olympus.client.pipelines.pips.OlympusPictureInPictureRenderState
+import me.owdding.lib.displays.circle.TexturedCircleRenderer
+import me.owdding.lib.displays.circle.TexturedCircleState
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.navigation.ScreenRectangle
 import net.minecraft.client.gui.render.TextureSetup
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer
-//~ if >= 26.1 'gui.render.state' -> 'renderer.state.gui' {
 import net.minecraft.client.renderer.state.gui.BlitRenderState
 import net.minecraft.client.renderer.state.gui.GuiItemRenderState
 import net.minecraft.client.renderer.state.gui.GuiRenderState
-//~ }
-//~ if >= 26.1 'client.renderer.LightTexture' -> 'util.LightCoordsUtil as LightTexture'
-import net.minecraft.util.LightCoordsUtil as LightTexture
-import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.util.LightCoordsUtil
+//? 26.1
+//import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderPipelines
+import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.item.TrackingItemStackRenderState
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.world.item.ItemDisplayContext
@@ -28,11 +28,14 @@ import org.joml.Matrix3x2f
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
-import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import java.util.Objects
-import java.util.function.Function
+//? 26.1
+//import java.util.function.Function
+import java.util.function.Supplier
+import kotlin.jvm.java
 
-class ItemStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictureRenderer<ItemStateRenderer.State>(buffer) {
+//~ if >= 26.2 '(buffer: MultiBufferSource.BufferSource) : ' -> '() : ', '(buffer)' -> '()'
+class ItemStateRenderer() : PictureInPictureRenderer<ItemStateRenderer.State>() {
 
     private var textureView: GpuTextureView? = null
     private var lastState: State? = null
@@ -41,18 +44,23 @@ class ItemStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictu
         return this.lastState != null && this.lastState == state
     }
 
-    override fun renderToTexture(state: State, stack: PoseStack) {
+    override fun renderToTexture(state: State, stack: PoseStack/*? >= 26.2 >> ')'*/, submitNodeCollector: SubmitNodeCollector) {
         this.lastState = state
         this.textureView = RenderSystem.outputColorTextureOverride
 
         stack.scale(1f, -1f, -1f)
         val item = state.state
 
-        McClient.self.gameRenderer.lighting.setupFor(if (item.itemStackRenderState().usesBlockLight()) Entry.ITEMS_3D else Entry.ITEMS_FLAT)
+        //~ if >= 26.2 '.lighting' -> '.lighting()'
+        McClient.self.gameRenderer.lighting().setupFor(if (item.itemStackRenderState().usesBlockLight()) Entry.ITEMS_3D else Entry.ITEMS_FLAT)
 
-        val featureRenderer = McClient.self.gameRenderer.featureRenderDispatcher
-        item.itemStackRenderState().submit(stack, featureRenderer.submitNodeStorage, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0)
-        featureRenderer.renderAllFeatures()
+        //? 26.1 {
+        //val featureRenderer = McClient.self.gameRenderer.featureRenderDispatcher
+        //val submitNodeCollector = featureRenderer.submitNodeStorage
+        //? }
+        item.itemStackRenderState().submit(stack, submitNodeCollector, LightCoordsUtil.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0)
+        //? 26.1
+        //featureRenderer.renderAllFeatures()
     }
 
     override fun getTranslateY(height: Int, ignored: Int): Float {
@@ -60,15 +68,10 @@ class ItemStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictu
     }
 
     override fun blitTexture(state: State, gui: GuiRenderState) {
-        //~ if >= 26.1 'submit' -> 'add'
         gui.addBlitToCurrentLayer(
             BlitRenderState(
                 RenderPipelines.GUI_TEXTURED_PREMULTIPLIED_ALPHA,
-                TextureSetup.singleTexture(
-                    this.textureView!!,
-                    //? > 1.21.10
-                    RenderSystem.getSamplerCache().getRepeat(FilterMode.LINEAR),
-                ),
+                TextureSetup.singleTexture(this.textureView!!, RenderSystem.getSamplerCache().getRepeat(FilterMode.LINEAR)),
                 state.pose(), state.x0(), state.y0(), state.x0() + 16, state.y0() + 16,
                 0.0F, 1.0F, 1.0F, 0.0F, -1,
                 state.scissorArea(),
@@ -81,7 +84,10 @@ class ItemStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictu
     override fun getTextureLabel(): String = "meowdding_lib_item_state"
 
     data class State(val state: GuiItemRenderState) : OlympusPictureInPictureRenderState<State> {
-        override fun getFactory(): Function<MultiBufferSource.BufferSource, PictureInPictureRenderer<State>> = Function { ItemStateRenderer(it) }
+        //? if > 26.1 {
+        override fun getFactory(): Supplier<PictureInPictureRenderer<State>> = Supplier { ItemStateRenderer() }
+        //? } else
+        //override fun getFactory(): Function<MultiBufferSource.BufferSource, PictureInPictureRenderer<State>> = Function { buffer -> ItemStateRenderer(buffer) }
 
         override fun scale(): Float = maxOf(state.pose().m00(), state.pose().m11()) * 16f
         override fun x0(): Int = state.x()
@@ -121,12 +127,9 @@ class ItemStateRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictu
             val state = TrackingItemStackRenderState()
             McClient.self.itemModelResolver.updateForTopItem(state, item, ItemDisplayContext.GUI, McLevel.self, McPlayer.self, 0)
 
-            //~ if >= 26.1 'submit' -> 'add'
             graphics.guiRenderState.addPicturesInPictureState(
                 State(
                     GuiItemRenderState(
-                        //? < 26.1
-                        //item.item.name.toString(),
                         Matrix3x2f(graphics.pose()),
                         state,
                         x, y,

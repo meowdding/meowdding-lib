@@ -10,7 +10,7 @@ keval = "1.1.1"
 gson = "2.12.1"
 
 # Dependencies
-skyblockapi = "4.1.11"
+skyblockapi = "4.2.0-beta.1"
 placeholders = "2.6.1+1.21.5"
 rei = "20.0.811"
 skyblock-item-list = "0.0.5+26.1.2-SNAPSHOT"

@@ -43,7 +43,7 @@ public class FontMixin {
     }
 
     @WrapMethod(method = "accept")
-    public boolean accept(int $$0, Style style, int $$2, Operation<Boolean> original) {
+    public boolean accept(int position, Style style, int c, Operation<Boolean> original) {
         var pipeline = FontPipelineHolder.ACTIVE_PIPELINE;
 
         var previous = pipeline.get();
@@ -52,12 +52,12 @@ public class FontMixin {
         if ((Object) style instanceof TextShaderHolder holder) {
             var shader = holder.meowddinglib$getTextShader();
             if (shader != null) {
-                pipeline.set(shader.getPipeline());
+                pipeline.set(shader);
                 TextShaders.setActiveShader(shader);
             }
         }
 
-        var result = original.call($$0, style, $$2);
+        var result = original.call(position, style, c);
         pipeline.set(previous);
         TextShaders.setActiveShader(previousShader);
 

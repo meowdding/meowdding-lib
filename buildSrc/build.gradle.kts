@@ -6,6 +6,7 @@ plugins {
 repositories {
     gradlePluginPortal()
     maven("https://maven.teamresourceful.com/repository/maven-public/")
+    maven("https://maven.kikugie.dev/snapshots")
 }
 
 dependencies {
@@ -17,11 +18,16 @@ fun plugin(provider: Provider<PluginDependency>): Provider<String> = provider.ma
     "${it.pluginId}:${it.pluginId}.gradle.plugin:${it.version}"
 }
 
+java.sourceCompatibility = JavaVersion.VERSION_25
+java.targetCompatibility = JavaVersion.VERSION_25
+
+kotlin.jvmToolchain(25)
+
 dependencies {
     implementation(libs.kotlin.stdlib)
     implementation(libs.kotlin.gradle.plugin)
     implementation(libs.kotlin.gradle.plugin.api)
     implementation(plugin(libs.plugins.kotlin.symbol.processor))
     implementation(plugin(libs.plugins.meowdding.auto.mixins))
-    implementation("dev.kikugie.stonecutter:dev.kikugie.stonecutter.gradle.plugin:0.8.3")
+    implementation("dev.kikugie.stonecutter:dev.kikugie.stonecutter.gradle.plugin:0.10-alpha.2")
 }

@@ -33,8 +33,7 @@ fun FabricClientCommandSource.toCommandSourceStack(): CommandSourceStack {
     return CommandSourceStack(
         object : CommandSource {
             override fun sendSystemMessage(component: Component) {
-                //~ if >= 26.1 'displayClientMessage' -> 'sendSystemMessage'
-                McPlayer.self?.sendSystemMessage(component, /*? < 26.1 >> ')'*//*false*/)
+                McPlayer.self?.sendSystemMessage(component)
             }
 
             override fun acceptsSuccess(): Boolean {

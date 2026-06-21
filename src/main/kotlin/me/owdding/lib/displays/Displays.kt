@@ -7,7 +7,6 @@ import me.owdding.lib.extensions.floor
 import me.owdding.lib.layouts.ScalableWidget
 import me.owdding.lib.platform.PlatformDisplays
 import net.minecraft.client.gui.GuiGraphicsExtractor
-//~ if >= 26.1 'PlayerFaceRenderer as PlayerFaceExtractor' -> 'PlayerFaceExtractor'
 import net.minecraft.client.gui.components.PlayerFaceExtractor
 import net.minecraft.client.gui.components.Renderable
 import net.minecraft.client.gui.layouts.LayoutElement
@@ -163,7 +162,6 @@ object Displays {
             override fun getHeight(): Int = size
 
             override fun extract(graphics: GuiGraphicsExtractor) {
-                //~ if >= 26.1 'draw' -> 'extractRenderState'
                 PlayerFaceExtractor.extractRenderState(graphics, texture(), 0, 0, 8, true, false, -1)
             }
         }
@@ -356,7 +354,6 @@ object Displays {
             override fun getWidth(): Int = if (width == -1) renderable.width else width
             override fun getHeight(): Int = if (height == -1) renderable.height else height
             override fun extract(graphics: GuiGraphicsExtractor) {
-                //~ if >= 26.1 '.render' -> '.extractRenderState'
                 renderable.extractRenderState(graphics, -1, -1, 0f)
             }
         }

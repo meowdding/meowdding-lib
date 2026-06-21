@@ -4,7 +4,6 @@ import com.mojang.blaze3d.platform.InputConstants
 import me.owdding.ktmodules.Module
 import me.owdding.lib.platform.screens.KeyEvent
 import me.owdding.lib.platform.screens.into
-//~ if >= 26.1 'keybinding.v1.KeyBindingHelper as KeyMappingHelper' -> 'keymapping.v1.KeyMappingHelper'
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper
 import net.minecraft.client.KeyMapping
 import net.minecraft.resources.Identifier
@@ -98,7 +97,6 @@ open class MeowddingKeybind(
         }
     }
 
-    //~ if >= 26.1 'registerKeyBinding' -> 'registerKeyMapping'
     val key: KeyMapping = KeyMappingHelper.registerKeyMapping(keyMapping(translationKey, keyCode, category))
 
     val isDown get() = key.isDown

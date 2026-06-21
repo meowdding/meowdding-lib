@@ -43,12 +43,10 @@ class BackgroundWidget(backgroundWidget: LayoutElement, widget: LayoutElement, v
     override fun getWidth() = body.width + padding * 2
     override fun getHeight() = body.height + padding * 2
 
-    //~ if >= 26.1 'renderWidget' -> 'extractWidgetRenderState'
     override fun extractWidgetRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         background.setPosition(this.x, this.y)
         body.setPosition(this.x + padding, this.y + padding)
 
-        //~ if >= 26.1 'renderWidget' -> 'extractWidgetRenderState'
         super.extractWidgetRenderState(graphics, mouseX, mouseY, partialTicks)
     }
 }

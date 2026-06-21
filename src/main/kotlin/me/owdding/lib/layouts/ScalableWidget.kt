@@ -64,14 +64,12 @@ class ScalableWidget(val original: AbstractWidget) : BaseParentWidget(original.w
         height = (original.height * scale).floor()
     }
 
-    //~ if >= 26.1 'renderWidget' -> 'extractWidgetRenderState'
     override fun extractWidgetRenderState(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
         guiGraphics.scaled(scale, scale) {
             original.x = (this@ScalableWidget.x / scale).floor()
             original.y = (this@ScalableWidget.y / scale).floor()
             this@ScalableWidget.updateWidthHeight()
             currentScale.addLast(scale)
-            //~ if >= 26.1 'render' -> 'extractRenderState'
             original.extractRenderState(guiGraphics, (mouseX / scale).floor(), (mouseY / scale).floor(), partialTick)
             currentScale.removeLast()
         }

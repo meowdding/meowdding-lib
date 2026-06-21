@@ -1,17 +1,19 @@
 package me.owdding.lib.displays.circle
 
+//? > 26.1
+import com.mojang.blaze3d.PrimitiveTopology
 import com.mojang.blaze3d.buffers.Std140Builder
 import com.mojang.blaze3d.buffers.Std140SizeCalculator
+//? > 26.1
+import com.mojang.blaze3d.pipeline.BindGroupLayout
+//? = 26.1
 import com.mojang.blaze3d.pipeline.BlendFunction
-//? >= 26.1
 import com.mojang.blaze3d.pipeline.DepthStencilState
 import com.mojang.blaze3d.pipeline.RenderPipeline
-//? >= 26.1
 import com.mojang.blaze3d.platform.CompareOp
-//? < 26.1
-//import com.mojang.blaze3d.platform.DepthTestFunction
 import com.mojang.blaze3d.shaders.UniformType
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
+//? = 26.1
 import com.mojang.blaze3d.vertex.VertexFormat
 import earth.terrarium.olympus.client.pipelines.uniforms.RenderPipelineUniforms
 import earth.terrarium.olympus.client.pipelines.uniforms.RenderPipelineUniformsStorage
@@ -39,6 +41,14 @@ object TexturedCirclePipeline {
     val UNIFORM_STORAGE: Supplier<DynamicUniformStorage<TexturedCircleUniform>> =
         RenderPipelineUniformsStorage.register("Meowdding Textured Circle UBO", 2, Std140SizeCalculator().putVec4())
 
+    //? >= 26.2 {
+    val LAYOUT = BindGroupLayout.builder()
+        .withSampler("Sampler0")
+        .withUniform(UNIFORM_NAME, UniformType.UNIFORM_BUFFER)
+        .withUniform("DynamicTransforms", UniformType.UNIFORM_BUFFER)
+        .withUniform("Projection", UniformType.UNIFORM_BUFFER)
+        .build()
+    //? }
 
     val PIPELINE: RenderPipeline = RenderPipelines.register(
         RenderPipeline.builder()
@@ -46,17 +56,18 @@ object TexturedCirclePipeline {
             .withVertexShader(id("core/circle_tex"))
             .withFragmentShader(id("core/circle_tex"))
             .withCull(false)
-            //? >= 26.1
             .withDepthStencilState(DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false))
-            //? < 26.1 {
-            /*.withDepthTestFunction(DepthTestFunction.LEQUAL_DEPTH_TEST)
-            .withBlend(BlendFunction.TRANSLUCENT)
-            *///? }
-            .withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
-            .withSampler("Sampler0")
-            .withUniform(UNIFORM_NAME, UniformType.UNIFORM_BUFFER)
-            .withUniform("DynamicTransforms", UniformType.UNIFORM_BUFFER)
-            .withUniform("Projection", UniformType.UNIFORM_BUFFER)
+            //? >= 26.2 {
+            .withBindGroupLayout(LAYOUT)
+            .withVertexBinding(0, DefaultVertexFormat.POSITION_TEX_COLOR)
+            .withPrimitiveTopology(PrimitiveTopology.QUADS)
+            //? } else {
+            //.withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
+            //.withSampler("Sampler0")
+            //.withUniform(UNIFORM_NAME, UniformType.UNIFORM_BUFFER)
+            //.withUniform("DynamicTransforms", UniformType.UNIFORM_BUFFER)
+            //.withUniform("Projection", UniformType.UNIFORM_BUFFER)
+            //? }
             .build(),
     )
 }

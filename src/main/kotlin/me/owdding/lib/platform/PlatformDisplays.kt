@@ -67,6 +67,7 @@ internal object PlatformDisplays {
                 entity.xRot = -rotationY * 20.0f
                 entity.yHeadRot = entity.yRot
                 entity.yHeadRotO = entity.yRot
+                entity.id = -1
                 val entityScale = entity.scale
                 val scaledSize = scale / entityScale
 
@@ -117,7 +118,6 @@ internal object PlatformDisplays {
                     if (scale.x > 1f || scale.y > 1f) {
                         ItemStateRenderer.extract(graphics, item, 0, 0)
                     } else {
-                        //~ if >= 26.1 'renderItem(' -> 'item('
                         graphics.item(item, 0, 0)
                     }
 

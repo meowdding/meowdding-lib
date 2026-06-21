@@ -11,12 +11,6 @@ import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.extentions.translated
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
-
-private fun Overlay._extract(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
-    extract(graphics, mouseX, mouseY)
-}
-
-
 interface Overlay {
 
     val modId: String
@@ -33,21 +27,9 @@ interface Overlay {
             return Rect(x, y, bounds.first, bounds.second)
         }
 
-    //? < 26.1 {
-    /*@Deprecated(message = "Outdated naming", replaceWith = ReplaceWith("extract"))
-    fun render(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) = extract(graphics, mouseX, mouseY)
-    *///? }
-    fun extract(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {
-        //? < 26.1
-        //@Suppress("DEPRECATION_ERROR") render(graphics, mouseX, mouseY)
-    }
+    fun extract(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {}
 
-    //? < 26.1 {
-    /*@Deprecated(message = "Outdated naming", replaceWith = ReplaceWith("extract"))
-    fun render(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) = _extract(graphics, mouseX, mouseY, partialTicks)
-    *///? }
-    //~ if >= 26.1 'render' -> '_extract'
-    fun extract(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) = _extract(graphics, mouseX, mouseY, partialTicks)
+    fun extract(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) = extract(graphics, mouseX, mouseY)
 
     fun onRightClick() = ContextMenu.open {
         it.dangerButton(Text.translatable("mlib.overlay.edit.reset")) {

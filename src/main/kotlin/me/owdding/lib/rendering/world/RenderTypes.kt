@@ -1,12 +1,10 @@
 package me.owdding.lib.rendering.world
 
-//? >= 26.1
+//? >= 26.2
+import com.mojang.blaze3d.PrimitiveTopology
 import com.mojang.blaze3d.pipeline.DepthStencilState
 import com.mojang.blaze3d.pipeline.RenderPipeline
-//? >= 26.1
 import com.mojang.blaze3d.platform.CompareOp
-//? < 26.1
-//import com.mojang.blaze3d.platform.DepthTestFunction
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.VertexFormat
 import net.minecraft.client.renderer.RenderPipelines
@@ -18,35 +16,39 @@ object RenderTypes {
 
     private val blockFillTriangleThroughWalls = RenderPipeline.builder(RenderPipelines.DEBUG_FILLED_SNIPPET)
         .withLocation("pipeline/debug_filled_box")
-        .withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.TRIANGLE_STRIP)
-        //? >= 26.1
+        //? >= 26.2 {
+        .withPrimitiveTopology(PrimitiveTopology.TRIANGLE_STRIP)
+        .withVertexBinding(0, DefaultVertexFormat.POSITION_COLOR)
+        //? } else
+        //.withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.TRIANGLE_STRIP)
         .withDepthStencilState(DepthStencilState(CompareOp.ALWAYS_PASS, false))
-        //? < 26.1
-        //.withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST)
         .build()
 
     val BLOCK_FILL_TRIANGLE_THROUGH_WALLS = RenderType.create(
         "mlib/filled_through_walls/triangle",
         RenderSetup.builder(blockFillTriangleThroughWalls)
             .setLayeringTransform(LayeringTransform.VIEW_OFFSET_Z_LAYERING)
-            .bufferSize(131072)
+            //? 26.1
+            //.bufferSize(131072)
             .createRenderSetup(),
     )
 
     private val blockFillQuad = RenderPipeline.builder(RenderPipelines.DEBUG_FILLED_SNIPPET)
         .withLocation("pipeline/debug_filled_box")
-        .withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS)
-        //? >= 26.1
+        //? >= 26.2 {
+        .withPrimitiveTopology(PrimitiveTopology.QUADS)
+        .withVertexBinding(0, DefaultVertexFormat.POSITION_COLOR)
+        //? } else
+        //.withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS)
         .withDepthStencilState(DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false, -1f, -10f))
-        //? < 26.1
-        //.withDepthBias(-1f, -10f)
         .build()
 
     val BLOCK_FILL_QUAD = RenderType.create(
         "mlib/depth_block_fill/quad",
         RenderSetup.builder(blockFillQuad)
             .setLayeringTransform(LayeringTransform.VIEW_OFFSET_Z_LAYERING)
-            .bufferSize(131072)
+            //? 26.1
+            //.bufferSize(131072)
             .createRenderSetup(),
     )
 

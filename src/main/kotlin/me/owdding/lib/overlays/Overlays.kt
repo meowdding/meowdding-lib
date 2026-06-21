@@ -40,7 +40,8 @@ object Overlays {
 
     @Subscription
     fun onHudRender(event: RenderHudEvent) {
-        if (McClient.options.hideGui) return
+        //~ if >= 26.2 '.options.hideGui' -> '.gui.hud.isHidden'
+        if (McClient.gui.hud.isHidden) return
 
         val graphics = event.graphics
         val screen = McScreen.self

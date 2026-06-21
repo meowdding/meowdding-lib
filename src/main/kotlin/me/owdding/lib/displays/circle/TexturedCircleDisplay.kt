@@ -13,7 +13,6 @@ class TexturedCircleDisplay(@JvmField val width: Int, @JvmField val height: Int,
     override fun extract(graphics: GuiGraphicsExtractor) {
         val bounds = ScreenRectangle(0, 0, width, height).transformMaxBounds(graphics.pose())
 
-        //~ if >= 26.1 'submit' -> 'add'
         graphics.guiRenderState.addPicturesInPictureState(
             TexturedCircleState(
                 bounds,

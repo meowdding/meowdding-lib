@@ -10,7 +10,6 @@ class ExpandingWidget(val widget: AbstractWidget, val margin: Int) : BaseParentW
         this.addRenderableWidget(widget)
     }
 
-    //~ if >= 26.1 'renderWidget' -> 'extractWidgetRenderState'
     override fun extractWidgetRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         if (widget.isMouseOver(mouseX.toDouble(), mouseY.toDouble())) {
             widget.setPosition(this.x, this.y)
@@ -19,7 +18,6 @@ class ExpandingWidget(val widget: AbstractWidget, val margin: Int) : BaseParentW
             widget.setPosition(this.x + margin, this.y + margin)
             widget.setSize(this.width - margin * 2, this.height - margin * 2)
         }
-        //~ if >= 26.1 'renderWidget' -> 'extractWidgetRenderState'
         super.extractWidgetRenderState(graphics, mouseX, mouseY, partialTicks)
     }
 }

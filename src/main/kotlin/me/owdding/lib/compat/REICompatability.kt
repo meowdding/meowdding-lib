@@ -7,10 +7,12 @@ import me.shedaniel.math.Rectangle
 import me.shedaniel.rei.api.client.REIRuntime
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin
 import me.shedaniel.rei.api.client.registry.screen.ExclusionZones
-import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
+
+//? < 26.2 {
+/*import net.minecraft.client.gui.layouts.LayoutElement
 import tech.thatgravyboat.skyblockapi.api.events.base.CancellableSkyBlockEvent
 import me.shedaniel.math.impl.PointHelper
 import me.shedaniel.rei.api.client.gui.screen.DisplayScreen
@@ -23,9 +25,11 @@ import net.minecraft.client.input.KeyEvent
 import net.minecraft.world.InteractionResult
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyPressedEvent
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
-import kotlin.jvm.optionals.getOrNull
+import kotlin.jvm.optionals.getOrNull*///?}
 
-@Deprecated("Use ItemListRegisterExclusionZonesEvent for more compatability", ReplaceWith("me.owdding.lib.events.ItemListRegisterExclusionZonesEvent"))
+// TODO: dont uncomment this when rei is released, this is removed on purpose as we want to remove this event
+//? < 26.2 {
+/*@Deprecated("Use ItemListRegisterExclusionZonesEvent for more compatability", ReplaceWith("me.owdding.lib.events.ItemListRegisterExclusionZonesEvent"))
 class REIRenderOverlayEvent(val screen: Screen, private val registrar: (Int, Int, Int, Int) -> Unit) : CancellableSkyBlockEvent() {
 
     fun register(x: Int, y: Int, width: Int, height: Int) {
@@ -33,20 +37,24 @@ class REIRenderOverlayEvent(val screen: Screen, private val registrar: (Int, Int
     }
 
     fun register(layout: LayoutElement) = register(layout.x, layout.y, layout.width, layout.height)
-}
+}*///?}
 
 object REICompatability : REIClientPlugin {
 
     init {
-        SkyBlockAPI.eventBus.register<ScreenKeyPressedEvent.Post> { event -> REIRuntimeCompatability.keyPressed(event) }
+        //? < 26.2
+        //SkyBlockAPI.eventBus.register<ScreenKeyPressedEvent.Post> { event -> REIRuntimeCompatability.keyPressed(event) }
     }
 
     override fun registerExclusionZones(zones: ExclusionZones) {
         zones.register(Screen::class.java) { screen ->
             val areas = mutableListOf<Rectangle>()
-            val hide = REIRenderOverlayEvent(screen) { x, y, width, height ->
+            //? < 26.2 {
+            /*val hide = REIRenderOverlayEvent(screen) { x, y, width, height ->
                 areas.add(Rectangle(x, y, width, height))
-            }.post(SkyBlockAPI.eventBus)
+            }.post(SkyBlockAPI.eventBus)*/
+            //?} else
+            val hide = false
 
             val excludedEvent = ItemListEvent.RegisterExcludedScreen(screen).apply { post(SkyBlockAPI.eventBus) }
 
@@ -65,7 +73,10 @@ object REIRuntimeCompatability {
     @Deprecated("Use ItemListRegisterExclusionZonesEvent for more compatability", ReplaceWith("me.owdding.lib.events.ItemListHoveredItemKeyPressEvent"))
     fun getReiHoveredItemStack(): ItemStack? {
         if (!installed) return null
-        return getHoveredItemStack()
+        //? < 26.2 {
+        //return getHoveredItemStack()
+        //?} else
+        return null
     }
 
     fun getCurrentSearchBar(): String? {
@@ -85,7 +96,8 @@ object REIRuntimeCompatability {
     }
 
     // Taken from REI, somehow if I try to change anything it just refuses to work
-    private fun shouldReturn(screen: Screen?): Boolean {
+    //? < 26.2 {
+    /*private fun shouldReturn(screen: Screen?): Boolean {
         if (screen == null) return true
         for (decider in ScreenRegistry.getInstance().getDeciders(screen)) {
             val result = decider.shouldScreenBeOverlaid(screen)
@@ -128,5 +140,5 @@ object REIRuntimeCompatability {
         return screen.resultsToNotice.firstOrNull()?.toStack()
     }
 
-    private fun EntryStack<*>.toStack(): ItemStack? = this.value as? ItemStack ?: this.cheatsAs().value
+    private fun EntryStack<*>.toStack(): ItemStack? = this.value as? ItemStack ?: this.cheatsAs().value*///?}
 }

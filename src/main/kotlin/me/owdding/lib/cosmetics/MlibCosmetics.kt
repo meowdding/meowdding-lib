@@ -11,7 +11,6 @@ import me.owdding.lib.generated.MeowddingLibCodecs
 import net.fabricmc.fabric.api.client.rendering.v1.RenderStateDataKey
 import net.minecraft.client.entity.ClientAvatarEntity
 import net.minecraft.client.model.HumanoidModel
-//~ if >= 1.21.11 'model' -> 'model.player'
 import net.minecraft.client.model.player.PlayerModel
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState

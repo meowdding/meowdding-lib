@@ -3,12 +3,12 @@ package me.owdding.lib.utils
 import me.owdding.lib.rendering.world.RenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS
 import net.minecraft.client.CameraType
 import net.minecraft.client.gui.Font
-//~ if >= 26.1 'client.renderer.LightTexture' -> 'util.LightCoordsUtil as LightTexture'
-import net.minecraft.util.LightCoordsUtil as LightTexture
-import net.minecraft.client.renderer.ShapeRenderer
+import net.minecraft.util.LightCoordsUtil
+//? 26.1
+//import net.minecraft.client.renderer.ShapeRenderer
 import net.minecraft.client.renderer.blockentity.BeaconRenderer
-import net.minecraft.client.renderer.rendertype.RenderTypes
 import net.minecraft.core.BlockPos
+import net.minecraft.gizmos.Gizmos
 import net.minecraft.network.chat.Component
 import net.minecraft.util.ARGB
 import net.minecraft.util.Mth
@@ -63,7 +63,7 @@ object RenderUtils {
                 dropShadow = true,
                 displayMode = Font.DisplayMode.SEE_THROUGH,
                 backgroundColor = 0x70000000.toUInt(),
-                light = LightTexture.FULL_BRIGHT,
+                light = LightCoordsUtil.FULL_BRIGHT,
             )
         }
     }
@@ -87,15 +87,28 @@ object RenderUtils {
         color: Int,
     ) {
         atCamera {
-            ShapeRenderer.renderShape(
-                poseStack,
-                buffer.getBuffer(BLOCK_FILL_TRIANGLE_THROUGH_WALLS),
-                Shapes.create(
-                    position.minX - 0.005, position.minY - 0.005, position.minZ - 0.005,
-                    position.maxX + 0.005, position.maxY + 0.005, position.maxZ + 0.005,
-                ),
-                0.0, 0.0, 0.0, color, 1f,
+
+            val shape = Shapes.create(
+                position.minX - 0.005, position.minY - 0.005, position.minZ - 0.005,
+                position.maxX + 0.005, position.maxY + 0.005, position.maxZ + 0.005,
             )
+            //? >= 26.2 {
+            submitNodeCollector.submitShapeOutline(
+                poseStack,
+                shape,
+                BLOCK_FILL_TRIANGLE_THROUGH_WALLS,
+                color,
+                1f,
+                true,
+            )
+            //? } else {
+            //ShapeRenderer.renderShape(
+            //    poseStack,
+            //    buffer.getBuffer(BLOCK_FILL_TRIANGLE_THROUGH_WALLS),
+            //    shape,
+            //    0.0, 0.0, 0.0, color, 1f,
+            //)
+            //? }
         }
     }
 
@@ -108,20 +121,12 @@ object RenderUtils {
     }
 
     fun RenderWorldEvent.render3dLine(start: Vec3, end: Vec3, color: Int, width: Float = 5f) {
-        atCamera {
-            val entry = poseStack.last()
-            val buffer = buffer.getBuffer(RenderTypes.lines())
-            val normal = end.toVector3f().sub(start.toVector3f()).normalize()
-            buffer.addVertex(entry, start.toVector3f()).setColor(color).setNormal(entry, normal)
-            buffer.setLineWidth(width)
-            buffer.addVertex(entry, end.toVector3f()).setColor(color).setNormal(entry, normal)
-            buffer.setLineWidth(width)
-        }
+        Gizmos.line(start, end, color, width)
     }
 
     fun RenderWorldEvent.renderBeaconBeam(position: Vec3, color: Int) {
         renderBeaconBeam(
-            poseStack, position, buffer, BeaconRenderer.BEAM_LOCATION,
+            poseStack, position, BeaconRenderer.BEAM_LOCATION,
             0f, Mth.PI, McLevel.selfOrNull?.gameTime ?: 0, 0, (McLevel.selfOrNull?.maxY ?: 255) * 2,
             ARGB.opaque(color), 0.2f, 0.25f,
         )

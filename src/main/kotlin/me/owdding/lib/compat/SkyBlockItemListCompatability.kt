@@ -1,4 +1,3 @@
-//? >= 26.1 {
 package me.owdding.lib.compat
 
 import com.operationpotato.itemlist.api.ExcludedScreensManager
@@ -52,4 +51,3 @@ object SBILCompatability : Plugin {
         }
     }
 }
-//?}
