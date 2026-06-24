@@ -88,7 +88,7 @@ object MlibCosmetics {
         if (!LocationAPI.isOnSkyBlock) return
         state.setData(BABY_MODIFIER_DATA_KEY, cosmetic.small ?: false)
         if (cosmetic.small == true) {
-            state.ageScale = 0.5f
+            state.ageScale = SMALL_PLAYER_AGE_SCALE
             if (state.nameTagAttachment != null) {
                 state.nameTagAttachment = state.nameTagAttachment?.scale(state.ageScale.toDouble())
             }
