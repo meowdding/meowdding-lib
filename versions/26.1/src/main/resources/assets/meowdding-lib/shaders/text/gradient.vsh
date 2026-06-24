@@ -10,7 +10,7 @@ in vec4 Color;
 in vec2 UV0;
 in ivec2 UV2;
 
-uniform sampler2D Sampler2;
+uniform sampler2D Sampler0;
 
 out float sphericalVertexDistance;
 out float cylindricalVertexDistance;
@@ -22,7 +22,7 @@ void main() {
 
     sphericalVertexDistance = fog_spherical_distance(Position);
     cylindricalVertexDistance = fog_cylindrical_distance(Position);
-    vertexColor = Color * sample_lightmap(Sampler2, UV2);
+    vertexColor = Color;
     texCoord0 = UV0;
 }
 
