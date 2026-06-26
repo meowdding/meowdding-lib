@@ -1,8 +1,10 @@
 package me.owdding.lib.dev
 
+import me.owdding.lib.MeowddingLib
 import me.owdding.lib.builder.DisplayFactory
 import me.owdding.lib.displays.Alignment
 import me.owdding.lib.displays.Displays
+import me.owdding.lib.displays.circle.roundedTextureDisplay
 import me.owdding.lib.displays.withOutline
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
 import me.owdding.lib.rendering.text.textShader
@@ -67,6 +69,23 @@ object DisplayTest : Screen(CommonComponents.EMPTY) {
             display(Displays.wrappedText(meow, width, textAlignment = Alignment.CENTER).withOutline())
             display(Displays.wrappedText(meow, width, textAlignment = Alignment.END).withOutline())
         }.extract(graphics, 200, 200)
+
+        DisplayFactory.vertical {
+            display(
+                roundedTextureDisplay(
+                    64,
+                    64,
+                    MeowddingLib.id("background"),
+                ),
+            )
+            display(
+                roundedTextureDisplay(
+                    100,
+                    100,
+                    MeowddingLib.id("background"),
+                ),
+            )
+        }.extract(graphics, 500, 200)
     }
 
     override fun isPauseScreen(): Boolean {
