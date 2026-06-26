@@ -46,17 +46,9 @@ class GradientTextShader(val gradientProvider: GradientProvider, val direction: 
             RenderPipeline.builder(
                 *buildList {
                     when (displayMode) {
-                        Font.DisplayMode.NORMAL, Font.DisplayMode.POLYGON_OFFSET -> {
-                            add(RenderPipelines.WORLD_TEXT_SNIPPET)
-                        }
-
-                        Font.DisplayMode.SEE_THROUGH -> {
-                            add(RenderPipelines.TEXT_SNIPPET)
-                        }
-
-                        null -> {
-                            add(RenderPipelines.GUI_TEXT_SNIPPET)
-                        }
+                        Font.DisplayMode.NORMAL, Font.DisplayMode.POLYGON_OFFSET -> add(RenderPipelines.WORLD_TEXT_SNIPPET)
+                        Font.DisplayMode.SEE_THROUGH -> add(RenderPipelines.TEXT_SNIPPET)
+                        null -> add(RenderPipelines.GUI_TEXT_SNIPPET)
                     }
                 }.toTypedArray(),
             ).withLocation(MeowddingLib.id("gradient_text/${displayMode?.name?.lowercase()}${if (grayscale) "_grayscale" else ""}"))
@@ -84,7 +76,6 @@ class GradientTextShader(val gradientProvider: GradientProvider, val direction: 
                         else -> {}
                     }
                 }
-                .withBindGroupLayout(BindGroupLayouts.GLOBALS)
                 .withShaderDefine(
                     "COLORS",
                     gradientProvider
