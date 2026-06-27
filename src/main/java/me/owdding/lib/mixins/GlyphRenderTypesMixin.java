@@ -24,7 +24,7 @@ public abstract class GlyphRenderTypesMixin implements TextShaderRenderTypeHolde
     @Unique
     private Identifier meowdding$texture;
     @Unique
-    private Boolean meowdding$grayscale;
+    private Boolean meowdding$grayscale = false;
 
     @ModifyReturnValue(method = {"createForColorTexture", "createForIntensityTexture", "createForGrayscaleTexture"}, at = @At("RETURN"))
     private static GlyphRenderTypes create(GlyphRenderTypes original, @Local(argsOnly = true) Identifier name) {
