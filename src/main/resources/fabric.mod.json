@@ -41,7 +41,8 @@
     "resourcefullib": ">=${rlib}",
     "olympus": ">=${olympus}",
     "skyblock-api": ">=${sbapi}",
-    "placeholder-api": ">=${placeholder_api}"
+    "placeholder-api": ">=${placeholder_api}",
+    "me_owdding_meowdding-lib_meowdding-lib-packsharing": "${version}"
   },
   "accessWidener": "mlib.accesswidener"
 }

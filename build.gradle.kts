@@ -1,6 +1,10 @@
 import com.google.devtools.ksp.gradle.KspExtension
 import me.owdding.AutoMixinExtension
 import net.fabricmc.loom.task.ValidateAccessWidenerTask
+import org.gradle.api.internal.artifacts.capability.SpecificCapabilitySelector
+import org.gradle.api.internal.artifacts.dependencies.AbstractModuleDependency
+import org.gradle.api.internal.artifacts.dependencies.DefaultMutableVersionConstraint
+import org.gradle.api.internal.artifacts.dependencies.SelfResolvingDependencyInternal
 import org.gradle.plugins.ide.idea.model.IdeaModel
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -43,6 +47,7 @@ repositories {
     scopedMaven(url = "https://maven.shedaniel.me/", "me.shedaniel", "dev.architectury")
     scopedMaven("https://maven.operationpotato.com/snapshots", "com.operationpotato")
     mavenCentral()
+    mavenLocal()
 }
 
 val archiveName = "Meowdding-Lib"
@@ -86,7 +91,7 @@ tasks.withType<KotlinCompile>().configureEach {
 }
 
 
-tasks.withType<ProcessResources>().configureEach {
+tasks.processResources {
     filteringCharset = "UTF-8"
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
     filesMatching(listOf("**/*.fsh", "**/*.vsh")) {
@@ -174,6 +179,58 @@ extensions.getByType<IdeaModel>().apply {
     }
 }
 
+fun createComponent(name: String) = sourceSets.create(name) {
+    this.java.setSrcDirs(listOf(layout.projectDirectory.dir("src/$name/java")))
+    this.kotlin.setSrcDirs(listOf(layout.projectDirectory.dir("src/$name/kotlin")))
+}.apply {
+    val extraApi = configurations.create("${name}extraApi") {
+        isCanBeConsumed = false
+        isCanBeResolved = false
+    }
+    configurations.named("apiElements").get().extendsFrom(extraApi)
+
+    dependencies {
+        implementationConfigurationName(project.files(tasks.compileKotlin.map { it.destinationDirectory }))
+        implementationConfigurationName(project.files(tasks.compileJava.map { it.destinationDirectory }))
+        afterEvaluate { add("include", ComponentDependency(tasks.named("packSharingJar"), version.toString(), name)) }
+
+        add("${name}extraApi", FakeDependency(name, version.toString(), stonecutter.current.version))
+    }
+
+    project.java.registerFeature(name) {
+        usingSourceSet(this@apply)
+        capability("me.owdding.meowdding-lib", "meowdding-lib-${name.lowercase()}", version.toString())
+    }
+
+    tasks.named<Jar>(this.jarTaskName) {
+        this.archiveClassifier = stonecutter.current.version
+    }
+
+    afterEvaluate {
+        tasks.named(
+            "ksp${
+                name.replaceFirstChar {
+                    if (it.isLowerCase()) it.titlecase() else it.toString()
+                }
+            }Kotlin"
+        ) {
+            enabled = false
+        }
+    }
+}
+
+configurations {
+    listOf(apiElements, runtimeElements, named("sourcesElements")).forEach {
+        it.configure {
+            outgoing.capability("me.owdding.meowdding-lib:meowdding-lib:${version}")
+        }
+    }
+}
+configurations.apiElements {
+}
+
+val packSharing = createComponent("packSharing")
+
 kotlin {
     jvmToolchain(25)
 }
@@ -220,7 +277,9 @@ dependencies {
 
     compileOnly(versionedCatalog["iris"])
     compileOnly(versionedCatalog["rei"])
-    compileOnly(versionedCatalog["skyblock-item-list"])
+
+    compileOnly("org.polyfrost.oneconfig:hud:1.0.0-beta.5") { isTransitive = false }
+    //compileOnly(versionedCatalog["skyblock-item-list"])
 }
 
 fun DependencyHandlerScope.includeImplementation(dep: Any, transitive: Boolean = true) {
