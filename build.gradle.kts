@@ -42,6 +42,7 @@ repositories {
     scopedMaven("https://maven.nucleoid.xyz/", "eu.pb4")
     scopedMaven(url = "https://maven.shedaniel.me/", "me.shedaniel", "dev.architectury")
     scopedMaven("https://maven.operationpotato.com/snapshots", "com.operationpotato")
+    scopedMaven("https://maven.operationpotato.com/releases", "com.operationpotato")
     mavenCentral()
 }
 
