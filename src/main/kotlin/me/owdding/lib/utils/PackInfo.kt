@@ -26,8 +26,7 @@ object SkyblockPackInfo : MeowddingLogger by MeowddingLib.featureLogger() {
     @Subscription
     private fun onPacketReceived(event: PacketReceivedEvent) {
         if (!LocationAPI.onHypixel) return
-        val packet = event.packet
-        if (packet !is ClientboundResourcePackPushPacket) return
+        val packet = event.packet as? ClientboundResourcePackPushPacket ?: return
 
         val match = regex.matchEntire(packet.url) ?: return
         val uuid = match.groups["uuid"]?.value ?: return
