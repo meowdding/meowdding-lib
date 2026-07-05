@@ -30,12 +30,8 @@ object SkyblockPackInfo : MeowddingLogger by MeowddingLib.featureLogger() {
 
         val match = regex.matchEntire(packet.url) ?: return
         val uuid = match.groups["uuid"]?.value ?: return
-        val num = match.groups["num"]?.value?.toIntOrNull() ?: return
 
-        val packInfo = PackInfo(
-            uuid, num, McClient.version,
-            LocationAPI.onAlpha,
-        )
+        val packInfo = PackInfo(uuid, LocationAPI.onAlpha,)
 
         val json = packInfo.toJson(codec) ?: return
 
@@ -56,7 +52,5 @@ object SkyblockPackInfo : MeowddingLogger by MeowddingLib.featureLogger() {
 @GenerateCodec
 data class PackInfo(
     @FieldName("uuid") val packId: String,
-    @FieldName("num") val packNumber: Int,
-    @FieldName("version") val gameVersion: String,
     val alpha: Boolean,
 )
