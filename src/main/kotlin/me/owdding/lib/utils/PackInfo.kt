@@ -1,17 +1,16 @@
-package me.owdding.lib
+package me.owdding.lib.utils
 
 import kotlinx.coroutines.runBlocking
 import me.owdding.ktcodecs.FieldName
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktmodules.Module
+import me.owdding.lib.MeowddingLib
 import me.owdding.lib.generated.MeowddingLibCodecs
-import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.level.PacketReceivedEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
-import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.http.Http
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toJson
 import java.util.concurrent.CompletableFuture
