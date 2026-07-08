@@ -19,7 +19,7 @@ const val API_URL = "https://skyblock-pack.meowdd.ing"
 
 @Module
 object SkyblockPackInfo : MeowddingLogger by MeowddingLib.featureLogger() {
-    val regex = Regex("(?i)^https://resourcepacks2\\.hypixel\\.net/SkyBlockResourcePack/(?<uuid>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/(?<num>\\d{2}).zip$")
+    val regex = Regex("(?i)^https://resourcepacks\\d*\\.hypixel\\.net/SkyBlockResourcePack/(?<uuid>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/(?<num>\\d{2}).zip$")
     private val codec = MeowddingLibCodecs.getCodec<PackInfo>()
 
     @Subscription
