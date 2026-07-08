@@ -38,9 +38,10 @@ object RenderTypes {
         //? >= 26.2 {
         .withPrimitiveTopology(PrimitiveTopology.QUADS)
         .withVertexBinding(0, DefaultVertexFormat.POSITION_COLOR)
-        //? } else
-        //.withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS)
-        .withDepthStencilState(DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false, -1f, -10f))
+        .withDepthStencilState(DepthStencilState(CompareOp.GREATER_THAN_OR_EQUAL, false, -1f, -10f))
+        //? } else {
+        /*.withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS)
+        .withDepthStencilState(DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false, -1f, -10f))*///?}
         .build()
 
     val BLOCK_FILL_QUAD = RenderType.create(
