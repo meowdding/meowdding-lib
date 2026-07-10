@@ -11,7 +11,11 @@ import tech.thatgravyboat.skyblockapi.api.events.base.SkyBlockEvent
 sealed interface ItemListEvent {
     data class HoveredItemKeyPress(val screen: Screen, val stack: ItemStack?, val event: KeyEvent) : SkyBlockEvent()
 
-    data class RecipeButtonAdd(val recipe: Recipe<*>, val itemStack: ItemStack, private val button: (AbstractWidget) -> Unit) : SkyBlockEvent()
+    data class RecipeButtonAdd(val recipe: Recipe<*>, val itemStack: ItemStack, private val button: (AbstractWidget) -> Unit) : SkyBlockEvent(){
+        fun register(widget: AbstractWidget) {
+            button(widget)
+        }
+    }
 
     data class RegisterExclusionZones(val screen: Screen, private val registrar: (Int, Int, Int, Int) -> Unit) : SkyBlockEvent() {
         fun register(x: Int, y: Int, width: Int, height: Int) {
