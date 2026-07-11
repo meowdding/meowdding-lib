@@ -29,7 +29,7 @@ object SkyblockPackInfo : MeowddingLogger by MeowddingLib.featureLogger() {
 
     @Subscription
     fun onHypixelJoin(event: HypixelJoinEvent) {
-        this.onDev = event.environment == Environment.BETA
+        this.onDev = event.environment == Environment.TEST
     }
 
     @Subscription(ServerDisconnectEvent::class)
