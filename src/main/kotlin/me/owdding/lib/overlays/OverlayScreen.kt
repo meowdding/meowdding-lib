@@ -39,6 +39,7 @@ private val UP_KEY = keysOf(InputConstants.KEY_UP)
 private val DOWN_KEY = keysOf(InputConstants.KEY_DOWN)
 private val LEFT_KEY = keysOf(InputConstants.KEY_LEFT)
 private val RIGHT_KEY = keysOf(InputConstants.KEY_RIGHT)
+private val A_KEY = keysOf(InputConstants.KEY_A)
 
 class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) : MeowddingScreen(CommonText.EMPTY) {
 
@@ -48,12 +49,13 @@ class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) :
 
     override fun extractRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         super.extractRenderState(graphics, mouseX, mouseY, partialTicks)
-        val (x, y) = overlay.position
+        val (_, y) = overlay.position
+        val x = overlay.alignedX.toInt()
         val (width, height) = overlay.bounds * overlay.position.scale
 
         val hovered = mouseX - x in 0..width && mouseY - y in 0..height
         graphics.pushPop {
-            graphics.translate(x.toFloat(), y.toFloat())
+            graphics.translate(overlay.alignedX, y.toFloat())
             graphics.scale(overlay.position.scale, overlay.position.scale)
             overlay.extract(graphics, mouseX, mouseY, partialTicks)
         }
@@ -71,9 +73,10 @@ class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) :
         }
 
         val center = (this.width / 2f).toInt()
-        graphics.centeredText(font, "X: ${overlay.position.x}, Y: ${overlay.position.y}", center, this.height - 40, -1)
-        graphics.centeredText(font, "Scale: ${overlay.position.scale}", center, this.height - 30, -1)
-        graphics.centeredText(font, "Use +/- to scale, arrow keys to move around.", center, this.height - 20, -1)
+        graphics.centeredText(font, "X: ${overlay.position.x}, Y: ${overlay.position.y}", center, this.height - 50, -1)
+        graphics.centeredText(font, "Scale: ${overlay.position.scale}", center, this.height - 40, -1)
+        graphics.centeredText(font, "Use +/- to scale, arrow keys to move around.", center, this.height - 30, -1)
+        graphics.centeredText(font, "Use A to change between different alignments.", center, this.height - 20, -1)
     }
 
     override fun extractBackground(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
@@ -96,7 +99,8 @@ class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) :
     override fun mouseClicked(mouseEvent: MouseButtonEvent, doubleClicked: Boolean): Boolean {
         val (mouseX, mouseY) = mouseEvent
         val (button) = mouseEvent.buttonInfo
-        val (x, y) = overlay.position
+        val (_, y) = overlay.position
+        val x = overlay.alignedX.toInt()
         val (width, height) = overlay.bounds * overlay.position.scale
 
         if ((mouseX - x).toInt() in 0..width && (mouseY - y).toInt() in 0..height) {
@@ -131,7 +135,8 @@ class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) :
     override fun keyPressed(keyEvent: KeyEvent): Boolean {
         val (key, scan) = keyEvent
         val multiplier = if (McScreen.isShiftDown) 10 else 1
-        val (x, y) = overlay.position
+        val y = overlay.position.component2()
+        val x = overlay.alignedX.toInt()
         val scale = overlay.position.scale
 
         when {
@@ -141,6 +146,7 @@ class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) :
             RIGHT_KEY.isDown(key, scan) && EditableProperty.X in overlay.properties -> overlay.setX(x + multiplier)
             ADD_KEY.isDown(key, scan) && EditableProperty.SCALE in overlay.properties -> overlay.setScale(scale + 0.1f)
             MINUS_KEY.isDown(key, scan) && EditableProperty.SCALE in overlay.properties -> overlay.setScale(scale - 0.1f)
+            A_KEY.isDown(key, scan) && EditableProperty.ALIGNMENT in overlay.properties -> overlay.nextAlignment()
             else -> return super.keyPressed(keyEvent)
         }
         return true
@@ -158,7 +164,8 @@ class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) :
     fun save() = FinishOverlayEditingEvent(overlay.modId).post(SkyBlockAPI.eventBus)
 
     fun isMouseOverOverlay(mouseX: Double, mouseY: Double): Boolean {
-        val (x, y) = overlay.position
+        val (_, y) = overlay.position
+        val x = overlay.alignedX.toInt()
         val (width, height) = overlay.bounds * overlay.position.scale
         return ((mouseX - x).toInt() in 0..width && (mouseY - y).toInt() in 0..height)
     }

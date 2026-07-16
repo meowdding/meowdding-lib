@@ -60,3 +60,9 @@ fun FabricClientCommandSource.toCommandSourceStack(): CommandSourceStack {
 }
 
 internal fun <T : Any> JsonElement.toDataOrThrow(codec: MapCodec<T>) = this.toDataOrThrow(codec.codec())
+
+fun <T : Enum<T>> T.next(): T {
+    val constants = if (this.javaClass.isEnum) this.javaClass.enumConstants else this.javaClass.superclass.enumConstants
+    return constants[(this.ordinal + 1) % constants.size].unsafeCast()
+}
+

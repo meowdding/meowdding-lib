@@ -3,6 +3,7 @@ package me.owdding.lib.overlays
 import earth.terrarium.olympus.client.ui.context.ContextMenu
 import me.owdding.lib.displays.Display
 import me.owdding.lib.mixins.OverlayAccessor
+import me.owdding.lib.utils.next
 import net.minecraft.client.gui.components.ChatComponent.getWidth
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.network.chat.Component
@@ -21,10 +22,22 @@ interface Overlay {
 
     val position: Position
     val bounds: Pair<Int, Int>
+
+    val alignedX: Float
+        get() {
+            val (x, _) = position
+            val width = bounds.first * position.scale
+            return when (position.alignment) {
+                OverlayAlignment.START -> x.toFloat()
+                OverlayAlignment.CENTER -> x - width / 2f
+                OverlayAlignment.END -> x - width
+            }
+        }
+
     val editBounds: Rect
         get() {
-            val (x, y) = position
-            return Rect(x, y, bounds.first, bounds.second)
+            val (_, y) = position
+            return Rect(alignedX.toInt(), y, bounds.first, bounds.second)
         }
 
     fun extract(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {}
@@ -38,9 +51,34 @@ interface Overlay {
     }
 
     fun setX(x: Int) {
-        val width = McClient.window.guiScaledWidth
-        if (bounds.first == 0 || bounds.first * position.scale >= width) return
-        position.x = if (x < width / 2) x.coerceAtLeast(0) else (x - width).coerceAtMost((-bounds.first * position.scale).toInt())
+        val screenWidth = McClient.window.guiScaledWidth
+        val scaledWidth = bounds.first * position.scale
+        if (bounds.first == 0 || scaledWidth >= screenWidth) return
+
+        var anchorX = when (position.alignment) {
+            OverlayAlignment.START -> x.toFloat()
+            OverlayAlignment.CENTER -> x + scaledWidth / 2f
+            OverlayAlignment.END -> x + scaledWidth
+        }
+
+        val minAnchorX = when (position.alignment) {
+            OverlayAlignment.START -> 0f
+            OverlayAlignment.CENTER -> scaledWidth / 2f
+            OverlayAlignment.END -> scaledWidth
+        }
+        val maxAnchorX = when (position.alignment) {
+            OverlayAlignment.START -> screenWidth - scaledWidth
+            OverlayAlignment.CENTER -> screenWidth - scaledWidth / 2f
+            OverlayAlignment.END -> screenWidth.toFloat()
+        }
+
+        anchorX = anchorX.coerceIn(minAnchorX, maxAnchorX)
+
+        position.x = if (anchorX < screenWidth / 2) {
+            anchorX.toInt()
+        } else {
+            (anchorX - screenWidth).toInt().coerceAtMost(-1)
+        }
     }
 
     fun setY(y: Int) {
@@ -51,6 +89,10 @@ interface Overlay {
 
     fun setScale(scale: Float) {
         position.scale = ((scale * 10f).toInt() / 10f).coerceAtLeast(0.1f)
+    }
+
+    fun nextAlignment() {
+        position.alignment = position.alignment.next()
     }
 
     fun isEditing(): Boolean {
@@ -68,5 +110,6 @@ enum class EditableProperty {
     X,
     Y,
     SCALE,
+    ALIGNMENT,
     MISC;
 }

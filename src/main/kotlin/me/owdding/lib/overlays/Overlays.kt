@@ -48,9 +48,9 @@ object Overlays {
         val (mouseX, mouseY) = McClient.mouse
         overlays.forEach {
             if (!it.enabled) return@forEach
-            val (x, y) = it.position
+            val (_, y) = it.position
             graphics.pushPop {
-                graphics.translate(x.toFloat(), y.toFloat())
+                graphics.translate(it.alignedX, y.toFloat())
                 graphics.scale(it.position.scale, it.position.scale)
                 it.extract(graphics, mouseX.toInt(), mouseY.toInt(), event.partialTicks)
             }
