@@ -2,6 +2,7 @@ package me.owdding.lib.displays
 
 import com.mojang.blaze3d.vertex.PoseStack
 import earth.terrarium.olympus.client.images.BuiltinImageProviders
+import me.owdding.lib.compat.IconographicCompat
 import me.owdding.lib.displays.circle.roundedTextureDisplay
 import me.owdding.lib.extensions.floor
 import me.owdding.lib.layouts.ScalableWidget
@@ -471,6 +472,12 @@ object Displays {
             mouseX.toInt(),
             mouseY.toInt(),
         ) && showTooltips
+    }
+
+    fun iconographicCompat(display: Display, item: ItemStack): Display = object : Display by display {
+        override fun extract(graphics: GuiGraphicsExtractor) = IconographicCompat.withItem(item) {
+            display.extract(graphics)
+        }
     }
 
     fun circleTexture(width: Int, height: Int, resourceLocation: Identifier) = roundedTextureDisplay(width, height, resourceLocation)

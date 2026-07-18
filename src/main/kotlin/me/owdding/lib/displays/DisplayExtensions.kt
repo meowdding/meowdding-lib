@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants
 import earth.terrarium.olympus.client.components.buttons.Button
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
+import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.utils.builders.TooltipBuilder
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
@@ -96,3 +97,5 @@ fun Display.withPadding(padding: Int = 0, left: Int? = null, right: Int? = null,
     Displays.padding(left ?: padding, right ?: padding, top ?: padding, bottom ?: padding, this)
 
 fun Display.withOutline(color: UInt = 0xFF000000u): Display = Displays.outline({ color }, this)
+
+fun Display.withIconographicCompat(item: ItemStack) = Displays.iconographicCompat(this, item)
