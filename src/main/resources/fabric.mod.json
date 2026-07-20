@@ -43,5 +43,12 @@
     "skyblock-api": ">=${sbapi}",
     "placeholder-api": ">=${placeholder_api}"
   },
-  "accessWidener": "mlib.accesswidener"
+  "accessWidener": "mlib.accesswidener",
+  "custom": {
+    "modmenu": {
+      "badges": [
+        "library"
+      ]
+    }
+  }
 }
