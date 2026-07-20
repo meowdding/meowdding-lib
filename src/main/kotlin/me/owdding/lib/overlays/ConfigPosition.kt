@@ -3,6 +3,9 @@ package me.owdding.lib.overlays
 import com.teamresourceful.resourcefulconfigkt.api.ObjectKt
 
 class ConfigPosition(x: Int, y: Int, scale: Float = 1f, alignment: OverlayAlignment = OverlayAlignment.START) : ObjectKt(), Position {
+    @Deprecated("Legacy", ReplaceWith("class ConfigPosition"), DeprecationLevel.HIDDEN)
+    constructor(x: Int, y: Int, scale: Float = 1f) : this(x, y, scale, OverlayAlignment.START)
+
     val initialPosition = x to y
 
     override var x: Int by int("x", x)
