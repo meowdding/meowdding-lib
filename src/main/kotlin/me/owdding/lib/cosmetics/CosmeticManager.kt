@@ -13,13 +13,15 @@ import me.owdding.lib.PostInitModule
 import me.owdding.lib.events.CosmeticLoadEvent
 import me.owdding.lib.generated.MeowddingLibCodecs
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
+import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
-import java.util.UUID
+import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.time.Duration.Companion.seconds
@@ -48,6 +50,10 @@ object CosmeticManager {
         .build()
 
     init {
+        updateCosmetics()
+    }
+
+    fun updateCosmetics() {
         CompletableFuture.runAsync {
             runCatching {
                 loadData()
@@ -57,7 +63,7 @@ object CosmeticManager {
         }
     }
 
-    fun loadData() {
+    private fun loadData() {
         _cosmetics.clear()
         _players.clear()
         val response = client.send(
@@ -137,4 +143,13 @@ object CosmeticManager {
         val version: Int,
         @Inline val data: JsonObject,
     )
+
+    @Subscription
+    fun onCommand(event: RegisterCommandsEvent) {
+        event.register("meowdding dev cosmetics") {
+            thenCallback("reload") {
+                updateCosmetics()
+            }
+        }
+    }
 }
