@@ -356,6 +356,7 @@ enum class PowderType(val formatting: ChatFormatting) : SkillTreeCurrency {
 
 enum class WhisperType(val formatting: ChatFormatting) : SkillTreeCurrency {
     FOREST(ChatFormatting.DARK_AQUA),
+    DESERT(ChatFormatting.GOLD),
     ;
 
     override val displayName = Text.of(name.toTitleCase()) {
