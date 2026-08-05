@@ -9,11 +9,14 @@ import me.owdding.lib.generated.MeowddingLibCodecs
 import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import net.hypixel.data.region.Environment
 import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket
+import net.minecraft.util.Mth
+import net.minecraft.util.RandomSource
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.HypixelJoinEvent
 import tech.thatgravyboat.skyblockapi.api.events.level.PacketReceivedEvent
 import tech.thatgravyboat.skyblockapi.api.events.location.ServerDisconnectEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
+import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.http.Http
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toJson
 import java.util.concurrent.CompletableFuture
@@ -24,6 +27,7 @@ const val API_URL = "https://skyblock-pack.meowdd.ing/v2"
 object SkyblockPackInfo : MeowddingLogger by MeowddingLib.featureLogger() {
     val regex = Regex("(?i)^https://resourcepacks\\d*\\.hypixel\\.net/SkyBlock(?:ResourcePack)?/(?<uuid>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/(?<num>\\d{2}).zip$")
     private val codec = MeowddingLibCodecs.getCodec<PackInfo>()
+    private val source = RandomSource.create()
 
     var onDev = false
 
@@ -42,6 +46,8 @@ object SkyblockPackInfo : MeowddingLogger by MeowddingLib.featureLogger() {
         if (!LocationAPI.onHypixel) return
         if (onDev) return
         val packet = event.packet as? ClientboundResourcePackPushPacket ?: return
+
+        if ((Mth.randomBetweenInclusive(source, 0, 100) >= 25) && McPlayer.self?.isMeowddingDev() != true) return
 
         val match = regex.matchEntire(packet.url) ?: return
         val uuid = match.groups["uuid"]?.value ?: return
