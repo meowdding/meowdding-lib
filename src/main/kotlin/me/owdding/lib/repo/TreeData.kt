@@ -68,12 +68,13 @@ object TreeRepoData {
     fun hotfByName(name: String) = hotf.find { it.name == name }
 
     @Subscription
-    fun finishRepoLoading(event: FinishRepoLoadingEvent) {
-        runCatching {
+    context(_: FinishRepoLoadingEvent)
+    fun finishRepoLoading() {
+        MeowddingLib.runCatching("Load Hotm Data") {
             RemoteRepo.getFileContentAsJson("mining/hotm.json")?.toDataOrThrow(MeowddingLibCodecs.TreeNodeCodec.codec().listOf())?.apply(_hotm::set)
+        }
+        MeowddingLib.runCatching("Load Hotf Data") {
             RemoteRepo.getFileContentAsJson("foraging/hotf.json")?.toDataOrThrow(MeowddingLibCodecs.TreeNodeCodec.codec().listOf())?.apply(_hotf::set)
-        }.onFailure {
-            MeowddingLib.error("Failed to load hotm or hotf data!", it)
         }
     }
 }
