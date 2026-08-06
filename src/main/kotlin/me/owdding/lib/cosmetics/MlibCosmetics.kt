@@ -1,7 +1,10 @@
 package me.owdding.lib.cosmetics
 
+import com.mojang.datafixers.util.Either
+import com.mojang.serialization.Codec
 import me.owdding.ktcodecs.FieldName
 import me.owdding.ktcodecs.GenerateCodec
+import me.owdding.ktcodecs.IncludedCodec
 import me.owdding.ktcodecs.Lenient
 import me.owdding.ktcodecs.NamedCodec
 import me.owdding.lib.PreInitModule
@@ -39,8 +42,11 @@ object MlibCosmetics {
     data class MlibCosmeticData(
         @Lenient val suffix: Component?,
         @NamedCodec("cosmetic_url_type") @Lenient @FieldName("cape_texture") val capeTexture: URI?,
-        @Lenient val small: Boolean?,
+        @NamedCodec("cosmetic_scale") @Lenient val small: Float?,
     )
+
+    @IncludedCodec(named = "cosmetic_scale")
+    val cosmeticScaleCodec = Codec.either(Codec.BOOL, Codec.FLOAT).xmap({Either.unwrap(it.mapLeft { 0.5f })}, Either<*, Double>::right)
 
     private val emptyCosmetic = MlibCosmeticData(null, null, null)
 
@@ -86,30 +92,11 @@ object MlibCosmetics {
 
     fun tryApplySmallModifier(cosmetic: MlibCosmeticData, state: AvatarRenderState) {
         if (!LocationAPI.isOnSkyBlock) return
-        state.setData(BABY_MODIFIER_DATA_KEY, cosmetic.small ?: false)
-        if (cosmetic.small == true) {
-            state.ageScale = SMALL_PLAYER_AGE_SCALE
-            if (state.nameTagAttachment != null) {
-                state.nameTagAttachment = state.nameTagAttachment?.scale(state.ageScale.toDouble())
-            }
+        if (cosmetic.small != null) {
+            state.setData(BABY_MODIFIER_DATA_KEY, cosmetic.small)
         }
     }
 
-    @JvmStatic
-    fun getBabyModel(state: AvatarRenderState): PlayerModel {
-        return if (state.skin.model == PlayerModelType.SLIM) smallPlayerModelSlim else smallPlayerModelWide
-    }
-
-    @JvmStatic
-    fun <A: HumanoidModel<*>> getArmorModel(original: A, state: HumanoidRenderState, slot: EquipmentSlot): A {
-        if (original !is PlayerModel) return original
-
-        val state = state as? AvatarRenderState ?: return original
-        if (state.getData(BABY_MODIFIER_DATA_KEY) != true) return original
-
-        return babyArmor[slot] as A
-    }
-
     @JvmField
-    val BABY_MODIFIER_DATA_KEY: RenderStateDataKey<Boolean> = RenderStateDataKey.create { "meowdding_lib:baby_modifier" }
+    val BABY_MODIFIER_DATA_KEY: RenderStateDataKey<Float> = RenderStateDataKey.create { "meowdding_lib:baby_modifier" }
 }
