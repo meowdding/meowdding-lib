@@ -74,7 +74,7 @@ class SelectSquaresCaptcha(val entry: Entry) : CaptchaWidget(CaptchaType.SELECT_
             ),
             Entry(
                 "hide_on_leaf",
-                "Select all Squares containing a HiddenOnLeaf",
+                "Select all Squares containing a HideOnLeaf",
                 listOf(Vector2i(5, 2))
             )
         ).toList()
