@@ -1,0 +1,21 @@
+{
+  "@meowdding:metadata": {
+    "allowMultiline": true,
+    "allowReferences": true,
+    "allowTags": true,
+    "objectAsKeys": true,
+    "prefix": "mlib",
+    "@references": {}
+  },
+  "gradients": {
+    "default": "Обычный",
+    "rainbow": "Радужный",
+    "bisexual": "Бисексуальный",
+    "gay": "Гейский",
+    "lesbian": "Лесбиянский",
+    "pansexual": "Пансексуальный",
+    "asexual": "Асексуальный",
+    "non_binary": "Небинарный",
+    "trans": "Трансгендерный"
+  }
+}

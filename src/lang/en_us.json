@@ -18,5 +18,16 @@
       "skyocean": "<blue>SkyOcean</blue>",
       "skycubed": "<blue>SkyCubed</blue>"
     }
+  },
+  "gradients": {
+    "default": "Default",
+    "rainbow": "Rainbow",
+    "bisexual": "Bisexual",
+    "gay": "Gay",
+    "lesbian": "Lesbian",
+    "pansexual": "Pansexual",
+    "asexual": "Asexual",
+    "non_binary": "Non Binary",
+    "trans": "Transgender"
   }
 }

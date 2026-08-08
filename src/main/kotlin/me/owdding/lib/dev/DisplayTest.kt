@@ -1,5 +1,7 @@
 package me.owdding.lib.dev
 
+import earth.terrarium.olympus.client.components.Widgets
+import earth.terrarium.olympus.client.utils.ListenableState
 import me.owdding.lib.MeowddingLib
 import me.owdding.lib.builder.DisplayFactory
 import me.owdding.lib.displays.Alignment
@@ -7,6 +9,7 @@ import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.circle.roundedTextureDisplay
 import me.owdding.lib.displays.withOutline
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
+import me.owdding.lib.rendering.text.serialization.TagComponentSerialization
 import me.owdding.lib.rendering.text.textShader
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.screens.Screen
@@ -23,6 +26,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.strikethrough
 
 object DisplayTest : Screen(CommonComponents.EMPTY) {
 
+    val state = ListenableState("")
+    val mappedState = state.map({ Displays.text(TagComponentSerialization.deserialize(it))}, { "" })
     val shaders = GradientTextShader.Direction.entries.map {
         GradientTextShader(
             listOf(
@@ -38,6 +43,11 @@ object DisplayTest : Screen(CommonComponents.EMPTY) {
     }
 
     val entity = Displays.entity(RemotePlayer(McClient.self.level!!, McPlayer.self!!.gameProfile), 50, 100, 100 / 3)
+
+    override fun init() {
+        addRenderableWidget(Widgets.textInput(state).withPosition(200, 300).withSize(100, 10))
+        super.init()
+    }
 
     override fun extractRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         super.extractRenderState(graphics, mouseX, mouseY, partialTicks)
@@ -61,6 +71,9 @@ object DisplayTest : Screen(CommonComponents.EMPTY) {
             }
 
         }
+
+        mappedState.get().extract(graphics, 200, 310)
+
         DisplayFactory.vertical {
             val width = 200
             display(Displays.background(0x88FFFFFFu, Displays.empty(width, 5)))
