@@ -7,7 +7,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text
 abstract class CaptchaWidget(
     val type: CaptchaType,
     val description: String,
-) : AbstractWidget(0, 0, 256, 256, Text.of("Captcha Widget")) {
+    val widgetHeight: Int = 256
+) : AbstractWidget(0, 0, 256, widgetHeight, Text.of("Captcha Widget")) {
     abstract fun isCorrect(): Boolean
 
     override fun updateWidgetNarration(output: NarrationElementOutput?) {}

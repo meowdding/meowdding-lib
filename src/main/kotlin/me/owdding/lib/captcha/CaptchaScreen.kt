@@ -34,20 +34,22 @@ class CaptchaScreen(
                 display(Displays.wrappedText(Text.of("Suspicious behavior detected!"), 256, textAlignment = Alignment.CENTER))
                 display(Displays.wrappedText(Text.of(captchaWidget.description), 256, textAlignment = Alignment.CENTER))
                 widget(captchaWidget)
-                widget(
-                    Widgets.button().apply {
-                        withTexture(UIConstants.PRIMARY_BUTTON)
-                        withSize(50, 20)
-                        withRenderer(WidgetRenderers.text(Text.of("Verify", TextColor.WHITE)))
-                        withCallback {
-                            if (captchaWidget.isCorrect()) {
-                                McClient.setScreen(parent)
-                            } else {
-                                CaptchaType.openRandom(parent, captchaWidget.type)
+                if (captchaWidget.type.verifyManually) {
+                    widget(
+                        Widgets.button().apply {
+                            withTexture(UIConstants.PRIMARY_BUTTON)
+                            withSize(50, 20)
+                            withRenderer(WidgetRenderers.text(Text.of("Verify", TextColor.WHITE)))
+                            withCallback {
+                                if (captchaWidget.isCorrect()) {
+                                    McClient.setScreen(parent)
+                                } else {
+                                    CaptchaType.openRandom(parent, captchaWidget.type)
+                                }
                             }
-                        }
-                    },
-                ) { alignHorizontally(1f) }
+                        },
+                    ) { alignHorizontally(1f) }
+                }
             },
             5,
         ).apply {

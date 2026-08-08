@@ -177,7 +177,7 @@ class MeowddingModsScreen : Screen(Text.of("Meowdding Mods")) {
 
                 callback {
                     McClient.runNextTick {
-                        CaptchaType.openRandom(MeowddingModsScreen())
+                        McClient.setScreen(MeowddingModsScreen())
                     }
                 }
             }

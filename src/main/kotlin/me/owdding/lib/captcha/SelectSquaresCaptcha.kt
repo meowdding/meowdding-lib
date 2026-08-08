@@ -2,6 +2,7 @@ package me.owdding.lib.captcha
 
 import me.owdding.lib.MeowddingLib
 import net.minecraft.client.gui.GuiGraphicsExtractor
+import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.renderer.RenderPipelines
 import org.joml.Vector2i
@@ -79,7 +80,7 @@ class SelectSquaresCaptcha(val entry: Entry) : CaptchaWidget(CaptchaType.SELECT_
             )
         ).toList()
 
-        override fun selectRandom(): CaptchaWidget {
+        override fun selectRandom(parent: Screen): CaptchaWidget {
             val captcha = captchas.random()
             return SelectSquaresCaptcha(captcha)
         }
