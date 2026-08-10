@@ -4,12 +4,15 @@ import eu.pb4.placeholders.api.ParserContext
 import eu.pb4.placeholders.api.parsers.TagParser
 import eu.pb4.placeholders.api.parsers.tag.TagRegistry
 import eu.pb4.placeholders.api.parsers.tag.TextTag
+import me.owdding.lib.MeowddingLib
 import me.owdding.lib.generated.EnumCodec
 import me.owdding.lib.rendering.text.PrideShader
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
 import me.owdding.lib.rendering.text.serialization.nodes.GradientNode
 import me.owdding.lib.rendering.text.serialization.nodes.PrideGradientNode
 import me.owdding.lib.rendering.text.textShader
+import me.owdding.lib.utils.MeowddingLogger
+import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import net.minecraft.ChatFormatting
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.Style
@@ -17,7 +20,7 @@ import net.minecraft.network.chat.TextColor
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
-object TagComponentSerialization {
+object TagComponentSerialization : MeowddingLogger by MeowddingLib.featureLogger() {
 
     val context: ParserContext = ParserContext.of()
     val tagParser: TagParser by lazy {
@@ -33,12 +36,19 @@ object TagComponentSerialization {
             ),
 
             ChatFormatting.entries.filter { it <= ChatFormatting.WHITE }.map {
-                //~ if >= 26.2 'serializedName' -> 'name'
-                it.name
+                //~ if >= 26.2 'serializedName' -> 'name.lowercase()'
+                it.name.lowercase()
             },
         ).flatten()
         val tagRegistry = TagRegistry.builder().apply {
-            copies.forEach { default.getTag(it)?.let { tag -> this.add(tag) } }
+            copies.forEach {
+                val tag = default.getTag(it)
+                if (tag == null) {
+                    warn("Unable to get tag $it from default registry")
+                    return@forEach
+                }
+                this.add(tag)
+            }
             add(
                 TextTag.enclosing("gradient", "gradient") { node, data, _ ->
                     val colors = mutableListOf<TextColor>()
