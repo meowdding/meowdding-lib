@@ -102,13 +102,13 @@ object RenderUtils {
                 true,
             )
             //? } else {
-            //ShapeRenderer.renderShape(
-            //    poseStack,
-            //    buffer.getBuffer(BLOCK_FILL_TRIANGLE_THROUGH_WALLS),
-            //    shape,
-            //    0.0, 0.0, 0.0, color, 1f,
-            //)
-            //? }
+            /*ShapeRenderer.renderShape(
+                poseStack,
+                buffer.getBuffer(BLOCK_FILL_TRIANGLE_THROUGH_WALLS),
+                shape,
+                0.0, 0.0, 0.0, color, 1f,
+            )
+            *///? }
         }
     }
 

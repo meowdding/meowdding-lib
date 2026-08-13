@@ -55,9 +55,9 @@ class ItemStateRenderer() : PictureInPictureRenderer<ItemStateRenderer.State>() 
         McClient.self.gameRenderer.lighting().setupFor(if (item.itemStackRenderState().usesBlockLight()) Entry.ITEMS_3D else Entry.ITEMS_FLAT)
 
         //? 26.1 {
-        //val featureRenderer = McClient.self.gameRenderer.featureRenderDispatcher
-        //val submitNodeCollector = featureRenderer.submitNodeStorage
-        //? }
+        /*val featureRenderer = McClient.self.gameRenderer.featureRenderDispatcher
+        val submitNodeCollector = featureRenderer.submitNodeStorage
+        *///? }
         item.itemStackRenderState().submit(stack, submitNodeCollector, LightCoordsUtil.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0)
         //? 26.1
         //featureRenderer.renderAllFeatures()

@@ -6,9 +6,9 @@ import com.mojang.blaze3d.shaders.UniformType
 object MeowddingPipelines {
 
     //? 26.1 {
-    //val GAME_TIME_SNIPPET: RenderPipeline.Snippet = RenderPipeline
-    //    .builder()
-    //    .withUniform("Globals", UniformType.UNIFORM_BUFFER)
-    //    .buildSnippet()
-    //? }
+    /*val GAME_TIME_SNIPPET: RenderPipeline.Snippet = RenderPipeline
+        .builder()
+        .withUniform("Globals", UniformType.UNIFORM_BUFFER)
+        .buildSnippet()
+    *///? }
 }

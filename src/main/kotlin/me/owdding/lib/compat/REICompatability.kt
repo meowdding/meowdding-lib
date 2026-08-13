@@ -52,8 +52,8 @@ object REICompatability : REIClientPlugin {
             //? < 26.2 {
             /*val hide = REIRenderOverlayEvent(screen) { x, y, width, height ->
                 areas.add(Rectangle(x, y, width, height))
-            }.post(SkyBlockAPI.eventBus)*/
-            //?} else
+            }.post(SkyBlockAPI.eventBus)
+            *///?} else
             val hide = false
 
             val excludedEvent = ItemListEvent.RegisterExcludedScreen(screen).apply { post(SkyBlockAPI.eventBus) }
@@ -74,8 +74,8 @@ object REIRuntimeCompatability {
     fun getReiHoveredItemStack(): ItemStack? {
         if (!installed) return null
         //? < 26.2 {
-        //return getHoveredItemStack()
-        //?} else
+        /*return getHoveredItemStack()
+        *///?} else
         return null
     }
 
