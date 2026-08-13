@@ -28,19 +28,6 @@ object DisplayTest : Screen(CommonComponents.EMPTY) {
 
     val state = ListenableState("")
     val mappedState = state.map({ Displays.text(TagComponentSerialization.deserialize(it))}, { "" })
-    val shaders = GradientTextShader.Direction.entries.map {
-        GradientTextShader(
-            listOf(
-                0xFF55CDFC.toInt(),
-                0xFFF7A8B8.toInt(),
-                0xFFFFFFFF.toInt(),
-                0xFFF7A8B8.toInt(),
-                0xFF55CDFC.toInt(),
-            ),
-            it,
-            4f,
-        )
-    }
 
     val entity = Displays.entity(RemotePlayer(McClient.self.level!!, McPlayer.self!!.gameProfile), 50, 100, 100 / 3)
 
@@ -54,7 +41,19 @@ object DisplayTest : Screen(CommonComponents.EMPTY) {
 
         entity.extract(graphics, 300, 100)
 
-        shaders.forEachIndexed { index, shader ->
+        GradientTextShader.Direction.entries.map {
+            GradientTextShader(
+                listOf(
+                    0xFF55CDFC.toInt(),
+                    0xFFF7A8B8.toInt(),
+                    0xFFFFFFFF.toInt(),
+                    0xFFF7A8B8.toInt(),
+                    0xFF55CDFC.toInt(),
+                ),
+                it,
+                4f,
+            )
+        }.forEachIndexed { index, shader ->
             val text = Text.of("Hello, ") {
                 append("World") {
                     this.textShader = shader
