@@ -20,6 +20,7 @@ import tech.thatgravyboat.skyblockapi.platform.pushPop
 import tech.thatgravyboat.skyblockapi.platform.scale
 import tech.thatgravyboat.skyblockapi.platform.showTooltip
 import tech.thatgravyboat.skyblockapi.platform.translate
+import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedName
 import tech.thatgravyboat.skyblockapi.utils.text.CommonText
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
@@ -73,10 +74,16 @@ class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) :
         }
 
         val center = (this.width / 2f).toInt()
-        graphics.centeredText(font, "X: ${overlay.position.x}, Y: ${overlay.position.y}", center, this.height - 50, -1)
-        graphics.centeredText(font, "Scale: ${overlay.position.scale}", center, this.height - 40, -1)
-        graphics.centeredText(font, "Use +/- to scale, arrow keys to move around.", center, this.height - 30, -1)
-        graphics.centeredText(font, "Use A to change between different alignments.", center, this.height - 20, -1)
+        listOf(
+            "X: ${overlay.position.x}, Y: ${overlay.position.y}",
+            "Scale: ${overlay.position.scale}",
+            "Alignment: ${overlay.position.alignment}",
+            "Use +/- to scale, arrow keys to move around.",
+            "Use A to change between different alignments."
+        ).reversed().forEachIndexed { index, string ->
+            val yPosition = this.height - 20 - (index * 10)
+            graphics.centeredText(font, string, center, yPosition, -1)
+        }
     }
 
     override fun extractBackground(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
