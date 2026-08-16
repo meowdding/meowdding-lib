@@ -20,7 +20,6 @@ import tech.thatgravyboat.skyblockapi.platform.pushPop
 import tech.thatgravyboat.skyblockapi.platform.scale
 import tech.thatgravyboat.skyblockapi.platform.showTooltip
 import tech.thatgravyboat.skyblockapi.platform.translate
-import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedName
 import tech.thatgravyboat.skyblockapi.utils.text.CommonText
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
@@ -74,13 +73,27 @@ class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) :
         }
 
         val center = (this.width / 2f).toInt()
-        listOf(
-            "X: ${overlay.position.x}, Y: ${overlay.position.y}",
-            "Scale: ${overlay.position.scale}",
-            "Alignment: ${overlay.position.alignment}",
-            "Use +/- to scale, arrow keys to move around.",
-            "Use A to change between different alignments."
-        ).reversed().forEachIndexed { index, string ->
+        buildList {
+            val hasX = EditableProperty.X in overlay.properties
+            val hasY = EditableProperty.Y in overlay.properties
+            val hasScale = EditableProperty.SCALE in overlay.properties
+            val hasAlign = EditableProperty.ALIGNMENT in overlay.properties
+
+            val position = mutableListOf<String>()
+            if (hasX) position.add("X: ${overlay.position.x}")
+            if (hasY) position.add("Y: ${overlay.position.y}")
+            if (position.isNotEmpty()) add(position.joinToString(", "))
+
+            if (hasScale) add("Scale: ${overlay.position.scale}")
+            if (hasAlign) add("Alignment: ${overlay.position.alignment}")
+
+            val controls = mutableListOf<String>()
+            if (hasScale) controls.add("Use +/- or scroll to scale")
+            if (hasX || hasY) controls.add("arrow keys to move")
+            if (controls.isNotEmpty()) add(controls.joinToString(", "))
+
+            if (hasAlign) add("Use A to change between alignments.")
+        }.reversed().forEachIndexed { index, string ->
             val yPosition = this.height - 20 - (index * 10)
             graphics.centeredText(font, string, center, yPosition, -1)
         }

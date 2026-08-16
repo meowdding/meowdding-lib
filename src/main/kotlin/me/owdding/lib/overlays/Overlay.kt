@@ -1,15 +1,12 @@
 package me.owdding.lib.overlays
 
 import earth.terrarium.olympus.client.ui.context.ContextMenu
-import me.owdding.lib.displays.Display
 import me.owdding.lib.mixins.OverlayAccessor
 import me.owdding.lib.utils.next
-import net.minecraft.client.gui.components.ChatComponent.getWidth
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
-import tech.thatgravyboat.skyblockapi.utils.extentions.translated
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
 interface Overlay {
