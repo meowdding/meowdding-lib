@@ -25,6 +25,93 @@ import net.minecraft.util.ARGB
 import org.joml.Vector2f
 import org.joml.Vector4f
 
+
+//? >= 26.2 {
+private val layout = BindGroupLayout.builder()
+    .build()
+
+private val pipelineCreator0: (GradientTextShader, Font.DisplayMode?, Boolean) -> RenderPipeline = MeowddingUtil.memoize { shader, displayMode, grayscale ->
+    RenderPipelines.register(
+        RenderPipeline.builder(
+            *buildList {
+                when (displayMode) {
+                    Font.DisplayMode.NORMAL, Font.DisplayMode.POLYGON_OFFSET -> add(RenderPipelines.WORLD_TEXT_SNIPPET)
+                    Font.DisplayMode.SEE_THROUGH -> add(RenderPipelines.TEXT_SNIPPET)
+                    null -> add(RenderPipelines.GUI_TEXT_SNIPPET)
+                }
+            }.toTypedArray(),
+        ).withLocation(MeowddingLib.id("gradient_text/${displayMode?.name?.lowercase()}${if (grayscale) "_grayscale" else ""}"))
+            .withVertexShader(MeowddingLib.id("text/gradient"))
+            .withFragmentShader(MeowddingLib.id("text/gradient"))
+            .withBindGroupLayout(layout)
+            .apply {
+                if (grayscale) {
+                    withShaderDefine("IS_GRAYSCALE")
+                }
+
+                when (displayMode) {
+                    Font.DisplayMode.SEE_THROUGH -> {
+                        withShaderDefine("IS_SEE_THROUGH")
+                    }
+
+                    Font.DisplayMode.POLYGON_OFFSET -> {
+                        withDepthStencilState(DepthStencilState(CompareOp.GREATER_THAN_OR_EQUAL, true, 1.0F, 10.0F))
+                    }
+
+                    null -> {
+                        withShaderDefine("IS_GUI")
+                    }
+
+                    else -> {}
+                }
+            }
+            .withShaderDefine(
+                "COLORS",
+                shader.gradientProvider
+                    .getColors()
+                    .map { color -> Vector4f(ARGB.redFloat(color), ARGB.greenFloat(color), ARGB.blueFloat(color), ARGB.alphaFloat(color)) }
+                    .toTypedArray(),
+            )
+            .withShaderDefine(
+                "DIRECTION",
+                shader.direction.vec,
+            )
+            .withShaderDefine(
+                "SPEED",
+                shader.speed,
+            )
+            .build(),
+    )
+}
+//? } else {
+/*private val pipelineCreator0: (GradientTextShader) -> RenderPipeline = MeowddingUtil.memoize {
+    RenderPipelines.register(
+        RenderPipeline.builder(RenderPipelines.TEXT_SNIPPET, RenderPipelines.FOG_SNIPPET, MeowddingPipelines.GAME_TIME_SNIPPET)
+            .withLocation(MeowddingLib.id("gradient_text"))
+            .withVertexShader(MeowddingLib.id("text/gradient"))
+            .withFragmentShader(MeowddingLib.id("text/gradient"))
+            .withSampler("Sampler0")
+            .withDepthStencilState(DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false, -1f, -10f))
+            .withShaderDefine(
+                "COLORS",
+                it.gradientProvider
+                    .getColors()
+                    .map { color -> Vector4f(ARGB.redFloat(color), ARGB.greenFloat(color), ARGB.blueFloat(color), ARGB.alphaFloat(color)) }
+                    .toTypedArray(),
+            )
+            .withShaderDefine(
+                "DIRECTION",
+                it.direction.vec,
+            )
+            .withShaderDefine(
+                "SPEED",
+                it.speed,
+            )
+            .build(),
+    )
+}
+*///? }
+
 class GradientTextShader(val gradientProvider: GradientProvider, val direction: Direction, val speed: Float) : TextShader {
     constructor(gradientProvider: GradientProvider) : this(gradientProvider, Direction.RIGHT, 1f)
     constructor(colors: List<Int>) : this({ colors })
@@ -65,90 +152,9 @@ class GradientTextShader(val gradientProvider: GradientProvider, val direction: 
         }
 
         //? >= 26.2 {
-        private val layout = BindGroupLayout.builder()
-            .build()
-
-        val pipelineCreator: (GradientTextShader, Font.DisplayMode?, Boolean) -> RenderPipeline = MeowddingUtil.memoize { shader, displayMode, grayscale ->
-            RenderPipelines.register(
-                RenderPipeline.builder(
-                    *buildList {
-                        when (displayMode) {
-                            Font.DisplayMode.NORMAL, Font.DisplayMode.POLYGON_OFFSET -> add(RenderPipelines.WORLD_TEXT_SNIPPET)
-                            Font.DisplayMode.SEE_THROUGH -> add(RenderPipelines.TEXT_SNIPPET)
-                            null -> add(RenderPipelines.GUI_TEXT_SNIPPET)
-                        }
-                    }.toTypedArray(),
-                ).withLocation(MeowddingLib.id("gradient_text/${displayMode?.name?.lowercase()}${if (grayscale) "_grayscale" else ""}"))
-                    .withVertexShader(MeowddingLib.id("text/gradient"))
-                    .withFragmentShader(MeowddingLib.id("text/gradient"))
-                    .withBindGroupLayout(layout)
-                    .apply {
-                        if (grayscale) {
-                            withShaderDefine("IS_GRAYSCALE")
-                        }
-
-                        when (displayMode) {
-                            Font.DisplayMode.SEE_THROUGH -> {
-                                withShaderDefine("IS_SEE_THROUGH")
-                            }
-
-                            Font.DisplayMode.POLYGON_OFFSET -> {
-                                withDepthStencilState(DepthStencilState(CompareOp.GREATER_THAN_OR_EQUAL, true, 1.0F, 10.0F))
-                            }
-
-                            null -> {
-                                withShaderDefine("IS_GUI")
-                            }
-
-                            else -> {}
-                        }
-                    }
-                    .withShaderDefine(
-                        "COLORS",
-                        shader.gradientProvider
-                            .getColors()
-                            .map { color -> Vector4f(ARGB.redFloat(color), ARGB.greenFloat(color), ARGB.blueFloat(color), ARGB.alphaFloat(color)) }
-                            .toTypedArray(),
-                    )
-                    .withShaderDefine(
-                        "DIRECTION",
-                        shader.direction.vec,
-                    )
-                    .withShaderDefine(
-                        "SPEED",
-                        shader.speed,
-                    )
-                    .build(),
-            )
-        }
-        //? } else {
-        /*private val pipelineCreator: (GradientTextShader) -> RenderPipeline = MeowddingUtil.memoize {
-            RenderPipelines.register(
-                RenderPipeline.builder(RenderPipelines.TEXT_SNIPPET, RenderPipelines.FOG_SNIPPET, MeowddingPipelines.GAME_TIME_SNIPPET)
-                    .withLocation(MeowddingLib.id("gradient_text"))
-                    .withVertexShader(MeowddingLib.id("text/gradient"))
-                    .withFragmentShader(MeowddingLib.id("text/gradient"))
-                    .withSampler("Sampler0")
-                    .withDepthStencilState(DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false, -1f, -10f))
-                    .withShaderDefine(
-                        "COLORS",
-                        it.gradientProvider
-                            .getColors()
-                            .map { color -> Vector4f(ARGB.redFloat(color), ARGB.greenFloat(color), ARGB.blueFloat(color), ARGB.alphaFloat(color)) }
-                            .toTypedArray(),
-                    )
-                    .withShaderDefine(
-                        "DIRECTION",
-                        it.direction.vec,
-                    )
-                    .withShaderDefine(
-                        "SPEED",
-                        it.speed,
-                    )
-                    .build(),
-            )
-        }
-        *///? }
+        val pipelineCreator: (GradientTextShader, Font.DisplayMode?, Boolean) -> RenderPipeline = pipelineCreator0
+        //? } else
+        //private val pipelineCreator: (GradientTextShader) -> RenderPipeline = pipelineCreator0
     }
 
     override fun equals(other: Any?): Boolean {

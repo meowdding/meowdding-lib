@@ -61,7 +61,7 @@ object Overlays {
                 if (it.isEditingOverlay()) return@forEach
                 graphics.drawFilledBox(rect.x, rect.y, rect.width, rect.height, 0x50000000)
                 graphics.drawOutline(rect.x - 1, rect.y - 1, rect.width + 2, rect.height + 2, 0xFFFFFFFF.toInt())
-                if (it.properties.isNotEmpty()) {
+                if (it.properties.isNotEmpty() && !it.ignoreChatScreenEdits) {
                     graphics.showTooltip(
                         Text.multiline(
                             it.name,
@@ -83,6 +83,7 @@ object Overlays {
 
         for (overlay in overlays.reversed()) {
             if (!overlay.enabled) continue
+            if (overlay.ignoreChatScreenEdits) continue
             if (overlay.properties.isEmpty()) continue
             if (overlay.isEditingOverlay()) continue
             val rect = overlay.editBounds * overlay.position.scale

@@ -11,6 +11,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text
 
 interface Overlay {
 
+    val ignoreChatScreenEdits: Boolean get() = false
+
     val modId: String
     val name: Component
 
