@@ -136,10 +136,10 @@ class GradientTextShader(val gradientProvider: GradientProvider, val direction: 
         ;
     }
     //? 26.1
-    //override val pipeline: RenderPipeline = pipelineCreator(this)
+    //override val pipeline: RenderPipeline = pipelineCreator0(this)
 
     //? >= 26.2
-    override val pipeline: (Font.DisplayMode?, Boolean) -> RenderPipeline = { first, second -> pipelineCreator(this, first, second) }
+    override val pipeline: (Font.DisplayMode?, Boolean) -> RenderPipeline = { first, second -> pipelineCreator0(this, first, second) }
 
     companion object {
         val ID = MeowddingLib.id("gradient")
