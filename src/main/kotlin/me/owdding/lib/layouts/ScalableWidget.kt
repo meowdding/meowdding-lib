@@ -30,7 +30,6 @@ class ScalableWidget(val original: AbstractWidget) : BaseParentWidget(original.w
         width = original.width
         height = original.height
         message = original.message
-        addRenderableWidget(original)
     }
 
     override fun setPosition(p0: Int, p1: Int) {
@@ -65,14 +64,26 @@ class ScalableWidget(val original: AbstractWidget) : BaseParentWidget(original.w
     }
 
     override fun extractWidgetRenderState(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
+        this@ScalableWidget.updateWidthHeight()
+
+        val currentTooltip = original.tooltip.get()
+        val currentTooltipDelay = original.tooltip.delay
+        this.setTooltip(currentTooltip)
+        this.setTooltipDelay(currentTooltipDelay)
+
+        original.setTooltip(null)
+
         guiGraphics.scaled(scale, scale) {
             original.x = (this@ScalableWidget.x / scale).floor()
             original.y = (this@ScalableWidget.y / scale).floor()
-            this@ScalableWidget.updateWidthHeight()
+
             currentScale.addLast(scale)
             original.extractRenderState(guiGraphics, (mouseX / scale).floor(), (mouseY / scale).floor(), partialTick)
             currentScale.removeLast()
         }
+
+        original.setTooltip(currentTooltip)
+        original.setTooltipDelay(currentTooltipDelay)
     }
 
     override fun scale(scale: Double) {
@@ -116,12 +127,12 @@ class ScalableWidget(val original: AbstractWidget) : BaseParentWidget(original.w
 
     override fun getRectangle(): ScreenRectangle? {
         val original = original.rectangle ?: return null
-        return ScreenRectangle(original.left(), original.top(), (original.width() * scale).floor(), (original.height() * scale).floor())
+        return ScreenRectangle(this.x, this.y, (original.width() * scale).floor(), (original.height() * scale).floor())
     }
 
     override fun getBorderForArrowNavigation(direction: ScreenDirection): ScreenRectangle? {
         val original = original.getBorderForArrowNavigation(direction) ?: return null
-        return ScreenRectangle(original.left(), original.top(), (original.width() * scale).floor(), (original.height() * scale).floor())
+        return ScreenRectangle(this.x, this.y, (original.width() * scale).floor(), (original.height() * scale).floor())
     }
 
     override fun setFocused(focused: GuiEventListener?) {
