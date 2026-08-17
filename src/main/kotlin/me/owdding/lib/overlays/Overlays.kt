@@ -58,7 +58,8 @@ object Overlays {
             val rect = it.editBounds * it.position.scale
 
             if (isOverlayScreen(screen, mouseX.toInt(), mouseY.toInt()) && rect.contains(mouseX.toInt(), mouseY.toInt())) {
-                if (it.isEditingOverlay() || it.ignoreChatScreenEdits) return@forEach
+                if (it.isEditingOverlay() || (screen is ChatScreen && it.ignoreChatScreenEdits)) return@forEach
+
                 graphics.drawFilledBox(rect.x, rect.y, rect.width, rect.height, 0x50000000)
                 graphics.drawOutline(rect.x - 1, rect.y - 1, rect.width + 2, rect.height + 2, 0xFFFFFFFF.toInt())
                 if (it.properties.isNotEmpty()) {
@@ -83,7 +84,7 @@ object Overlays {
 
         for (overlay in overlays.reversed()) {
             if (!overlay.enabled) continue
-            if (overlay.ignoreChatScreenEdits) continue
+            if (event.screen is ChatScreen && overlay.ignoreChatScreenEdits) continue
             if (overlay.properties.isEmpty()) continue
             if (overlay.isEditingOverlay()) continue
             val rect = overlay.editBounds * overlay.position.scale
