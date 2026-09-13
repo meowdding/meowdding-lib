@@ -1,5 +1,6 @@
 package me.owdding.lib.mixins;
 
+import me.owdding.lib.config.MeowddingLibConfig;
 import me.owdding.lib.cosmetics.MlibCosmetics;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.EntityType;
@@ -26,6 +27,8 @@ public abstract class PlayerMixin extends LivingEntity {
         MutableComponent nameComponent,
         CallbackInfoReturnable<MutableComponent> cir
     ) {
+        if (!MeowddingLibConfig.INSTANCE.getSuffixCosmetic()) return;
+
         final var mlibData = MlibCosmetics.getMlibCosmetics().get(uuid);
         if (mlibData == null || mlibData.getSuffix() == null) {
             return;

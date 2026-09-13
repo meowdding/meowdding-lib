@@ -8,6 +8,7 @@ import me.owdding.ktcodecs.IncludedCodec
 import me.owdding.ktcodecs.Lenient
 import me.owdding.ktcodecs.NamedCodec
 import me.owdding.lib.PreInitModule
+import me.owdding.lib.config.MeowddingLibConfig
 import me.owdding.lib.events.CosmeticLoadEvent
 import me.owdding.lib.extensions.associateNotNull
 import me.owdding.lib.generated.MeowddingLibCodecs
@@ -70,8 +71,8 @@ object MlibCosmetics {
     ) where AvatarlikeEntity : Avatar, AvatarlikeEntity : ClientAvatarEntity {
         val cosmetic = mlibCosmetics[entity.uuid] ?: return
 
-        tryModifyCape(cosmetic, state)
-        tryApplySmallModifier(cosmetic, state)
+        if (MeowddingLibConfig.capeCosmetic) tryModifyCape(cosmetic, state)
+        if (MeowddingLibConfig.playerScaleCosmetic) tryApplySmallModifier(cosmetic, state)
     }
 
     fun tryModifyCape(cosmetic: MlibCosmeticData, state: AvatarRenderState) {
