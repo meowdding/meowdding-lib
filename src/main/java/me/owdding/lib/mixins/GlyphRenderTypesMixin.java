@@ -42,13 +42,8 @@ public abstract class GlyphRenderTypesMixin implements TextShaderRenderTypeHolde
     private void select(Font.DisplayMode mode, CallbackInfoReturnable<RenderType> cir) {
         var shader = TextShaders.getActiveShader();
         if (shader != null) {
-            cir.setReturnValue(meowddinglib$getRenderType(shader.getPipeline(mode, meowdding$grayscale), mode, meowdding$grayscale));
+            cir.setReturnValue(meowddinglib$createType(shader, mode));
         }
-    }
-
-    @Override
-    public RenderType meowddinglib$getRenderType(RenderPipeline pipeline, Font.DisplayMode displayMode, Boolean grayScale) {
-        return TextShaderKt.createTextRenderType(pipeline, meowdding$texture, displayMode, grayScale);
     }
 
     @Override

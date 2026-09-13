@@ -18,6 +18,7 @@ import java.util.function.Supplier
 
 //? >= 26.2
 import com.mojang.renderpearl.api.pipeline.PrimitiveTopology
+import earth.terrarium.olympus.client.pipelines.renderer.PipelineTarget
 //? 26.1 {
 /*import net.minecraft.client.renderer.MultiBufferSource
 import java.util.function.Function
@@ -56,7 +57,7 @@ class TexturedCircleRenderer : PictureInPictureRenderer<TexturedCircleState>() {
                 .textures(texture)
                 .uniform(TexturedCirclePipeline.UNIFORM_STORAGE, TexturedCircleUniform(sprite.u0, sprite.u1, sprite.v0, sprite.v1))
                 .color(-1)
-                .draw()
+                .draw(PipelineTarget(this))
 
             //? >= 26.2
         }

@@ -24,7 +24,8 @@ public class TextRenderablesMixin {
         if (pipeline == null) {
             return original.call();
         }
-        return pipeline.getPipeline(null, false);
+        //~ if >= 26.3 ');' -> ').getFirst();'
+        return pipeline.getPipelines(null, false).getFirst();
     }
 
     @SuppressWarnings("ConstantValue")
