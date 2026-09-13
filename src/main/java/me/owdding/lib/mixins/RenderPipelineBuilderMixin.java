@@ -1,6 +1,6 @@
 package me.owdding.lib.mixins;
 
-import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.renderpearl.api.pipeline.RenderPipeline;
 import me.owdding.lib.accessor.RenderPipelineBuilderAccessor;
 import net.minecraft.client.renderer.ShaderDefines;
 import org.spongepowered.asm.mixin.Mixin;

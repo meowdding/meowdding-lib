@@ -2,42 +2,44 @@ package me.owdding.lib.displays.item
 
 import com.mojang.blaze3d.platform.Lighting.Entry
 import com.mojang.blaze3d.systems.RenderSystem
-import com.mojang.blaze3d.textures.FilterMode
-import com.mojang.blaze3d.textures.GpuTextureView
 import com.mojang.blaze3d.vertex.PoseStack
+import com.mojang.renderpearl.api.textures.FilterMode
 import earth.terrarium.olympus.client.pipelines.pips.OlympusPictureInPictureRenderState
-import me.owdding.lib.displays.circle.TexturedCircleRenderer
-import me.owdding.lib.displays.circle.TexturedCircleState
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.navigation.ScreenRectangle
 import net.minecraft.client.gui.render.TextureSetup
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer
-import net.minecraft.client.renderer.state.gui.BlitRenderState
-import net.minecraft.client.renderer.state.gui.GuiItemRenderState
-import net.minecraft.client.renderer.state.gui.GuiRenderState
-import net.minecraft.util.LightCoordsUtil
-//? 26.1
-//import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.item.TrackingItemStackRenderState
+import net.minecraft.client.renderer.state.gui.BlitRenderState
+import net.minecraft.client.renderer.state.gui.GuiItemRenderState
+import net.minecraft.client.renderer.state.gui.GuiRenderState
 import net.minecraft.client.renderer.texture.OverlayTexture
+import net.minecraft.util.LightCoordsUtil
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.item.ItemStack
 import org.joml.Matrix3x2f
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
-import java.util.Objects
-//? 26.1
-//import java.util.function.Function
+import java.util.*
 import java.util.function.Supplier
+import com.mojang.renderpearl.api.textures.GpuTextureView
 import kotlin.jvm.java
 
-//~ if >= 26.2 '(buffer: MultiBufferSource.BufferSource) : ' -> '() : ', '(buffer)' -> '()'
-class ItemStateRenderer() : PictureInPictureRenderer<ItemStateRenderer.State>() {
+//? > 26.2
+import earth.terrarium.olympus.mixins.PictureInPictureRendererAccessor
+//? 26.1
+//import net.minecraft.client.renderer.MultiBufferSource
+//? 26.1
+//import java.util.function.Function
 
-    private var textureView: GpuTextureView? = null
+//~ if >= 26.2 '(buffer: MultiBufferSource.BufferSource) : ' -> ' : ', '(buffer)' -> '()'
+class ItemStateRenderer : PictureInPictureRenderer<ItemStateRenderer.State>() {
+
+    //? < 26.3
+    //private var textureView: GpuTextureView? = null
     private var lastState: State? = null
 
     override fun textureIsReadyToBlit(state: State): Boolean {
@@ -46,7 +48,8 @@ class ItemStateRenderer() : PictureInPictureRenderer<ItemStateRenderer.State>() 
 
     override fun renderToTexture(state: State, stack: PoseStack/*? >= 26.2 >> ')'*/, submitNodeCollector: SubmitNodeCollector) {
         this.lastState = state
-        this.textureView = RenderSystem.outputColorTextureOverride
+        //? < 26.3
+        //this.textureView = RenderSystem.outputColorTextureOverride
 
         stack.scale(1f, -1f, -1f)
         val item = state.state
@@ -68,10 +71,15 @@ class ItemStateRenderer() : PictureInPictureRenderer<ItemStateRenderer.State>() 
     }
 
     override fun blitTexture(state: State, gui: GuiRenderState) {
+        //? < 26.3
+        //val view = this.textureView!!
+        //? > 26.2
+        val view = (this as PictureInPictureRendererAccessor).`olympus$textureView`()
+
         gui.addBlitToCurrentLayer(
             BlitRenderState(
                 RenderPipelines.GUI_TEXTURED_PREMULTIPLIED_ALPHA,
-                TextureSetup.singleTexture(this.textureView!!, RenderSystem.getSamplerCache().getRepeat(FilterMode.LINEAR)),
+                TextureSetup.singleTexture(view, RenderSystem.getSamplerCache().getRepeat(FilterMode.LINEAR)),
                 state.pose(), state.x0(), state.y0(), state.x0() + 16, state.y0() + 16,
                 0.0F, 1.0F, 1.0F, 0.0F, -1,
                 state.scissorArea(),

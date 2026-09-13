@@ -1,12 +1,8 @@
 package me.owdding.lib.rendering.text.builtin
 
-//? >= 26.2
-import com.mojang.blaze3d.pipeline.BindGroupLayout
-import com.mojang.blaze3d.pipeline.DepthStencilState
-import com.mojang.blaze3d.pipeline.RenderPipeline
-import com.mojang.blaze3d.platform.CompareOp
-//? 26.1
-//import com.mojang.blaze3d.vertex.DefaultVertexFormat
+import com.mojang.renderpearl.api.pipeline.CompareOp
+import com.mojang.renderpearl.api.pipeline.DepthStencilState
+import com.mojang.renderpearl.api.pipeline.RenderPipeline
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
@@ -15,8 +11,6 @@ import me.owdding.lib.extensions.withShaderDefine
 import me.owdding.lib.generated.EnumCodec
 import me.owdding.lib.rendering.text.TextShader
 import me.owdding.lib.utils.MeowddingUtil
-//? 26.1
-//import me.owdding.lib.utils.MeowddingPipelines
 import net.minecraft.client.gui.Font
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.network.chat.TextColor
@@ -25,6 +19,12 @@ import net.minecraft.util.ARGB
 import org.joml.Vector2f
 import org.joml.Vector4f
 
+//? >= 26.2
+import com.mojang.renderpearl.api.pipeline.BindGroupLayout
+//? 26.1
+//import com.mojang.blaze3d.vertex.DefaultVertexFormat
+//? 26.1
+//import me.owdding.lib.utils.MeowddingPipelines
 
 //? >= 26.2 {
 private val layout = BindGroupLayout.builder()

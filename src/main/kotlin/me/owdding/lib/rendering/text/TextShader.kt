@@ -1,6 +1,6 @@
 package me.owdding.lib.rendering.text
 
-import com.mojang.blaze3d.pipeline.RenderPipeline
+import com.mojang.renderpearl.api.pipeline.RenderPipeline
 import me.owdding.lib.helper.TextShaderHolder
 import net.minecraft.client.gui.Font
 import net.minecraft.client.renderer.rendertype.RenderSetup
