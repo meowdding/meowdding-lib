@@ -3,6 +3,7 @@ package me.owdding.lib.rendering.text
 import com.mojang.renderpearl.api.pipeline.RenderPipeline
 import me.owdding.lib.helper.TextShaderHolder
 import net.minecraft.client.gui.Font
+//? >= 26.3
 import net.minecraft.client.renderer.oit.OitPipelineSet
 import net.minecraft.client.renderer.rendertype.RenderSetup
 import net.minecraft.client.renderer.rendertype.RenderType
@@ -18,10 +19,11 @@ val TEXT_RENDER_TYPE_CACHE: (TextShaderInfo) -> RenderType = Util.memoize<TextSh
         "meowddinglib/font_shader",
         //~ if >= 26.3 'pipeline' -> 'pipeline.first'
         RenderSetup.builder(it.pipeline.first)
-            //? >= 26.3
+            //? >= 26.3 {
             .apply {
                 setOitPipelines(it.pipeline.second ?: return@apply)
             }
+            //? }
             //? 26.1
             //.bufferSize(786432)
             .useLightmap()

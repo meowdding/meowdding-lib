@@ -22,6 +22,7 @@ import org.joml.Vector4f
 //? >= 26.2
 import com.mojang.renderpearl.api.pipeline.BindGroupLayout
 import me.owdding.lib.rendering.text.PipelineResult
+//? >= 26.3
 import net.minecraft.client.renderer.oit.OitPipelineSet
 //? 26.1
 //import com.mojang.blaze3d.vertex.DefaultVertexFormat
