@@ -1,15 +1,16 @@
+import dev.kikugie.stonecutter.build.config.ReplacementContainer
 import org.gradle.kotlin.dsl.support.serviceOf
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
 
 plugins {
     id("dev.kikugie.stonecutter")
-    id("net.fabricmc.fabric-loom-remap") version "1.16-SNAPSHOT" apply false
-    id("net.fabricmc.fabric-loom") version "1.16-SNAPSHOT" apply false
+    id("net.fabricmc.fabric-loom-remap") version "1.17-SNAPSHOT" apply false
+    id("net.fabricmc.fabric-loom") version "1.17-SNAPSHOT" apply false
     kotlin("jvm") apply false
     `maven-publish`
 }
 
-stonecutter active "26.2"
+stonecutter active "26.3"
 
 stonecutter handlers {
     //configure("fsh", "vsh") {
@@ -39,6 +40,89 @@ stonecutter parameters {
                 replace(
                     replacement.regex to replacement.to,
                     replacement.reverseRegex to replacement.reverse
+                )
+            }
+        }
+    }
+
+    fun ReplacementContainer.StringReplacementSpec.rename(
+        from: String,
+        to: String,
+        prefix: String? = null
+    ) {
+        val prefix = prefix?.plus(".") ?: ""
+        replace("import $prefix$from;", "import $prefix$to;")
+        replace("import $prefix$from as ${to.substringAfterLast('.')}", "import $prefix$to")
+    }
+    fun ReplacementContainer.StringReplacementSpec.move(
+        from: String,
+        to: String,
+        prefix: String? = null
+    ) {
+        val prefix = prefix?.plus(".") ?: ""
+        replace("$prefix$from".replace('/', '.'), "$prefix$to".replace('/', '.'))
+        replace("$prefix$from".replace('.', '/'), "$prefix$to".replace('.', '/'))
+    }
+
+    class PackageMover(val fromPackage: String, val toPackage: String) {
+        fun ReplacementContainer.StringReplacementSpec.moveRelative(vararg names: String) {
+            names.forEach { name ->
+                move("$fromPackage.$name", "$toPackage.$name")
+            }
+        }
+        fun ReplacementContainer.StringReplacementSpec.move(vararg relatives: Pair<String, String>) {
+            relatives.forEach { (old, new) ->
+                move("$fromPackage.$old", "$toPackage.$new")
+            }
+        }
+        fun ReplacementContainer.StringReplacementSpec.moveAndRename(vararg relatives: Pair<String, String>) {
+            relatives.forEach { (old, new) ->
+                rename("$fromPackage.$old", "$toPackage.$new")
+            }
+        }
+    }
+
+    fun movePackage(
+        from: String,
+        to: String,
+        callback: PackageMover.() -> Unit
+    ) = PackageMover(from, to).callback()
+
+    val minecraft = "net.minecraft"
+
+    replacements {
+        string(current.parsed > "26.2") {
+            val blaze3d = "com.mojang.blaze3d"
+            val renderpearl = "com.mojang.renderpearl.api"
+
+            rename("EnderMan", "Enderman", "$minecraft.world.entity.monster")
+            rename("DynamicUniformStorage", "DynamicGpuDataStorage", "$minecraft.client.renderer")
+            move("me.owdding.lib.platform.screens.*", "net.minecraft.client.input.*")
+
+            move("me.owdding.lib.platform.screens.BaseParentWidget", "earth.terrarium.olympus.client.components.base.BaseParentWidget")
+
+            movePackage(blaze3d, renderpearl) {
+                moveRelative(
+                    "GpuFormat",
+                    "buffers.GpuBuffer",
+                    "buffers.GpuBufferSlice",
+                    "pipeline.BindGroupLayout",
+                    "pipeline.BlendFunction",
+                    "pipeline.ColorTargetState",
+                    "pipeline.DepthStencilState",
+                    "pipeline.RenderPipeline",
+                    "textures.FilterMode",
+                    "textures.GpuTexture",
+                    "textures.GpuTextureView",
+                    "vertex.VertexFormat",
+                )
+                move(
+                    "systems.RenderPass" to "commands.RenderPass",
+                    "systems.GpuDevice" to "device.GpuDevice",
+                    "platform.CompareOp" to "pipeline.CompareOp",
+                    "IndexType" to "pipeline.IndexType",
+                    "PrimitiveTopology" to "pipeline.PrimitiveTopology",
+                    "shaders.UniformType" to "pipeline.UniformType",
                 )
             }
         }

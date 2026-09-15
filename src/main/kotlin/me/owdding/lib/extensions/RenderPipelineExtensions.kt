@@ -1,8 +1,14 @@
 package me.owdding.lib.extensions
 
-import com.mojang.blaze3d.pipeline.RenderPipeline
+import com.mojang.renderpearl.api.pipeline.RenderPipeline
 import me.owdding.lib.accessor.RenderPipelineBuilderAccessor
-import org.joml.*
+import org.joml.Vector2f
+import org.joml.Vector3f
+import org.joml.Vector4f
+import org.joml.component1
+import org.joml.component2
+import org.joml.component3
+import org.joml.component4
 
 fun RenderPipeline.Builder.withShaderDefine(name: String, array: IntArray): RenderPipeline.Builder {
     val accessor = this as RenderPipelineBuilderAccessor

@@ -6,8 +6,8 @@ import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.MIDDLE
 import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.Displays.background
-import me.owdding.lib.platform.screens.BaseParentWidget
-import me.owdding.lib.platform.screens.MouseButtonEvent
+import earth.terrarium.olympus.client.components.base.BaseParentWidget
+import net.minecraft.client.input.*
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.layouts.LayoutElement
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
@@ -38,7 +38,7 @@ class ClickToExpandWidget(title: LayoutElement, body: LayoutElement, val onClick
     override fun getHeight() = title.height + if (expanded) body.height else 0
 
     override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
-        if ((title.isMouseOver(event.x, event.y) || (allowBodyClick && body.isMouseOver(event.x, event.y))) && event.isLeftClick()) {
+        if ((title.isMouseOver(event.x, event.y) || (allowBodyClick && body.isMouseOver(event.x, event.y))) && event.isLeft) {
             expanded = !expanded
             title.isFocused = expanded
             body.visible = expanded

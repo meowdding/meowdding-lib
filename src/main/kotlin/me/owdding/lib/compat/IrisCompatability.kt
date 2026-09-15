@@ -1,6 +1,7 @@
-package me.owdding.lib.compat
+//? < 26.3 {
+/*package me.owdding.lib.compat
 
-import com.mojang.blaze3d.pipeline.RenderPipeline
+import com.mojang.renderpearl.api.pipeline.RenderPipeline
 import me.owdding.ktmodules.Module
 import me.owdding.lib.rendering.world.RenderTypes
 import me.owdding.lib.utils.KnownMods
@@ -58,3 +59,5 @@ internal object IrisCompatImpl : IrisCompatability {
         instance.assignPipeline(renderPipeline, type)
     }
 }
+
+*///? }

@@ -2,24 +2,34 @@ package me.owdding.lib.utils
 
 import com.mojang.blaze3d.platform.InputConstants
 import me.owdding.ktmodules.Module
-import me.owdding.lib.platform.screens.KeyEvent
-import me.owdding.lib.platform.screens.into
+import me.owdding.lib.platform.isMouseDown
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper
 import net.minecraft.client.KeyMapping
+import net.minecraft.client.input.*
 import net.minecraft.resources.Identifier
-import org.lwjgl.glfw.GLFW
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyPressedEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyReleasedEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
-import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.helpers.McScreen
+
+//? < 26.3 {
+//import me.owdding.lib.platform.screens.into
+//import tech.thatgravyboat.skyblockapi.helpers.McClient
+//? }
+//~ if >= 26.3 'glfw.GLFW' -> 'sdl.SDLKeyboard'
+import org.lwjgl.sdl.SDLKeyboard
 
 internal fun isDown(key: Int): Boolean {
-    return InputConstants.isKeyDown(McClient.window, key)
+    return InputConstants.isKeyDown(
+        //? < 26.3
+        //McClient.window,
+        key,
+    )
 }
 
-internal fun isMouseKeyDown(key: Int): Boolean {
-    return (GLFW.glfwGetMouseButton(McClient.window.handle(), key) == 1)
+internal fun isMouseKeyDown(button: Int): Boolean {
+    return McScreen.isMouseDown(button)
 }
 
 data class KeyboardInputs(
@@ -29,11 +39,13 @@ data class KeyboardInputs(
 ) {
 
     fun isDown(event: KeyEvent): Boolean {
-        return isDown(event.key, event.scancode)
+        //~ if >= 26.3 'scancode' -> 'keycode()'
+        return isDown(event.key, event.keycode())
     }
 
     fun isDown(key: Int, scanCode: Int): Boolean {
-        return key in keys || GLFW.glfwGetKeyName(key, scanCode) in symbols
+        //~ if >= 26.3 'GLFW.glfwGetKeyName(key, scanCode)' -> '(SDLKeyboard.SDL_GetKeyName(key) ?: return false)'
+        return key in keys || (SDLKeyboard.SDL_GetKeyName(key) ?: return false) in symbols
     }
 
     fun isDown(): Boolean {
@@ -80,9 +92,11 @@ internal fun keyMapping(translationKey: String, keyCode: Int, category: Identifi
     return KeyMapping(translationKey, keyCode, category)
 }
 
-fun KeyMapping.matches(event: KeyEvent): Boolean {
+//? < 26.3 {
+/*fun KeyMapping.matches(event: KeyEvent): Boolean {
     return this.matches(event.into())
 }
+*///? }
 
 open class MeowddingKeybind(
     category: Identifier,
@@ -101,9 +115,15 @@ open class MeowddingKeybind(
 
     val isDown get() = key.isDown
 
-    fun matches(keyCode: Int, scancode: Int) = key.matches(KeyEvent(keyCode, scancode, 0))
-    fun matches(event: ScreenKeyReleasedEvent) = matches(event.key, event.scanCode)
-    fun matches(event: ScreenKeyPressedEvent) = matches(event.key, event.scanCode)
+    @JvmOverloads
+    //~ if >= 26.3 ', scancode: Int = 0) = ' -> ') = ', 'key, scancode' -> 'key, 0'
+    fun matches(key: Int) = this.key.matches(KeyEvent(key, 0, 0))
+
+    //~ if >= 26.3 'key, event.scanCode)' -> 'key)'
+    fun matches(event: ScreenKeyReleasedEvent) = matches(event.key)
+
+    //~ if >= 26.3 'key, event.scanCode)' -> 'key)'
+    fun matches(event: ScreenKeyPressedEvent) = matches(event.key)
     fun matches(event: KeyEvent) = key.matches(event)
 
     @Module

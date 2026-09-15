@@ -44,6 +44,7 @@ repositories {
     scopedMaven("https://maven.operationpotato.com/snapshots", "com.operationpotato")
     scopedMaven("https://maven.operationpotato.com/releases", "com.operationpotato")
     mavenCentral()
+    mavenLocal()
 }
 
 val archiveName = "Meowdding-Lib"

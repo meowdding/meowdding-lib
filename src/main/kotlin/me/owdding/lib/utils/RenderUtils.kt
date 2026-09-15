@@ -3,14 +3,12 @@ package me.owdding.lib.utils
 import me.owdding.lib.rendering.world.RenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS
 import net.minecraft.client.CameraType
 import net.minecraft.client.gui.Font
-import net.minecraft.util.LightCoordsUtil
-//? 26.1
-//import net.minecraft.client.renderer.ShapeRenderer
 import net.minecraft.client.renderer.blockentity.BeaconRenderer
 import net.minecraft.core.BlockPos
 import net.minecraft.gizmos.Gizmos
 import net.minecraft.network.chat.Component
 import net.minecraft.util.ARGB
+import net.minecraft.util.LightCoordsUtil
 import net.minecraft.util.Mth
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
@@ -23,6 +21,9 @@ import tech.thatgravyboat.skyblockapi.platform.drawString
 import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import kotlin.math.max
+
+//? 26.1
+//import net.minecraft.client.renderer.ShapeRenderer
 
 object RenderUtils {
 
@@ -51,7 +52,8 @@ object RenderUtils {
         poseStack.pushPop {
             poseStack.translate(position.x - x + 0.5, position.y - y + 1.07f, position.z - z + 0.5)
             poseStack.translate(0f, yOffset * -scale, 0f)
-            poseStack.mulPose(cameraRotation)
+            //~ if >= 26.3 'mulPose' -> 'rotate'
+            poseStack.rotate(cameraRotation)
             poseStack.scale(scale, -scale, scale)
             val xOffset = if (center) -McFont.width(text) / 2.0f else 0.0f
 

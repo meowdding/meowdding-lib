@@ -2,15 +2,12 @@ package me.owdding.lib.overlays
 
 import com.mojang.blaze3d.platform.InputConstants
 import me.owdding.lib.events.overlay.FinishOverlayEditingEvent
-import me.owdding.lib.platform.screens.KeyEvent
-import me.owdding.lib.platform.screens.MeowddingScreen
-import me.owdding.lib.platform.screens.MouseButtonEvent
 import me.owdding.lib.utils.keys
 import me.owdding.lib.utils.keysOf
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.screens.ChatScreen
 import net.minecraft.client.gui.screens.Screen
-import org.lwjgl.glfw.GLFW
+import net.minecraft.client.input.*
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
@@ -23,6 +20,9 @@ import tech.thatgravyboat.skyblockapi.platform.translate
 import tech.thatgravyboat.skyblockapi.utils.text.CommonText
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
+//~ if >= 26.3 'glfw.GLFW' -> 'sdl.SDLKeycode'
+import org.lwjgl.sdl.SDLKeycode
+
 private val ADD_KEY = keys {
     withSymbol("+")
     withKey(InputConstants.KEY_EQUALS)
@@ -32,7 +32,8 @@ private val ADD_KEY = keys {
 private val MINUS_KEY = keys {
     withSymbol("-")
     withKey(InputConstants.KEY_MINUS)
-    withKey(GLFW.GLFW_KEY_KP_SUBTRACT)
+    //~ if >= 26.3 'GLFW.GLFW_KEY_KP_SUBTRACT' -> 'SDLKeycode.SDLK_KP_MINUS'
+    withKey(SDLKeycode.SDLK_KP_MINUS)
 }
 
 private val UP_KEY = keysOf(InputConstants.KEY_UP)
@@ -41,7 +42,8 @@ private val LEFT_KEY = keysOf(InputConstants.KEY_LEFT)
 private val RIGHT_KEY = keysOf(InputConstants.KEY_RIGHT)
 private val A_KEY = keysOf(InputConstants.KEY_A)
 
-class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) : MeowddingScreen(CommonText.EMPTY) {
+//~ if >= 26.3 ': MeowddingScreen(' -> ': Screen('
+class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) : Screen(CommonText.EMPTY) {
 
     private var dragging = false
     private var relativeX = 0
@@ -117,8 +119,9 @@ class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) :
     }
 
     override fun mouseClicked(mouseEvent: MouseButtonEvent, doubleClicked: Boolean): Boolean {
-        val (mouseX, mouseY) = mouseEvent
-        val (button) = mouseEvent.buttonInfo
+        val mouseX = mouseEvent.x
+        val mouseY = mouseEvent.y
+        val button = mouseEvent.buttonInfo.button
         val (_, y) = overlay.position
         val x = overlay.alignedX.toInt()
         val (width, height) = overlay.bounds * overlay.position.scale
@@ -153,7 +156,9 @@ class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) :
     }
 
     override fun keyPressed(keyEvent: KeyEvent): Boolean {
-        val (key, scan) = keyEvent
+        val key = keyEvent.key
+        //~ if >= 26.3 'scancode' -> 'keycode'
+        val scan = keyEvent.keycode
         val multiplier = if (McScreen.isShiftDown) 10 else 1
         val y = overlay.position.component2()
         val x = overlay.alignedX.toInt()

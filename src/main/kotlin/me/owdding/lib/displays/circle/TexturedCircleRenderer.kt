@@ -1,7 +1,5 @@
 package me.owdding.lib.displays.circle
 
-//? >= 26.2
-import com.mojang.blaze3d.PrimitiveTopology
 import com.mojang.blaze3d.vertex.BufferBuilder
 import com.mojang.blaze3d.vertex.ByteBufferBuilder
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
@@ -18,15 +16,19 @@ import org.joml.Matrix3x2f
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import java.util.function.Supplier
 
+//? >= 26.2
+import com.mojang.renderpearl.api.pipeline.PrimitiveTopology
+//? >= 26.3
+import earth.terrarium.olympus.client.pipelines.renderer.PipelineTarget
 //? 26.1 {
 /*import net.minecraft.client.renderer.MultiBufferSource
 import java.util.function.Function
 import com.mojang.blaze3d.vertex.Tesselator
-import com.mojang.blaze3d.vertex.VertexFormat
+import com.mojang.renderpearl.api.vertex.VertexFormat
 *///? }
 
-//~ if >= 26.2 '(buffer: MultiBufferSource.BufferSource) : ' -> '() : ', '(buffer)' -> '()'
-class TexturedCircleRenderer() : PictureInPictureRenderer<TexturedCircleState>() {
+//~ if >= 26.2 '(buffer: MultiBufferSource.BufferSource) : ' -> ' : ', '(buffer)' -> '()'
+class TexturedCircleRenderer : PictureInPictureRenderer<TexturedCircleState>() {
 
     override fun getRenderStateClass(): Class<TexturedCircleState> = TexturedCircleState::class.java
 
@@ -56,7 +58,8 @@ class TexturedCircleRenderer() : PictureInPictureRenderer<TexturedCircleState>()
                 .textures(texture)
                 .uniform(TexturedCirclePipeline.UNIFORM_STORAGE, TexturedCircleUniform(sprite.u0, sprite.u1, sprite.v0, sprite.v1))
                 .color(-1)
-                .draw()
+                //~ if >= 26.3 'draw(' -> 'draw(PipelineTarget(this)'
+                .draw(PipelineTarget(this))
 
             //? >= 26.2
         }

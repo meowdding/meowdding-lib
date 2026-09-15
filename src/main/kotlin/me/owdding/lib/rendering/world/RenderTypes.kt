@@ -1,16 +1,17 @@
 package me.owdding.lib.rendering.world
 
-//? >= 26.2
-import com.mojang.blaze3d.PrimitiveTopology
-import com.mojang.blaze3d.pipeline.DepthStencilState
-import com.mojang.blaze3d.pipeline.RenderPipeline
-import com.mojang.blaze3d.platform.CompareOp
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
-import com.mojang.blaze3d.vertex.VertexFormat
+import com.mojang.renderpearl.api.pipeline.CompareOp
+import com.mojang.renderpearl.api.pipeline.DepthStencilState
+import com.mojang.renderpearl.api.pipeline.RenderPipeline
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.client.renderer.rendertype.LayeringTransform
 import net.minecraft.client.renderer.rendertype.RenderSetup
 import net.minecraft.client.renderer.rendertype.RenderType
+import com.mojang.renderpearl.api.vertex.VertexFormat
+
+//? >= 26.2
+import com.mojang.renderpearl.api.pipeline.PrimitiveTopology
 
 object RenderTypes {
 
