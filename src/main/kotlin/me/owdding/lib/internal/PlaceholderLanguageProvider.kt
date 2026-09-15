@@ -24,6 +24,11 @@ object PlaceholderLanguageProvider : TagLikeParser.Provider {
         "copy_to_clipboard", "copy",
         "insert", "insertion",
         "open_url", "url",
+        "font",
+        "atlas",
+        "player",
+        "shadow",
+        "lang", "translate", "lang_fallback",
     )
 
     private var PARSER = SingleTagLikeParser(TagLikeParser.TAGS_LENIENT, PlaceholderLanguageProvider)
