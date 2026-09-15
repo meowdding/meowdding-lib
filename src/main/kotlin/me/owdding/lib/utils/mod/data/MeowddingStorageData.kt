@@ -15,14 +15,12 @@ import tech.thatgravyboat.skyblockapi.utils.json.Json.toJsonOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
 import tech.thatgravyboat.skyblockapi.utils.json.JsonObject
 import java.nio.file.Path
-import java.nio.file.StandardOpenOption
 import java.util.concurrent.CompletableFuture
 import kotlin.io.path.createParentDirectories
 import kotlin.io.path.deleteIfExists
 import kotlin.io.path.exists
 import kotlin.io.path.readText
 import kotlin.io.path.relativeTo
-import kotlin.io.path.writeText
 
 class MeowddingStorageData<T : Any> internal constructor(
     private val version: Int = 0,
@@ -101,7 +99,6 @@ class MeowddingStorageData<T : Any> internal constructor(
                 this["@${mod.MOD_ID}:version"] = version
                 this["@${mod.MOD_ID}:data"] = data.toJson(currentCodec) ?: return mod.warn("Failed to encode $data to json")
             }
-            path.writeText(json.toPrettyString(), Charsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE)
             FileUtils.write(path.toFile(), json.toPrettyString(), Charsets.UTF_8)
             mod.debug("saved $path")
         } catch (e: Exception) {
