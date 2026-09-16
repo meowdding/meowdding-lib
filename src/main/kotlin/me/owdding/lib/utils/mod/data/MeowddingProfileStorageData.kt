@@ -13,18 +13,14 @@ import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toJson
-import tech.thatgravyboat.skyblockapi.utils.json.Json.toJsonOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
 import tech.thatgravyboat.skyblockapi.utils.json.JsonObject
 import java.nio.file.Path
-import java.nio.file.StandardOpenOption
 import java.util.concurrent.CompletableFuture
 import kotlin.io.path.createParentDirectories
-import kotlin.io.path.deleteIfExists
 import kotlin.io.path.exists
 import kotlin.io.path.readText
 import kotlin.io.path.relativeTo
-import kotlin.io.path.writeText
 
 class MeowddingProfileStorageData<T : Any> internal constructor(
     private val version: Int = 0,
@@ -55,6 +51,7 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
     fun set(new: T) {
         if (isCurrentlyActive()) {
             data = new
+            save()
             return
         }
 
@@ -110,7 +107,6 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
                 this["@${mod.MOD_ID}:version"] = version
                 this["@${mod.MOD_ID}:data"] = data.toJson(codec) ?: return mod.warn("Failed to encode $data to json")
             }
-            lastPath.writeText(json.toPrettyString(), Charsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE)
             FileUtils.write(lastPath.toFile(), json.toPrettyString(), Charsets.UTF_8)
             mod.debug("saved $lastPath")
         } catch (e: Exception) {

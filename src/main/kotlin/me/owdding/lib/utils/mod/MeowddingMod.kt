@@ -13,6 +13,7 @@ import net.minecraft.resources.Identifier
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.getEmptyConstructor
+import java.nio.file.Path
 
 @Suppress("PropertyName")
 abstract class MeowddingMod(
@@ -25,14 +26,15 @@ abstract class MeowddingMod(
     val SELF: ModContainer = FabricLoader.getInstance().getModContainer(id).get()
     val MOD_ID: String = SELF.metadata.id
     val VERSION: String = SELF.metadata.version.friendlyString
+    open val RESOURCE_PATH: String = MOD_ID
 
-    fun id(path: String): Identifier = Identifier.fromNamespaceAndPath(MOD_ID, path)
+    fun id(path: String): Identifier = Identifier.fromNamespaceAndPath(RESOURCE_PATH, path)
 
-    internal open val storagePath = McClient.config.resolve("$MOD_ID/data")
+    open val storagePath: Path = McClient.config.resolve("$MOD_ID/data")
 
     abstract fun <T : Any> getCodec(clazz: Class<T>): Codec<T>
 
-    protected fun <T : Any> registerEvents(list: Iterable<T>) = list.forEach(SkyBlockAPI.eventBus::register)
+    fun <T : Any> registerEvents(list: Iterable<T>) = list.forEach(SkyBlockAPI.eventBus::register)
 
     open fun preInit() {}
 
