@@ -7,6 +7,29 @@
     "prefix": "mlib",
     "@references": {}
   },
+  "config": {
+    "@value": "Meowdding Lib Config",
+    "cosmetics": {
+      "@value": "Cosmetics",
+      "desc": "Cosmetics for specific players, loaded from: https://cosmetics.meowdd.ing/"
+    },
+    "suffix_cosmetic": {
+      "@value": "Name Suffix Cosmetic",
+      "desc": "Suffix after the player name in the Nametag & SkyCubed Tablist"
+    },
+    "cape_cosmetic": {
+      "@value": "Cape Cosmetic",
+      "desc": "Custom Capes"
+    },
+    "player_scale_cosmetic": {
+      "@value": "Player Scale Cosmetic",
+      "desc": "Changes the scale of players, limited to inside SkyBlock only"
+    },
+    "pv_cosmetic": {
+      "@value": "SkyBlockProfileViewer Cosmetics",
+      "desc": "All Cosmetics shown inside Pv, like custom text below name, pets, ..."
+    }
+  },
   "overlay": {
     "edit": {
       "@value": "<gold>Click to edit overlay.</gold>",
