@@ -108,17 +108,14 @@ abstract class MeowddingMod(
     //region Folder Storage Data
     inline fun <reified T : Any> folderStorage(
         folderName: String,
-        differentAlphaData: Boolean = true,
         codec: Codec<T> = getCodec(T::class.java),
-    ): MeowddingFolderStorageData<T> = folderStorage(folderName, 0, { codec }, differentAlphaData)
+    ): MeowddingFolderStorageData<T> = folderStorage(folderName, 0) { codec }
 
-    @JvmOverloads
     fun <T : Any> folderStorage(
         folderName: String,
         version: Int,
         codec: (Int) -> Codec<T>,
-        differentAlphaData: Boolean = true,
-    ) : MeowddingFolderStorageData<T> = MeowddingFolderStorageData(version, this, folderName, codec, differentAlphaData)
+    ) : MeowddingFolderStorageData<T> = MeowddingFolderStorageData(version, this, folderName, codec)
     //endregion
 
 
