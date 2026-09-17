@@ -28,6 +28,7 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
     private val defaultData: () -> T,
     val fileName: String,
     val codec: (Int) -> Codec<T>,
+    private val differentAlphaData: Boolean,
 ) {
 
     private fun isCurrentlyActive() = lastProfile != null && hasProfile() && currentProfile == lastProfile

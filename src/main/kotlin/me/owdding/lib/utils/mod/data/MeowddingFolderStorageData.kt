@@ -9,6 +9,7 @@ class MeowddingFolderStorageData<T : Any> internal constructor(
     private val mod: MeowddingMod,
     private val folderName: String,
     private val codec: (Int) -> Codec<T>,
+    private val differentAlphaData: Boolean,
 ) {
 
     private val storages = mutableMapOf<String, MeowddingStorageData<T>>()
