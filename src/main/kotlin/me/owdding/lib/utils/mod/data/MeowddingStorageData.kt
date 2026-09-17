@@ -4,8 +4,11 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.mojang.serialization.Codec
 import me.owdding.ktmodules.Module
+import me.owdding.lib.dev.alphaOverride
+import me.owdding.lib.events.NewHypixelAlphaDetectedEvent
 import me.owdding.lib.utils.mod.MeowddingMod
 import org.apache.commons.io.FileUtils
+import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
 import tech.thatgravyboat.skyblockapi.api.events.chat.ChatReceivedEvent
@@ -28,13 +31,13 @@ import kotlin.io.path.relativeTo
 class MeowddingStorageData<T : Any> internal constructor(
     private val version: Int = 0,
     private val mod: MeowddingMod,
-    defaultData: () -> T,
+    private val defaultData: () -> T,
     fileName: String,
     private val codec: (Int) -> Codec<T>,
     private val differentAlphaData: Boolean,
 ) {
 
-    fun get(): T = if (shouldUseAlphaData()) getAlphaData() else data
+    fun get(): T = if (shouldUseAlphaData()) getOrCreateAlphaData() else data
 
     fun save() {
         if (shouldUseAlphaData()) requiresAlphaSave.add(this)
@@ -43,7 +46,9 @@ class MeowddingStorageData<T : Any> internal constructor(
 
     fun delete() {
         deletePath(path)
+        this.data = defaultData()
         deletePath(alphaPath)
+        alphaData = defaultData()
     }
 
     init {
@@ -52,7 +57,7 @@ class MeowddingStorageData<T : Any> internal constructor(
 
     @Module
     internal companion object {
-        val allStorageDatas = mutableSetOf<MeowddingStorageData<*>>()
+        val allStorageDatas = mutableListOf<MeowddingStorageData<*>>()
         val requiresSave = mutableSetOf<MeowddingStorageData<*>>()
         val requiresAlphaSave = mutableSetOf<MeowddingStorageData<*>>()
 
@@ -70,6 +75,11 @@ class MeowddingStorageData<T : Any> internal constructor(
         @Subscription
         fun onChatReceived(event: ChatReceivedEvent.Pre) {
             if (!newAlphaRegex.contains(event.text)) return
+            NewHypixelAlphaDetectedEvent.post(SkyBlockAPI.eventBus)
+        }
+
+        @Subscription(NewHypixelAlphaDetectedEvent::class)
+        fun onNewAlpha() {
             allStorageDatas.forEach { it.deleteAlpha() }
         }
 
@@ -88,9 +98,9 @@ class MeowddingStorageData<T : Any> internal constructor(
     private var data: T
     private var alphaData: T? = null
 
-    private fun shouldUseAlphaData() = differentAlphaData && LocationAPI.onAlpha
+    private fun shouldUseAlphaData() = differentAlphaData && alphaOverride.toBoolean(LocationAPI.onAlpha)
 
-    private fun getAlphaData(): T {
+    private fun getOrCreateAlphaData(): T {
         var alphaData = alphaData
         if (alphaData == null) {
             // we use the current normal data as a default for alpha data
