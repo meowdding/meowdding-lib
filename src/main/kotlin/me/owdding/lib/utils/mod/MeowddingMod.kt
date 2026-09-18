@@ -51,49 +51,58 @@ abstract class MeowddingMod(
     //region Storage Data
     inline fun <reified T : Any> storage(
         fileName: String,
+        differentAlphaData: Boolean = true,
         codec: Codec<T> = getCodec(T::class.java),
     ): MeowddingStorageData<T> {
         val clazz = T::class
         val constructor = requireNotNull(clazz.getEmptyConstructor()) { "No empty constructor found for class ${clazz.simpleName}" }
-        return storage(fileName, { constructor.callBy(emptyMap()) }, 0) { codec }
+        return storage(fileName, { constructor.callBy(emptyMap()) }, 0, { codec }, differentAlphaData)
     }
 
     inline fun <reified T : Any> storage(
         fileName: String,
         noinline defaultData: () -> T,
+        differentAlphaData: Boolean = true,
         codec: Codec<T> = getCodec(T::class.java),
-    ): MeowddingStorageData<T> = storage(fileName, defaultData, 0) { codec }
+    ): MeowddingStorageData<T> = storage(fileName, defaultData, 0, { codec }, differentAlphaData)
 
+    @JvmOverloads
     fun <T : Any> storage(
         fileName: String,
         defaultData: () -> T,
         version: Int,
         codec: (Int) -> Codec<T>,
-    ) : MeowddingStorageData<T> = MeowddingStorageData(version, this, defaultData, fileName, codec)
+        differentAlphaData: Boolean = true,
+    ) : MeowddingStorageData<T> = MeowddingStorageData(version, this, defaultData, fileName, codec, differentAlphaData)
+
     //endregion
 
     //region Profile Storage Data
     inline fun <reified T : Any> profileStorage(
         fileName: String,
+        differentAlphaData: Boolean = true,
         codec: Codec<T> = getCodec(T::class.java),
     ): MeowddingProfileStorageData<T> {
         val clazz = T::class
         val constructor = requireNotNull(clazz.getEmptyConstructor()) { "No empty constructor found for class ${clazz.simpleName}" }
-        return profileStorage(fileName, { constructor.callBy(emptyMap()) }, 0) { codec }
+        return profileStorage(fileName, { constructor.callBy(emptyMap()) }, 0, { codec }, differentAlphaData)
     }
 
     inline fun <reified T : Any> profileStorage(
         fileName: String,
         noinline defaultData: () -> T,
+        differentAlphaData: Boolean = true,
         codec: Codec<T> = getCodec(T::class.java),
-    ): MeowddingProfileStorageData<T> = profileStorage(fileName, defaultData, 0) { codec }
+    ): MeowddingProfileStorageData<T> = profileStorage(fileName, defaultData, 0, { codec }, differentAlphaData)
 
+    @JvmOverloads
     fun <T : Any> profileStorage(
         fileName: String,
         defaultData: () -> T,
         version: Int,
         codec: (Int) -> Codec<T>,
-    ) : MeowddingProfileStorageData<T> = MeowddingProfileStorageData(version, this, defaultData, fileName, codec)
+        differentAlphaData: Boolean = true,
+    ) : MeowddingProfileStorageData<T> = MeowddingProfileStorageData(version, this, defaultData, fileName, codec, differentAlphaData)
     //endregion
 
     //region Folder Storage Data
