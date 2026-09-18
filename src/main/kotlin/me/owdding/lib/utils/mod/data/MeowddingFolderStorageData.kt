@@ -51,7 +51,7 @@ class MeowddingFolderStorageData<T : Any> internal constructor(
                 codec = codec,
                 differentAlphaData = false,
             )
-        }.save()
+        }.set(value)
     }
 
     fun get(id: String): T? = storages[id]?.get()

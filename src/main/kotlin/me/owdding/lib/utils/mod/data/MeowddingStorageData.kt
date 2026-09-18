@@ -39,6 +39,12 @@ class MeowddingStorageData<T : Any> internal constructor(
 
     fun get(): T = if (shouldUseAlphaData()) getOrCreateAlphaData() else data
 
+    fun set(value: T) {
+        if (shouldUseAlphaData()) this.alphaData = value
+        else this.data = value
+        save()
+    }
+
     fun save() {
         if (shouldUseAlphaData()) requiresAlphaSave.add(this)
         else requiresSave.add(this)
