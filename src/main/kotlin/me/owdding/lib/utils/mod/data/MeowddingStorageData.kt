@@ -48,7 +48,7 @@ class MeowddingStorageData<T : Any> internal constructor(
         deletePath(path)
         this.data = defaultData()
         deletePath(alphaPath)
-        alphaData = defaultData()
+        alphaData = null
     }
 
     init {
@@ -100,11 +100,22 @@ class MeowddingStorageData<T : Any> internal constructor(
 
     private fun shouldUseAlphaData() = differentAlphaData && alphaOverride.toBoolean(LocationAPI.onAlpha)
 
+    private fun copyData(): T {
+        mod.debug("Copying data from $path for alpha data")
+        try {
+            // we convert to json and then back to make a new copy of the data and not just a reference to it
+            return data.toJsonOrThrow(currentCodec).toDataOrThrow(currentCodec)
+        } catch (e: Exception) {
+            mod.error("Failed to copy $data to alphaData ", e)
+            return defaultData()
+        }
+    }
+
     private fun getOrCreateAlphaData(): T {
         var alphaData = alphaData
         if (alphaData == null) {
             // we use the current normal data as a default for alpha data
-            alphaData = loadData(alphaPath) { data }
+            alphaData = loadData(alphaPath, ::copyData)
             this.alphaData = alphaData
         }
         return alphaData
@@ -148,7 +159,6 @@ class MeowddingStorageData<T : Any> internal constructor(
     }
 
     private fun deleteAlpha() {
-        if (!shouldUseAlphaData()) return
         this.alphaData = null
         deletePath(alphaPath)
     }

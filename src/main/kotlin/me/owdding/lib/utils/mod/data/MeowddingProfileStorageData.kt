@@ -13,10 +13,10 @@ import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
 import tech.thatgravyboat.skyblockapi.api.events.profile.ProfileChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
-import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toJson
+import tech.thatgravyboat.skyblockapi.utils.json.Json.toJsonOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
 import tech.thatgravyboat.skyblockapi.utils.json.JsonObject
 import java.nio.file.Path
@@ -84,10 +84,23 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
         else requiresSave.add(this)
     }
 
+    private val currentCodec = codec(version)
+
+    private fun copyData(): T {
+        mod.debug("Copying data from $lastPath for alpha data")
+        try {
+            // we convert to json and then back to make a new copy of the data and not just a reference to it
+            return data.toJsonOrThrow(currentCodec).toDataOrThrow(currentCodec)
+        } catch (e: Exception) {
+            mod.error("Failed to copy $data to alphaData ", e)
+            return defaultData()
+        }
+    }
+
     private fun getOrCreateAlphaData(): T {
         var alphaData = alphaData
         if (alphaData == null) {
-            alphaData = loadData(lastAlphaPath) { data }
+            alphaData = loadData(lastAlphaPath, ::copyData)
             this.alphaData = alphaData
         }
         return alphaData
