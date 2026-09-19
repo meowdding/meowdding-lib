@@ -6,14 +6,15 @@ import com.teamresourceful.resourcefulconfig.api.types.elements.ResourcefulConfi
 import com.teamresourceful.resourcefulconfig.api.types.elements.ResourcefulConfigObjectEntryElement
 import com.teamresourceful.resourcefulconfig.common.config.Configurations
 import me.owdding.ktmodules.Module
+import tech.thatgravyboat.skyblockapi.utils.extentions.filterValuesNotNull
 
 @Module
 object MeowddingFeatures {
     val configurators: Map<MeowddingMod, ResourcefulConfig> by lazy {
-        @Suppress("UnstableApiUsage", "UNCHECKED_CAST")
+        @Suppress("UnstableApiUsage")
         MeowddingModsParser.mods.associateWith { mod ->
             Configurations.INSTANCE.modToConfigs()[mod.modId]?.firstOrNull()?.let { Configurations.INSTANCE.configs()[it] }
-        }.filterValues { it != null } as Map<MeowddingMod, ResourcefulConfig>
+        }.filterValuesNotNull()
     }
 
     val features by lazy {

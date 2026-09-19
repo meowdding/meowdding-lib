@@ -4,7 +4,9 @@ import com.mojang.serialization.Codec
 import me.owdding.ktmodules.AutoCollect
 import me.owdding.ktmodules.Module
 import me.owdding.lib.compat.HiddenElementRenderer
+import me.owdding.lib.compat.meowdding.MeowddingConfigTranslationChecker
 import me.owdding.lib.events.FinishRepoLoadingEvent
+import me.owdding.lib.events.MeowddingLibRegisterCommandsEvent
 import me.owdding.lib.events.StartRepoLoadingEvent
 import me.owdding.lib.generated.MeowddingLibCodecs
 import me.owdding.lib.generated.MeowddingLibDevModules
@@ -40,6 +42,7 @@ object MeowddingLib : MeowddingMod("meowdding-lib") {
 
         registerEvents(MeowddingLibModules.collected)
         if (McClient.isDev) registerEvents(MeowddingLibDevModules.collected)
+        MeowddingConfigTranslationChecker.addModToWarn(MOD_ID)
     }
 
     override fun postInit() {
@@ -67,8 +70,13 @@ object MeowddingLib : MeowddingMod("meowdding-lib") {
     }
 
     @Subscription
-    fun command(event: RegisterCommandsEvent) {
-        event.register("meowdding dev repo") {
+    fun onRegisterCommands(event: RegisterCommandsEvent) {
+        MeowddingLibRegisterCommandsEvent(event).post(SkyBlockAPI.eventBus)
+    }
+
+    @Subscription
+    internal fun command(event: MeowddingLibRegisterCommandsEvent) {
+        event.register("dev repo") {
             then("reload") {
                 callback {
                     RemoteRepo.invalidate()
