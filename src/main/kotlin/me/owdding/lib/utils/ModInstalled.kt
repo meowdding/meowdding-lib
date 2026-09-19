@@ -20,6 +20,7 @@ enum class KnownMods(val modId: String) {
     SKYHANNI("skyhanni"),
     SKYTILS("skytils"),
     FIRMAMENT("firmament"),
+    SKYBLOCK_ITEM_LIST("skyblock-item-list"),
 
     // "Performance" Mods
     SODIUM("sodium"),
@@ -28,10 +29,9 @@ enum class KnownMods(val modId: String) {
 
     // General Mods
     REI("roughlyenoughitems"),
-    SKYBLOCK_ITEM_LIST("skyblock-item-list")
     ;
 
-    val installed by lazy { FabricLoader.getInstance().isModLoaded(modId) }
+    val installed: Boolean by lazy { FabricLoader.getInstance().isModLoaded(modId) }
     val version: String? by lazy { FabricLoader.getInstance().getModContainer(modId).getOrNull()?.metadata?.version?.friendlyString }
 
     fun installed(action: (version: String?) -> Unit) {

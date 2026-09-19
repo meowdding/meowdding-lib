@@ -42,7 +42,6 @@ object MeowddingConfigTranslationChecker {
     private val modsToWarn = mutableSetOf<String>()
     private var hasSent = false
 
-
     fun addModToWarn(modId: String) = modsToWarn.add(modId)
 
     @Subscription(ServerChangeEvent::class)
