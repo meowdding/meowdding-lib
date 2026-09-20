@@ -84,7 +84,7 @@ private val pipelineCreator0: (GradientTextShader, Font.DisplayMode?, Boolean) -
     )
 }
 //? } else {
-/*private val pipelineCreator0: (GradientTextShader) -> RenderPipeline = MeowddingUtil.memoize {
+/*private val pipelineCreator0: (GradientTextShader) -> RenderPipeline = MemoizeUtil.memoize {
     RenderPipelines.register(
         RenderPipeline.builder(RenderPipelines.TEXT_SNIPPET, RenderPipelines.FOG_SNIPPET, MeowddingPipelines.GAME_TIME_SNIPPET)
             .withLocation(MeowddingLib.id("gradient_text"))
