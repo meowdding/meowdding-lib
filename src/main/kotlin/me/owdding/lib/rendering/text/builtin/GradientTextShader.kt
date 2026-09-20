@@ -10,7 +10,9 @@ import me.owdding.lib.MeowddingLib
 import me.owdding.lib.extensions.withShaderDefine
 import me.owdding.lib.generated.EnumCodec
 import me.owdding.lib.rendering.text.TextShader
-import me.owdding.lib.utils.MeowddingUtil
+import me.owdding.lib.utils.MemoizeUtil
+//? 26.1
+//import me.owdding.lib.utils.MeowddingPipelines
 import net.minecraft.client.gui.Font
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.network.chat.TextColor
@@ -89,7 +91,7 @@ private val pipelineCreator0: (GradientTextShader, Font.DisplayMode?, Boolean) -
 /*private val layout = BindGroupLayout.builder()
     .build()
 
-private val pipelineCreator0: (GradientTextShader, Font.DisplayMode?, Boolean) -> RenderPipeline = MeowddingUtil.memoize { shader, displayMode, grayscale ->
+private val pipelineCreator0: (GradientTextShader, Font.DisplayMode?, Boolean) -> RenderPipeline = MemoizeUtil.memoize { shader, displayMode, grayscale ->
     RenderPipelines.register(
         RenderPipeline.builder(
             *buildList {
@@ -143,7 +145,7 @@ private val pipelineCreator0: (GradientTextShader, Font.DisplayMode?, Boolean) -
     )
 }
 *///? } else {
-/*private val pipelineCreator0: (GradientTextShader) -> RenderPipeline = MeowddingUtil.memoize {
+/*private val pipelineCreator0: (GradientTextShader) -> RenderPipeline = MemoizeUtil.memoize {
     RenderPipelines.register(
         RenderPipeline.builder(RenderPipelines.TEXT_SNIPPET, RenderPipelines.FOG_SNIPPET, MeowddingPipelines.GAME_TIME_SNIPPET)
             .withLocation(MeowddingLib.id("gradient_text"))

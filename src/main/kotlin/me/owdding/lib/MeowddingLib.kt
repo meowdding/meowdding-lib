@@ -13,7 +13,6 @@ import me.owdding.lib.generated.MeowddingLibPostInitModules
 import me.owdding.lib.utils.mod.MeowddingMod
 import me.owdding.lib.utils.unsafeCast
 import me.owdding.repo.RemoteRepo
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents
 import net.fabricmc.loader.api.FabricLoader
 import org.spongepowered.asm.mixin.MixinEnvironment
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
