@@ -1,12 +1,12 @@
 [versions]
 minecraft-range = "26.3.x"
-minecraft = "26.3-rc-2"
+minecraft = "26.3"
 
 sbapi-mc-version = "26.3"
-fabric-api = "0.160.4+26.3"
+fabric-api = "0.161.0+26.3"
 
-resourceful-lib = "5.0.5"
-resourceful-config = "6.0.0"
+resourceful-lib = "6.0.0"
+resourceful-config = "6.0.1"
 resourceful-config-kotlin = "4.0.0-beta.1"
 olympus = "1.9.5"
 placeholders = "3.1.0-beta.1+26.2"
@@ -21,12 +21,12 @@ minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
 
 fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
 
-resourceful-lib = { module = "com.teamresourceful.resourcefullib:resourcefullib-fabric-26.3-rc-2", version.ref = "resourceful-lib" }
+resourceful-lib = { module = "com.teamresourceful.resourcefullib:resourcefullib-fabric-26.3", version.ref = "resourceful-lib" }
 resourceful-config = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-26.3", version.ref = "resourceful-config" }
 resourceful-config-kotlin = { module = "com.teamresourceful.resourcefulconfigkt:resourcefulconfigkt-26.1-rc-1", version.ref = "resourceful-config-kotlin" }
 
 #rei = { module = "me.shedaniel:RoughlyEnoughItems-api", version.ref = "rei" }
 
 iris = { module = "maven.modrinth:iris", version = "1.9.1+1.21.7-fabric" }
-olympus = { module = "earth.terrarium.olympus:olympus-fabric-26.3-rc-2", version.ref = "olympus" }
+olympus = { module = "earth.terrarium.olympus:olympus-fabric-26.3", version.ref = "olympus" }
 placeholders = { module = "eu.pb4:placeholder-api", version.ref = "placeholders" }
