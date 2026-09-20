@@ -14,7 +14,7 @@ import me.owdding.lib.MeowddingLib
 import me.owdding.lib.extensions.withShaderDefine
 import me.owdding.lib.generated.EnumCodec
 import me.owdding.lib.rendering.text.TextShader
-import me.owdding.lib.utils.MeowddingUtil
+import me.owdding.lib.utils.MemoizeUtil
 //? 26.1
 //import me.owdding.lib.utils.MeowddingPipelines
 import net.minecraft.client.gui.Font
@@ -30,7 +30,7 @@ import org.joml.Vector4f
 private val layout = BindGroupLayout.builder()
     .build()
 
-private val pipelineCreator0: (GradientTextShader, Font.DisplayMode?, Boolean) -> RenderPipeline = MeowddingUtil.memoize { shader, displayMode, grayscale ->
+private val pipelineCreator0: (GradientTextShader, Font.DisplayMode?, Boolean) -> RenderPipeline = MemoizeUtil.memoize { shader, displayMode, grayscale ->
     RenderPipelines.register(
         RenderPipeline.builder(
             *buildList {
