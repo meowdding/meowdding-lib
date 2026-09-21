@@ -14,9 +14,9 @@ import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 
 //? < 26.3 {
-//import me.owdding.lib.platform.screens.into
-//import tech.thatgravyboat.skyblockapi.helpers.McClient
-//? }
+/*import me.owdding.lib.platform.screens.into
+import tech.thatgravyboat.skyblockapi.helpers.McClient
+*///? }
 //~ if >= 26.3 'glfw.GLFW' -> 'sdl.SDLKeyboard'
 import org.lwjgl.sdl.SDLKeyboard
 

@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.BufferBuilder
 import com.mojang.blaze3d.vertex.ByteBufferBuilder
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
-import earth.terrarium.olympus.client.pipelines.renderer.PipelineRenderer
+import earth.terrarium.olympus.client.pipelines.renderer.PipelineSubmit
 import earth.terrarium.olympus.client.utils.TextureUtils
 import me.owdding.lib.rendering.MeowddingPipState
 import net.minecraft.client.gui.navigation.ScreenRectangle
@@ -18,8 +18,8 @@ import java.util.function.Supplier
 
 //? >= 26.2
 import com.mojang.renderpearl.api.pipeline.PrimitiveTopology
-//? >= 26.3
-import earth.terrarium.olympus.client.pipelines.renderer.PipelineTarget
+import earth.terrarium.olympus.client.pipelines.renderer.PipelineSubmitBuilder
+
 //? 26.1 {
 /*import net.minecraft.client.renderer.MultiBufferSource
 import java.util.function.Function
@@ -39,30 +39,45 @@ class TexturedCircleRenderer : PictureInPictureRenderer<TexturedCircleState>() {
         val scaledWidth = bounds.width * scale
         val scaledHeight = bounds.height * scale
 
-        //? >= 26.2 {
-        ByteBufferBuilder.exactlySized(DefaultVertexFormat.POSITION_TEX_COLOR.vertexSize * 4).use {
-            val bufferBuilder = BufferBuilder(it, PrimitiveTopology.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR)
-            //? } else
-            //val bufferBuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR)
+        val sprite = McClient.self.atlasManager.getAtlasOrThrow(AtlasIds.GUI).getSprite(state.texture)
 
-            bufferBuilder.addVertex(0f, 0f, 0f).setUv(-1f, -1f).setColor(-1)
-            bufferBuilder.addVertex(0f, scaledHeight, 0f).setUv(-1f, 1f).setColor(-1)
-            bufferBuilder.addVertex(scaledWidth, scaledHeight, 0f).setUv(1f, 1f).setColor(-1)
-            bufferBuilder.addVertex(scaledWidth, 0f, 0f).setUv(1f, -1f).setColor(-1)
+        val texture = TextureUtils.single(sprite.atlasLocation())
 
-            val sprite = McClient.self.atlasManager.getAtlasOrThrow(AtlasIds.GUI).getSprite(state.texture)
+        //? if 26.1 {
 
-            val texture = TextureUtils.single(sprite.atlasLocation())
+        //val bufferBuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR)
 
-            PipelineRenderer.builder(TexturedCirclePipeline.PIPELINE, bufferBuilder.buildOrThrow())
-                .textures(texture)
-                .uniform(TexturedCirclePipeline.UNIFORM_STORAGE, TexturedCircleUniform(sprite.u0, sprite.u1, sprite.v0, sprite.v1))
-                .color(-1)
-                //~ if >= 26.3 'draw(' -> 'draw(PipelineTarget(this)'
-                .draw(PipelineTarget(this))
+        //? else 26.2 {
 
-            //? >= 26.2
-        }
+        //ByteBufferBuilder.exactlySized(DefaultVertexFormat.POSITION_TEX_COLOR.vertexSize * 4).use {
+        //    val bufferBuilder = BufferBuilder(it, PrimitiveTopology.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR)
+        //? }
+
+        //? if >= 26.3 {
+
+        PipelineSubmit.builder(TexturedCirclePipeline.PIPELINE)
+            .vertices(DefaultVertexFormat.POSITION_TEX_COLOR, PrimitiveTopology.QUADS) { bufferBuilder ->
+
+        //? }
+
+                bufferBuilder.addVertex(0f, 0f, 0f).setUv(-1f, -1f).setColor(-1)
+                bufferBuilder.addVertex(0f, scaledHeight, 0f).setUv(-1f, 1f).setColor(-1)
+                bufferBuilder.addVertex(scaledWidth, scaledHeight, 0f).setUv(1f, 1f).setColor(-1)
+                bufferBuilder.addVertex(scaledWidth, 0f, 0f).setUv(1f, -1f).setColor(-1)
+
+            //? 26.3
+            }
+            //? < 26.3
+            //PipelineSubmit.builder(TexturedCirclePipeline.PIPELINE, bufferBuilder.buildOrThrow())
+
+            .textures(texture)
+            .uniform(TexturedCirclePipeline.UNIFORM_STORAGE, TexturedCircleUniform(sprite.u0, sprite.u1, sprite.v0, sprite.v1))
+            .color(-1)
+            //~ if >= 26.3 'draw(' -> 'submit(submitNodeCollector'
+            .submit(submitNodeCollector)
+
+        //? = 26.2
+        //}
     }
 
     override fun getTextureLabel(): String = "meowdding_lib_textured_circle"

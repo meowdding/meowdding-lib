@@ -28,8 +28,6 @@ import java.util.function.Supplier
 import com.mojang.renderpearl.api.textures.GpuTextureView
 import kotlin.jvm.java
 
-//? > 26.2
-import earth.terrarium.olympus.mixins.PictureInPictureRendererAccessor
 //? 26.1
 //import net.minecraft.client.renderer.MultiBufferSource
 //? 26.1
@@ -71,27 +69,20 @@ class ItemStateRenderer : PictureInPictureRenderer<ItemStateRenderer.State>() {
     }
 
     override fun blitTexture(state: State, gui: GuiRenderState) {
-        //? < 26.3
-        //val view = this.textureView!!
-        //? > 26.2
-        val view = (this as PictureInPictureRendererAccessor).`olympus$textureView`()
-
-        gui.addBlitToCurrentLayer(
-            BlitRenderState(
-                RenderPipelines.GUI_TEXTURED_PREMULTIPLIED_ALPHA,
-                TextureSetup.singleTexture(view, RenderSystem.getSamplerCache().getRepeat(FilterMode.LINEAR)),
-                state.pose(), state.x0(), state.y0(), state.x0() + 16, state.y0() + 16,
-                0.0F, 1.0F, 1.0F, 0.0F, -1,
-                state.scissorArea(),
-                null,
+        super.blitTexture(
+            state.copy(
+                x1 = state.x0() + 16,
+                y1 = state.y0() + 16,
             ),
+            gui,
         )
     }
 
     override fun getRenderStateClass(): Class<State> = State::class.java
     override fun getTextureLabel(): String = "meowdding_lib_item_state"
 
-    data class State(val state: GuiItemRenderState) : OlympusPictureInPictureRenderState<State> {
+    data class State @JvmOverloads constructor(val state: GuiItemRenderState, val x1: Int? = null, val y1: Int? = null) :
+        OlympusPictureInPictureRenderState<State> {
         //? if > 26.1 {
         override fun getFactory(): Supplier<PictureInPictureRenderer<State>> = Supplier { ItemStateRenderer() }
         //? } else
@@ -99,9 +90,9 @@ class ItemStateRenderer : PictureInPictureRenderer<ItemStateRenderer.State>() {
 
         override fun scale(): Float = maxOf(state.pose().m00(), state.pose().m11()) * 16f
         override fun x0(): Int = state.x()
-        override fun x1(): Int = state.x() + scale().toInt()
+        override fun x1(): Int = x1 ?: (state.x() + scale().toInt())
         override fun y0(): Int = state.y()
-        override fun y1(): Int = state.y() + scale().toInt()
+        override fun y1(): Int = y1 ?: (state.y() + scale().toInt())
         override fun scissorArea(): ScreenRectangle? = state.scissorArea()
         override fun bounds(): ScreenRectangle? = state.bounds()
         override fun pose(): Matrix3x2f = state.pose()

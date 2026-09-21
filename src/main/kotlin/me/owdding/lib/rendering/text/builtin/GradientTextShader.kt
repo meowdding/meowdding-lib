@@ -11,8 +11,6 @@ import me.owdding.lib.extensions.withShaderDefine
 import me.owdding.lib.generated.EnumCodec
 import me.owdding.lib.rendering.text.TextShader
 import me.owdding.lib.utils.MemoizeUtil
-//? 26.1
-//import me.owdding.lib.utils.MeowddingPipelines
 import net.minecraft.client.gui.Font
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.network.chat.TextColor
