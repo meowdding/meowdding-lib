@@ -32,7 +32,7 @@ import net.minecraft.client.renderer.oit.OitPipelineSet
 //import me.owdding.lib.utils.MeowddingPipelines
 
 //? >= 26.3 {
-private val pipelineCreator0: (GradientTextShader, Font.DisplayMode?, Boolean) -> Pair<RenderPipeline, OitPipelineSet?> = MeowddingUtil.memoize { shader, displayMode, grayscale ->
+private val pipelineCreator0: (GradientTextShader, Font.DisplayMode?, Boolean) -> Pair<RenderPipeline, OitPipelineSet?> = MemoizeUtil.memoize { shader, displayMode, grayscale ->
     val builder = RenderPipeline.builder(
             *buildList {
                 when (displayMode) {
