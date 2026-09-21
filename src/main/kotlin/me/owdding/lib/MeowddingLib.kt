@@ -16,6 +16,7 @@ import me.owdding.lib.generated.MeowddingLibPostInitModules
 import me.owdding.lib.utils.mod.MeowddingMod
 import me.owdding.lib.utils.unsafeCast
 import me.owdding.repo.RemoteRepo
+import org.spongepowered.asm.mixin.MixinEnvironment
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
@@ -31,6 +32,9 @@ object MeowddingLib : MeowddingMod("meowdding-lib") {
     private var notifyAboutRepoLoad = false
 
     init {
+        if (McClient.isDev) { // Ensures all mixins always apply while in dev
+            MixinEnvironment.getCurrentEnvironment().audit()
+        }
         registerEvents(MeowddingLibPreInitModules.collected)
     }
 

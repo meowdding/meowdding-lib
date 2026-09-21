@@ -56,7 +56,7 @@ object TagComponentSerialization : MeowddingLogger by MeowddingLib.featureLogger
                         "dir",
                         EnumCodec.forKCodec(GradientTextShader.Direction.entries.toTypedArray()),
                     ).resultOrPartial().getOrNull() ?: GradientTextShader.Direction.RIGHT
-                    val speed = data.get("speed", "0").toFloatOrNull() ?: 1f
+                    val speed = data.get("speed", "1").toFloatOrNull() ?: 1f
 
                     while (true) {
                         val current = data.getNext("0") ?: break
@@ -76,7 +76,7 @@ object TagComponentSerialization : MeowddingLogger by MeowddingLib.featureLogger
                             "dir",
                             EnumCodec.forKCodec(GradientTextShader.Direction.entries.toTypedArray()),
                         ).resultOrPartial().getOrNull() ?: GradientTextShader.Direction.RIGHT
-                        val speed = data.get("speed", "0").toFloatOrNull() ?: 1f
+                        val speed = data.get("speed", "1").toFloatOrNull() ?: 1f
                         PrideGradientNode(node, it, direction, speed)
                     },
                 )
