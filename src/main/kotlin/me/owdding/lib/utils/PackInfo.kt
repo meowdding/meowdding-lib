@@ -47,7 +47,7 @@ object SkyblockPackInfo : MeowddingLogger by MeowddingLib.featureLogger() {
         if (onDev) return
         val packet = event.packet as? ClientboundResourcePackPushPacket ?: return
 
-        if ((Mth.randomBetweenInclusive(source, 0, 100) >= 25) && McPlayer.self?.isMeowddingDev() != true) return
+        if ((Mth.randomBetweenInclusive(source, 0, 100) >= 25) && McPlayer.self?.isMeowddingMaintainer() != true) return
 
         val match = regex.matchEntire(packet.url) ?: return
         val uuid = match.groups["uuid"]?.value ?: return

@@ -1,29 +1,28 @@
 package me.owdding.lib.displays.circle
 
-//? > 26.1
-import com.mojang.blaze3d.PrimitiveTopology
 import com.mojang.blaze3d.buffers.Std140Builder
 import com.mojang.blaze3d.buffers.Std140SizeCalculator
-//? > 26.1
-import com.mojang.blaze3d.pipeline.BindGroupLayout
-//? = 26.1
-//import com.mojang.blaze3d.pipeline.BlendFunction
-import com.mojang.blaze3d.pipeline.DepthStencilState
-import com.mojang.blaze3d.pipeline.RenderPipeline
-import com.mojang.blaze3d.platform.CompareOp
-import com.mojang.blaze3d.shaders.UniformType
-import com.mojang.blaze3d.vertex.DefaultVertexFormat
-//? = 26.1
-//import com.mojang.blaze3d.vertex.VertexFormat
+import com.mojang.renderpearl.api.pipeline.RenderPipeline
+import com.mojang.renderpearl.api.pipeline.UniformType
 import earth.terrarium.olympus.client.pipelines.uniforms.RenderPipelineUniforms
 import earth.terrarium.olympus.client.pipelines.uniforms.RenderPipelineUniformsStorage
 import me.owdding.lib.MeowddingLib.id
 import me.owdding.lib.displays.circle.TexturedCirclePipeline.UNIFORM_NAME
-import net.minecraft.client.renderer.DynamicUniformStorage
+import net.minecraft.client.renderer.DynamicGpuDataStorage
 import net.minecraft.client.renderer.RenderPipelines
 import org.joml.Vector4f
 import java.nio.ByteBuffer
 import java.util.function.Supplier
+import com.mojang.blaze3d.vertex.DefaultVertexFormat
+
+//? > 26.1
+import com.mojang.renderpearl.api.pipeline.BindGroupLayout
+//? = 26.1 {
+/*import com.mojang.renderpearl.api.pipeline.BlendFunction
+import com.mojang.renderpearl.api.pipeline.DepthStencilState
+import com.mojang.renderpearl.api.pipeline.CompareOp
+import com.mojang.renderpearl.api.vertex.VertexFormat
+*///? }
 
 data class TexturedCircleUniform(val uvs: Vector4f) : RenderPipelineUniforms {
 
@@ -38,7 +37,7 @@ data class TexturedCircleUniform(val uvs: Vector4f) : RenderPipelineUniforms {
 object TexturedCirclePipeline {
 
     const val UNIFORM_NAME = "MLibTexturedCircleUniform"
-    val UNIFORM_STORAGE: Supplier<DynamicUniformStorage<TexturedCircleUniform>> =
+    val UNIFORM_STORAGE: Supplier<DynamicGpuDataStorage<TexturedCircleUniform>> =
         RenderPipelineUniformsStorage.register("Meowdding Textured Circle UBO", 2, Std140SizeCalculator().putVec4())
 
     //? >= 26.2 {

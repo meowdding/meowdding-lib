@@ -74,8 +74,8 @@ object REIRuntimeCompatability {
     fun getReiHoveredItemStack(): ItemStack? {
         if (!installed) return null
         //? < 26.2 {
-        /*return getHoveredItemStack()
-        *///?} else
+        //return getHoveredItemStack()
+        //?} else
         return null
     }
 
