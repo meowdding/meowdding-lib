@@ -38,6 +38,7 @@ object RenderTypes {
     val BLOCK_FILL_TRIANGLE_THROUGH_WALLS: RenderType = RenderType.create(
         "mlib/filled_through_walls/triangle",
         RenderSetup.builder(RenderPipelines.register(blockFillTriangleThroughWalls.build()))
+            //? >= 26.3
             .setOitPipelines(blockFillTriangleThroughWallsOit)
             .setLayeringTransform(LayeringTransform.VIEW_OFFSET_Z_LAYERING)
             //? 26.1
@@ -66,6 +67,7 @@ object RenderTypes {
     val BLOCK_FILL_QUAD = RenderType.create(
         "mlib/depth_block_fill/quad",
         RenderSetup.builder(RenderPipelines.register(blockFillQuad.build()))
+            //? >= 26.3
             .setOitPipelines(blockFillQuadOit)
             .setLayeringTransform(LayeringTransform.VIEW_OFFSET_Z_LAYERING)
             //? 26.1
@@ -84,6 +86,7 @@ object RenderTypes {
     val DEBUG_FILLED_BOX = RenderType.create(
         "mlib/debug_filled_box",
         RenderSetup.builder(debugFilledBox)
+            //? >= 26.3
             .setOitPipelines(debugFilledBoxOit)
             .sortOnUpload()
             .setLayeringTransform(LayeringTransform.VIEW_OFFSET_Z_LAYERING)
