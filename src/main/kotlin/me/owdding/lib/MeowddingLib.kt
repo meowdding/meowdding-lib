@@ -7,6 +7,7 @@ import me.owdding.lib.compat.HiddenElementRenderer
 import me.owdding.lib.events.FinishRepoLoadingEvent
 import me.owdding.lib.events.StartRepoLoadingEvent
 import me.owdding.lib.generated.MeowddingLibCodecs
+import me.owdding.lib.generated.MeowddingLibDevModules
 import me.owdding.lib.generated.MeowddingLibModules
 import me.owdding.lib.generated.MeowddingLibPreInitModules
 import me.owdding.lib.generated.MeowddingLibPostInitModules
@@ -42,6 +43,7 @@ object MeowddingLib : MeowddingMod("meowdding-lib") {
         }
 
         registerEvents(MeowddingLibModules.collected)
+        if (McClient.isDev) registerEvents(MeowddingLibDevModules.collected)
     }
 
     override fun postInit() {
@@ -111,3 +113,8 @@ internal annotation class PreInitModule
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)
 internal annotation class PostInitModule
+
+@AutoCollect("DevModules")
+@Target(AnnotationTarget.CLASS)
+@Retention(AnnotationRetention.SOURCE)
+internal annotation class DevModule
