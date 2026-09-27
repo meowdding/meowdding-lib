@@ -2,7 +2,7 @@ package me.owdding.lib.mixins;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.renderpearl.api.pipeline.RenderPipeline;
 import me.owdding.lib.accessor.FontPipelineHolder;
 import me.owdding.lib.helper.TextShaderRenderTypeHolder;
 import me.owdding.lib.rendering.text.TextShader;
@@ -42,13 +42,8 @@ public abstract class GlyphRenderTypesMixin implements TextShaderRenderTypeHolde
     private void select(Font.DisplayMode mode, CallbackInfoReturnable<RenderType> cir) {
         var shader = TextShaders.getActiveShader();
         if (shader != null) {
-            cir.setReturnValue(meowddinglib$getRenderType(shader.getPipeline(mode, meowdding$grayscale), mode, meowdding$grayscale));
+            cir.setReturnValue(meowddinglib$createType(shader, mode));
         }
-    }
-
-    @Override
-    public RenderType meowddinglib$getRenderType(RenderPipeline pipeline, Font.DisplayMode displayMode, Boolean grayScale) {
-        return TextShaderKt.createTextRenderType(pipeline, meowdding$texture, displayMode, grayScale);
     }
 
     @Override

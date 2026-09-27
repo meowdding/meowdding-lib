@@ -1,7 +1,7 @@
 package me.owdding.lib.utils
 
-import com.mojang.blaze3d.pipeline.RenderPipeline
-import com.mojang.blaze3d.shaders.UniformType
+import com.mojang.renderpearl.api.pipeline.RenderPipeline
+import com.mojang.renderpearl.api.pipeline.UniformType
 
 object MeowddingPipelines {
 

@@ -1,7 +1,7 @@
 package me.owdding.lib.layouts
 
+import earth.terrarium.olympus.client.components.base.BaseParentWidget
 import me.owdding.lib.extensions.floor
-import me.owdding.lib.platform.screens.*
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.events.GuiEventListener
@@ -10,10 +10,10 @@ import net.minecraft.client.gui.narration.NarratableEntry
 import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.client.gui.navigation.ScreenDirection
 import net.minecraft.client.gui.navigation.ScreenRectangle
+import net.minecraft.client.input.*
 import tech.thatgravyboat.skyblockapi.utils.extentions.scaled
 import java.util.*
 import kotlin.properties.Delegates.observable
-
 
 class ScalableWidget(val original: AbstractWidget) : BaseParentWidget(original.width, original.height), Scalable {
 

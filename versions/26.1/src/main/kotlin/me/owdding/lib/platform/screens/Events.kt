@@ -39,8 +39,14 @@ data class MouseButtonEvent(
     constructor(x: Double, y: Double, button: Int) : this(x, y, MouseButtonInfo(button, 0))
     val button get() = buttonInfo.button
     fun isLeftClick() = button == 0
+    @get:JvmName("getIsLeft")
+    val isLeft get() = button == 0
     fun isRightClick() = button == 1
+    @get:JvmName("getIsRight")
+    val isRight get() = button == 1
     fun isMiddleClick() = button == 2
+    @get:JvmName("getIsMiddle")
+    val isMiddle get() = button == 2
 }
 
 

@@ -29,5 +29,5 @@ dependencies {
     implementation(libs.kotlin.gradle.plugin.api)
     implementation(plugin(libs.plugins.kotlin.symbol.processor))
     implementation(plugin(libs.plugins.meowdding.auto.mixins))
-    implementation("dev.kikugie.stonecutter:dev.kikugie.stonecutter.gradle.plugin:0.10-alpha.2")
+    implementation("dev.kikugie.stonecutter:dev.kikugie.stonecutter.gradle.plugin:0.10-alpha.8")
 }

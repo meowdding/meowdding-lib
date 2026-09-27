@@ -2,10 +2,10 @@ package me.owdding.lib.utils
 
 import java.util.concurrent.ConcurrentHashMap
 
-object MeowddingUtil {
+object MemoizeUtil {
     data class Holder<Type>(val value: Type)
 
-    fun <Arg : Any, Result : Any> memoize(function: (Arg) -> Result): (Arg) -> Result =
+    fun <Arg, Result> memoize(function: (Arg) -> Result): (Arg) -> Result =
         object : Function1<Arg, Result> {
             private val cache = ConcurrentHashMap<Holder<Arg>, Holder<Result>>()
 

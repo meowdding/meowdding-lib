@@ -1,10 +1,7 @@
 package me.owdding.lib.mixins;
 
-import com.mojang.blaze3d.pipeline.RenderPipeline;
 import me.owdding.lib.accessor.FontPipelineHolder;
 import me.owdding.lib.rendering.text.TextShader;
-import net.minecraft.client.gui.Font;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
