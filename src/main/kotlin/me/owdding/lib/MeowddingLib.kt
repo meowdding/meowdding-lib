@@ -26,7 +26,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import java.util.concurrent.CompletableFuture
 
 @Module
-object MeowddingLib : MeowddingMod("meowdding-lib") {
+object MeowddingLib : MeowddingMod("meowdding-lib", loggerName = "MeowddingLib") {
     private var notifyAboutRepoLoad = false
 
     init {

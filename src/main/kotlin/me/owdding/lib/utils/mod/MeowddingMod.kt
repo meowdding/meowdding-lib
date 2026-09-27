@@ -20,7 +20,7 @@ abstract class MeowddingMod(
     id: String,
     loggerName: String? = null,
 ) : ClientModInitializer,
-    MeowddingLogger by MeowddingLogger.named(loggerName ?: MeowddingLogger.STACK_WALKER.callerClass.simpleName)
+    MeowddingLogger by MeowddingLogger.named(loggerName ?: FabricLoader.getInstance().getModContainer(id).get().metadata.name)
 {
 
     val SELF: ModContainer = FabricLoader.getInstance().getModContainer(id).get()
