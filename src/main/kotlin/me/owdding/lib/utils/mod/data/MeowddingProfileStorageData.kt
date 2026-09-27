@@ -4,16 +4,16 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.mojang.serialization.Codec
 import me.owdding.ktmodules.Module
-import me.owdding.lib.dev.alphaOverride
-import me.owdding.lib.events.NewHypixelAlphaDetectedEvent
 import me.owdding.lib.utils.mod.MeowddingMod
 import org.apache.commons.io.FileUtils
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
+import tech.thatgravyboat.skyblockapi.api.events.hypixel.FreshHypixelAlphaDetectedEvent
 import tech.thatgravyboat.skyblockapi.api.events.profile.ProfileChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
+import tech.thatgravyboat.skyblockapi.utils.Scheduling
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toJson
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toJsonOrThrow
@@ -48,7 +48,7 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
     private val defaultAlphaPath get() = defaultPath.resolve("alpha")
 
     private fun isCurrentlyActive() = lastProfile != null && hasProfile() && currentProfile == lastProfile
-    private fun shouldUseAlphaData() = differentAlphaData && alphaOverride.toBoolean(LocationAPI.onAlpha)
+    private fun shouldUseAlphaData() = differentAlphaData && LocationAPI.onAlpha
 
     private lateinit var data: T
     private var alphaData: T? = null
@@ -200,13 +200,13 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
         @Subscription
         fun onProfileSwitch(event: ProfileChangeEvent) {
             currentProfile = event.name
+            Scheduling.async { allStorageDatas.forEach { it.load() } }
         }
 
-        @Subscription(NewHypixelAlphaDetectedEvent::class)
+        @Subscription(FreshHypixelAlphaDetectedEvent::class)
         fun onNewAlpha() {
             allStorageDatas.forEach { it.deleteAlpha() }
         }
-
 
         @Subscription(TickEvent::class)
         @TimePassed("5s")

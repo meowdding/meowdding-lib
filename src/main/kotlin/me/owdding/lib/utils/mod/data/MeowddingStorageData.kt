@@ -4,22 +4,20 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.mojang.serialization.Codec
 import me.owdding.ktmodules.Module
-import me.owdding.lib.dev.alphaOverride
-import me.owdding.lib.events.NewHypixelAlphaDetectedEvent
 import me.owdding.lib.utils.mod.MeowddingMod
 import org.apache.commons.io.FileUtils
-import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
-import tech.thatgravyboat.skyblockapi.api.events.chat.ChatReceivedEvent
+import tech.thatgravyboat.skyblockapi.api.events.hypixel.FreshHypixelAlphaDetectedEvent
+import tech.thatgravyboat.skyblockapi.api.events.hypixel.HypixelJoinEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
+import tech.thatgravyboat.skyblockapi.utils.Scheduling
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toJson
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toJsonOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
 import tech.thatgravyboat.skyblockapi.utils.json.JsonObject
-import tech.thatgravyboat.skyblockapi.utils.regex.RegexUtils.contains
 import java.nio.file.Path
 import java.util.concurrent.CompletableFuture
 import kotlin.io.path.createParentDirectories
@@ -37,7 +35,7 @@ class MeowddingStorageData<T : Any> internal constructor(
     private val differentAlphaData: Boolean,
 ) {
 
-    fun get(): T = if (shouldUseAlphaData()) getOrCreateAlphaData() else data
+    fun get(): T = if (shouldUseAlphaData()) getOrCreateAlphaData() else getNormalData()
 
     fun set(value: T) {
         if (shouldUseAlphaData()) this.alphaData = value
@@ -67,8 +65,6 @@ class MeowddingStorageData<T : Any> internal constructor(
         val requiresSave = mutableSetOf<MeowddingStorageData<*>>()
         val requiresAlphaSave = mutableSetOf<MeowddingStorageData<*>>()
 
-        private val newAlphaRegex = "^Welcome to Hypixel SkyBlock on the Alpha Network!".toRegex()
-
         inline fun <reified T : Any> clearAndRun(collection: MutableCollection<T>, crossinline block: (T) -> Unit) {
             val copy = collection.toTypedArray<T>()
             collection.clear()
@@ -78,13 +74,16 @@ class MeowddingStorageData<T : Any> internal constructor(
             }
         }
 
-        @Subscription
-        fun onChatReceived(event: ChatReceivedEvent.Pre) {
-            if (!newAlphaRegex.contains(event.text)) return
-            NewHypixelAlphaDetectedEvent.post(SkyBlockAPI.eventBus)
+        private var firstJoin = false
+
+        @Subscription(HypixelJoinEvent::class)
+        fun onHypixelJoin() {
+            if (firstJoin) return
+            firstJoin = true
+            Scheduling.async { allStorageDatas.forEach { it } }
         }
 
-        @Subscription(NewHypixelAlphaDetectedEvent::class)
+        @Subscription(FreshHypixelAlphaDetectedEvent::class)
         fun onNewAlpha() {
             allStorageDatas.forEach { it.deleteAlpha() }
         }
@@ -101,12 +100,13 @@ class MeowddingStorageData<T : Any> internal constructor(
     private val path: Path = mod.storagePath.resolve(this.fileName)
     private val alphaPath: Path = mod.storagePath.resolve("alpha").resolve(this.fileName)
 
-    private var data: T
+    private var data: T? = null
     private var alphaData: T? = null
 
-    private fun shouldUseAlphaData() = differentAlphaData && alphaOverride.toBoolean(LocationAPI.onAlpha)
+    private fun shouldUseAlphaData() = differentAlphaData && LocationAPI.onAlpha
 
     private fun copyData(): T {
+        val data = getNormalData()
         mod.debug("Copying data from $path for alpha data")
         try {
             // we convert to json and then back to make a new copy of the data and not just a reference to it
@@ -115,6 +115,11 @@ class MeowddingStorageData<T : Any> internal constructor(
             mod.error("Failed to copy $data to alphaData ", e)
             return defaultData()
         }
+    }
+
+    private fun getNormalData(): T {
+        if (data == null) data = loadData(path, defaultData)
+        return data!!
     }
 
     private fun getOrCreateAlphaData(): T {
@@ -150,10 +155,6 @@ class MeowddingStorageData<T : Any> internal constructor(
         }
     }
 
-    init {
-        this.data = loadData(path, defaultData)
-    }
-
     private val currentCodec = codec(version)
 
     private fun deletePath(path: Path) {
@@ -170,6 +171,7 @@ class MeowddingStorageData<T : Any> internal constructor(
     }
 
     private fun saveToSystem() {
+        val data = data ?: return
         savePath(data, path)
     }
 
