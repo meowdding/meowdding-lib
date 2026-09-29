@@ -41,7 +41,7 @@ public class FontMixin {
         holder.meowddinglib$setPipeline(FontPipelineHolder.ACTIVE_PIPELINE.get());
     }
 
-    @WrapMethod(method = "accept*")
+    @WrapMethod(method = "accept")
     public boolean accept(int position, Style style, int c, Operation<Boolean> original) {
         var pipeline = FontPipelineHolder.ACTIVE_PIPELINE;
 
