@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import me.owdding.lib.accessor.FontPipelineHolder;
-import me.owdding.lib.helper.TextShaderHolder;
 import me.owdding.lib.rendering.text.TextShaders;
 import net.minecraft.client.gui.font.TextRenderable;
 import net.minecraft.network.chat.Style;
@@ -42,20 +41,19 @@ public class FontMixin {
         holder.meowddinglib$setPipeline(FontPipelineHolder.ACTIVE_PIPELINE.get());
     }
 
-    @WrapMethod(method = "accept")
+    @WrapMethod(method = "accept*")
     public boolean accept(int position, Style style, int c, Operation<Boolean> original) {
         var pipeline = FontPipelineHolder.ACTIVE_PIPELINE;
 
         var previous = pipeline.get();
         var previousShader = TextShaders.getActiveShader();
 
-        if ((Object) style instanceof TextShaderHolder holder) {
-            var shader = holder.meowddinglib$getTextShader();
-            if (shader != null) {
-                pipeline.set(shader);
-                TextShaders.setActiveShader(shader);
-            }
+        var shader = style.meowddinglib$getTextShader();
+        if (shader != null) {
+            pipeline.set(shader);
+            TextShaders.setActiveShader(shader);
         }
+
 
         var result = original.call(position, style, c);
         pipeline.set(previous);
