@@ -8,6 +8,7 @@ import com.teamresourceful.resourcefulconfigkt.api.RConfigKtEntry
 import com.teamresourceful.resourcefulconfigkt.api.TransformedEntry
 import com.teamresourceful.resourcefulconfigkt.api.builders.CategoryBuilder
 import com.teamresourceful.resourcefulconfigkt.api.builders.SeparatorBuilder
+import me.owdding.lib.rendering.text.serialization.TagComponentSerialization
 
 var SeparatorBuilder.translation: String
     get() = ""
@@ -30,3 +31,15 @@ fun <T, R> ConfigDelegateProvider<RConfigKtEntry<T>>.cachedTransform(from: (R) -
 fun <T, R> ConfigDelegateProvider<RConfigKtEntry<T>>.transform(from: (R) -> T, to: (T) -> R) = TransformedEntry(this, from, to)
 
 fun <T> ConfigDelegateProvider<RConfigKtEntry<T>>.observable(onChange: (T, T) -> Unit) = ObservableEntry(this, onChange)
+
+fun ConfigDelegateProvider<RConfigKtEntry<String>>.cachedTransformPlaceholderComponent() = CachedTransformedEntry(
+    this,
+    { TagComponentSerialization.serialize(it) },
+    { TagComponentSerialization.deserialize(it) },
+)
+
+fun ConfigDelegateProvider<RConfigKtEntry<Array<out String>>>.cachedTransformPlaceholderComponents() = CachedTransformedEntry(
+    this,
+    { list -> list.map { TagComponentSerialization.serialize(it) }.toTypedArray() },
+    { list -> list.map { TagComponentSerialization.deserialize(it) } },
+)
