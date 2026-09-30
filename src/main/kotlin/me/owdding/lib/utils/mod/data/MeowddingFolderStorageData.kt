@@ -29,6 +29,7 @@ class MeowddingFolderStorageData<T : Any> internal constructor(
                         defaultData = { throw IllegalStateException("No default data for folder storage!") },
                         fileName = "$folderName/$id",
                         codec = codec,
+                        differentAlphaData = false,
                     )
                 } catch (e: Exception) {
                     mod.error("Failed to load storage file: ${it.relativeTo(defaultPath)}", e)
@@ -48,14 +49,17 @@ class MeowddingFolderStorageData<T : Any> internal constructor(
                 defaultData = { value },
                 fileName = "$folderName/$id",
                 codec = codec,
+                differentAlphaData = false,
             )
-        }.save()
+        }.set(value)
     }
 
     fun get(id: String): T? = storages[id]?.get()
 
     fun remove(id: String) {
-        storages.remove(id)?.delete()
+        val storage = storages.remove(id) ?: return
+        storage.delete()
+        MeowddingStorageData.allStorageDatas.remove(storage)
     }
 
     private fun files() =
@@ -65,7 +69,9 @@ class MeowddingFolderStorageData<T : Any> internal constructor(
     fun getAll(): Map<String, T> = storages.mapValues { it.value.get() }
 
     fun refresh() {
+        MeowddingStorageData.allStorageDatas.removeAll(storages.values)
         storages.clear()
         load()
     }
+
 }
