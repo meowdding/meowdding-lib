@@ -4,16 +4,22 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.mojang.serialization.Codec
 import me.owdding.ktmodules.Module
+import me.owdding.lib.dev.alphaOverride
+import me.owdding.lib.events.NewHypixelAlphaDetectedEvent
 import me.owdding.lib.utils.mod.MeowddingMod
 import org.apache.commons.io.FileUtils
+import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
+import tech.thatgravyboat.skyblockapi.api.events.chat.ChatReceivedEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
+import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toJson
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toJsonOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
 import tech.thatgravyboat.skyblockapi.utils.json.JsonObject
+import tech.thatgravyboat.skyblockapi.utils.regex.RegexUtils.contains
 import java.nio.file.Path
 import java.util.concurrent.CompletableFuture
 import kotlin.io.path.createParentDirectories
@@ -25,46 +31,109 @@ import kotlin.io.path.relativeTo
 class MeowddingStorageData<T : Any> internal constructor(
     private val version: Int = 0,
     private val mod: MeowddingMod,
-    defaultData: () -> T,
+    private val defaultData: () -> T,
     fileName: String,
-    codec: (Int) -> Codec<T>,
+    private val codec: (Int) -> Codec<T>,
+    private val differentAlphaData: Boolean,
 ) {
 
-    fun get(): T = data
+    fun get(): T = if (shouldUseAlphaData()) getOrCreateAlphaData() else data
+
+    fun set(value: T) {
+        if (shouldUseAlphaData()) this.alphaData = value
+        else this.data = value
+        save()
+    }
 
     fun save() {
-        requiresSave.add(this)
+        if (shouldUseAlphaData()) requiresAlphaSave.add(this)
+        else requiresSave.add(this)
+    }
+
+    fun delete() {
+        deletePath(path)
+        this.data = defaultData()
+        deletePath(alphaPath)
+        alphaData = null
+    }
+
+    init {
+        allStorageDatas.add(this)
     }
 
     @Module
     internal companion object {
+        val allStorageDatas = mutableListOf<MeowddingStorageData<*>>()
         val requiresSave = mutableSetOf<MeowddingStorageData<*>>()
+        val requiresAlphaSave = mutableSetOf<MeowddingStorageData<*>>()
+
+        private val newAlphaRegex = "^Welcome to Hypixel SkyBlock on the Alpha Network!".toRegex()
+
+        inline fun <reified T : Any> clearAndRun(collection: MutableCollection<T>, crossinline block: (T) -> Unit) {
+            val copy = collection.toTypedArray<T>()
+            collection.clear()
+            if (copy.isEmpty()) return
+            CompletableFuture.runAsync {
+                copy.forEach(block)
+            }
+        }
+
+        @Subscription
+        fun onChatReceived(event: ChatReceivedEvent.Pre) {
+            if (!newAlphaRegex.contains(event.text)) return
+            NewHypixelAlphaDetectedEvent.post(SkyBlockAPI.eventBus)
+        }
+
+        @Subscription(NewHypixelAlphaDetectedEvent::class)
+        fun onNewAlpha() {
+            allStorageDatas.forEach { it.deleteAlpha() }
+        }
 
         @Subscription(TickEvent::class)
         @TimePassed("5s")
         fun onTick() {
-            val toSave = requiresSave.toTypedArray()
-            requiresSave.clear()
-            CompletableFuture.runAsync {
-                toSave.forEach {
-                    it.saveToSystem()
-                }
-            }
+            clearAndRun(requiresSave) { it.saveToSystem() }
+            clearAndRun(requiresAlphaSave) { it.saveAlphaToSystem() }
         }
     }
 
-    private val path: Path = mod.storagePath.resolve("${fileName.removePrefix(".json")}.json")
+    private val fileName = "${fileName.removePrefix(".json")}.json"
+    private val path: Path = mod.storagePath.resolve(this.fileName)
+    private val alphaPath: Path = mod.storagePath.resolve("alpha").resolve(this.fileName)
 
-    private val data: T
+    private var data: T
+    private var alphaData: T? = null
 
-    init {
+    private fun shouldUseAlphaData() = differentAlphaData && alphaOverride.toBoolean(LocationAPI.onAlpha)
+
+    private fun copyData(): T {
+        mod.debug("Copying data from $path for alpha data")
+        try {
+            // we convert to json and then back to make a new copy of the data and not just a reference to it
+            return data.toJsonOrThrow(currentCodec).toDataOrThrow(currentCodec)
+        } catch (e: Exception) {
+            mod.error("Failed to copy $data to alphaData ", e)
+            return defaultData()
+        }
+    }
+
+    private fun getOrCreateAlphaData(): T {
+        var alphaData = alphaData
+        if (alphaData == null) {
+            // we use the current normal data as a default for alpha data
+            alphaData = loadData(alphaPath, ::copyData)
+            this.alphaData = alphaData
+        }
+        return alphaData
+    }
+
+    private fun loadData(path: Path, default: () -> T): T {
         if (!path.exists()) {
             path.createParentDirectories()
-            this.data = defaultData()
+            return default()
         } else {
             var newData: T
             try {
-
                 val readJson = JsonParser.parseString(path.readText()) as JsonObject
                 val version = readJson.get("@${mod.MOD_ID}:version").asInt
                 var data = readJson.get("@${mod.MOD_ID}:data")
@@ -75,15 +144,19 @@ class MeowddingStorageData<T : Any> internal constructor(
                 newData = data.toDataOrThrow(codec)
             } catch (e: Exception) {
                 mod.error("Failed to load ${path.relativeTo(mod.storagePath)}.", e)
-                newData = defaultData()
+                newData = default()
             }
-            this.data = newData
+            return newData
         }
+    }
+
+    init {
+        this.data = loadData(path, defaultData)
     }
 
     private val currentCodec = codec(version)
 
-    fun delete() {
+    private fun deletePath(path: Path) {
         try {
             path.deleteIfExists()
         } catch (e: Exception) {
@@ -91,7 +164,16 @@ class MeowddingStorageData<T : Any> internal constructor(
         }
     }
 
+    private fun deleteAlpha() {
+        this.alphaData = null
+        deletePath(alphaPath)
+    }
+
     private fun saveToSystem() {
+        savePath(data, path)
+    }
+
+    private fun savePath(data: T, path: Path) {
         mod.debug("Saving $path")
         try {
             val version = this.version
@@ -104,5 +186,9 @@ class MeowddingStorageData<T : Any> internal constructor(
         } catch (e: Exception) {
             mod.error("Failed to save $data to file", e)
         }
+    }
+    private fun saveAlphaToSystem() {
+        val alphaData = alphaData ?: return
+        savePath(alphaData, alphaPath)
     }
 }
