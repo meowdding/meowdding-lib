@@ -35,7 +35,7 @@ object MeowddingModsParser {
 data class MeowddingMod(
     val name: String,
     @FieldName("mod_id") val modId: String,
-    @FieldName("config_id") val configId: String,
+    @FieldName("config_id") val configId: String?,
     @FieldName("modrinth_slug") val modrinthSlug: String,
     @FieldName("github_repo") val githubRepo: String,
     val icon: String,
