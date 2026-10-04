@@ -23,6 +23,11 @@ import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyPressedEvent
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import kotlin.jvm.optionals.getOrNull
 
+//? < 26.2 {
+/*import tech.thatgravyboat.skyblockapi.api.events.base.CancellableSkyBlockEvent
+import net.minecraft.client.gui.layouts.LayoutElement
+*///?}
+
 // TONOTDO: dont uncomment this when rei is released, this is removed on purpose as we want to remove this event
 //? < 26.2 {
 /*@Deprecated("Use ItemListRegisterExclusionZonesEvent for more compatability", ReplaceWith("me.owdding.lib.events.ItemListRegisterExclusionZonesEvent"))
