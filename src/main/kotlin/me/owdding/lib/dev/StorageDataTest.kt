@@ -5,25 +5,17 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.serialization.Codec
 import me.owdding.lib.DevModule
 import me.owdding.lib.MeowddingLib
-import me.owdding.lib.events.NewHypixelAlphaDetectedEvent
 import me.owdding.lib.generated.CodecUtils
-import net.minecraft.util.TriState
-import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent.Companion.argument
-import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
-import tech.thatgravyboat.skyblockapi.utils.command.EnumArgument
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
-
-internal var alphaOverride = TriState.DEFAULT
 
 @DevModule
 internal object StorageDataTest {
 
-
-    fun path(name: String) = "storage_test/${name}_storage_test"
+    private fun path(name: String) = "storage_test/${name}_storage_test"
 
     val NORMAL_STORAGE = MeowddingLib.storage(
         path("normal"),
@@ -45,18 +37,6 @@ internal object StorageDataTest {
     @Subscription
     fun onRegisterCommands(event: RegisterCommandsEvent) {
         event.register("meowdding dev storage_test") {
-            then("alpha") {
-                thenCallback("override_state", EnumArgument<TriState>()) {
-                    val state = argument<TriState>("override_state")
-                    alphaOverride = state
-                }
-                thenCallback("trigger_new_alpha") {
-                    if (alphaOverride.toBoolean(LocationAPI.onAlpha)) {
-                        NewHypixelAlphaDetectedEvent.post(SkyBlockAPI.eventBus)
-                    }
-                }
-            }
-
             then("normal") {
                 thenCallback("add string", StringArgumentType.string()) {
                     NORMAL_STORAGE.get().add(argument("string"))

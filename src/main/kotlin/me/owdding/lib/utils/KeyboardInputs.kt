@@ -5,7 +5,7 @@ import me.owdding.ktmodules.Module
 import me.owdding.lib.platform.isMouseDown
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper
 import net.minecraft.client.KeyMapping
-import net.minecraft.client.input.*
+import net.minecraft.client.input.KeyEvent
 import net.minecraft.resources.Identifier
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyPressedEvent
@@ -15,6 +15,7 @@ import tech.thatgravyboat.skyblockapi.helpers.McScreen
 
 //? < 26.3 {
 /*import me.owdding.lib.platform.screens.into
+import me.owdding.lib.platform.screens.KeyEvent as MeowddingKeyEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 *///? }
 //~ if >= 26.3 'glfw.GLFW' -> 'sdl.SDLKeyboard'
@@ -42,6 +43,9 @@ data class KeyboardInputs(
         //~ if >= 26.3 'scancode' -> 'keycode()'
         return isDown(event.key, event.keycode())
     }
+
+    //? if < 26.3
+    //fun isDown(event: MeowddingKeyEvent): Boolean = isDown(event.key, event.scancode)
 
     fun isDown(key: Int, scanCode: Int): Boolean {
         //~ if >= 26.3 'GLFW.glfwGetKeyName(key, scanCode)' -> '(SDLKeyboard.SDL_GetKeyName(key) ?: return false)'
@@ -93,7 +97,7 @@ internal fun keyMapping(translationKey: String, keyCode: Int, category: Identifi
 }
 
 //? < 26.3 {
-/*fun KeyMapping.matches(event: KeyEvent): Boolean {
+/*fun KeyMapping.matches(event: MeowddingKeyEvent): Boolean {
     return this.matches(event.into())
 }
 *///? }
@@ -125,6 +129,9 @@ open class MeowddingKeybind(
     //~ if >= 26.3 'key, event.scanCode)' -> 'key)'
     fun matches(event: ScreenKeyPressedEvent) = matches(event.key)
     fun matches(event: KeyEvent) = key.matches(event)
+
+    //? if < 26.3
+    //fun matches(event: MeowddingKeyEvent) = key.matches(event)
 
     @Module
     companion object {
