@@ -45,9 +45,9 @@ object TextCodecs {
     val STYLE_WITH_SHADER_CODEC: MapCodec<Style> = RecordCodecBuilder.mapCodec {
         it.group(
             Style.Serializer.MAP_CODEC.forGetter(Function.identity()),
-            TextShaders.CODEC.optionalFieldOf("text_shader").forNullGetter { style -> (style as? TextShaderHolder)?.`meowddinglib$getTextShader`() },
+            TextShaders.CODEC.optionalFieldOf("text_shader").forNullGetter { style -> style.`meowddinglib$getTextShader`() },
         ).apply(it) { style, shader ->
-            (style as? TextShaderHolder)?.`meowddinglib$withTextShader`(shader.getOrNull())
+            style.`meowddinglib$withTextShader`(shader.getOrNull())
         }
     }
 

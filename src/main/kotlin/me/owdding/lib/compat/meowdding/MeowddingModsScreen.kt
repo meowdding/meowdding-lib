@@ -2,7 +2,6 @@ package me.owdding.lib.compat.meowdding
 
 import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
 import com.teamresourceful.resourcefulconfig.common.config.Configurations
-import net.minecraft.client.gui.screens.Screen
 import earth.terrarium.olympus.client.components.base.ListWidget
 import earth.terrarium.olympus.client.utils.ListenableState
 import me.owdding.ktmodules.Module
@@ -17,6 +16,7 @@ import me.owdding.lib.layouts.asWidget
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.FrameLayout
+import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
@@ -105,17 +105,21 @@ class MeowddingModsScreen : Screen(Text.of("Meowdding Mods")) {
 
                         features.forEach { feature ->
                             if (!feature.contains(input, ignoreCase = true)) return@forEach
-                            widget(
-                                Displays.text(feature, color = { TextColor.GRAY.toUInt() }).asButtonLeft {
-                                    val config = Configurations.INSTANCE.getConfig(mod.configId + "/config") ?: return@asButtonLeft
-                                    McClient.setScreenAsync {
-                                        ResourcefulConfigScreen.make(config)
-                                            .withParent(this@MeowddingModsScreen)
-                                            .withQuery(feature)
-                                            .build()
-                                    }
-                                },
-                            )
+                            val textDisplay = Displays.text(feature, color = { TextColor.GRAY.toUInt() })
+
+                            mod.configId?.let { configId ->
+                                widget(
+                                    textDisplay.asButtonLeft {
+                                        val config = Configurations.INSTANCE.getConfig("$configId/config") ?: return@asButtonLeft
+                                        McClient.setScreenAsync {
+                                            ResourcefulConfigScreen.make(config)
+                                                .withParent(this@MeowddingModsScreen)
+                                                .withQuery(feature)
+                                                .build()
+                                        }
+                                    },
+                                )
+                            } ?: display(textDisplay)
                         }
                         spacer(maxFeatureWidth)
                     }

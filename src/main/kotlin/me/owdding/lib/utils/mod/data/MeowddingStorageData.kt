@@ -20,11 +20,9 @@ import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
 import tech.thatgravyboat.skyblockapi.utils.json.JsonObject
 import java.nio.file.Path
 import java.util.concurrent.CompletableFuture
-import kotlin.io.path.createParentDirectories
-import kotlin.io.path.deleteIfExists
-import kotlin.io.path.exists
-import kotlin.io.path.readText
-import kotlin.io.path.relativeTo
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
+import kotlin.io.path.*
 
 class MeowddingStorageData<T : Any> internal constructor(
     private val version: Int = 0,
@@ -55,6 +53,14 @@ class MeowddingStorageData<T : Any> internal constructor(
         alphaData = null
     }
 
+    inline fun edit(edit: T.() -> Unit?) {
+        contract {
+            callsInPlace(edit, InvocationKind.EXACTLY_ONCE)
+        }
+        val data = get()
+        if (edit(data) != null) save()
+    }
+
     init {
         allStorageDatas.add(this)
     }
@@ -80,7 +86,7 @@ class MeowddingStorageData<T : Any> internal constructor(
         fun onHypixelJoin() {
             if (firstJoin) return
             firstJoin = true
-            Scheduling.async { allStorageDatas.forEach { it } }
+            Scheduling.async { allStorageDatas.forEach { it.get() } } // load all data async
         }
 
         @Subscription(FreshHypixelAlphaDetectedEvent::class)
@@ -97,8 +103,12 @@ class MeowddingStorageData<T : Any> internal constructor(
     }
 
     private val fileName = "${fileName.removePrefix(".json")}.json"
-    private val path: Path = mod.storagePath.resolve(this.fileName)
-    private val alphaPath: Path = mod.storagePath.resolve("alpha").resolve(this.fileName)
+
+    private val defaultPath get() = mod.storagePath
+    private val defaultAlphaPath get() = defaultPath.resolve("alpha")
+
+    private val path: Path = defaultPath.resolve(this.fileName)
+    private val alphaPath: Path = defaultAlphaPath.resolve(this.fileName)
 
     private var data: T? = null
     private var alphaData: T? = null
@@ -107,7 +117,7 @@ class MeowddingStorageData<T : Any> internal constructor(
 
     private fun copyData(): T {
         val data = getNormalData()
-        mod.debug("Copying data from $path for alpha data")
+        mod.debug("Copying data from ${path.relativeTo(defaultPath)} for alpha data")
         try {
             // we convert to json and then back to make a new copy of the data and not just a reference to it
             return data.toJsonOrThrow(currentCodec).toDataOrThrow(currentCodec)
@@ -148,7 +158,7 @@ class MeowddingStorageData<T : Any> internal constructor(
                 val codec = codec(version)
                 newData = data.toDataOrThrow(codec)
             } catch (e: Exception) {
-                mod.error("Failed to load ${path.relativeTo(mod.storagePath)}.", e)
+                mod.error("Failed to load ${path.relativeTo(defaultPath)}.", e)
                 newData = default()
             }
             return newData
@@ -161,7 +171,7 @@ class MeowddingStorageData<T : Any> internal constructor(
         try {
             path.deleteIfExists()
         } catch (e: Exception) {
-            mod.error("Failed to delete $path", e)
+            mod.error("Failed to delete ${path.relativeTo(defaultPath)}", e)
         }
     }
 
@@ -176,7 +186,6 @@ class MeowddingStorageData<T : Any> internal constructor(
     }
 
     private fun savePath(data: T, path: Path) {
-        mod.debug("Saving $path")
         try {
             val version = this.version
             val json = JsonObject {
@@ -184,9 +193,9 @@ class MeowddingStorageData<T : Any> internal constructor(
                 this["@${mod.MOD_ID}:data"] = data.toJson(currentCodec) ?: return mod.warn("Failed to encode $data to json")
             }
             FileUtils.write(path.toFile(), json.toPrettyString(), Charsets.UTF_8)
-            mod.debug("saved $path")
+            mod.debug("saved ${path.relativeTo(defaultPath)}")
         } catch (e: Exception) {
-            mod.error("Failed to save $data to file", e)
+            mod.error("Failed to save $data to ${path.relativeTo(defaultPath)}", e)
         }
     }
     private fun saveAlphaToSystem() {

@@ -20,14 +20,9 @@ import tech.thatgravyboat.skyblockapi.utils.json.Json.toJsonOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
 import tech.thatgravyboat.skyblockapi.utils.json.JsonObject
 import java.nio.file.Path
-import kotlin.io.path.createParentDirectories
-import kotlin.io.path.deleteIfExists
-import kotlin.io.path.exists
-import kotlin.io.path.isDirectory
-import kotlin.io.path.isRegularFile
-import kotlin.io.path.readText
-import kotlin.io.path.relativeTo
-import kotlin.io.path.useDirectoryEntries
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
+import kotlin.io.path.*
 
 class MeowddingProfileStorageData<T : Any> internal constructor(
     private val version: Int = 0,
@@ -37,26 +32,6 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
     val codec: (Int) -> Codec<T>,
     private val differentAlphaData: Boolean,
 ) {
-
-    init {
-        allStorageDatas.add(this)
-    }
-
-    private val fileName = "${fileName.removePrefix(".json")}.json"
-
-    private val defaultPath get() = mod.storagePath
-    private val defaultAlphaPath get() = defaultPath.resolve("alpha")
-
-    private fun isCurrentlyActive() = lastProfile != null && hasProfile() && currentProfile == lastProfile
-    private fun shouldUseAlphaData() = differentAlphaData && LocationAPI.onAlpha
-
-    private lateinit var data: T
-    private var alphaData: T? = null
-
-    private lateinit var lastPath: Path
-    private lateinit var lastAlphaPath: Path
-    private var lastProfile: String? = null
-
     fun get(): T? {
         if (!isCurrentlyActive()) {
             saveActiveToSystem()
@@ -84,10 +59,37 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
         else requiresSave.add(this)
     }
 
+    inline fun edit(edit: T.() -> Unit?) {
+        contract {
+            callsInPlace(edit, InvocationKind.AT_MOST_ONCE)
+        }
+        val data = get() ?: return
+        if (edit(data) != null) save()
+    }
+
+    init {
+        allStorageDatas.add(this)
+    }
+
+    private val fileName = "${fileName.removePrefix(".json")}.json"
+
+    private val defaultPath get() = mod.storagePath
+    private val defaultAlphaPath get() = defaultPath.resolve("alpha")
+
+    private fun isCurrentlyActive() = lastProfile != null && hasProfile() && currentProfile == lastProfile
+    private fun shouldUseAlphaData() = differentAlphaData && LocationAPI.onAlpha
+
+    private lateinit var data: T
+    private var alphaData: T? = null
+
+    private lateinit var lastPath: Path
+    private lateinit var lastAlphaPath: Path
+    private var lastProfile: String? = null
+
     private val currentCodec = codec(version)
 
     private fun copyData(): T {
-        mod.debug("Copying data from $lastPath for alpha data")
+        mod.debug("Copying data from ${lastPath.relativeTo(defaultPath)} for alpha data")
         try {
             // we convert to json and then back to make a new copy of the data and not just a reference to it
             return data.toJsonOrThrow(currentCodec).toDataOrThrow(currentCodec)
@@ -165,18 +167,17 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
     }
 
     private fun saveDataToPath(lastPath: Path, data: T) {
-        mod.debug("Saving $lastPath")
         try {
             val version = this.version
             val codec = this.codec(version)
             val json = JsonObject {
                 this["@${mod.MOD_ID}:version"] = version
-                this["@${mod.MOD_ID}:data"] = data.toJson(codec) ?: return mod.warn("Failed to encode $data to json")
+                this["@${mod.MOD_ID}:data"] = data.toJson(codec) ?: return mod.warn("Failed to encode $data to json to path $${lastPath.relativeTo(defaultPath)}")
             }
             FileUtils.write(lastPath.toFile(), json.toPrettyString(), Charsets.UTF_8)
-            mod.debug("saved $lastPath")
+            mod.debug("saved ${lastPath.relativeTo(defaultPath)}")
         } catch (e: Exception) {
-            mod.error("Failed to save $data to file", e)
+            mod.error("Failed to save $data to ${lastPath.relativeTo(defaultPath)}", e)
         }
     }
 

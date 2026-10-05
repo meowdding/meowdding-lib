@@ -4,30 +4,31 @@ import me.owdding.lib.events.ItemListEvent
 import me.owdding.lib.mixins.compat.rei.OverlaySearchFieldAccessor
 import me.owdding.lib.utils.KnownMods
 import me.shedaniel.math.Rectangle
-import me.shedaniel.rei.api.client.REIRuntime
-import me.shedaniel.rei.api.client.plugins.REIClientPlugin
-import me.shedaniel.rei.api.client.registry.screen.ExclusionZones
-import net.minecraft.client.gui.screens.Screen
-import net.minecraft.world.item.ItemStack
-import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
-
-//? < 26.2 {
-/*import net.minecraft.client.gui.layouts.LayoutElement
-import tech.thatgravyboat.skyblockapi.api.events.base.CancellableSkyBlockEvent
 import me.shedaniel.math.impl.PointHelper
+import me.shedaniel.rei.api.client.REIRuntime
 import me.shedaniel.rei.api.client.gui.screen.DisplayScreen
 import me.shedaniel.rei.api.client.gui.widgets.Slot
+import me.shedaniel.rei.api.client.plugins.REIClientPlugin
+import me.shedaniel.rei.api.client.registry.screen.ExclusionZones
 import me.shedaniel.rei.api.client.registry.screen.ScreenRegistry
 import me.shedaniel.rei.api.common.entry.EntryStack
 import net.minecraft.client.gui.components.events.ContainerEventHandler
 import net.minecraft.client.gui.components.events.GuiEventListener
+import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.input.KeyEvent
 import net.minecraft.world.InteractionResult
+import net.minecraft.world.item.ItemStack
+import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyPressedEvent
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
-import kotlin.jvm.optionals.getOrNull*///?}
+import kotlin.jvm.optionals.getOrNull
 
-// TODO: dont uncomment this when rei is released, this is removed on purpose as we want to remove this event
+//? < 26.2 {
+/*import tech.thatgravyboat.skyblockapi.api.events.base.CancellableSkyBlockEvent
+import net.minecraft.client.gui.layouts.LayoutElement
+*///?}
+
+// TONOTDO: dont uncomment this when rei is released, this is removed on purpose as we want to remove this event
 //? < 26.2 {
 /*@Deprecated("Use ItemListRegisterExclusionZonesEvent for more compatability", ReplaceWith("me.owdding.lib.events.ItemListRegisterExclusionZonesEvent"))
 class REIRenderOverlayEvent(val screen: Screen, private val registrar: (Int, Int, Int, Int) -> Unit) : CancellableSkyBlockEvent() {
@@ -42,8 +43,7 @@ class REIRenderOverlayEvent(val screen: Screen, private val registrar: (Int, Int
 object REICompatability : REIClientPlugin {
 
     init {
-        //? < 26.2
-        //SkyBlockAPI.eventBus.register<ScreenKeyPressedEvent.Post> { event -> REIRuntimeCompatability.keyPressed(event) }
+        SkyBlockAPI.eventBus.register<ScreenKeyPressedEvent.Post> { event -> REIRuntimeCompatability.keyPressed(event) }
     }
 
     override fun registerExclusionZones(zones: ExclusionZones) {
@@ -73,10 +73,7 @@ object REIRuntimeCompatability {
     @Deprecated("Use ItemListRegisterExclusionZonesEvent for more compatability", ReplaceWith("me.owdding.lib.events.ItemListHoveredItemKeyPressEvent"))
     fun getReiHoveredItemStack(): ItemStack? {
         if (!installed) return null
-        //? < 26.2 {
-        //return getHoveredItemStack()
-        //?} else
-        return null
+        return getHoveredItemStack()
     }
 
     fun getCurrentSearchBar(): String? {
@@ -96,8 +93,7 @@ object REIRuntimeCompatability {
     }
 
     // Taken from REI, somehow if I try to change anything it just refuses to work
-    //? < 26.2 {
-    /*private fun shouldReturn(screen: Screen?): Boolean {
+    private fun shouldReturn(screen: Screen?): Boolean {
         if (screen == null) return true
         for (decider in ScreenRegistry.getInstance().getDeciders(screen)) {
             val result = decider.shouldScreenBeOverlaid(screen)
@@ -112,7 +108,7 @@ object REIRuntimeCompatability {
         ItemListEvent.HoveredItemKeyPress(
             event.screen,
             getHoveredItemStack(),
-            KeyEvent(event.key, event.scanCode, event.modifiers)
+            KeyEvent(event.key, 0, event.modifiers),
         )
     }
 
@@ -126,6 +122,7 @@ object REIRuntimeCompatability {
             !is ContainerEventHandler -> null
             else -> listener.getChildAt(PointHelper.getMouseFloatingX(), PointHelper.getMouseFloatingY()).orElse(null)?.let(::getStack)
         }
+
         val overlay = REIRuntime.getInstance().overlay.getOrNull() ?: return null
         if (shouldReturn(McScreen.self)) return null
         return getStack(overlay)
@@ -140,5 +137,5 @@ object REIRuntimeCompatability {
         return screen.resultsToNotice.firstOrNull()?.toStack()
     }
 
-    private fun EntryStack<*>.toStack(): ItemStack? = this.value as? ItemStack ?: this.cheatsAs().value*///?}
+    private fun EntryStack<*>.toStack(): ItemStack? = this.value as? ItemStack ?: this.cheatsAs().value
 }

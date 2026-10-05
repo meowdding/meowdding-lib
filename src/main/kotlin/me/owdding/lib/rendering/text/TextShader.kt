@@ -54,11 +54,11 @@ fun createTextRenderType(
 *///? }
 
 fun Style.textShader(): TextShader? {
-    return (this as? TextShaderHolder)?.`meowddinglib$getTextShader`()
+    return this.`meowddinglib$getTextShader`()
 }
 
 fun Style.withTextShader(shader: TextShader?): Style {
-    return (this as? TextShaderHolder)?.`meowddinglib$withTextShader`(shader) ?: this
+    return this.`meowddinglib$withTextShader`(shader) ?: this
 }
 
 var MutableComponent.textShader: TextShader?
