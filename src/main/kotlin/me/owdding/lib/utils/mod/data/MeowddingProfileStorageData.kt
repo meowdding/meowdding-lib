@@ -136,15 +136,17 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
             return default()
         }
 
+        var readJson: JsonObject? = null
+
         return try {
-            val readJson = JsonParser.parseString(path.readText()) as JsonObject
+            readJson = JsonParser.parseString(path.readText()) as JsonObject
             val version = readJson.get("@${mod.MOD_ID}:version").asInt
             val data = readJson.get("@${mod.MOD_ID}:data")
             val codec = codec(version)
 
             data.toDataOrThrow(codec)
         } catch (e: Exception) {
-            mod.error("Failed to load ${path.relativeTo(defaultPath)}.", e)
+            mod.error("Failed to load ${path.relativeTo(defaultPath)}. (json: $readJson)", e)
             default()
         }
     }
