@@ -3,7 +3,8 @@
   "id": "meowdding-lib",
   "version": "${version}",
   "name": "Meowdding-Lib",
-  "license": "",
+  "license": "MIT",
+  "environment": "client",
   "mixins": [
     "meowdding-lib.mixins.json"
   ],

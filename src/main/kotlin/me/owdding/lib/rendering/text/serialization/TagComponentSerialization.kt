@@ -33,6 +33,9 @@ object TagComponentSerialization : MeowddingLogger by MeowddingLib.featureLogger
                 "underlined",
                 "strikethrough",
                 "color",
+                "player",
+                "atlas",
+                "font",
             ),
 
             ChatFormatting.entries.filter { it <= ChatFormatting.WHITE }.map {
