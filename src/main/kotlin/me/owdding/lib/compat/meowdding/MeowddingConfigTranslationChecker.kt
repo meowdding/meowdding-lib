@@ -34,7 +34,6 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.onClick
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.underlined
 import java.util.concurrent.CompletableFuture
-import kotlin.collections.associateWith
 
 @Module
 object MeowddingConfigTranslationChecker {
@@ -149,6 +148,7 @@ object MeowddingConfigTranslationChecker {
             is ResourcefulConfigButton -> {
                 add(element.title())
                 add(element.description())
+                add(element.text())
             }
             is ResourcefulConfigEntryElement -> {
                 addEntryTranslations(element.entry())
