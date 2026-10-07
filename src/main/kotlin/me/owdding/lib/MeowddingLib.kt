@@ -4,7 +4,9 @@ import com.mojang.serialization.Codec
 import me.owdding.ktmodules.AutoCollect
 import me.owdding.ktmodules.Module
 import me.owdding.lib.compat.HiddenElementRenderer
+import me.owdding.lib.compat.meowdding.MeowddingConfigTranslationChecker
 import me.owdding.lib.events.FinishRepoLoadingEvent
+import me.owdding.lib.events.MeowddingLibRegisterCommandsEvent
 import me.owdding.lib.events.StartRepoLoadingEvent
 import me.owdding.lib.generated.MeowddingLibCodecs
 import me.owdding.lib.generated.MeowddingLibDevModules
@@ -14,7 +16,6 @@ import me.owdding.lib.generated.MeowddingLibPostInitModules
 import me.owdding.lib.utils.mod.MeowddingMod
 import me.owdding.lib.utils.unsafeCast
 import me.owdding.repo.RemoteRepo
-import net.fabricmc.loader.api.FabricLoader
 import org.spongepowered.asm.mixin.MixinEnvironment
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -38,12 +39,11 @@ object MeowddingLib : MeowddingMod("meowdding-lib", loggerName = "MeowddingLib")
     }
 
     override fun onInitializeClient() {
-        if (FabricLoader.getInstance().isModLoaded("resourcefulconfig")) {
-            HiddenElementRenderer.register()
-        }
+        HiddenElementRenderer.register()
 
         registerEvents(MeowddingLibModules.collected)
         if (McClient.isDev) registerEvents(MeowddingLibDevModules.collected)
+        MeowddingConfigTranslationChecker.addModToWarn(MOD_ID)
     }
 
     override fun postInit() {
@@ -71,8 +71,13 @@ object MeowddingLib : MeowddingMod("meowdding-lib", loggerName = "MeowddingLib")
     }
 
     @Subscription
-    fun command(event: RegisterCommandsEvent) {
-        event.register("meowdding dev repo") {
+    fun onRegisterCommands(event: RegisterCommandsEvent) {
+        MeowddingLibRegisterCommandsEvent(event).post(SkyBlockAPI.eventBus)
+    }
+
+    @Subscription
+    internal fun command(event: MeowddingLibRegisterCommandsEvent) {
+        event.register("dev repo") {
             then("reload") {
                 callback {
                     RemoteRepo.invalidate()
