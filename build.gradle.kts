@@ -1,8 +1,11 @@
+@file:OptIn(ExperimentalAbiValidation::class)
+
 import com.google.devtools.ksp.gradle.KspExtension
 import me.owdding.AutoMixinExtension
 import net.fabricmc.loom.task.ValidateAccessWidenerTask
 import org.gradle.plugins.ide.idea.model.IdeaModel
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
+import org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import kotlin.io.path.Path
 import kotlin.io.path.absolutePathString
@@ -17,6 +20,21 @@ plugins {
     id("com.google.devtools.ksp")
     id("versioned-catalogues")
     id("idea")
+}
+
+kotlin {
+    abiValidation {
+        filters {
+            exclude {
+                byNames.addAll(
+                    "me.owdding.lib.accessor.**",
+                    "me.owdding.lib.helper.**",
+                    "me.owdding.lib.mixins.**",
+                    "me.owdding.lib.internal.**,"
+                )
+            }
+        }
+    }
 }
 
 val mcVersion = stonecutter.current.version.replace(".", "")
