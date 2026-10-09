@@ -380,7 +380,6 @@ public final class me/owdding/lib/compat/meowdding/MeowddingModsScreen : net/min
 }
 
 public final class me/owdding/lib/compat/meowdding/MeowddingModsScreen$Companion {
-	public final fun onCommand (Ltech/thatgravyboat/skyblockapi/api/events/misc/RegisterCommandsEvent;)V
 }
 
 public final class me/owdding/lib/config/MeowddingLibConfig : com/teamresourceful/resourcefulconfigkt/api/ConfigKt, me/owdding/lib/utils/config/AutoTranslated {
@@ -442,7 +441,6 @@ public final class me/owdding/lib/config/MeowddingLibConfig : com/teamresourcefu
 	public fun getTranslationBase ()Ljava/lang/String;
 	public fun makeTranslation (Ljava/lang/String;)Ljava/lang/String;
 	public fun makeTranslations (Lcom/teamresourceful/resourcefulconfigkt/api/builders/EntriesBuilder;Lcom/teamresourceful/resourcefulconfigkt/api/builders/TypeBuilder;)V
-	public final fun onCommand (Ltech/thatgravyboat/skyblockapi/api/events/misc/RegisterCommandsEvent;)V
 	public final fun save ()V
 	public fun wrap (Lcom/teamresourceful/resourcefulconfigkt/api/builders/EntriesBuilder;Lkotlin/jvm/functions/Function1;)Lkotlin/jvm/functions/Function1;
 }
@@ -455,7 +453,6 @@ public final class me/owdding/lib/cosmetics/CosmeticManager {
 	public static final fun getImageProvider ()Learth/terrarium/olympus/client/images/ImageProvider;
 	public final fun getPlayerList ()Ljava/util/Collection;
 	public final fun getPlayers ()Ljava/util/Map;
-	public final fun onCommand (Ltech/thatgravyboat/skyblockapi/api/events/misc/RegisterCommandsEvent;)V
 	public final fun updateCosmetics ()V
 }
 
@@ -532,7 +529,6 @@ public final class me/owdding/lib/dev/DisplayTest : net/minecraft/client/gui/scr
 
 public final class me/owdding/lib/dev/EnchantmentGuideParser {
 	public static final field INSTANCE Lme/owdding/lib/dev/EnchantmentGuideParser;
-	public final fun commandRegisterEvent (Ltech/thatgravyboat/skyblockapi/api/events/misc/RegisterCommandsEvent;)V
 	public final fun getEnabled ()Z
 	public final fun itemChangeEvent (Ltech/thatgravyboat/skyblockapi/api/events/screen/InventoryChangeEvent;)V
 	public final fun setEnabled (Z)V
@@ -545,13 +541,11 @@ public final class me/owdding/lib/dev/OverlayTest {
 
 public final class me/owdding/lib/dev/REITest {
 	public static final field INSTANCE Lme/owdding/lib/dev/REITest;
-	public final fun onRegisterCommands (Ltech/thatgravyboat/skyblockapi/api/events/misc/RegisterCommandsEvent;)V
 	public final fun onTick ()V
 }
 
 public final class me/owdding/lib/dev/TestCommands {
 	public static final field INSTANCE Lme/owdding/lib/dev/TestCommands;
-	public final fun onCommand (Ltech/thatgravyboat/skyblockapi/api/events/misc/RegisterCommandsEvent;)V
 }
 
 public final class me/owdding/lib/displays/Alignment : java/lang/Enum {
@@ -615,9 +609,13 @@ public final class me/owdding/lib/displays/DisplayWidget$Companion {
 
 public final class me/owdding/lib/displays/Displays {
 	public static final field INSTANCE Lme/owdding/lib/displays/Displays;
-	public final fun background (Lnet/minecraft/resources/Identifier;II)Lme/owdding/lib/displays/Display;
-	public final fun background (Lnet/minecraft/resources/Identifier;Lme/owdding/lib/displays/Display;I)Lme/owdding/lib/displays/Display;
+	public final synthetic fun background (Lnet/minecraft/resources/Identifier;II)Lme/owdding/lib/displays/Display;
+	public final fun background (Lnet/minecraft/resources/Identifier;IIIZ)Lme/owdding/lib/displays/Display;
+	public final synthetic fun background (Lnet/minecraft/resources/Identifier;Lme/owdding/lib/displays/Display;I)Lme/owdding/lib/displays/Display;
+	public final fun background (Lnet/minecraft/resources/Identifier;Lme/owdding/lib/displays/Display;IZ)Lme/owdding/lib/displays/Display;
+	public static synthetic fun background$default (Lme/owdding/lib/displays/Displays;Lnet/minecraft/resources/Identifier;IIIZILjava/lang/Object;)Lme/owdding/lib/displays/Display;
 	public static synthetic fun background$default (Lme/owdding/lib/displays/Displays;Lnet/minecraft/resources/Identifier;Lme/owdding/lib/displays/Display;IILjava/lang/Object;)Lme/owdding/lib/displays/Display;
+	public static synthetic fun background$default (Lme/owdding/lib/displays/Displays;Lnet/minecraft/resources/Identifier;Lme/owdding/lib/displays/Display;IZILjava/lang/Object;)Lme/owdding/lib/displays/Display;
 	public final fun background-qim9Vi0 (ILme/owdding/lib/displays/Display;)Lme/owdding/lib/displays/Display;
 	public final fun center (IILme/owdding/lib/displays/Display;)Lme/owdding/lib/displays/Display;
 	public static synthetic fun center$default (Lme/owdding/lib/displays/Displays;IILme/owdding/lib/displays/Display;ILjava/lang/Object;)Lme/owdding/lib/displays/Display;
@@ -1215,7 +1213,6 @@ public final class me/owdding/lib/overlays/OverlayScreen : me/owdding/lib/platfo
 
 public final class me/owdding/lib/overlays/Overlays {
 	public static final field INSTANCE Lme/owdding/lib/overlays/Overlays;
-	public final fun onCommandRegistration (Ltech/thatgravyboat/skyblockapi/api/events/misc/RegisterCommandsEvent;)V
 	public final fun onHudRender (Ltech/thatgravyboat/skyblockapi/api/events/render/RenderHudEvent;)V
 	public final fun onMouseClick (Ltech/thatgravyboat/skyblockapi/api/events/screen/ScreenMouseClickEvent$Pre;)V
 	public final fun register (Lme/owdding/lib/overlays/Overlay;)V
@@ -2759,6 +2756,7 @@ public final class me/owdding/lib/utils/mod/data/MeowddingFolderStorageData {
 
 public final class me/owdding/lib/utils/mod/data/MeowddingProfileStorageData {
 	public final fun edit (Lkotlin/jvm/functions/Function1;)V
+	public final fun editBoolean (Lkotlin/jvm/functions/Function1;)V
 	public final fun get ()Ljava/lang/Object;
 	public final fun getCodec ()Lkotlin/jvm/functions/Function1;
 	public final fun load ()V
@@ -2769,6 +2767,7 @@ public final class me/owdding/lib/utils/mod/data/MeowddingProfileStorageData {
 public final class me/owdding/lib/utils/mod/data/MeowddingStorageData {
 	public final fun delete ()V
 	public final fun edit (Lkotlin/jvm/functions/Function1;)V
+	public final fun editBoolean (Lkotlin/jvm/functions/Function1;)V
 	public final fun get ()Ljava/lang/Object;
 	public final fun save ()V
 	public final fun set (Ljava/lang/Object;)V
@@ -2899,7 +2898,6 @@ public final class me/owdding/lib/waypoints/MeowddingWaypointHandler {
 	public final fun getWaypointsWithAllTags ([Lme/owdding/lib/waypoints/MeowddingWaypointTag;)Ljava/util/List;
 	public final fun getWaypointsWithAnyTags (Ljava/util/Collection;)Ljava/util/List;
 	public final fun getWaypointsWithAnyTags ([Lme/owdding/lib/waypoints/MeowddingWaypointTag;)Ljava/util/List;
-	public final fun onCommand (Ltech/thatgravyboat/skyblockapi/api/events/misc/RegisterCommandsEvent;)V
 	public final fun onRender (Ltech/thatgravyboat/skyblockapi/api/events/render/RenderWorldEvent$AfterEntities;)V
 	public final fun onRender (Ltech/thatgravyboat/skyblockapi/api/events/render/RenderWorldEvent$AfterTranslucent;)V
 	public final fun onTick (Ltech/thatgravyboat/skyblockapi/api/events/time/TickEvent;)V
