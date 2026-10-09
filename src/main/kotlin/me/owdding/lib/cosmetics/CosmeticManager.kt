@@ -11,10 +11,10 @@ import me.owdding.ktcodecs.Inline
 import me.owdding.lib.MeowddingLib
 import me.owdding.lib.PostInitModule
 import me.owdding.lib.events.CosmeticLoadEvent
+import me.owdding.lib.events.MeowddingLibRegisterCommandsEvent
 import me.owdding.lib.generated.MeowddingLibCodecs
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
-import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import java.net.URI
@@ -145,8 +145,8 @@ object CosmeticManager {
     )
 
     @Subscription
-    fun onCommand(event: RegisterCommandsEvent) {
-        event.register("meowdding dev cosmetics") {
+    internal fun onCommand(event: MeowddingLibRegisterCommandsEvent) {
+        event.register("dev cosmetics") {
             thenCallback("reload") {
                 updateCosmetics()
             }

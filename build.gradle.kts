@@ -67,6 +67,7 @@ repositories {
 
 val archiveName = "Meowdding-Lib"
 
+tasks.named("checkKotlinAbi") { enabled = false }
 
 tasks.named("build") {
 

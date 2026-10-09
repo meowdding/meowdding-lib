@@ -16,6 +16,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.FormattedText
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.Identifier
+import net.minecraft.util.ARGB
 import net.minecraft.util.FormattedCharSequence
 import net.minecraft.util.Mth
 import net.minecraft.util.Util
@@ -85,7 +86,13 @@ object Displays {
         }
     }
 
-    fun background(sprite: Identifier, display: Display, color: Int = -1): Display {
+    fun background(
+        sprite: Identifier,
+        display: Display,
+        color: Int = -1,
+        @IntroducedAt("4.2.32") allowAlpha: Boolean = false,
+    ): Display {
+        val color = if (allowAlpha) color else ARGB.opaque(color)
         return object : Display {
             override fun getWidth() = display.getWidth()
             override fun getHeight() = display.getHeight()
@@ -96,7 +103,7 @@ object Displays {
                     0,
                     display.getWidth(),
                     display.getHeight(),
-                    color.and(0xFFFFFF).or(0xFF000000u.toInt()),
+                    color,
                 )
                 display.extract(graphics)
             }
@@ -114,8 +121,14 @@ object Displays {
         }
     }
 
-    fun background(sprite: Identifier, width: Int, height: Int): Display {
-        return background(sprite, empty(width, height))
+    fun background(
+        sprite: Identifier,
+        width: Int,
+        height: Int,
+        @IntroducedAt("4.2.32") color: Int = -1,
+        @IntroducedAt("4.2.32") allowAlpha: Boolean = false,
+    ): Display {
+        return background(sprite, empty(width, height), color, allowAlpha)
     }
 
     fun padding(padding: Int, display: Display): Display {
