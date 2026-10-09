@@ -1,10 +1,10 @@
 package me.owdding.lib.overlays
 
 import me.owdding.ktmodules.Module
+import me.owdding.lib.events.MeowddingLibRegisterCommandsEvent
 import net.minecraft.client.gui.screens.ChatScreen
 import net.minecraft.client.gui.screens.Screen
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
-import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderHudEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenMouseClickEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -98,7 +98,7 @@ object Overlays {
     }
 
     @Subscription
-    fun onCommandRegistration(event: RegisterCommandsEvent) {
+    internal fun onCommandRegistration(event: MeowddingLibRegisterCommandsEvent) {
         event.register("meowdding") {
             then("overlays") {
                 callback { McClient.setScreen(EditOverlaysScreen()) }

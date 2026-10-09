@@ -2,6 +2,7 @@ package me.owdding.lib.waypoints
 
 import com.mojang.brigadier.arguments.StringArgumentType
 import me.owdding.ktmodules.Module
+import me.owdding.lib.events.MeowddingLibRegisterCommandsEvent
 import me.owdding.lib.utils.suggestions.MeowddingSuggestionProviders
 import me.owdding.lib.utils.toCommandSourceStack
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument
@@ -10,12 +11,10 @@ import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription.Companion.HIGHEST
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.location.ServerDisconnectEvent
-import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
-import tech.thatgravyboat.skyblockapi.utils.McVersionGroup
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import java.util.*
 import kotlin.math.pow
@@ -70,8 +69,8 @@ object MeowddingWaypointHandler {
     }
 
     @Subscription
-    fun onCommand(event: RegisterCommandsEvent) {
-        event.register("meowdding waypoint") {
+    internal fun onCommand(event: MeowddingLibRegisterCommandsEvent) {
+        event.register("waypoint") {
             then("add") {
                 thenCallback("coords", BlockPosArgument.blockPos()) {
                     val pos = this.getArgument("coords", Coordinates::class.java).getBlockPos(this.source.toCommandSourceStack())

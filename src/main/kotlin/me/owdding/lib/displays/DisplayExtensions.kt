@@ -53,8 +53,8 @@ fun List<Any>.asLayer(): Display {
 
 fun List<List<Any>>.asTable(spacing: Int = 0): Display =
     Displays.table(
-        this.map {
-            it.map {
+        this.map { list ->
+            list.map {
                 when (it) {
                     is Display -> it
                     is Identifier -> Displays.sprite(it, 12, 12)

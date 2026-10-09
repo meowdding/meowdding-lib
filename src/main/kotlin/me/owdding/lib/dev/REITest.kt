@@ -2,10 +2,10 @@ package me.owdding.lib.dev
 
 import me.owdding.ktmodules.Module
 import me.owdding.lib.compat.REIRuntimeCompatability
+import me.owdding.lib.events.MeowddingLibRegisterCommandsEvent
 import me.owdding.lib.utils.KnownMods
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
-import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
@@ -18,9 +18,9 @@ object REITest {
     private var hoveredToggle = false
 
     @Subscription
-    fun onRegisterCommands(event: RegisterCommandsEvent) {
+    internal fun onRegisterCommands(event: MeowddingLibRegisterCommandsEvent) {
         if (!KnownMods.REI.installed) return
-        event.register("meowdding test rei") {
+        event.register("test rei") {
             thenCallback("searchbar") {
                 val text = REIRuntimeCompatability.getCurrentSearchBar()
                 val focused = REIRuntimeCompatability.isSearchBarHighlighting()
