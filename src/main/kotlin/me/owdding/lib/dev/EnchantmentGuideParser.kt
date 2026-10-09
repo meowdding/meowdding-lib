@@ -1,13 +1,13 @@
 package me.owdding.lib.dev
 
 import me.owdding.ktmodules.Module
+import me.owdding.lib.events.MeowddingLibRegisterCommandsEvent
 import me.owdding.lib.generated.CodecUtils
 import me.owdding.lib.generated.MeowddingLibCodecs
 import me.owdding.lib.repo.EnchantmentRepoData
 import me.owdding.lib.repo.EnchantmentRepoData.PassthroughRequirement
 import net.minecraft.world.item.Items
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
-import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
@@ -112,13 +112,13 @@ object EnchantmentGuideParser {
     }.toMutableList()
 
     @Subscription
-    fun commandRegisterEvent(event: RegisterCommandsEvent) {
-        event.registerWithCallback("meowdding dev serialize_enchantments") {
+    internal fun commandRegisterEvent(event: MeowddingLibRegisterCommandsEvent) {
+        event.registerWithCallback("dev serialize_enchantments") {
             Text.of("Click to copy max enchantments!") {
                 onClick { McClient.clipboard = enchantments.toJson(CodecUtils.mutableSet(MeowddingLibCodecs.getCodec())).toPrettyString() }
             }.send()
         }
-        event.registerWithCallback("meowdding dev toggle enchantment_parser") {
+        event.registerWithCallback("dev toggle enchantment_parser") {
             enabled = !enabled
             Text.of {
                 if (enabled) append("Enabled") { color = TextColor.GREEN }
