@@ -53,21 +53,12 @@ class MeowddingStorageData<T : Any> internal constructor(
         alphaData = null
     }
 
-    @JvmName("editBoolean")
     inline fun edit(edit: T.() -> Boolean) {
         contract {
             callsInPlace(edit, InvocationKind.EXACTLY_ONCE)
         }
         val data = get()
         if (edit(data)) save()
-    }
-
-    inline fun edit(edit: T.() -> Unit?) {
-        contract {
-            callsInPlace(edit, InvocationKind.EXACTLY_ONCE)
-        }
-        val data = get()
-        if (edit(data) != null) save()
     }
 
     init {
