@@ -1,13 +1,13 @@
 package me.owdding.lib.dev
 
 import me.owdding.ktmodules.Module
-import me.owdding.lib.events.MeowddingLibRegisterCommandsEvent
 import me.owdding.lib.rendering.text.TextShaders
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
 import me.owdding.lib.rendering.text.textShader
 import me.owdding.lib.utils.type.EnumArgumentType
 import net.minecraft.ChatFormatting
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McClient.clipboard
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toJsonOrThrow
@@ -19,8 +19,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 object TestCommands {
 
     @Subscription
-    internal fun onCommand(event: MeowddingLibRegisterCommandsEvent) {
-        event.register("test") {
+    fun onCommand(event: RegisterCommandsEvent) {
+        event.register("meowdding test") {
             thenCallback("display") {
                 McClient.setScreenAsync { DisplayTest }
             }

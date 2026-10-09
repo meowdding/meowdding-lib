@@ -1,5 +1,7 @@
 package me.owdding.lib.displays.circle
 
+import com.mojang.blaze3d.vertex.BufferBuilder
+import com.mojang.blaze3d.vertex.ByteBufferBuilder
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
 import earth.terrarium.olympus.client.pipelines.renderer.PipelineSubmit
@@ -13,11 +15,11 @@ import net.minecraft.resources.Identifier
 import org.joml.Matrix3x2f
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import java.util.function.Supplier
-import com.mojang.blaze3d.vertex.BufferBuilder
-import com.mojang.blaze3d.vertex.ByteBufferBuilder
 
 //? >= 26.2
 import com.mojang.renderpearl.api.pipeline.PrimitiveTopology
+import earth.terrarium.olympus.client.pipelines.renderer.PipelineSubmitBuilder
+
 //? 26.1 {
 /*import net.minecraft.client.renderer.MultiBufferSource
 import java.util.function.Function

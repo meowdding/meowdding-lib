@@ -5,9 +5,9 @@ import com.teamresourceful.resourcefulconfig.api.loader.Configurator
 import com.teamresourceful.resourcefulconfigkt.api.ConfigKt
 import me.owdding.ktmodules.Module
 import me.owdding.lib.MeowddingLib
-import me.owdding.lib.events.MeowddingLibRegisterCommandsEvent
 import me.owdding.lib.utils.config.AutoTranslated
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 
 @Module
@@ -21,8 +21,8 @@ object MeowddingLibConfig : ConfigKt("meowdding-lib/config"), AutoTranslated {
     fun save() = config.save()
 
     @Subscription
-    internal fun onCommand(event: MeowddingLibRegisterCommandsEvent) {
-        event.registerWithCallback("config") {
+    fun onCommand(event: RegisterCommandsEvent) {
+        event.registerWithCallback("meowdding config") {
             McClient.setScreenAsync { ResourcefulConfigScreen.getFactory(MeowddingLib.MOD_ID).apply(null) }
         }
     }

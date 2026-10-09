@@ -5,9 +5,9 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.serialization.Codec
 import me.owdding.lib.DevModule
 import me.owdding.lib.MeowddingLib
-import me.owdding.lib.events.MeowddingLibRegisterCommandsEvent
 import me.owdding.lib.generated.CodecUtils
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent.Companion.argument
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
@@ -35,8 +35,8 @@ internal object StorageDataTest {
     )
 
     @Subscription
-    fun onRegisterCommands(event: MeowddingLibRegisterCommandsEvent) {
-        event.register("dev storage_test") {
+    fun onRegisterCommands(event: RegisterCommandsEvent) {
+        event.register("meowdding dev storage_test") {
             then("normal") {
                 thenCallback("add string", StringArgumentType.string()) {
                     NORMAL_STORAGE.get().add(argument("string"))

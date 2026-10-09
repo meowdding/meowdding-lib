@@ -10,7 +10,6 @@ import me.owdding.lib.builder.DisplayFactory
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.MIDDLE
 import me.owdding.lib.displays.*
-import me.owdding.lib.events.MeowddingLibRegisterCommandsEvent
 import me.owdding.lib.layouts.BackgroundWidget
 import me.owdding.lib.layouts.ExpandingWidget
 import me.owdding.lib.layouts.asWidget
@@ -20,6 +19,7 @@ import net.minecraft.client.gui.layouts.FrameLayout
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -152,34 +152,36 @@ class MeowddingModsScreen : Screen(Text.of("Meowdding Mods")) {
     @Module
     companion object {
         @Subscription
-        internal fun onCommand(event: MeowddingLibRegisterCommandsEvent) {
-            event.registerWithCallback("versions") {
-                fun version(name: String, id: String): Component? {
-                    val mod = FabricLoader.getInstance().getModContainer(id).getOrNull() ?: return null
+        fun onCommand(event: RegisterCommandsEvent) {
+            event.register("meowdding") {
+                thenCallback("versions") {
+                    fun version(name: String, id: String): Component? {
+                        val mod = FabricLoader.getInstance().getModContainer(id).getOrNull() ?: return null
 
-                    return Text.of {
-                        append("$name: ") {
-                            color = TextColor.YELLOW
-                        }
-                        append(mod.metadata.version.friendlyString) {
-                            color = TextColor.GRAY
+                        return Text.of {
+                            append("$name: ") {
+                                color = TextColor.YELLOW
+                            }
+                            append(mod.metadata.version.friendlyString) {
+                                color = TextColor.GRAY
+                            }
                         }
                     }
+
+                    Text.multiline(
+                        version("SkyBlockAPI", "skyblock-api"),
+                        version("MeowddingLib", "meowdding-lib"),
+                        version("MeowddingRepo", "meowdding-repo"),
+                        MeowddingModsParser.mods.mapNotNull {
+                            version(it.name, it.modId)
+                        },
+                    ).send()
                 }
 
-                Text.multiline(
-                    version("SkyBlockAPI", "skyblock-api"),
-                    version("MeowddingLib", "meowdding-lib"),
-                    version("MeowddingRepo", "meowdding-repo"),
-                    MeowddingModsParser.mods.mapNotNull {
-                        version(it.name, it.modId)
-                    },
-                ).send()
-            }
-
-            event.registerBaseCallback {
-                McClient.runNextTick {
-                    McClient.setScreen(MeowddingModsScreen())
+                callback {
+                    McClient.runNextTick {
+                        McClient.setScreen(MeowddingModsScreen())
+                    }
                 }
             }
         }
