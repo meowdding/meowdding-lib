@@ -22,6 +22,7 @@ import tech.thatgravyboat.skyblockapi.utils.json.JsonObject
 import java.nio.file.Path
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
+import kotlin.experimental.ExperimentalTypeInference
 import kotlin.io.path.*
 
 class MeowddingProfileStorageData<T : Any> internal constructor(
@@ -59,12 +60,25 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
         else requiresSave.add(this)
     }
 
+    @JvmName("editBoolean")
+    @OptIn(ExperimentalTypeInference::class)
+    @OverloadResolutionByLambdaReturnType
     inline fun edit(edit: T.() -> Boolean) {
         contract {
             callsInPlace(edit, InvocationKind.AT_MOST_ONCE)
         }
         val data = get() ?: return
         if (edit(data)) save()
+    }
+
+    @OptIn(ExperimentalTypeInference::class)
+    @OverloadResolutionByLambdaReturnType
+    inline fun edit(edit: T.() -> Unit?) {
+        contract {
+            callsInPlace(edit, InvocationKind.AT_MOST_ONCE)
+        }
+        val data = get() ?: return
+        if (edit(data) != null) save()
     }
 
     init {
