@@ -22,6 +22,7 @@ import java.nio.file.Path
 import java.util.concurrent.CompletableFuture
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
+import kotlin.experimental.ExperimentalTypeInference
 import kotlin.io.path.*
 
 class MeowddingStorageData<T : Any> internal constructor(
@@ -54,6 +55,8 @@ class MeowddingStorageData<T : Any> internal constructor(
     }
 
     @JvmName("editBoolean")
+    @OptIn(ExperimentalTypeInference::class)
+    @OverloadResolutionByLambdaReturnType
     inline fun edit(edit: T.() -> Boolean) {
         contract {
             callsInPlace(edit, InvocationKind.EXACTLY_ONCE)
@@ -62,6 +65,8 @@ class MeowddingStorageData<T : Any> internal constructor(
         if (edit(data)) save()
     }
 
+    @OptIn(ExperimentalTypeInference::class)
+    @OverloadResolutionByLambdaReturnType
     inline fun edit(edit: T.() -> Unit?) {
         contract {
             callsInPlace(edit, InvocationKind.EXACTLY_ONCE)
