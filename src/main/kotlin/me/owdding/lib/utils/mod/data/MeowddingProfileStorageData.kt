@@ -9,6 +9,7 @@ import org.apache.commons.io.FileUtils
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.FreshHypixelAlphaDetectedEvent
+import tech.thatgravyboat.skyblockapi.api.events.misc.ProfileDeleteDataEvent
 import tech.thatgravyboat.skyblockapi.api.events.profile.ProfileChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
@@ -40,8 +41,7 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
         }
 
         return if (shouldUseAlphaData()) getOrCreateAlphaData()
-        else if (::data.isInitialized) data
-        else null
+        else data
     }
 
     fun set(new: T) {
@@ -93,7 +93,7 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
     private fun isCurrentlyActive() = lastProfile != null && hasProfile() && currentProfile == lastProfile
     private fun shouldUseAlphaData() = differentAlphaData && LocationAPI.onAlpha
 
-    private lateinit var data: T
+    private var data: T? = null
     private var alphaData: T? = null
 
     private lateinit var lastPath: Path
@@ -104,6 +104,11 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
 
     private fun copyData(): T {
         mod.debug("Copying data from ${lastPath.relativeTo(defaultPath)} for alpha data")
+        val data = data
+        if (data == null) {
+            mod.debug("data is null for ${lastPath.relativeTo(defaultPath)}, creating default instead")
+            return defaultData()
+        }
         try {
             // we convert to json and then back to make a new copy of the data and not just a reference to it
             return data.toJsonOrThrow(currentCodec).toDataOrThrow(currentCodec)
@@ -122,6 +127,11 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
         return alphaData
     }
 
+    private fun Path.profile(profileName: String) =
+        resolve(McPlayer.uuid.toString())
+            .resolve(profileName)
+            .resolve(fileName)
+
     fun load() {
         if (!hasProfile()) {
             return
@@ -129,19 +139,27 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
 
         lastProfile = currentProfile
         val profile = lastProfile ?: return
-        val uuid = McPlayer.uuid.toString()
 
-        lastPath = defaultPath.resolve(uuid)
-            .resolve(profile)
-            .resolve(fileName)
+        lastPath = defaultPath.profile(profile)
 
-        lastAlphaPath = defaultAlphaPath.resolve(uuid)
-            .resolve(profile)
-            .resolve(fileName)
+        lastAlphaPath = defaultAlphaPath.profile(profile)
 
         data = loadData(lastPath, defaultData)
 
         alphaData = null // alpha data it only initialized if necessary
+    }
+
+    private fun deleteProfile(profileName: String) {
+        val path = defaultPath.profile(profileName)
+        val alphaPath = defaultAlphaPath.profile(profileName)
+
+        if (path.isRegularFile()) path.deleteIfExists()
+        if (alphaPath.isRegularFile()) alphaPath.deleteIfExists()
+        if (profileName == lastProfile) {
+            mod.info("Deleted profile $profileName is the same as current one")
+            data = null
+            alphaData = null
+        }
     }
 
     private fun loadData(path: Path, default: () -> T): T {
@@ -174,6 +192,7 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
                 if (file.isRegularFile()) file.deleteIfExists()
             }
         }
+        alphaData = null // we uninitialize alpha data, in case its already loaded
     }
 
 
@@ -198,7 +217,7 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
     }
 
     private fun saveToSystem() {
-        if (!this::data.isInitialized) return
+        val data = data ?: return
         saveDataToPath(lastPath, data)
     }
 
@@ -223,6 +242,11 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
         @Subscription(FreshHypixelAlphaDetectedEvent::class)
         private fun onNewAlpha() {
             allStorageDatas.forEach { it.deleteAlpha() }
+        }
+
+        @Subscription
+        private fun onProfileDelete(event: ProfileDeleteDataEvent) {
+            Scheduling.async { allStorageDatas.forEach { it.deleteProfile(event.profileName) } }
         }
 
         @Subscription(TickEvent::class)
