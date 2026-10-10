@@ -39,7 +39,7 @@ object Overlays {
     }
 
     @Subscription
-    fun onHudRender(event: RenderHudEvent) {
+    private fun onHudRender(event: RenderHudEvent) {
         //~ if >= 26.2 '.options.hideGui' -> '.gui.hud.isHidden'
         if (McClient.gui.hud.isHidden) return
 
@@ -79,7 +79,7 @@ object Overlays {
     }
 
     @Subscription
-    fun onMouseClick(event: ScreenMouseClickEvent.Pre) {
+    private fun onMouseClick(event: ScreenMouseClickEvent.Pre) {
         if (!isOverlayScreen(event.screen, event.x.toInt(), event.y.toInt())) return
 
         for (overlay in overlays.reversed()) {

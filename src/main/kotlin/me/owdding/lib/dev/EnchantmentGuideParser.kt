@@ -51,7 +51,7 @@ object EnchantmentGuideParser {
     }
 
     @Subscription
-    fun itemChangeEvent(event: InventoryChangeEvent) {
+    private fun itemChangeEvent(event: InventoryChangeEvent) {
         if (!enabled) return
         if (!event.title.endsWith("Enchantments Guide")) return
         if (!event.isInMainPart) return

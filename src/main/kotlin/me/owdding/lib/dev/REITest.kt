@@ -44,7 +44,7 @@ object REITest {
 
     @Subscription(TickEvent::class)
     @TimePassed("1s")
-    fun onTick() {
+    private fun onTick() {
         if (!hoveredToggle || !KnownMods.REI.installed) return
         val stack = REIRuntimeCompatability.getReiHoveredItemStack()
         val message = if (stack == null) Text.of("Not hovering any REI itemstack!")

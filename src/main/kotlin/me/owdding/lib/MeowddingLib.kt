@@ -8,11 +8,7 @@ import me.owdding.lib.compat.meowdding.MeowddingConfigTranslationChecker
 import me.owdding.lib.events.FinishRepoLoadingEvent
 import me.owdding.lib.events.MeowddingLibRegisterCommandsEvent
 import me.owdding.lib.events.StartRepoLoadingEvent
-import me.owdding.lib.generated.MeowddingLibCodecs
-import me.owdding.lib.generated.MeowddingLibDevModules
-import me.owdding.lib.generated.MeowddingLibModules
-import me.owdding.lib.generated.MeowddingLibPreInitModules
-import me.owdding.lib.generated.MeowddingLibPostInitModules
+import me.owdding.lib.generated.*
 import me.owdding.lib.utils.mod.MeowddingMod
 import me.owdding.lib.utils.unsafeCast
 import me.owdding.repo.RemoteRepo
@@ -71,7 +67,7 @@ object MeowddingLib : MeowddingMod("meowdding-lib", loggerName = "MeowddingLib")
     }
 
     @Subscription
-    fun onRegisterCommands(event: RegisterCommandsEvent) {
+    private fun onRegisterCommands(event: RegisterCommandsEvent) {
         MeowddingLibRegisterCommandsEvent(event).post(SkyBlockAPI.eventBus)
     }
 

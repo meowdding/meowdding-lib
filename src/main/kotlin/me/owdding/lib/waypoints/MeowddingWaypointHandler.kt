@@ -61,7 +61,7 @@ object MeowddingWaypointHandler {
     }
 
     @Subscription(ServerChangeEvent::class, ServerDisconnectEvent::class, priority = HIGHEST)
-    fun clearWaypoints() = onMain {
+    private fun clearWaypoints() = onMain {
         _waypoints.removeIf {
             removeLocatorBar(it)
             true
@@ -115,7 +115,7 @@ object MeowddingWaypointHandler {
     }
 
     @Subscription
-    fun onTick(event: TickEvent) {
+    private fun onTick(event: TickEvent) {
         val position = McPlayer.position ?: return
         _waypoints.removeIf {
             val removalDistance = it.removalDistance ?: return@removeIf false
@@ -126,7 +126,7 @@ object MeowddingWaypointHandler {
     }
 
     @Subscription
-    fun onRender(event: RenderWorldEvent.AfterEntities) {
+    private fun onRender(event: RenderWorldEvent.AfterEntities) {
         val position = McPlayer.position ?: return
         _waypoints
             .filter { it.renderCondition(event) }
@@ -135,7 +135,7 @@ object MeowddingWaypointHandler {
     }
 
     @Subscription
-    fun onRender(event: RenderWorldEvent.AfterTranslucent) {
+    private fun onRender(event: RenderWorldEvent.AfterTranslucent) {
         val position = McPlayer.position ?: return
         _waypoints
             .filter { it.renderCondition(event) }

@@ -97,20 +97,20 @@ class MeowddingStorageData<T : Any> internal constructor(
         private var firstJoin = false
 
         @Subscription(HypixelJoinEvent::class)
-        fun onHypixelJoin() {
+        private fun onHypixelJoin() {
             if (firstJoin) return
             firstJoin = true
             Scheduling.async { allStorageDatas.forEach { it.get() } } // load all data async
         }
 
         @Subscription(FreshHypixelAlphaDetectedEvent::class)
-        fun onNewAlpha() {
+        private fun onNewAlpha() {
             allStorageDatas.forEach { it.deleteAlpha() }
         }
 
         @Subscription(TickEvent::class)
         @TimePassed("5s")
-        fun onTick() {
+        private fun onTick() {
             clearAndRun(requiresSave) { it.saveToSystem() }
             clearAndRun(requiresAlphaSave) { it.saveAlphaToSystem() }
         }

@@ -65,7 +65,7 @@ object EnchantmentRepoData {
     )
 
     @Subscription
-    fun finishRepoLoading(event: FinishRepoLoadingEvent) {
+    private fun finishRepoLoading(event: FinishRepoLoadingEvent) {
         _data.setRelease(RemoteRepo.getFileContentAsJson("enchantments.json")?.toData(MeowddingLibCodecs.ParsedEnchantmentDataCodec.codec().listOf()) ?: return)
     }
 }

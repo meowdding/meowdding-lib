@@ -39,7 +39,7 @@ object TextShaders {
     val CODEC: Codec<TextShader> = Identifier.CODEC.dispatch({ it.id }, { codecRegistry[it]!! })
 
     @Subscription
-    fun register(event: RegisterTextShaderEvent) {
+    private fun register(event: RegisterTextShaderEvent) {
         event.register(GradientTextShader.ID, GradientTextShader.CODEC)
 
         Text.of {
@@ -74,7 +74,7 @@ enum class PrideShader(val colors: List<Int>, private val shader: GradientTextSh
         val CODEC: MapCodec<PrideShader> = MeowddingLibCodecs.getCodec<PrideShader>().fieldOf("name")
 
         @Subscription
-        fun registerShaders(event: RegisterTextShaderEvent) {
+        private fun registerShaders(event: RegisterTextShaderEvent) {
             event.register(ID, CODEC)
         }
     }

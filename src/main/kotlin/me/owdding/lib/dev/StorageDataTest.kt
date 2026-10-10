@@ -35,7 +35,7 @@ internal object StorageDataTest {
     )
 
     @Subscription
-    fun onRegisterCommands(event: MeowddingLibRegisterCommandsEvent) {
+    private fun onRegisterCommands(event: MeowddingLibRegisterCommandsEvent) {
         event.register("dev storage_test") {
             then("normal") {
                 thenCallback("add string", StringArgumentType.string()) {

@@ -2,11 +2,7 @@ package me.owdding.lib.cosmetics
 
 import com.mojang.datafixers.util.Either
 import com.mojang.serialization.Codec
-import me.owdding.ktcodecs.FieldName
-import me.owdding.ktcodecs.GenerateCodec
-import me.owdding.ktcodecs.IncludedCodec
-import me.owdding.ktcodecs.Lenient
-import me.owdding.ktcodecs.NamedCodec
+import me.owdding.ktcodecs.*
 import me.owdding.lib.PreInitModule
 import me.owdding.lib.config.MeowddingLibConfig
 import me.owdding.lib.events.CosmeticLoadEvent
@@ -14,16 +10,11 @@ import me.owdding.lib.extensions.associateNotNull
 import me.owdding.lib.generated.MeowddingLibCodecs
 import net.fabricmc.fabric.api.client.rendering.v1.RenderStateDataKey
 import net.minecraft.client.entity.ClientAvatarEntity
-import net.minecraft.client.model.HumanoidModel
-import net.minecraft.client.model.player.PlayerModel
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
-import net.minecraft.client.renderer.entity.state.HumanoidRenderState
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite
 import net.minecraft.core.ClientAsset
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.Avatar
-import net.minecraft.world.entity.EquipmentSlot
-import net.minecraft.world.entity.player.PlayerModelType
 import net.minecraft.world.entity.player.PlayerSkin
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
@@ -52,7 +43,7 @@ object MlibCosmetics {
     private val emptyCosmetic = MlibCosmeticData(null, null, null)
 
     @Subscription
-    fun onCosmeticLoad(event: CosmeticLoadEvent) {
+    private fun onCosmeticLoad(event: CosmeticLoadEvent) {
         this._mlibCosmetics.putAll(
             CosmeticManager.playerList.associateNotNull(
                 keySelector = { it.uuid },

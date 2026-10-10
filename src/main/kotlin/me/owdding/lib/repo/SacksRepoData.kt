@@ -22,7 +22,7 @@ object SacksRepoData {
     )
 
     @Subscription
-    fun finishRepoLoading(event: FinishRepoLoadingEvent) {
+    private fun finishRepoLoading(event: FinishRepoLoadingEvent) {
         _data.setRelease(RemoteRepo.getFileContentAsJson("sacks.json")?.toData(MeowddingLibCodecs.SackEntryCodec.codec().listOf()) ?: return)
     }
 }

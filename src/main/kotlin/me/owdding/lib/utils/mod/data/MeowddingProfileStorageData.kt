@@ -215,19 +215,19 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
         var currentProfile: String? = null
 
         @Subscription
-        fun onProfileSwitch(event: ProfileChangeEvent) {
+        private fun onProfileSwitch(event: ProfileChangeEvent) {
             currentProfile = event.name
             Scheduling.async { allStorageDatas.forEach { it.load() } }
         }
 
         @Subscription(FreshHypixelAlphaDetectedEvent::class)
-        fun onNewAlpha() {
+        private fun onNewAlpha() {
             allStorageDatas.forEach { it.deleteAlpha() }
         }
 
         @Subscription(TickEvent::class)
         @TimePassed("5s")
-        fun onTick() {
+        private fun onTick() {
             MeowddingStorageData.clearAndRun(requiresSave) { it.saveToSystem() }
             MeowddingStorageData.clearAndRun(requiresAlphaSave) { it.saveAlphaToSystem() }
         }

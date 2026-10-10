@@ -44,7 +44,7 @@ object MeowddingConfigTranslationChecker {
     fun addModToWarn(modId: String) = modsToWarn.add(modId)
 
     @Subscription(ServerChangeEvent::class)
-    fun onServerChange() {
+    private fun onServerChange() {
         if (hasSent) return
         hasSent = true
         modsToWarn.clearAnd(::warnTranslationsOfMod)

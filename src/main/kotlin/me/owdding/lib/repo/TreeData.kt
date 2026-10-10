@@ -69,7 +69,7 @@ object TreeRepoData {
 
     @Subscription
     context(_: FinishRepoLoadingEvent)
-    fun finishRepoLoading() {
+    private fun finishRepoLoading() {
         MeowddingLib.runCatching("Load Hotm Data") {
             RemoteRepo.getFileContentAsJson("mining/hotm.json")?.toDataOrThrow(MeowddingLibCodecs.TreeNodeCodec.codec().listOf())?.apply(_hotm::set)
         }

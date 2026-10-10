@@ -138,7 +138,7 @@ open class MeowddingKeybind(
         private val knownKeybinds = mutableListOf<MeowddingKeybind>()
 
         @Subscription(event = [TickEvent::class])
-        fun onTick() {
+        private fun onTick() {
             knownKeybinds.forEach { keybind ->
                 if (keybind.allowMultipleExecutions && keybind.isDown) {
                     keybind.runnable?.invoke()

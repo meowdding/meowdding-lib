@@ -32,12 +32,12 @@ object SkyblockPackInfo : MeowddingLogger by MeowddingLib.featureLogger() {
     var onDev = false
 
     @Subscription
-    fun onHypixelJoin(event: HypixelJoinEvent) {
+    private fun onHypixelJoin(event: HypixelJoinEvent) {
         this.onDev = event.environment == Environment.TEST
     }
 
     @Subscription(ServerDisconnectEvent::class)
-    fun onServerDisconnect() {
+    private fun onServerDisconnect() {
         this.onDev = false
     }
 
