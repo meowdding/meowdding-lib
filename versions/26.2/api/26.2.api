@@ -2,7 +2,6 @@ public final class me/owdding/lib/MeowddingLib : me/owdding/lib/utils/mod/Meowdd
 	public static final field INSTANCE Lme/owdding/lib/MeowddingLib;
 	public fun getCodec (Ljava/lang/Class;)Lcom/mojang/serialization/Codec;
 	public fun onInitializeClient ()V
-	public final fun onRegisterCommands (Ltech/thatgravyboat/skyblockapi/api/events/misc/RegisterCommandsEvent;)V
 	public fun postInit ()V
 }
 
@@ -334,7 +333,6 @@ public final class me/owdding/lib/compat/meowdding/MeowddingConfigTranslationChe
 	public final fun addModToWarn (Ljava/lang/String;)Z
 	public final fun getAllTranslationKeys (Lcom/teamresourceful/resourcefulconfig/api/types/ResourcefulConfig;)Ljava/util/Set;
 	public final fun getMissingTranslations (Lcom/teamresourceful/resourcefulconfig/api/types/ResourcefulConfig;)Ljava/util/Set;
-	public final fun onServerChange ()V
 }
 
 public final class me/owdding/lib/compat/meowdding/MeowddingFeatures {
@@ -493,7 +491,6 @@ public final class me/owdding/lib/cosmetics/MlibCosmetics {
 	public static final field INSTANCE Lme/owdding/lib/cosmetics/MlibCosmetics;
 	public final fun getCosmeticScaleCodec ()Lcom/mojang/serialization/Codec;
 	public static final fun getMlibCosmetics ()Ljava/util/Map;
-	public final fun onCosmeticLoad (Lme/owdding/lib/events/CosmeticLoadEvent;)V
 	public final fun tryApplySmallModifier (Lme/owdding/lib/cosmetics/MlibCosmetics$MlibCosmeticData;Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;)V
 	public static final fun tryModify (Lnet/minecraft/world/entity/Avatar;Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;F)V
 	public final fun tryModifyCape (Lme/owdding/lib/cosmetics/MlibCosmetics$MlibCosmeticData;Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;)V
@@ -530,7 +527,6 @@ public final class me/owdding/lib/dev/DisplayTest : net/minecraft/client/gui/scr
 public final class me/owdding/lib/dev/EnchantmentGuideParser {
 	public static final field INSTANCE Lme/owdding/lib/dev/EnchantmentGuideParser;
 	public final fun getEnabled ()Z
-	public final fun itemChangeEvent (Ltech/thatgravyboat/skyblockapi/api/events/screen/InventoryChangeEvent;)V
 	public final fun setEnabled (Z)V
 }
 
@@ -541,7 +537,6 @@ public final class me/owdding/lib/dev/OverlayTest {
 
 public final class me/owdding/lib/dev/REITest {
 	public static final field INSTANCE Lme/owdding/lib/dev/REITest;
-	public final fun onTick ()V
 }
 
 public final class me/owdding/lib/dev/TestCommands {
@@ -1213,8 +1208,6 @@ public final class me/owdding/lib/overlays/OverlayScreen : me/owdding/lib/platfo
 
 public final class me/owdding/lib/overlays/Overlays {
 	public static final field INSTANCE Lme/owdding/lib/overlays/Overlays;
-	public final fun onHudRender (Ltech/thatgravyboat/skyblockapi/api/events/render/RenderHudEvent;)V
-	public final fun onMouseClick (Ltech/thatgravyboat/skyblockapi/api/events/screen/ScreenMouseClickEvent$Pre;)V
 	public final fun register (Lme/owdding/lib/overlays/Overlay;)V
 }
 
@@ -1617,7 +1610,6 @@ public final class me/owdding/lib/rendering/text/PrideShader : java/lang/Enum, c
 public final class me/owdding/lib/rendering/text/PrideShader$Companion {
 	public final fun getCODEC ()Lcom/mojang/serialization/MapCodec;
 	public final fun getID ()Lnet/minecraft/resources/Identifier;
-	public final fun registerShaders (Lme/owdding/lib/events/RegisterTextShaderEvent;)V
 }
 
 public abstract interface class me/owdding/lib/rendering/text/TextShader {
@@ -1672,7 +1664,6 @@ public final class me/owdding/lib/rendering/text/TextShaders {
 	public static final fun getActiveShader ()Lme/owdding/lib/rendering/text/TextShader;
 	public final fun getCODEC ()Lcom/mojang/serialization/Codec;
 	public final fun pushPop (Lme/owdding/lib/rendering/text/TextShader;Lkotlin/jvm/functions/Function0;)V
-	public final fun register (Lme/owdding/lib/events/RegisterTextShaderEvent;)V
 	public static final fun setActiveShader (Lme/owdding/lib/rendering/text/TextShader;)V
 	public final fun withTextShader (Lnet/minecraft/client/gui/GuiGraphicsExtractor;Lme/owdding/lib/rendering/text/TextShader;Lkotlin/jvm/functions/Function0;)V
 }
@@ -1897,7 +1888,6 @@ public final class me/owdding/lib/repo/CostTypes$Companion {
 
 public final class me/owdding/lib/repo/EnchantmentRepoData {
 	public static final field INSTANCE Lme/owdding/lib/repo/EnchantmentRepoData;
-	public final fun finishRepoLoading (Lme/owdding/lib/events/FinishRepoLoadingEvent;)V
 	public final fun getData ()Ljava/util/List;
 	public final fun getREQUIREMENT_CODEC ()Lcom/mojang/serialization/Codec;
 }
@@ -2042,7 +2032,6 @@ public final class me/owdding/lib/repo/PowderType : java/lang/Enum, me/owdding/l
 
 public final class me/owdding/lib/repo/SacksRepoData {
 	public static final field INSTANCE Lme/owdding/lib/repo/SacksRepoData;
-	public final fun finishRepoLoading (Lme/owdding/lib/events/FinishRepoLoadingEvent;)V
 	public final fun getData ()Ljava/util/List;
 }
 
@@ -2133,7 +2122,6 @@ public final class me/owdding/lib/repo/TreeNodes$Companion {
 
 public final class me/owdding/lib/repo/TreeRepoData {
 	public static final field INSTANCE Lme/owdding/lib/repo/TreeRepoData;
-	public final fun finishRepoLoading (Lme/owdding/lib/events/FinishRepoLoadingEvent;)V
 	public final fun getHotf ()Ljava/util/List;
 	public final fun getHotm ()Ljava/util/List;
 	public final fun hotfByName (Ljava/lang/String;)Lme/owdding/lib/repo/TreeNode;
@@ -2300,7 +2288,6 @@ public class me/owdding/lib/utils/MeowddingKeybind {
 }
 
 public final class me/owdding/lib/utils/MeowddingKeybind$Companion {
-	public final fun onTick ()V
 }
 
 public abstract interface class me/owdding/lib/utils/MeowddingLogger {
@@ -2373,7 +2360,6 @@ public final class me/owdding/lib/utils/MeowddingUpdateChecker {
 	public final fun getCallback ()Lme/owdding/lib/utils/UpdateCallback;
 	public final fun getModContainer ()Lnet/fabricmc/loader/api/ModContainer;
 	public final fun getProjectSlug ()Ljava/lang/String;
-	public final fun onJoinHypixel ()V
 }
 
 public final class me/owdding/lib/utils/MiscKt {
@@ -2436,8 +2422,6 @@ public final class me/owdding/lib/utils/SkyblockPackInfo : me/owdding/lib/utils/
 	public fun info (Ljava/lang/String;Ljava/lang/String;)V
 	public fun info (Ljava/lang/String;Ljava/lang/Throwable;)V
 	public fun info (Ljava/lang/String;Ljava/lang/Throwable;Ljava/lang/String;)V
-	public final fun onHypixelJoin (Ltech/thatgravyboat/skyblockapi/api/events/hypixel/HypixelJoinEvent;)V
-	public final fun onServerDisconnect ()V
 	public fun runCatching (Ljava/lang/String;Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
 	public final fun setOnDev (Z)V
 	public fun trace (Ljava/lang/String;)V
@@ -2892,15 +2876,11 @@ public final class me/owdding/lib/waypoints/MeowddingWaypoint {
 public final class me/owdding/lib/waypoints/MeowddingWaypointHandler {
 	public static final field INSTANCE Lme/owdding/lib/waypoints/MeowddingWaypointHandler;
 	public final fun addWaypoint (Lme/owdding/lib/waypoints/MeowddingWaypoint;)V
-	public final fun clearWaypoints ()V
 	public final fun getWaypoints ()Ljava/util/List;
 	public final fun getWaypointsWithAllTags (Ljava/util/Collection;)Ljava/util/List;
 	public final fun getWaypointsWithAllTags ([Lme/owdding/lib/waypoints/MeowddingWaypointTag;)Ljava/util/List;
 	public final fun getWaypointsWithAnyTags (Ljava/util/Collection;)Ljava/util/List;
 	public final fun getWaypointsWithAnyTags ([Lme/owdding/lib/waypoints/MeowddingWaypointTag;)Ljava/util/List;
-	public final fun onRender (Ltech/thatgravyboat/skyblockapi/api/events/render/RenderWorldEvent$AfterEntities;)V
-	public final fun onRender (Ltech/thatgravyboat/skyblockapi/api/events/render/RenderWorldEvent$AfterTranslucent;)V
-	public final fun onTick (Ltech/thatgravyboat/skyblockapi/api/events/time/TickEvent;)V
 	public final fun removeWaypoint (Ljava/util/UUID;)V
 	public final fun removeWaypoint (Lme/owdding/lib/waypoints/MeowddingWaypoint;)V
 }
