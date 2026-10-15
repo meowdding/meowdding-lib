@@ -9,6 +9,7 @@ import org.apache.commons.io.FileUtils
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.FreshHypixelAlphaDetectedEvent
+import tech.thatgravyboat.skyblockapi.api.events.location.ServerDisconnectEvent
 import tech.thatgravyboat.skyblockapi.api.events.misc.ProfileDeleteDataEvent
 import tech.thatgravyboat.skyblockapi.api.events.profile.ProfileChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
@@ -96,17 +97,17 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
     private var data: T? = null
     private var alphaData: T? = null
 
-    private lateinit var lastPath: Path
-    private lateinit var lastAlphaPath: Path
+    private var lastPath: Path? = null
+    private var lastAlphaPath: Path? = null
     private var lastProfile: String? = null
 
     private val currentCodec = codec(version)
 
     private fun copyData(): T {
-        mod.debug("Copying data from ${lastPath.relativeTo(defaultPath)} for alpha data")
+        mod.debug("Copying data from ${lastPath?.relativeTo(defaultPath)} for alpha data")
         val data = data
         if (data == null) {
-            mod.debug("data is null for ${lastPath.relativeTo(defaultPath)}, creating default instead")
+            mod.debug("data is null for ${lastPath?.relativeTo(defaultPath)}, creating default instead")
             return defaultData()
         }
         try {
@@ -118,7 +119,7 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
         }
     }
 
-    private fun getOrCreateAlphaData(): T {
+    private fun getOrCreateAlphaData(): T? {
         var alphaData = alphaData
         if (alphaData == null) {
             alphaData = loadData(lastAlphaPath, ::copyData)
@@ -162,7 +163,8 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
         }
     }
 
-    private fun loadData(path: Path, default: () -> T): T {
+    private fun loadData(path: Path?, default: () -> T): T? {
+        if (path == null) return null
         if (!path.exists()) {
             path.createParentDirectories()
             return default()
@@ -201,7 +203,8 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
         else saveToSystem()
     }
 
-    private fun saveDataToPath(lastPath: Path, data: T) {
+    private fun saveDataToPath(lastPath: Path?, data: T?) {
+        if (lastPath == null || data == null) return
         try {
             val version = this.version
             val codec = this.codec(version)
@@ -217,12 +220,10 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
     }
 
     private fun saveToSystem() {
-        val data = data ?: return
         saveDataToPath(lastPath, data)
     }
 
     private fun saveAlphaToSystem() {
-        val alphaData = alphaData ?: return
         saveDataToPath(lastAlphaPath, alphaData)
     }
 
@@ -237,6 +238,11 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
         private fun onProfileSwitch(event: ProfileChangeEvent) {
             currentProfile = event.name
             Scheduling.async { allStorageDatas.forEach { it.load() } }
+        }
+
+        @Subscription(ServerDisconnectEvent::class)
+        private fun onDisconnect() {
+            currentProfile = null
         }
 
         @Subscription(FreshHypixelAlphaDetectedEvent::class)
