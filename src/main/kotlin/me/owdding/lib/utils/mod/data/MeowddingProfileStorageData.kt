@@ -9,7 +9,6 @@ import org.apache.commons.io.FileUtils
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.FreshHypixelAlphaDetectedEvent
-import tech.thatgravyboat.skyblockapi.api.events.location.ServerDisconnectEvent
 import tech.thatgravyboat.skyblockapi.api.events.misc.ProfileDeleteDataEvent
 import tech.thatgravyboat.skyblockapi.api.events.profile.ProfileChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
@@ -238,11 +237,6 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
         private fun onProfileSwitch(event: ProfileChangeEvent) {
             currentProfile = event.name
             Scheduling.async { allStorageDatas.forEach { it.load() } }
-        }
-
-        @Subscription(ServerDisconnectEvent::class)
-        private fun onDisconnect() {
-            currentProfile = null
         }
 
         @Subscription(FreshHypixelAlphaDetectedEvent::class)
