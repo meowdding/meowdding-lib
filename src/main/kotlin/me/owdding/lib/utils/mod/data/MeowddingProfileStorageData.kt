@@ -131,7 +131,7 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
     private fun Path.profile(profileName: String) =
         resolve(McPlayer.uuid.toString())
             .resolve(profileName)
-            .resolve(fileName)
+            .resolve(this@MeowddingProfileStorageData.fileName)
 
     fun load() {
         if (!hasProfile()) {
