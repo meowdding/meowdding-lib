@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
     breaking-change-check:
-        if: ${{ !github.event.pull_request.draft }}
+        if: ${{ !github.event.pull_request.draft && !contains(github.event.pull_request.labels.*.name, 'Ignore Breaking') }}
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@v5
@@ -25,7 +25,7 @@ jobs:
                     ref: ${{ github.event.pull_request.head.sha }}
 
             -   name: Fail if build files are changed
-                if: ${{ github.event.pull_request.head.repo.owner.login != 'meowdding' && github.event.pull_request.head.repo.owner.login != 'j10a1n15' }}
+                if: ${{ github.event.pull_request.head.repo.owner.login != 'meowdding' }}
                 run: |
                     git fetch origin ${{ github.event.pull_request.base.sha }}
                     if git diff --name-only ${{ github.event.pull_request.head.sha }} ${{ github.event.pull_request.base.sha }} | grep -E ".*gradle.*|buildSrc/.*|.*main.kts"; then
@@ -44,6 +44,9 @@ jobs:
             -   name: Setup gradle
                 uses: gradle/actions/setup-gradle@v5
             -   run: chmod +x gradlew
+
+            -   name: Backup current versions
+                run: find versions -name *.api -exec sh -c 'cp $1 $1.old' _ '{}' \;
 
             -   name: Update API baseline
                 run: ./gradlew updateKotlinAbi || true
