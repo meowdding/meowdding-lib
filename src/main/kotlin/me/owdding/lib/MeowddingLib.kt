@@ -97,7 +97,7 @@ object MeowddingLib : MeowddingMod("meowdding-lib", loggerName = "MeowddingLib")
                 Text.of("Toggled backup repo to: ") {
                     if (RemoteRepo.forceBackupRepo) append("Enabled", TextColor.GREEN)
                     else append("Disabled", TextColor.RED)
-                }
+                }.send()
                 notifyAboutRepoLoad = true
                 loadRepo()
             }
