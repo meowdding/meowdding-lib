@@ -9,6 +9,7 @@ import me.owdding.lib.MeowddingLib
 import me.owdding.lib.builder.DisplayFactory
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.MIDDLE
+import me.owdding.lib.captcha.CaptchaType
 import me.owdding.lib.displays.*
 import me.owdding.lib.events.MeowddingLibRegisterCommandsEvent
 import me.owdding.lib.layouts.BackgroundWidget
