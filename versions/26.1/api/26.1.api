@@ -2762,6 +2762,119 @@ public final class me/owdding/lib/utils/mod/data/MeowddingStorageData {
 	public final fun set (Ljava/lang/Object;)V
 }
 
+public abstract class me/owdding/lib/utils/strings/BaseRemoteStrings : me/owdding/lib/utils/strings/StringGroup {
+	public static final field Companion Lme/owdding/lib/utils/strings/BaseRemoteStrings$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public fun componentRegex (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lme/owdding/lib/utils/strings/ElementDelegate;
+	public fun componentRegex (Lkotlin/text/Regex;Ljava/lang/String;Ljava/lang/String;)Lme/owdding/lib/utils/strings/ElementDelegate;
+	public fun getRegistry ()Lme/owdding/lib/utils/strings/BaseRemoteStrings;
+	public final fun getRepoFilePath ()Ljava/lang/String;
+	public final fun getStringOverwrites ()Ljava/util/Map;
+	protected fun onRegister (Lme/owdding/lib/utils/strings/CompletedElementDelegate;)V
+	public fun regex (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lme/owdding/lib/utils/strings/ElementDelegate;
+	public fun regex (Lkotlin/text/Regex;Ljava/lang/String;Ljava/lang/String;)Lme/owdding/lib/utils/strings/ElementDelegate;
+	public final fun register (Lme/owdding/lib/utils/strings/CompletedElementDelegate;)V
+	public final fun repoLoaded ()V
+	public final fun repoStartLoading ()V
+	public fun resolve (Ljava/lang/String;)Lme/owdding/lib/utils/strings/StringGroup;
+	public fun string (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lme/owdding/lib/utils/strings/ElementDelegate;
+}
+
+public final class me/owdding/lib/utils/strings/BaseRemoteStrings$Companion {
+}
+
+public final class me/owdding/lib/utils/strings/CompletedElementDelegate {
+	public fun <init> (Lme/owdding/lib/utils/strings/BaseRemoteStrings;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Ljava/lang/Object;)V
+	public final fun component1 ()Lme/owdding/lib/utils/strings/BaseRemoteStrings;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Lkotlin/jvm/functions/Function1;
+	public final fun component4 ()Ljava/lang/Object;
+	public final fun copy (Lme/owdding/lib/utils/strings/BaseRemoteStrings;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Ljava/lang/Object;)Lme/owdding/lib/utils/strings/CompletedElementDelegate;
+	public static synthetic fun copy$default (Lme/owdding/lib/utils/strings/CompletedElementDelegate;Lme/owdding/lib/utils/strings/BaseRemoteStrings;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Ljava/lang/Object;ILjava/lang/Object;)Lme/owdding/lib/utils/strings/CompletedElementDelegate;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun get ()Ljava/lang/Object;
+	public final fun getData ()Ljava/lang/Object;
+	public final fun getDefault ()Ljava/lang/Object;
+	public final fun getKey ()Ljava/lang/String;
+	public final fun getRegistry ()Lme/owdding/lib/utils/strings/BaseRemoteStrings;
+	public final fun getTransform ()Lkotlin/jvm/functions/Function1;
+	public final fun getValue (Ljava/lang/Object;Lkotlin/reflect/KProperty;)Ljava/lang/Object;
+	public fun hashCode ()I
+	public final fun setData (Ljava/lang/Object;)V
+	public fun toString ()Ljava/lang/String;
+	public final fun update ()V
+}
+
+public final class me/owdding/lib/utils/strings/ElementDelegate {
+	public fun <init> (Lme/owdding/lib/utils/strings/BaseRemoteStrings;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Ljava/lang/Object;)V
+	public final fun component1 ()Lme/owdding/lib/utils/strings/BaseRemoteStrings;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Lkotlin/jvm/functions/Function1;
+	public final fun component5 ()Ljava/lang/Object;
+	public final fun copy (Lme/owdding/lib/utils/strings/BaseRemoteStrings;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Ljava/lang/Object;)Lme/owdding/lib/utils/strings/ElementDelegate;
+	public static synthetic fun copy$default (Lme/owdding/lib/utils/strings/ElementDelegate;Lme/owdding/lib/utils/strings/BaseRemoteStrings;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Ljava/lang/Object;ILjava/lang/Object;)Lme/owdding/lib/utils/strings/ElementDelegate;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDefault ()Ljava/lang/Object;
+	public final fun getPath ()Ljava/lang/String;
+	public final fun getPrefix ()Ljava/lang/String;
+	public final fun getRegistry ()Lme/owdding/lib/utils/strings/BaseRemoteStrings;
+	public final fun getTransformer ()Lkotlin/jvm/functions/Function1;
+	public fun hashCode ()I
+	public final fun provideDelegate (Ljava/lang/Object;Lkotlin/reflect/KProperty;)Lme/owdding/lib/utils/strings/CompletedElementDelegate;
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class me/owdding/lib/utils/strings/StringGroup {
+	public static final field Companion Lme/owdding/lib/utils/strings/StringGroup$Companion;
+	public fun componentRegex (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lme/owdding/lib/utils/strings/ElementDelegate;
+	public abstract fun componentRegex (Lkotlin/text/Regex;Ljava/lang/String;Ljava/lang/String;)Lme/owdding/lib/utils/strings/ElementDelegate;
+	public static synthetic fun componentRegex$default (Lme/owdding/lib/utils/strings/StringGroup;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lme/owdding/lib/utils/strings/ElementDelegate;
+	public static synthetic fun componentRegex$default (Lme/owdding/lib/utils/strings/StringGroup;Lkotlin/text/Regex;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lme/owdding/lib/utils/strings/ElementDelegate;
+	public abstract fun getRegistry ()Lme/owdding/lib/utils/strings/BaseRemoteStrings;
+	public fun regex (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lme/owdding/lib/utils/strings/ElementDelegate;
+	public abstract fun regex (Lkotlin/text/Regex;Ljava/lang/String;Ljava/lang/String;)Lme/owdding/lib/utils/strings/ElementDelegate;
+	public static synthetic fun regex$default (Lme/owdding/lib/utils/strings/StringGroup;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lme/owdding/lib/utils/strings/ElementDelegate;
+	public static synthetic fun regex$default (Lme/owdding/lib/utils/strings/StringGroup;Lkotlin/text/Regex;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lme/owdding/lib/utils/strings/ElementDelegate;
+	public abstract fun resolve (Ljava/lang/String;)Lme/owdding/lib/utils/strings/StringGroup;
+	public abstract fun string (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lme/owdding/lib/utils/strings/ElementDelegate;
+	public static synthetic fun string$default (Lme/owdding/lib/utils/strings/StringGroup;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lme/owdding/lib/utils/strings/ElementDelegate;
+}
+
+public final class me/owdding/lib/utils/strings/StringGroup$Companion {
+	public final fun resolve (Lme/owdding/lib/utils/strings/StringGroup;)Lme/owdding/lib/utils/strings/StringGroup;
+}
+
+public final class me/owdding/lib/utils/strings/StringGroup$DefaultImpls {
+	public static fun componentRegex (Lme/owdding/lib/utils/strings/StringGroup;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lme/owdding/lib/utils/strings/ElementDelegate;
+	public static synthetic fun componentRegex$default (Lme/owdding/lib/utils/strings/StringGroup;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lme/owdding/lib/utils/strings/ElementDelegate;
+	public static synthetic fun componentRegex$default (Lme/owdding/lib/utils/strings/StringGroup;Lkotlin/text/Regex;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lme/owdding/lib/utils/strings/ElementDelegate;
+	public static fun regex (Lme/owdding/lib/utils/strings/StringGroup;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lme/owdding/lib/utils/strings/ElementDelegate;
+	public static synthetic fun regex$default (Lme/owdding/lib/utils/strings/StringGroup;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lme/owdding/lib/utils/strings/ElementDelegate;
+	public static synthetic fun regex$default (Lme/owdding/lib/utils/strings/StringGroup;Lkotlin/text/Regex;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lme/owdding/lib/utils/strings/ElementDelegate;
+	public static synthetic fun string$default (Lme/owdding/lib/utils/strings/StringGroup;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lme/owdding/lib/utils/strings/ElementDelegate;
+}
+
+public final class me/owdding/lib/utils/strings/StringGroupImpl : me/owdding/lib/utils/strings/StringGroup {
+	public fun <init> (Ljava/lang/String;Lme/owdding/lib/utils/strings/StringGroup;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lme/owdding/lib/utils/strings/StringGroup;
+	public fun componentRegex (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lme/owdding/lib/utils/strings/ElementDelegate;
+	public fun componentRegex (Lkotlin/text/Regex;Ljava/lang/String;Ljava/lang/String;)Lme/owdding/lib/utils/strings/ElementDelegate;
+	public final fun copy (Ljava/lang/String;Lme/owdding/lib/utils/strings/StringGroup;)Lme/owdding/lib/utils/strings/StringGroupImpl;
+	public static synthetic fun copy$default (Lme/owdding/lib/utils/strings/StringGroupImpl;Ljava/lang/String;Lme/owdding/lib/utils/strings/StringGroup;ILjava/lang/Object;)Lme/owdding/lib/utils/strings/StringGroupImpl;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getParent ()Lme/owdding/lib/utils/strings/StringGroup;
+	public final fun getPrefix ()Ljava/lang/String;
+	public fun getRegistry ()Lme/owdding/lib/utils/strings/BaseRemoteStrings;
+	public fun hashCode ()I
+	public fun regex (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lme/owdding/lib/utils/strings/ElementDelegate;
+	public fun regex (Lkotlin/text/Regex;Ljava/lang/String;Ljava/lang/String;)Lme/owdding/lib/utils/strings/ElementDelegate;
+	public fun resolve (Ljava/lang/String;)Lme/owdding/lib/utils/strings/StringGroup;
+	public fun string (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lme/owdding/lib/utils/strings/ElementDelegate;
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class me/owdding/lib/utils/suggestions/IterableSuggestionProvider : me/owdding/lib/utils/suggestions/MeowddingSuggestionProvider {
 	public fun <init> (Ljava/lang/Iterable;Lkotlin/jvm/functions/Function1;)V
 	public synthetic fun <init> (Ljava/lang/Iterable;Lkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
