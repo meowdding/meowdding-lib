@@ -26,14 +26,10 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.onClick
 @Module
 object EnchantmentGuideParser {
 
-    private val maxLevelOverwrites = mapOf(
-        "Ender Slayer" to 7,
-        "Smite" to 7,
-    )
+    private val maxLevelOverwrites = mapOf<String, Int>()
 
     var enabled = false
     private val enchantments = mutableSetOf<EnchantmentRepoData.ParsedEnchantmentData>()
-
 
     private data class LoreReader(val content: List<String>) {
         private var index = 0
@@ -46,14 +42,13 @@ object EnchantmentGuideParser {
             index = 0
         }
 
-        val isTitle: Boolean
-            get() = this.canRead() && !this.peek().startsWith(" ")
+        val isTitle: Boolean get() = this.canRead() && !this.peek().startsWith(" ")
     }
 
     @Subscription
     private fun itemChangeEvent(event: InventoryChangeEvent) {
         if (!enabled) return
-        if (!event.title.endsWith("Enchantments Guide")) return
+        if (!event.title.endsWith("Enchantment Guide")) return
         if (!event.isInMainPart) return
         if (event.item !in Items.ENCHANTED_BOOK) return
 
@@ -75,12 +70,8 @@ object EnchantmentGuideParser {
         }
 
         val name = event.item.cleanName.substringBeforeLast(" ")
-        val maxLevel = event.item.cleanName.removePrefix(name).trim().toInt()
+        val maxLevel = event.item.cleanName.substringAfterLast(" ").trim().toInt()
         val sources = parseSources(map.getOrDefault("Sources:", map.getOrDefault("Source:", emptyList())))
-        if (name == "Smite") {
-            sources.removeIf { (_, min, max) -> min == max && max == 7 }
-            sources.add(EnchantmentRepoData.EnchantmentSource("Severed Hand", 7, 7))
-        }
 
         val minLevel = sources.minOf { it.min }
 
