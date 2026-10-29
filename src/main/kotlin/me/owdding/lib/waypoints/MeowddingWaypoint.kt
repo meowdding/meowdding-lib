@@ -10,7 +10,6 @@ import net.minecraft.network.chat.Component
 import net.minecraft.util.ARGB
 import net.minecraft.util.Mth
 import net.minecraft.world.phys.Vec3
-import net.minecraft.world.waypoints.Waypoint
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
@@ -20,7 +19,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.awt.Color
-import java.util.*
+import java.util.UUID
 import kotlin.random.Random
 
 class MeowddingWaypoint(internal val position: Vec3) {

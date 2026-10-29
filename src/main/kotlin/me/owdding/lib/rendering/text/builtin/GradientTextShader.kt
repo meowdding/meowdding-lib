@@ -9,6 +9,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.owdding.lib.MeowddingLib
 import me.owdding.lib.extensions.withShaderDefine
 import me.owdding.lib.generated.EnumCodec
+import me.owdding.lib.rendering.text.PipelineResult
 import me.owdding.lib.rendering.text.TextShader
 import me.owdding.lib.utils.MemoizeUtil
 import net.minecraft.client.gui.Font
@@ -21,7 +22,6 @@ import org.joml.Vector4f
 
 //? >= 26.2
 import com.mojang.renderpearl.api.pipeline.BindGroupLayout
-import me.owdding.lib.rendering.text.PipelineResult
 //? >= 26.3
 import net.minecraft.client.renderer.oit.OitPipelineSet
 //? 26.1

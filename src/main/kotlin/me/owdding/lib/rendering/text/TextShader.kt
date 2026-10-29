@@ -1,16 +1,16 @@
 package me.owdding.lib.rendering.text
 
 import com.mojang.renderpearl.api.pipeline.RenderPipeline
-import me.owdding.lib.helper.TextShaderHolder
 import net.minecraft.client.gui.Font
-//? >= 26.3
-import net.minecraft.client.renderer.oit.OitPipelineSet
 import net.minecraft.client.renderer.rendertype.RenderSetup
 import net.minecraft.client.renderer.rendertype.RenderType
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Style
 import net.minecraft.resources.Identifier
 import net.minecraft.util.Util
+
+//? >= 26.3
+import net.minecraft.client.renderer.oit.OitPipelineSet
 
 data class TextShaderInfo(val pipeline: PipelineResult, val texture: Identifier, val displayMode: Font.DisplayMode, val grayScale: Boolean)
 

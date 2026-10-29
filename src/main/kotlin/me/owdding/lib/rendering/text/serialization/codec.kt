@@ -5,10 +5,8 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.owdding.ktcodecs.IncludedCodec
-import me.owdding.lib.helper.TextShaderHolder
 import me.owdding.lib.rendering.text.TextShaders
 import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.Component.literal
 import net.minecraft.network.chat.ComponentContents
 import net.minecraft.network.chat.ComponentSerialization
 import net.minecraft.network.chat.MutableComponent
@@ -23,7 +21,6 @@ import net.minecraft.network.chat.contents.TranslatableContents
 import net.minecraft.util.ExtraCodecs
 import tech.thatgravyboat.skyblockapi.utils.extentions.forNullGetter
 import tech.thatgravyboat.skyblockapi.utils.text.Text
-import tech.thatgravyboat.skyblockapi.utils.text.Text.join
 import java.util.function.Function
 import kotlin.jvm.optionals.getOrNull
 

@@ -2,7 +2,6 @@ package me.owdding.lib.mixins;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import com.mojang.renderpearl.api.pipeline.RenderPipeline;
 import me.owdding.lib.accessor.FontPipelineHolder;
 import me.owdding.lib.helper.TextShaderRenderTypeHolder;
 import me.owdding.lib.rendering.text.TextShader;

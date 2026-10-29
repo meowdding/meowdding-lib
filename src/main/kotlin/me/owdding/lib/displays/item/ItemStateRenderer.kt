@@ -1,18 +1,13 @@
 package me.owdding.lib.displays.item
 
 import com.mojang.blaze3d.platform.Lighting.Entry
-import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.PoseStack
-import com.mojang.renderpearl.api.textures.FilterMode
 import earth.terrarium.olympus.client.pipelines.pips.OlympusPictureInPictureRenderState
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.navigation.ScreenRectangle
-import net.minecraft.client.gui.render.TextureSetup
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer
-import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.item.TrackingItemStackRenderState
-import net.minecraft.client.renderer.state.gui.BlitRenderState
 import net.minecraft.client.renderer.state.gui.GuiItemRenderState
 import net.minecraft.client.renderer.state.gui.GuiRenderState
 import net.minecraft.client.renderer.texture.OverlayTexture
@@ -23,8 +18,10 @@ import org.joml.Matrix3x2f
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
-import java.util.*
+import java.util.Objects
 import java.util.function.Supplier
+import com.mojang.blaze3d.systems.RenderSystem
+import java.util.*
 import com.mojang.renderpearl.api.textures.GpuTextureView
 import kotlin.jvm.java
 

@@ -10,9 +10,12 @@ import net.minecraft.client.gui.narration.NarratableEntry
 import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.client.gui.navigation.ScreenDirection
 import net.minecraft.client.gui.navigation.ScreenRectangle
-import net.minecraft.client.input.*
+import net.minecraft.client.input.CharacterEvent
+import net.minecraft.client.input.KeyEvent
+import net.minecraft.client.input.MouseButtonEvent
 import tech.thatgravyboat.skyblockapi.utils.extentions.scaled
-import java.util.*
+import java.util.Deque
+import java.util.LinkedList
 import kotlin.properties.Delegates.observable
 
 class ScalableWidget(val original: AbstractWidget) : BaseParentWidget(original.width, original.height), Scalable {

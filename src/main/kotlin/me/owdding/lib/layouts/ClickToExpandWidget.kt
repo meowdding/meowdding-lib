@@ -1,15 +1,15 @@
 package me.owdding.lib.layouts
 
+import earth.terrarium.olympus.client.components.base.BaseParentWidget
 import earth.terrarium.olympus.client.ui.UIIcons
 import me.owdding.lib.MeowddingLib
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.MIDDLE
 import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.Displays.background
-import earth.terrarium.olympus.client.components.base.BaseParentWidget
-import net.minecraft.client.input.*
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.layouts.LayoutElement
+import net.minecraft.client.input.MouseButtonEvent
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import kotlin.math.max
 

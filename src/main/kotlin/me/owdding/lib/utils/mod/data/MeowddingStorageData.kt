@@ -23,7 +23,11 @@ import java.util.concurrent.CompletableFuture
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.experimental.ExperimentalTypeInference
-import kotlin.io.path.*
+import kotlin.io.path.createParentDirectories
+import kotlin.io.path.deleteIfExists
+import kotlin.io.path.exists
+import kotlin.io.path.readText
+import kotlin.io.path.relativeTo
 
 class MeowddingStorageData<T : Any> internal constructor(
     private val version: Int = 0,

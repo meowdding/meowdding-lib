@@ -1,7 +1,6 @@
 package me.owdding.lib.compat.meowdding
 
 import com.google.gson.JsonArray
-import kotlinx.coroutines.runBlocking
 import me.owdding.ktcodecs.FieldName
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktmodules.Module
@@ -11,6 +10,7 @@ import tech.thatgravyboat.skyblockapi.utils.http.Http
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import java.net.URI
 import java.util.concurrent.CompletableFuture
+import kotlinx.coroutines.runBlocking
 
 private const val URL = "https://meowdd.ing/mod/info.json"
 

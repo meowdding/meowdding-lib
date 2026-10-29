@@ -1,6 +1,11 @@
 package me.owdding.lib.builder
 
-import me.owdding.lib.displays.*
+import me.owdding.lib.displays.Alignment
+import me.owdding.lib.displays.Display
+import me.owdding.lib.displays.Displays
+import me.owdding.lib.displays.asLayer
+import me.owdding.lib.displays.toColumn
+import me.owdding.lib.displays.toRow
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.world.item.ItemStack

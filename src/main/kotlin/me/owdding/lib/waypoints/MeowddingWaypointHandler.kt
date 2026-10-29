@@ -16,7 +16,7 @@ import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
-import java.util.*
+import java.util.UUID
 import kotlin.math.pow
 
 @Module

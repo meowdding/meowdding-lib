@@ -11,7 +11,12 @@ import me.owdding.lib.layouts.Scalable
 import me.owdding.lib.layouts.ScalableLayout
 import me.owdding.lib.layouts.ScalableWidget
 import net.minecraft.client.gui.components.AbstractWidget
-import net.minecraft.client.gui.layouts.*
+import net.minecraft.client.gui.layouts.FrameLayout
+import net.minecraft.client.gui.layouts.Layout
+import net.minecraft.client.gui.layouts.LayoutElement
+import net.minecraft.client.gui.layouts.LayoutSettings
+import net.minecraft.client.gui.layouts.LinearLayout
+import net.minecraft.client.gui.layouts.SpacerElement
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.world.item.ItemStack
