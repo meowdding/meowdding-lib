@@ -1,18 +1,13 @@
 package me.owdding.lib.displays.item
 
 import com.mojang.blaze3d.platform.Lighting.Entry
-import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.PoseStack
-import com.mojang.renderpearl.api.textures.FilterMode
 import earth.terrarium.olympus.client.pipelines.pips.OlympusPictureInPictureRenderState
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.navigation.ScreenRectangle
-import net.minecraft.client.gui.render.TextureSetup
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer
-import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.item.TrackingItemStackRenderState
-import net.minecraft.client.renderer.state.gui.BlitRenderState
 import net.minecraft.client.renderer.state.gui.GuiItemRenderState
 import net.minecraft.client.renderer.state.gui.GuiRenderState
 import net.minecraft.client.renderer.texture.OverlayTexture
@@ -25,15 +20,9 @@ import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import java.util.*
 import java.util.function.Supplier
+import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.renderpearl.api.textures.GpuTextureView
-import kotlin.jvm.java
 
-//? 26.1
-//import net.minecraft.client.renderer.MultiBufferSource
-//? 26.1
-//import java.util.function.Function
-
-//~ if >= 26.2 '(buffer: MultiBufferSource.BufferSource) : ' -> ' : ', '(buffer)' -> '()'
 class ItemStateRenderer : PictureInPictureRenderer<ItemStateRenderer.State>() {
 
     //? < 26.3
@@ -44,7 +33,7 @@ class ItemStateRenderer : PictureInPictureRenderer<ItemStateRenderer.State>() {
         return this.lastState != null && this.lastState == state
     }
 
-    override fun renderToTexture(state: State, stack: PoseStack/*? >= 26.2 >> ')'*/, submitNodeCollector: SubmitNodeCollector) {
+    override fun renderToTexture(state: State, stack: PoseStack, submitNodeCollector: SubmitNodeCollector) {
         this.lastState = state
         //? < 26.3
         //this.textureView = RenderSystem.outputColorTextureOverride
@@ -52,16 +41,8 @@ class ItemStateRenderer : PictureInPictureRenderer<ItemStateRenderer.State>() {
         stack.scale(1f, -1f, -1f)
         val item = state.state
 
-        //~ if >= 26.2 '.lighting' -> '.lighting()'
         McClient.self.gameRenderer.lighting().setupFor(if (item.itemStackRenderState().usesBlockLight()) Entry.ITEMS_3D else Entry.ITEMS_FLAT)
-
-        //? 26.1 {
-        /*val featureRenderer = McClient.self.gameRenderer.featureRenderDispatcher
-        val submitNodeCollector = featureRenderer.submitNodeStorage
-        *///? }
         item.itemStackRenderState().submit(stack, submitNodeCollector, LightCoordsUtil.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0)
-        //? 26.1
-        //featureRenderer.renderAllFeatures()
     }
 
     override fun getTranslateY(height: Int, ignored: Int): Float {
@@ -83,10 +64,7 @@ class ItemStateRenderer : PictureInPictureRenderer<ItemStateRenderer.State>() {
 
     data class State @JvmOverloads constructor(val state: GuiItemRenderState, val x1: Int? = null, val y1: Int? = null) :
         OlympusPictureInPictureRenderState<State> {
-        //? if > 26.1 {
         override fun getFactory(): Supplier<PictureInPictureRenderer<State>> = Supplier { ItemStateRenderer() }
-        //? } else
-        //override fun getFactory(): Function<MultiBufferSource.BufferSource, PictureInPictureRenderer<State>> = Function { buffer -> ItemStateRenderer(buffer) }
 
         override fun scale(): Float = maxOf(state.pose().m00(), state.pose().m11()) * 16f
         override fun x0(): Int = state.x()

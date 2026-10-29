@@ -39,7 +39,6 @@ object TagComponentSerialization : MeowddingLogger by MeowddingLib.featureLogger
             ),
 
             ChatFormatting.entries.filter { it <= ChatFormatting.WHITE }.map {
-                //~ if >= 26.2 'serializedName' -> 'name.lowercase()'
                 it.name.lowercase()
             },
         ).flatten()

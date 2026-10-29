@@ -3,7 +3,6 @@ package me.owdding.lib.dev
 import me.owdding.ktmodules.Module
 import me.owdding.lib.overlays.ConfigPosition
 import me.owdding.lib.overlays.Overlays
-import me.owdding.lib.overlays.Position
 import me.owdding.lib.overlays.TextOverlay
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 

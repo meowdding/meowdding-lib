@@ -9,6 +9,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.owdding.lib.MeowddingLib
 import me.owdding.lib.extensions.withShaderDefine
 import me.owdding.lib.generated.EnumCodec
+import me.owdding.lib.rendering.text.PipelineResult
 import me.owdding.lib.rendering.text.TextShader
 import me.owdding.lib.utils.MemoizeUtil
 import net.minecraft.client.gui.Font
@@ -18,16 +19,10 @@ import net.minecraft.resources.Identifier
 import net.minecraft.util.ARGB
 import org.joml.Vector2f
 import org.joml.Vector4f
-
-//? >= 26.2
 import com.mojang.renderpearl.api.pipeline.BindGroupLayout
-import me.owdding.lib.rendering.text.PipelineResult
+
 //? >= 26.3
 import net.minecraft.client.renderer.oit.OitPipelineSet
-//? 26.1
-//import com.mojang.blaze3d.vertex.DefaultVertexFormat
-//? 26.1
-//import me.owdding.lib.utils.MeowddingPipelines
 
 //? >= 26.3 {
 private val pipelineCreator0: (GradientTextShader, Font.DisplayMode?, Boolean) -> Pair<RenderPipeline, OitPipelineSet?> = MemoizeUtil.memoize { shader, displayMode, grayscale ->
@@ -85,7 +80,7 @@ private val pipelineCreator0: (GradientTextShader, Font.DisplayMode?, Boolean) -
 
     RenderPipelines.register(builder.build()) to RenderPipelines.register(OitPipelineSet.builder("meowdding/gradient_text_shader", builder).build())
 }
-//? } >= 26.2 {
+//? } = 26.2 {
 /*private val layout = BindGroupLayout.builder()
     .build()
 
@@ -142,33 +137,6 @@ private val pipelineCreator0: (GradientTextShader, Font.DisplayMode?, Boolean) -
             .build(),
     )
 }
-*///? } else {
-/*private val pipelineCreator0: (GradientTextShader) -> RenderPipeline = MemoizeUtil.memoize {
-    RenderPipelines.register(
-        RenderPipeline.builder(RenderPipelines.TEXT_SNIPPET, RenderPipelines.FOG_SNIPPET, MeowddingPipelines.GAME_TIME_SNIPPET)
-            .withLocation(MeowddingLib.id("gradient_text"))
-            .withVertexShader(MeowddingLib.id("text/gradient"))
-            .withFragmentShader(MeowddingLib.id("text/gradient"))
-            .withSampler("Sampler0")
-            .withDepthStencilState(DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false, -1f, -10f))
-            .withShaderDefine(
-                "COLORS",
-                it.gradientProvider
-                    .getColors()
-                    .map { color -> Vector4f(ARGB.redFloat(color), ARGB.greenFloat(color), ARGB.blueFloat(color), ARGB.alphaFloat(color)) }
-                    .toTypedArray(),
-            )
-            .withShaderDefine(
-                "DIRECTION",
-                it.direction.vec,
-            )
-            .withShaderDefine(
-                "SPEED",
-                it.speed,
-            )
-            .build(),
-    )
-}
 *///? }
 
 class GradientTextShader(val gradientProvider: GradientProvider, val direction: Direction, val speed: Float) : TextShader {
@@ -194,10 +162,7 @@ class GradientTextShader(val gradientProvider: GradientProvider, val direction: 
         UP_RIGHT(Vector2f(-1f, -1f)),
         ;
     }
-    //? 26.1
-    //override val pipeline: RenderPipeline = pipelineCreator0(this)
 
-    //? >= 26.2
     override val pipeline: (Font.DisplayMode?, Boolean) -> PipelineResult = { first, second -> pipelineCreator0(this, first, second) }
 
     companion object {
@@ -210,10 +175,7 @@ class GradientTextShader(val gradientProvider: GradientProvider, val direction: 
             ).apply(it, ::GradientTextShader)
         }
 
-        //? >= 26.2 {
         val pipelineCreator: (GradientTextShader, Font.DisplayMode?, Boolean) -> PipelineResult = pipelineCreator0
-        //? } else
-        //private val pipelineCreator: (GradientTextShader) -> RenderPipeline = pipelineCreator0
     }
 
     override fun equals(other: Any?): Boolean {

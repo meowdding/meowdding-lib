@@ -2,6 +2,7 @@ package me.owdding.lib.displays.circle
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
+import com.mojang.renderpearl.api.pipeline.PrimitiveTopology
 import earth.terrarium.olympus.client.pipelines.renderer.PipelineSubmit
 import earth.terrarium.olympus.client.utils.TextureUtils
 import me.owdding.lib.rendering.MeowddingPipState
@@ -16,21 +17,11 @@ import java.util.function.Supplier
 import com.mojang.blaze3d.vertex.BufferBuilder
 import com.mojang.blaze3d.vertex.ByteBufferBuilder
 
-//? >= 26.2
-import com.mojang.renderpearl.api.pipeline.PrimitiveTopology
-//? 26.1 {
-/*import net.minecraft.client.renderer.MultiBufferSource
-import java.util.function.Function
-import com.mojang.blaze3d.vertex.Tesselator
-import com.mojang.renderpearl.api.vertex.VertexFormat
-*///? }
-
-//~ if >= 26.2 '(buffer: MultiBufferSource.BufferSource) : ' -> ' : ', '(buffer)' -> '()'
 class TexturedCircleRenderer : PictureInPictureRenderer<TexturedCircleState>() {
 
     override fun getRenderStateClass(): Class<TexturedCircleState> = TexturedCircleState::class.java
 
-    override fun renderToTexture(state: TexturedCircleState, poseStack: PoseStack/*? >= 26.2 >> ')'*/, submitNodeCollector: SubmitNodeCollector) {
+    override fun renderToTexture(state: TexturedCircleState, poseStack: PoseStack, submitNodeCollector: SubmitNodeCollector) {
         val bounds = state.bounds
 
         val scale = McClient.window.guiScale.toFloat()
@@ -41,13 +32,8 @@ class TexturedCircleRenderer : PictureInPictureRenderer<TexturedCircleState>() {
 
         val texture = TextureUtils.single(sprite.atlasLocation())
 
-        //? if 26.1 {
-/*
-        val bufferBuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR)
-
-        *///? else 26.2 {
-/*
-        ByteBufferBuilder.exactlySized(DefaultVertexFormat.POSITION_TEX_COLOR.vertexSize * 4).use {
+        //? 26.2 {
+        /*ByteBufferBuilder.exactlySized(DefaultVertexFormat.POSITION_TEX_COLOR.vertexSize * 4).use {
             val bufferBuilder = BufferBuilder(it, PrimitiveTopology.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR)
         *///? }
 
@@ -89,10 +75,7 @@ data class TexturedCircleState(
     override val pose: Matrix3x2f,
     val texture: Identifier,
 ) : MeowddingPipState<TexturedCircleState>() {
-    //? if > 26.1 {
     override fun getFactory(): Supplier<PictureInPictureRenderer<TexturedCircleState>> = Supplier { TexturedCircleRenderer() }
-    //? } else
-    //override fun getFactory(): Function<MultiBufferSource.BufferSource, PictureInPictureRenderer<TexturedCircleState>> = Function { buffer -> TexturedCircleRenderer(buffer) }
 
     override val shrinkToScissor: Boolean
         get() = false

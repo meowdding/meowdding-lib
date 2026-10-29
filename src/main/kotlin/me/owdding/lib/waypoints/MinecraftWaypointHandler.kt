@@ -4,7 +4,7 @@ import net.minecraft.world.waypoints.TrackedWaypoint
 import net.minecraft.world.waypoints.Waypoint
 import net.minecraft.world.waypoints.WaypointStyleAssets
 import tech.thatgravyboat.skyblockapi.helpers.McClient
-import java.util.Optional
+import java.util.*
 
 typealias MinecraftWaypoint = Waypoint
 
