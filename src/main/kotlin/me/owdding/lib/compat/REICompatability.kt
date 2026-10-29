@@ -23,23 +23,6 @@ import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyPressedEvent
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import kotlin.jvm.optionals.getOrNull
 
-//? < 26.2 {
-/*import tech.thatgravyboat.skyblockapi.api.events.base.CancellableSkyBlockEvent
-import net.minecraft.client.gui.layouts.LayoutElement
-*///?}
-
-// TONOTDO: dont uncomment this when rei is released, this is removed on purpose as we want to remove this event
-//? < 26.2 {
-/*@Deprecated("Use ItemListRegisterExclusionZonesEvent for more compatability", ReplaceWith("me.owdding.lib.events.ItemListRegisterExclusionZonesEvent"))
-class REIRenderOverlayEvent(val screen: Screen, private val registrar: (Int, Int, Int, Int) -> Unit) : CancellableSkyBlockEvent() {
-
-    fun register(x: Int, y: Int, width: Int, height: Int) {
-        registrar(x, y, width, height)
-    }
-
-    fun register(layout: LayoutElement) = register(layout.x, layout.y, layout.width, layout.height)
-}*///?}
-
 object REICompatability : REIClientPlugin {
 
     init {
@@ -49,20 +32,13 @@ object REICompatability : REIClientPlugin {
     override fun registerExclusionZones(zones: ExclusionZones) {
         zones.register(Screen::class.java) { screen ->
             val areas = mutableListOf<Rectangle>()
-            //? < 26.2 {
-            /*val hide = REIRenderOverlayEvent(screen) { x, y, width, height ->
-                areas.add(Rectangle(x, y, width, height))
-            }.post(SkyBlockAPI.eventBus)
-            *///?} else
-            val hide = false
-
             val excludedEvent = ItemListEvent.RegisterExcludedScreen(screen).apply { post(SkyBlockAPI.eventBus) }
 
             ItemListEvent.RegisterExclusionZones(screen) { x, y, width, height ->
                 areas.add(Rectangle(x, y, width, height))
             }.post(SkyBlockAPI.eventBus)
 
-            if (hide || excludedEvent.isExcluded) listOf(Rectangle(0, 0, screen.width, screen.height)) else areas
+            if (excludedEvent.isExcluded) listOf(Rectangle(0, 0, screen.width, screen.height)) else areas
         }
     }
 }

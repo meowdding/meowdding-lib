@@ -3,15 +3,13 @@ package me.owdding.lib.rendering.world
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.renderpearl.api.pipeline.CompareOp
 import com.mojang.renderpearl.api.pipeline.DepthStencilState
+import com.mojang.renderpearl.api.pipeline.PrimitiveTopology
 import com.mojang.renderpearl.api.pipeline.RenderPipeline
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.client.renderer.rendertype.LayeringTransform
 import net.minecraft.client.renderer.rendertype.RenderSetup
 import net.minecraft.client.renderer.rendertype.RenderType
-import com.mojang.renderpearl.api.vertex.VertexFormat
 
-//? >= 26.2
-import com.mojang.renderpearl.api.pipeline.PrimitiveTopology
 //? >= 26.3
 import net.minecraft.client.renderer.oit.OitPipelineSet
 
@@ -19,11 +17,8 @@ object RenderTypes {
 
     private val blockFillTriangleThroughWalls = RenderPipeline.builder(RenderPipelines.DEBUG_FILLED_SNIPPET)
         .withLocation("pipeline/debug_filled_box")
-        //? >= 26.2 {
         .withPrimitiveTopology(PrimitiveTopology.TRIANGLE_STRIP)
         .withVertexBinding(0, DefaultVertexFormat.POSITION_COLOR)
-        //? } else
-        //.withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.TRIANGLE_STRIP)
         .withDepthStencilState(DepthStencilState(CompareOp.ALWAYS_PASS, false));
 
     //? >= 26.3 {
@@ -41,20 +36,14 @@ object RenderTypes {
             //? >= 26.3
             .setOitPipelines(blockFillTriangleThroughWallsOit)
             .setLayeringTransform(LayeringTransform.VIEW_OFFSET_Z_LAYERING)
-            //? 26.1
-            //.bufferSize(131072)
             .createRenderSetup(),
     )
 
     private val blockFillQuad = RenderPipeline.builder(RenderPipelines.DEBUG_FILLED_SNIPPET)
         .withLocation("pipeline/debug_filled_box")
-        //? >= 26.2 {
         .withPrimitiveTopology(PrimitiveTopology.QUADS)
         .withVertexBinding(0, DefaultVertexFormat.POSITION_COLOR)
         .withDepthStencilState(DepthStencilState(CompareOp.GREATER_THAN_OR_EQUAL, false, -1f, -10f))
-        //? } else {
-        /*.withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS)
-        .withDepthStencilState(DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false, -1f, -10f))*///?}
     //? >= 26.3 {
     val blockFillQuadOit: OitPipelineSet = RenderPipelines.register(OitPipelineSet.builder("meowddinglib/pipeline/debug_filled_box_quad",
             RenderPipeline.builder(RenderPipelines.OIT_DEBUG_FILLED_SNIPPET)
@@ -70,8 +59,6 @@ object RenderTypes {
             //? >= 26.3
             .setOitPipelines(blockFillQuadOit)
             .setLayeringTransform(LayeringTransform.VIEW_OFFSET_Z_LAYERING)
-            //? 26.1
-            //.bufferSize(131072)
             .createRenderSetup(),
     )
 

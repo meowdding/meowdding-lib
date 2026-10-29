@@ -24,8 +24,6 @@ val TEXT_RENDER_TYPE_CACHE: (TextShaderInfo) -> RenderType = Util.memoize<TextSh
                 setOitPipelines(it.pipeline.second ?: return@apply)
             }
             //? }
-            //? 26.1
-            //.bufferSize(786432)
             .useLightmap()
             .sortOnUpload()
             .withTexture("Sampler0", it.texture)
@@ -76,11 +74,7 @@ typealias PipelineResult = Pair<RenderPipeline, OitPipelineSet?>
 interface TextShader {
 
     val id: Identifier
-    //? 26.1
-    //val pipeline: RenderPipeline
 
-
-    //? >= 26.2
     val pipeline: (Font.DisplayMode?, Boolean) -> PipelineResult
 
     val useWhite: Boolean get() = true
@@ -89,12 +83,7 @@ interface TextShader {
     //? < 26.3 {
     //fun getPipeline(mode: Font.DisplayMode?, grayScale: Boolean): RenderPipeline = getPipelines(mode, grayScale)
     //?}
-    fun getPipelines(mode: Font.DisplayMode?, grayScale: Boolean): PipelineResult {
-        //? 26.1
-        //return pipeline
-        //? >= 26.2
-        return pipeline(mode, grayScale)
-    }
+    fun getPipelines(mode: Font.DisplayMode?, grayScale: Boolean): PipelineResult = pipeline(mode, grayScale)
 
     fun getRenderType(
         location: Identifier,

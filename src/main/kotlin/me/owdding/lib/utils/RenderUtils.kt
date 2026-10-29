@@ -22,9 +22,6 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import kotlin.math.max
 
-//? 26.1
-//import net.minecraft.client.renderer.ShapeRenderer
-
 object RenderUtils {
 
     fun RenderWorldEvent.renderTextInWorld(
@@ -94,7 +91,6 @@ object RenderUtils {
                 position.minX - 0.005, position.minY - 0.005, position.minZ - 0.005,
                 position.maxX + 0.005, position.maxY + 0.005, position.maxZ + 0.005,
             )
-            //? >= 26.2 {
             submitNodeCollector.submitShapeOutline(
                 poseStack,
                 shape,
@@ -103,14 +99,6 @@ object RenderUtils {
                 1f,
                 true,
             )
-            //? } else {
-            /*ShapeRenderer.renderShape(
-                poseStack,
-                buffer.getBuffer(BLOCK_FILL_TRIANGLE_THROUGH_WALLS),
-                shape,
-                0.0, 0.0, 0.0, color, 1f,
-            )
-            *///? }
         }
     }
 
