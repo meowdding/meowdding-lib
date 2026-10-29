@@ -9,7 +9,7 @@ import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.Displays.background
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.layouts.LayoutElement
-import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.*
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import kotlin.math.max
 
