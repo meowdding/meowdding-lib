@@ -1034,7 +1034,7 @@ public final class me/owdding/lib/layouts/ClickToExpandWidget : me/owdding/lib/p
 	public final fun getOnClick ()Lkotlin/jvm/functions/Function0;
 	public final fun getTitle ()Lnet/minecraft/client/gui/components/AbstractWidget;
 	public fun getWidth ()I
-	public fun mouseClicked (Lnet/minecraft/client/input/MouseButtonEvent;Z)Z
+	public fun mouseClicked (Lme/owdding/lib/platform/screens/MouseButtonEvent;Z)Z
 	public final fun setAllowBodyClick (Z)V
 	public final fun setExpanded (Z)V
 }
@@ -1078,19 +1078,19 @@ public final class me/owdding/lib/layouts/ScalableWidget : me/owdding/lib/platfo
 	public static final field Companion Lme/owdding/lib/layouts/ScalableWidget$Companion;
 	public fun <init> (Lnet/minecraft/client/gui/components/AbstractWidget;)V
 	public fun <init> (Lnet/minecraft/client/gui/layouts/LayoutElement;)V
-	public fun charTyped (Lnet/minecraft/client/input/CharacterEvent;)Z
+	public fun charTyped (Lme/owdding/lib/platform/screens/CharacterEvent;)Z
 	public fun getBorderForArrowNavigation (Lnet/minecraft/client/gui/navigation/ScreenDirection;)Lnet/minecraft/client/gui/navigation/ScreenRectangle;
 	public fun getHeight ()I
 	public final fun getOriginal ()Lnet/minecraft/client/gui/components/AbstractWidget;
 	public fun getRectangle ()Lnet/minecraft/client/gui/navigation/ScreenRectangle;
 	public fun getWidth ()I
 	public fun isMouseOver (DD)Z
-	public fun keyPressed (Lnet/minecraft/client/input/KeyEvent;)Z
-	public fun keyReleased (Lnet/minecraft/client/input/KeyEvent;)Z
-	public fun mouseClicked (Lnet/minecraft/client/input/MouseButtonEvent;Z)Z
-	public fun mouseDragged (Lnet/minecraft/client/input/MouseButtonEvent;DD)Z
+	public fun keyPressed (Lme/owdding/lib/platform/screens/KeyEvent;)Z
+	public fun keyReleased (Lme/owdding/lib/platform/screens/KeyEvent;)Z
+	public fun mouseClicked (Lme/owdding/lib/platform/screens/MouseButtonEvent;Z)Z
+	public fun mouseDragged (Lme/owdding/lib/platform/screens/MouseButtonEvent;DD)Z
 	public fun mouseMoved (DD)V
-	public fun mouseReleased (Lnet/minecraft/client/input/MouseButtonEvent;)Z
+	public fun mouseReleased (Lme/owdding/lib/platform/screens/MouseButtonEvent;)Z
 	public fun mouseScrolled (DDDD)Z
 	public fun narrationPriority ()Lnet/minecraft/client/gui/narration/NarratableEntry$NarrationPriority;
 	public fun scale (D)V
@@ -1100,7 +1100,7 @@ public final class me/owdding/lib/layouts/ScalableWidget : me/owdding/lib/platfo
 	public fun setX (I)V
 	public fun setY (I)V
 	public final fun translated (DDLkotlin/jvm/functions/Function2;)Ljava/lang/Object;
-	public final fun translated (Lnet/minecraft/client/input/MouseButtonEvent;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public final fun translated (Lme/owdding/lib/platform/screens/MouseButtonEvent;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
 }
 
 public final class me/owdding/lib/layouts/ScalableWidget$Companion {
