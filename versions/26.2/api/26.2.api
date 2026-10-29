@@ -2351,10 +2351,6 @@ public final class me/owdding/lib/utils/MeowddingLogger$DefaultImpls {
 	public static synthetic fun warn$default (Lme/owdding/lib/utils/MeowddingLogger;Ljava/lang/String;Ljava/lang/Throwable;Ljava/lang/String;ILjava/lang/Object;)V
 }
 
-public final class me/owdding/lib/utils/MeowddingPipelines {
-	public static final field INSTANCE Lme/owdding/lib/utils/MeowddingPipelines;
-}
-
 public final class me/owdding/lib/utils/MeowddingUpdateChecker {
 	public fun <init> (Ljava/lang/String;Lnet/fabricmc/loader/api/ModContainer;Lme/owdding/lib/utils/UpdateCallback;)V
 	public final fun getCallback ()Lme/owdding/lib/utils/UpdateCallback;
