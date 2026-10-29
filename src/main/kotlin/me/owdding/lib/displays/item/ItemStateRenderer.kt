@@ -18,7 +18,7 @@ import org.joml.Matrix3x2f
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
-import java.util.*
+import java.util.Objects
 import java.util.function.Supplier
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.renderpearl.api.textures.GpuTextureView

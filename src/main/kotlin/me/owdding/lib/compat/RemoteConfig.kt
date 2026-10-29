@@ -10,7 +10,6 @@ import com.teamresourceful.resourcefulconfig.api.types.elements.ResourcefulConfi
 import com.teamresourceful.resourcefulconfig.api.types.elements.ResourcefulConfigObjectEntryElement
 import com.teamresourceful.resourcefulconfig.api.types.entries.ResourcefulConfigValueEntry
 import com.teamresourceful.resourcefulconfig.api.types.options.EntryType
-import kotlinx.coroutines.runBlocking
 import me.owdding.lib.utils.VersionIntervalParser
 import net.fabricmc.loader.api.ModContainer
 import net.minecraft.client.gui.components.AbstractWidget
@@ -25,6 +24,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.util.function.Predicate
+import kotlinx.coroutines.runBlocking
 
 object RemoteConfig {
     fun lockConfig(config: ResourcefulConfig, url: String, mod: ModContainer) {

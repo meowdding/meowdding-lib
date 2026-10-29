@@ -19,7 +19,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.awt.Color
-import java.util.*
+import java.util.UUID
 import kotlin.random.Random
 
 class MeowddingWaypoint(internal val position: Vec3) {

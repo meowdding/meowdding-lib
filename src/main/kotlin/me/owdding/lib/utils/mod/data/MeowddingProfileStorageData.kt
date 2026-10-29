@@ -24,7 +24,14 @@ import java.nio.file.Path
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.experimental.ExperimentalTypeInference
-import kotlin.io.path.*
+import kotlin.io.path.createParentDirectories
+import kotlin.io.path.deleteIfExists
+import kotlin.io.path.exists
+import kotlin.io.path.isDirectory
+import kotlin.io.path.isRegularFile
+import kotlin.io.path.readText
+import kotlin.io.path.relativeTo
+import kotlin.io.path.useDirectoryEntries
 
 class MeowddingProfileStorageData<T : Any> internal constructor(
     private val version: Int = 0,

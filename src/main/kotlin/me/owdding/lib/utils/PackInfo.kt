@@ -1,6 +1,5 @@
 package me.owdding.lib.utils
 
-import kotlinx.coroutines.runBlocking
 import me.owdding.ktcodecs.FieldName
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktmodules.Module
@@ -20,6 +19,7 @@ import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.http.Http
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toJson
 import java.util.concurrent.CompletableFuture
+import kotlinx.coroutines.runBlocking
 
 const val API_URL = "https://skyblock-pack.meowdd.ing/v2"
 

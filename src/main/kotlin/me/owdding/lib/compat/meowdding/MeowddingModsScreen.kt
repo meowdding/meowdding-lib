@@ -9,7 +9,12 @@ import me.owdding.lib.MeowddingLib
 import me.owdding.lib.builder.DisplayFactory
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.MIDDLE
-import me.owdding.lib.displays.*
+import me.owdding.lib.displays.Alignment
+import me.owdding.lib.displays.Displays
+import me.owdding.lib.displays.asButtonLeft
+import me.owdding.lib.displays.asLayer
+import me.owdding.lib.displays.withBackground
+import me.owdding.lib.displays.withPadding
 import me.owdding.lib.events.MeowddingLibRegisterCommandsEvent
 import me.owdding.lib.layouts.BackgroundWidget
 import me.owdding.lib.layouts.ExpandingWidget

@@ -2,7 +2,12 @@ package me.owdding.lib.utils.mod.data
 
 import com.mojang.serialization.Codec
 import me.owdding.lib.utils.mod.MeowddingMod
-import kotlin.io.path.*
+import kotlin.io.path.createDirectories
+import kotlin.io.path.extension
+import kotlin.io.path.isRegularFile
+import kotlin.io.path.listDirectoryEntries
+import kotlin.io.path.nameWithoutExtension
+import kotlin.io.path.relativeTo
 
 class MeowddingFolderStorageData<T : Any> internal constructor(
     private val version: Int = 0,

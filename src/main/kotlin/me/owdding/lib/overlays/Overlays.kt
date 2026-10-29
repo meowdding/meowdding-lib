@@ -9,7 +9,12 @@ import tech.thatgravyboat.skyblockapi.api.events.render.RenderHudEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenMouseClickEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
-import tech.thatgravyboat.skyblockapi.platform.*
+import tech.thatgravyboat.skyblockapi.platform.drawFilledBox
+import tech.thatgravyboat.skyblockapi.platform.drawOutline
+import tech.thatgravyboat.skyblockapi.platform.pushPop
+import tech.thatgravyboat.skyblockapi.platform.scale
+import tech.thatgravyboat.skyblockapi.platform.showTooltip
+import tech.thatgravyboat.skyblockapi.platform.translate
 import tech.thatgravyboat.skyblockapi.utils.text.CommonText
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 

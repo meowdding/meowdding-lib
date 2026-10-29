@@ -20,10 +20,13 @@ import org.joml.component2
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
-import tech.thatgravyboat.skyblockapi.platform.*
+import tech.thatgravyboat.skyblockapi.platform.drawString
+import tech.thatgravyboat.skyblockapi.platform.getScale
+import tech.thatgravyboat.skyblockapi.platform.pushPop
+import tech.thatgravyboat.skyblockapi.platform.scale
+import tech.thatgravyboat.skyblockapi.platform.translate
 import tech.thatgravyboat.skyblockapi.utils.extentions.scaled
 import tech.thatgravyboat.skyblockapi.utils.text.Text
-import java.lang.Math
 import kotlin.math.atan
 
 internal object PlatformDisplays {

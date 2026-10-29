@@ -1,6 +1,11 @@
 package me.owdding.lib.utils.config
 
-import com.teamresourceful.resourcefulconfigkt.api.*
+import com.teamresourceful.resourcefulconfigkt.api.CachedTransformedEntry
+import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
+import com.teamresourceful.resourcefulconfigkt.api.ConfigDelegateProvider
+import com.teamresourceful.resourcefulconfigkt.api.ObservableEntry
+import com.teamresourceful.resourcefulconfigkt.api.RConfigKtEntry
+import com.teamresourceful.resourcefulconfigkt.api.TransformedEntry
 import com.teamresourceful.resourcefulconfigkt.api.builders.CategoryBuilder
 import com.teamresourceful.resourcefulconfigkt.api.builders.SeparatorBuilder
 import me.owdding.lib.rendering.text.serialization.TagComponentSerialization

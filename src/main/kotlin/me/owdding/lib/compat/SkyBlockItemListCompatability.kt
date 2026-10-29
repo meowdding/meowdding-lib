@@ -1,13 +1,17 @@
 package me.owdding.lib.compat
 
-import com.operationpotato.itemlist.api.*
+import com.operationpotato.itemlist.api.ExcludedScreensManager
+import com.operationpotato.itemlist.api.ExclusionZoneManager
+import com.operationpotato.itemlist.api.HoveredItemManager
+import com.operationpotato.itemlist.api.Plugin
+import com.operationpotato.itemlist.api.RecipeButtonManager
 import me.owdding.lib.events.ItemListEvent
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.renderer.Rect2i
 import tech.thatgravyboat.repolib.api.recipes.Recipe
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
-import java.util.*
+import java.util.Optional
 
 object SBILCompatability : Plugin {
 

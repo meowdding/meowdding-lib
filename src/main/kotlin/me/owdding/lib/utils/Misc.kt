@@ -10,7 +10,7 @@ import net.minecraft.server.permissions.PermissionSet
 import net.minecraft.world.entity.player.Player
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
-import java.util.*
+import java.util.UUID
 
 //? < 26.3
 //import tech.thatgravyboat.skyblockapi.utils.text.Text

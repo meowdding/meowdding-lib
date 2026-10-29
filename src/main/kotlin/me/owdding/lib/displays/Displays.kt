@@ -25,7 +25,15 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.ItemLike
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
-import tech.thatgravyboat.skyblockapi.platform.*
+import tech.thatgravyboat.skyblockapi.platform.drawFilledBox
+import tech.thatgravyboat.skyblockapi.platform.drawOutline
+import tech.thatgravyboat.skyblockapi.platform.drawSprite
+import tech.thatgravyboat.skyblockapi.platform.drawString
+import tech.thatgravyboat.skyblockapi.platform.drawTexture
+import tech.thatgravyboat.skyblockapi.platform.getTranslation
+import tech.thatgravyboat.skyblockapi.platform.pushPop
+import tech.thatgravyboat.skyblockapi.platform.showTooltip
+import tech.thatgravyboat.skyblockapi.platform.translate
 import tech.thatgravyboat.skyblockapi.utils.extentions.scissor
 import tech.thatgravyboat.skyblockapi.utils.extentions.translated
 import tech.thatgravyboat.skyblockapi.utils.text.Text

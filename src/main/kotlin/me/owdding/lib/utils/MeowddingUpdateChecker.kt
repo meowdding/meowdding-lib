@@ -1,7 +1,6 @@
 package me.owdding.lib.utils
 
 import com.google.gson.JsonArray
-import kotlinx.coroutines.runBlocking
 import net.fabricmc.loader.api.ModContainer
 import net.fabricmc.loader.api.Version
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
@@ -10,6 +9,7 @@ import tech.thatgravyboat.skyblockapi.api.events.hypixel.HypixelJoinEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.http.Http
 import java.util.concurrent.CompletableFuture
+import kotlinx.coroutines.runBlocking
 
 private const val URL = "https://api.modrinth.com/v2/project/%project%/version"
 

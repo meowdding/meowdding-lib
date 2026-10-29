@@ -6,7 +6,11 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import me.owdding.lib.helper.TextShaderHolder;
 import me.owdding.lib.rendering.text.TextShader;
-import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.FontDescription;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,7 +19,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
 import java.util.Objects;
 
 @Mixin(Style.class)
