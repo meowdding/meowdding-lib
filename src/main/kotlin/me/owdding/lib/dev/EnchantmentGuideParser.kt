@@ -9,6 +9,7 @@ import me.owdding.lib.repo.EnchantmentRepoData.PassthroughRequirement
 import net.minecraft.world.item.Items
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.contains
@@ -27,6 +28,13 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.onClick
 object EnchantmentGuideParser {
 
     private val maxLevelOverwrites = mapOf<String, Int>()
+
+    private val itemMaxLevelOverwrites = mapOf(
+        "Efficiency" to mapOf(
+            SkyBlockId.item("stonk_pickaxe") to 6,
+            SkyBlockId.item("promising_axe") to 5,
+        ),
+    )
 
     var enabled = false
     private val enchantments = mutableSetOf<EnchantmentRepoData.ParsedEnchantmentData>()
@@ -80,6 +88,7 @@ object EnchantmentGuideParser {
                 name,
                 minLevel,
                 maxLevelOverwrites[name] ?: maxLevel,
+               itemMaxLevelOverwrites[name] ?: emptyMap(),
                 event.item.getRawLore().contains("You can only have 1 Ultimate"),
                 sources,
                 map.getOrDefault("Conflicts:", emptyList()).removeListElements(),

@@ -7,6 +7,7 @@ import me.owdding.lib.events.FinishRepoLoadingEvent
 import me.owdding.lib.generated.MeowddingLibCodecs
 import me.owdding.repo.RemoteRepo
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toData
 import java.util.concurrent.atomic.AtomicReference
 
@@ -21,6 +22,7 @@ object EnchantmentRepoData {
         val name: String,
         @FieldName("min_level") @OptionalInt(1) val minLevel: Int = 1,
         @FieldName("max_level") val maxLevel: Int,
+        @FieldName("per_item_overrides") @OptionalIfEmpty val perItemOverrides: Map<SkyBlockId, Int>,
         @FieldName("is_ultimate") @OptionalBoolean(false) val isUltimate: Boolean = false,
         val sources: List<EnchantmentSource>,
         @OptionalIfEmpty val conflicts: List<String> = listOf(),
