@@ -7,6 +7,7 @@ import me.owdding.ktcodecs.IncludedCodec
 import me.owdding.lib.generated.CodecUtils
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.ComponentSerialization
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import java.util.function.Function
 
 object CodecHelpers {
@@ -17,4 +18,6 @@ object CodecHelpers {
     @IncludedCodec
     val COMPONENT_CODEC: Codec<Component> = ComponentSerialization.CODEC
 
+    @IncludedCodec(keyable = true)
+    val SKYBLOCK_ID: Codec<SkyBlockId> = SkyBlockId.CODEC
 }
