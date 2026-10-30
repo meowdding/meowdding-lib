@@ -10,19 +10,13 @@ import me.owdding.ktcodecs.*
 import me.owdding.ktmodules.Module
 import me.owdding.lib.MeowddingLib
 import me.owdding.lib.PreInitModule
-import me.owdding.lib.events.FinishRepoLoadingEvent
 import me.owdding.lib.generated.DispatchHelper
-import me.owdding.lib.generated.MeowddingLibCodecs
-import me.owdding.repo.RemoteRepo
 import net.minecraft.ChatFormatting
 import net.minecraft.network.chat.Component
 import org.joml.Vector2i
-import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.extentions.toTitleCase
-import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import tech.thatgravyboat.skyblockapi.utils.text.Text
-import java.util.concurrent.atomic.AtomicReference
 import kotlin.reflect.KClass
 
 @GenerateDispatchCodec(TreeNode::class)
@@ -58,25 +52,11 @@ enum class TreeNodes(override val type: KClass<out TreeNode>) : DispatchHelper<T
 
 @PreInitModule
 object TreeRepoData {
-    private val _hotm = AtomicReference<List<TreeNode>>(emptyList())
-    val hotm: List<TreeNode> get() = _hotm.get()
-
-    private val _hotf = AtomicReference<List<TreeNode>>(emptyList())
-    val hotf: List<TreeNode> get() = _hotf.get()
+    val hotm: List<TreeNode> by MeowddingLib.repoDelegate("mining/hotm", emptyList())
+    val hotf: List<TreeNode> by MeowddingLib.repoDelegate("foraging/hotf", emptyList())
 
     fun hotmByName(name: String) = hotm.find { it.name == name }
     fun hotfByName(name: String) = hotf.find { it.name == name }
-
-    @Subscription
-    context(_: FinishRepoLoadingEvent)
-    private fun finishRepoLoading() {
-        MeowddingLib.runCatching("Load Hotm Data") {
-            RemoteRepo.getFileContentAsJson("mining/hotm.json")?.toDataOrThrow(MeowddingLibCodecs.TreeNodeCodec.codec().listOf())?.apply(_hotm::set)
-        }
-        MeowddingLib.runCatching("Load Hotf Data") {
-            RemoteRepo.getFileContentAsJson("foraging/hotf.json")?.toDataOrThrow(MeowddingLibCodecs.TreeNodeCodec.codec().listOf())?.apply(_hotf::set)
-        }
-    }
 }
 
 data class Context(val treeLevel: Int = -1, val perkLevel: Int = -1) {

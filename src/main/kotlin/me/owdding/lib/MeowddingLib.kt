@@ -22,6 +22,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import java.util.concurrent.CompletableFuture
+import kotlin.reflect.KType
 
 @Module
 object MeowddingLib : MeowddingMod("meowdding-lib", loggerName = "MeowddingLib") {
@@ -47,7 +48,12 @@ object MeowddingLib : MeowddingMod("meowdding-lib", loggerName = "MeowddingLib")
         registerEvents(MeowddingLibPostInitModules.collected)
     }
 
+    override fun <T : Any> getCodec(type: KType): Codec<T> = MeowddingLibCodecs.getCodec(type).unsafeCast()
+
+    //? if < 26.4 {
+    @Deprecated("Use getCodec(KType) instead. This will be removed on 26.4")
     override fun <T : Any> getCodec(clazz: Class<T>): Codec<T> = MeowddingLibCodecs.getCodec(clazz).unsafeCast()
+    //?}
 
     private fun finishRepoLoadingEvent() = McClient.runNextTick {
         debug("Finished loading repo!")

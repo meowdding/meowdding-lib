@@ -17,7 +17,7 @@ skyblock-item-list = "0.0.13+26.2"
 
 meowdding-remote-repo = "1.0.9"
 meowdding-ktmodules = "1.0.6"
-meowdding-ktcodecs = "1.1.5"
+meowdding-ktcodecs = "1.1.18"
 meowdding-patches = "1.0.8"
 meowdding-auto-mixins = "1.0.5"
 
