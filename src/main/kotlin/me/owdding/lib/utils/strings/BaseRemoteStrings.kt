@@ -104,7 +104,7 @@ data class ListElementDelegate<Type>(
     )
 }
 
-internal fun join(vararg parts: String?) = listOfNotNull(*parts).takeUnless { it.isEmpty() }?.joinToString(".")
+private fun join(vararg parts: String?) = listOfNotNull(*parts).takeUnless { it.isEmpty() }?.joinToString(".")
 
 interface StringGroup {
     val registry: BaseRemoteStrings
@@ -315,8 +315,9 @@ abstract class BaseRemoteStrings(val repoFilePath: String) : StringGroup {
             }
         }
 
-        fun <Type> Type.asString() = when (this) {
-            is ComponentRegex -> this.regex().toString()
+        private fun <Type> Type.asString() = when (this) {
+            is ComponentRegex -> this.regex().pattern
+            is Regex -> this.pattern
             else -> this.toString()
         }
     }
