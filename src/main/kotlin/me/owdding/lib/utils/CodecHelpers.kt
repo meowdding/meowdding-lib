@@ -20,7 +20,4 @@ object CodecHelpers {
 
     @IncludedCodec
     val COMPONENT_CODEC: Codec<Component> = ComponentSerialization.CODEC
-
-    @IncludedCodec(keyable = true)
-    val SKYBLOCK_ID: Codec<SkyBlockId> = SkyBlockId.CODEC
 }
