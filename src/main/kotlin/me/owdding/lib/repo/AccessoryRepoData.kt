@@ -11,24 +11,34 @@ import me.owdding.ktcodecs.IncludedCodec
 import me.owdding.ktmodules.Module
 import me.owdding.lib.MeowddingLib
 import me.owdding.lib.events.FinishRepoLoadingEvent
+import me.owdding.lib.events.MeowddingLibRegisterCommandsEvent
 import me.owdding.lib.events.StartRepoLoadingEvent
 import me.owdding.lib.generated.CodecUtils
 import me.owdding.lib.generated.DispatchHelper
 import me.owdding.lib.generated.MeowddingLibCodecs
+import me.owdding.lib.utils.sendWithPrefix
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.datatype.getData
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.misc.CommandBuilder
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.ItemData
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.ItemOrigin.BINGO
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.ItemOrigin.RIFT
+import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.utils.extentions.capitalize
+import tech.thatgravyboat.skyblockapi.utils.extentions.toSnakeCase
+import tech.thatgravyboat.skyblockapi.utils.json.Json.toJson
+import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
+import tech.thatgravyboat.skyblockapi.utils.text.Text
 import java.util.EnumSet
 import kotlin.collections.get
 import kotlin.math.roundToInt
 import kotlin.reflect.KClass
+import kotlin.reflect.KProperty0
 
 @Module
 object AccessoryRepoData {
@@ -40,18 +50,18 @@ object AccessoryRepoData {
     var disallowedOriginFamilies: Set<String> = emptySet()
         private set
 
-    private val unobtainable: Set<SkyBlockId> by MeowddingLib.repoDelegate("accessories/unobtainable_accessories", emptySet())
-    private val accessoryPowerData: AccessoryPowerRepoData? by MeowddingLib.repoDelegate("accessories/magical_power")
+    val ignored: Set<SkyBlockId> by MeowddingLib.repoDelegate("accessories/unobtainable_accessories", emptySet())
+    val accessoryPowerData: AccessoryPowerRepoData? by MeowddingLib.repoDelegate("accessories/magical_power")
 
     fun getFamily(id: SkyBlockId): AccessoryFamily? = families.values.find { it.contains(id) }
     fun getRarityUpgraded(id: SkyBlockId): AccessoryRarityUpgraded? = rarityUpgraded[id]
-    fun isIgnored(id: SkyBlockId): Boolean = id in unobtainable
+    fun isIgnored(id: SkyBlockId): Boolean = id in ignored
     fun upgradesRarity(id: SkyBlockId): Boolean = id in rarityUpgraded
 
     fun isDisallowed(family: AccessoryFamily): Boolean = family.family in disallowedOriginFamilies
 
     fun isDisallowedOrigin(id: SkyBlockId): Boolean = getFamily(id)?.let(::isDisallowed) == true
-    fun getAp(item: ItemStack): Int = accessoryPowerData?.getAccessoryPower(item) ?: 1
+    fun getAp(item: ItemStack): Int = accessoryPowerData?.getAccessoryPower(item) ?: 0
     fun AccessoryFamily.isRiftPrism(): Boolean = family == "rift_prism"
 
     private fun calculateIsDisallowedOrigin(family: AccessoryFamily): Boolean {
@@ -88,6 +98,26 @@ object AccessoryRepoData {
             ?.associateBy { it.item }.orEmpty()
 
         disallowedOriginFamilies = families.filterValues(::calculateIsDisallowedOrigin).keys
+    }
+
+
+    private inline fun <reified T : Any> CommandBuilder<*>.thenCopy(prop: KProperty0<T>) {
+        val snakeCase = prop.name.toSnakeCase()
+        thenCallback(snakeCase) {
+            McClient.clipboard = prop.get().toJson(MeowddingLib.getCodec<T>()).toPrettyString()
+            val outputName = snakeCase.split("_").joinToString(separator = " ") { it.capitalize() }
+            Text.of("Copied accessories $outputName data to clipboard!").sendWithPrefix()
+        }
+    }
+
+    @Subscription
+    private fun onCommand(event: MeowddingLibRegisterCommandsEvent) {
+        event.register("dev accessories") {
+            thenCopy(::families)
+            thenCopy(::rarityUpgraded)
+            thenCopy(::disallowedOriginFamilies)
+            thenCopy(::ignored)
+        }
     }
 
 }
@@ -132,7 +162,7 @@ data class AccessoryRarityUpgraded(
     val item: SkyBlockId,
     val rarities: EnumSet<SkyBlockRarity>,
 ) : Set<SkyBlockRarity> by rarities {
-    fun isMax(rarity: SkyBlockRarity) = rarities.maxOrNull() == rarity
+    fun isMax(rarity: SkyBlockRarity): Boolean = rarities.maxOrNull() == rarity
     fun nextAfter(rarity: SkyBlockRarity): SkyBlockRarity? = firstOrNull { it > rarity }
 
     companion object {
