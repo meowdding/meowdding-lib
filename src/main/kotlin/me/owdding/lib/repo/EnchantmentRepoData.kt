@@ -1,7 +1,13 @@
 package me.owdding.lib.repo
 
 import com.mojang.serialization.Codec
-import me.owdding.ktcodecs.*
+import me.owdding.ktcodecs.FieldName
+import me.owdding.ktcodecs.GenerateCodec
+import me.owdding.ktcodecs.IncludedCodec
+import me.owdding.ktcodecs.NamedCodec
+import me.owdding.ktcodecs.OptionalBoolean
+import me.owdding.ktcodecs.OptionalIfEmpty
+import me.owdding.ktcodecs.OptionalInt
 import me.owdding.ktmodules.Module
 import me.owdding.lib.MeowddingLib
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
@@ -16,11 +22,11 @@ object EnchantmentRepoData {
         val name: String,
         @FieldName("min_level") @OptionalInt(1) val minLevel: Int = 1,
         @FieldName("max_level") val maxLevel: Int,
-        @FieldName("per_item_overrides") @OptionalIfEmpty val perItemOverrides: Map<SkyBlockId, Int>,
+        @FieldName("per_item_overrides") @OptionalIfEmpty val perItemOverrides: Map<SkyBlockId, Int> = emptyMap(),
         @FieldName("is_ultimate") @OptionalBoolean(false) val isUltimate: Boolean = false,
-        val sources: List<EnchantmentSource>,
-        @OptionalIfEmpty val conflicts: List<String> = listOf(),
-        @OptionalIfEmpty @FieldName("applicable_to") val applicableTo: List<String> = listOf(),
+        val sources: List<EnchantmentSource> = emptyList(),
+        @OptionalIfEmpty val conflicts: List<String> = emptyList(),
+        @OptionalIfEmpty @FieldName("applicable_to") val applicableTo: List<String> = emptyList(),
         @NamedCodec("repo:enchantment:requirements") val requirements: List<Requirement> = emptyList(),
     )
 
