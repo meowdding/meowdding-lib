@@ -10,6 +10,7 @@ import me.owdding.lib.events.MeowddingLibRegisterCommandsEvent
 import me.owdding.lib.events.StartRepoLoadingEvent
 import me.owdding.lib.generated.*
 import me.owdding.lib.utils.mod.MeowddingMod
+import me.owdding.lib.utils.sendWithPrefix
 import me.owdding.lib.utils.unsafeCast
 import me.owdding.repo.RemoteRepo
 import org.spongepowered.asm.mixin.MixinEnvironment
@@ -21,7 +22,9 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.util.concurrent.CompletableFuture
+import kotlin.reflect.KType
 
 @Module
 object MeowddingLib : MeowddingMod("meowdding-lib", loggerName = "MeowddingLib") {
@@ -47,13 +50,18 @@ object MeowddingLib : MeowddingMod("meowdding-lib", loggerName = "MeowddingLib")
         registerEvents(MeowddingLibPostInitModules.collected)
     }
 
+    override fun <T : Any> getCodec(type: KType): Codec<T> = MeowddingLibCodecs.getCodec(type).unsafeCast()
+
+    //? if < 26.4 {
+    @Deprecated("Use getCodec(KType) instead. This will be removed on 26.4")
     override fun <T : Any> getCodec(clazz: Class<T>): Codec<T> = MeowddingLibCodecs.getCodec(clazz).unsafeCast()
+    //?}
 
     private fun finishRepoLoadingEvent() = McClient.runNextTick {
         debug("Finished loading repo!")
         FinishRepoLoadingEvent.post(SkyBlockAPI.eventBus)
         if (notifyAboutRepoLoad) {
-            Text.of("Reloaded repo!").send()
+            Text.of("Reloaded repo!", TextColor.PINK).sendWithPrefix()
             notifyAboutRepoLoad = false
         }
     }
@@ -76,13 +84,14 @@ object MeowddingLib : MeowddingMod("meowdding-lib", loggerName = "MeowddingLib")
         event.register("dev repo") {
             then("reload") {
                 callback {
+                    Text.of("Reloading Repo!", TextColor.GREEN).sendWithPrefix()
                     RemoteRepo.invalidate()
                     notifyAboutRepoLoad = true
                     loadRepo()
                 }
                 thenCallback("local") {
                     if (!RemoteRepo.isInitialized()) {
-                        Text.of("Remote Repo hasn't been initialized yet!").send()
+                        Text.of("Remote Repo hasn't been initialized yet!", TextColor.RED).sendWithPrefix()
                         return@thenCallback
                     }
                     notifyAboutRepoLoad = true
@@ -95,9 +104,10 @@ object MeowddingLib : MeowddingMod("meowdding-lib", loggerName = "MeowddingLib")
                 RemoteRepo.uninitialize()
                 RemoteRepo.forceBackupRepo = !RemoteRepo.forceBackupRepo
                 Text.of("Toggled backup repo to: ") {
+                    color = TextColor.GRAY
                     if (RemoteRepo.forceBackupRepo) append("Enabled", TextColor.GREEN)
                     else append("Disabled", TextColor.RED)
-                }.send()
+                }.sendWithPrefix()
                 notifyAboutRepoLoad = true
                 loadRepo()
             }

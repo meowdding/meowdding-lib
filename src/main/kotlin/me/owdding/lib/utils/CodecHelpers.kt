@@ -12,12 +12,12 @@ import java.util.function.Function
 
 object CodecHelpers {
 
+    @IncludedCodec(keyable = true)
+    val SKYBLOCK_ID: Codec<SkyBlockId> = SkyBlockId.CODEC
+
     @IncludedCodec
     val JSON_OBJECT_CODEC: MapCodec<JsonObject> = MapCodec.assumeMapUnsafe(CodecUtils.JSON_ELEMENT_CODEC.xmap({ it.asJsonObject }, Function.identity()))
 
     @IncludedCodec
     val COMPONENT_CODEC: Codec<Component> = ComponentSerialization.CODEC
-
-    @IncludedCodec(keyable = true)
-    val SKYBLOCK_ID: Codec<SkyBlockId> = SkyBlockId.CODEC
 }
