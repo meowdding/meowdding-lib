@@ -1,32 +1,32 @@
 package me.owdding.lib.repo
 
 import com.mojang.serialization.Codec
-import me.owdding.ktcodecs.*
+import me.owdding.ktcodecs.FieldName
+import me.owdding.ktcodecs.GenerateCodec
+import me.owdding.ktcodecs.IncludedCodec
+import me.owdding.ktcodecs.NamedCodec
+import me.owdding.ktcodecs.OptionalBoolean
+import me.owdding.ktcodecs.OptionalIfEmpty
+import me.owdding.ktcodecs.OptionalInt
 import me.owdding.ktmodules.Module
-import me.owdding.lib.events.FinishRepoLoadingEvent
-import me.owdding.lib.generated.MeowddingLibCodecs
-import me.owdding.repo.RemoteRepo
-import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import me.owdding.lib.MeowddingLib
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
-import tech.thatgravyboat.skyblockapi.utils.json.Json.toData
-import java.util.concurrent.atomic.AtomicReference
 
 @Module
 object EnchantmentRepoData {
 
-    private val _data = AtomicReference<List<ParsedEnchantmentData>>(emptyList())
-    val data: List<ParsedEnchantmentData> get() = _data.get()
+    val data: List<ParsedEnchantmentData> by MeowddingLib.repoDelegate("enchantments", emptyList())
 
     @GenerateCodec
     data class ParsedEnchantmentData(
         val name: String,
         @FieldName("min_level") @OptionalInt(1) val minLevel: Int = 1,
         @FieldName("max_level") val maxLevel: Int,
-        @FieldName("per_item_overrides") @OptionalIfEmpty val perItemOverrides: Map<SkyBlockId, Int>,
+        @FieldName("per_item_overrides") @OptionalIfEmpty val perItemOverrides: Map<SkyBlockId, Int> = emptyMap(),
         @FieldName("is_ultimate") @OptionalBoolean(false) val isUltimate: Boolean = false,
-        val sources: List<EnchantmentSource>,
-        @OptionalIfEmpty val conflicts: List<String> = listOf(),
-        @OptionalIfEmpty @FieldName("applicable_to") val applicableTo: List<String> = listOf(),
+        val sources: List<EnchantmentSource> = emptyList(),
+        @OptionalIfEmpty val conflicts: List<String> = emptyList(),
+        @OptionalIfEmpty @FieldName("applicable_to") val applicableTo: List<String> = emptyList(),
         @NamedCodec("repo:enchantment:requirements") val requirements: List<Requirement> = emptyList(),
     )
 
@@ -65,9 +65,4 @@ object EnchantmentRepoData {
         },
         { it.map { it.formatted } },
     )
-
-    @Subscription
-    private fun finishRepoLoading(event: FinishRepoLoadingEvent) {
-        _data.setRelease(RemoteRepo.getFileContentAsJson("enchantments.json")?.toData(MeowddingLibCodecs.ParsedEnchantmentDataCodec.codec().listOf()) ?: return)
-    }
 }
