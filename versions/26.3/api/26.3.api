@@ -1,6 +1,7 @@
 public final class me/owdding/lib/MeowddingLib : me/owdding/lib/utils/mod/MeowddingMod {
 	public static final field INSTANCE Lme/owdding/lib/MeowddingLib;
 	public fun getCodec (Ljava/lang/Class;)Lcom/mojang/serialization/Codec;
+	public fun getCodec (Lkotlin/reflect/KType;)Lcom/mojang/serialization/Codec;
 	public fun onInitializeClient ()V
 	public fun postInit ()V
 }
@@ -1508,6 +1509,169 @@ public final class me/owdding/lib/repo/AbilityTreeNode : me/owdding/lib/repo/Lev
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class me/owdding/lib/repo/AccessoryFamily : java/util/List, kotlin/jvm/internal/markers/KMappedMarker {
+	public static final field Companion Lme/owdding/lib/repo/AccessoryFamily$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/util/List;Z)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun add (ILjava/lang/Object;)V
+	public fun add (ILme/owdding/lib/repo/AccessoryTier;)V
+	public synthetic fun add (Ljava/lang/Object;)Z
+	public fun add (Lme/owdding/lib/repo/AccessoryTier;)Z
+	public fun addAll (ILjava/util/Collection;)Z
+	public fun addAll (Ljava/util/Collection;)Z
+	public synthetic fun addFirst (Ljava/lang/Object;)V
+	public fun addFirst (Lme/owdding/lib/repo/AccessoryTier;)V
+	public synthetic fun addLast (Ljava/lang/Object;)V
+	public fun addLast (Lme/owdding/lib/repo/AccessoryTier;)V
+	public fun clear ()V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Z
+	public final fun contains (Ljava/lang/Object;)Z
+	public fun contains (Lme/owdding/lib/repo/AccessoryTier;)Z
+	public final fun contains-Sg9Psy0 (Ljava/lang/String;)Z
+	public fun containsAll (Ljava/util/Collection;)Z
+	public final fun copy (Ljava/lang/String;Ljava/util/List;Z)Lme/owdding/lib/repo/AccessoryFamily;
+	public static synthetic fun copy$default (Lme/owdding/lib/repo/AccessoryFamily;Ljava/lang/String;Ljava/util/List;ZILjava/lang/Object;)Lme/owdding/lib/repo/AccessoryFamily;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun flatMapItems ()Lkotlin/sequences/Sequence;
+	public synthetic fun get (I)Ljava/lang/Object;
+	public fun get (I)Lme/owdding/lib/repo/AccessoryTier;
+	public final fun get-Sg9Psy0 (Ljava/lang/String;)Lme/owdding/lib/repo/AccessoryTier;
+	public final fun getFamily ()Ljava/lang/String;
+	public final fun getIgnoreDuplicates ()Z
+	public final fun getMaxTier ()I
+	public fun getSize ()I
+	public final fun getTiers ()Ljava/util/List;
+	public fun hashCode ()I
+	public final fun indexOf (Ljava/lang/Object;)I
+	public fun indexOf (Lme/owdding/lib/repo/AccessoryTier;)I
+	public fun isEmpty ()Z
+	public fun iterator ()Ljava/util/Iterator;
+	public final fun lastIndexOf (Ljava/lang/Object;)I
+	public fun lastIndexOf (Lme/owdding/lib/repo/AccessoryTier;)I
+	public fun listIterator ()Ljava/util/ListIterator;
+	public fun listIterator (I)Ljava/util/ListIterator;
+	public synthetic fun remove (I)Ljava/lang/Object;
+	public fun remove (I)Lme/owdding/lib/repo/AccessoryTier;
+	public fun remove (Ljava/lang/Object;)Z
+	public fun removeAll (Ljava/util/Collection;)Z
+	public synthetic fun removeFirst ()Ljava/lang/Object;
+	public fun removeFirst ()Lme/owdding/lib/repo/AccessoryTier;
+	public synthetic fun removeLast ()Ljava/lang/Object;
+	public fun removeLast ()Lme/owdding/lib/repo/AccessoryTier;
+	public fun replaceAll (Ljava/util/function/UnaryOperator;)V
+	public fun retainAll (Ljava/util/Collection;)Z
+	public synthetic fun set (ILjava/lang/Object;)Ljava/lang/Object;
+	public fun set (ILme/owdding/lib/repo/AccessoryTier;)Lme/owdding/lib/repo/AccessoryTier;
+	public final fun size ()I
+	public fun sort (Ljava/util/Comparator;)V
+	public fun subList (II)Ljava/util/List;
+	public fun toArray ()[Ljava/lang/Object;
+	public fun toArray ([Ljava/lang/Object;)[Ljava/lang/Object;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class me/owdding/lib/repo/AccessoryFamily$Companion {
+	public final fun getCODEC ()Lcom/mojang/serialization/Codec;
+}
+
+public final class me/owdding/lib/repo/AccessoryPowerRepoData {
+	public fun <init> (Ljava/util/Map;Ljava/util/Map;)V
+	public final fun component1 ()Ljava/util/Map;
+	public final fun component2 ()Ljava/util/Map;
+	public final fun copy (Ljava/util/Map;Ljava/util/Map;)Lme/owdding/lib/repo/AccessoryPowerRepoData;
+	public static synthetic fun copy$default (Lme/owdding/lib/repo/AccessoryPowerRepoData;Ljava/util/Map;Ljava/util/Map;ILjava/lang/Object;)Lme/owdding/lib/repo/AccessoryPowerRepoData;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAccessoryPower (Lnet/minecraft/world/item/ItemStack;)I
+	public final fun getOverrides ()Ljava/util/Map;
+	public final fun getRarity ()Ljava/util/Map;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class me/owdding/lib/repo/AccessoryRarityUpgraded : java/util/Set, kotlin/jvm/internal/markers/KMappedMarker {
+	public static final field Companion Lme/owdding/lib/repo/AccessoryRarityUpgraded$Companion;
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/EnumSet;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun add (Ljava/lang/Object;)Z
+	public fun add (Ltech/thatgravyboat/skyblockapi/api/data/SkyBlockRarity;)Z
+	public fun addAll (Ljava/util/Collection;)Z
+	public fun clear ()V
+	public final fun component1-EnzYQXU ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/EnumSet;
+	public final fun contains (Ljava/lang/Object;)Z
+	public fun contains (Ltech/thatgravyboat/skyblockapi/api/data/SkyBlockRarity;)Z
+	public fun containsAll (Ljava/util/Collection;)Z
+	public final fun copy-ls-oWKI (Ljava/lang/String;Ljava/util/EnumSet;)Lme/owdding/lib/repo/AccessoryRarityUpgraded;
+	public static synthetic fun copy-ls-oWKI$default (Lme/owdding/lib/repo/AccessoryRarityUpgraded;Ljava/lang/String;Ljava/util/EnumSet;ILjava/lang/Object;)Lme/owdding/lib/repo/AccessoryRarityUpgraded;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getItem-EnzYQXU ()Ljava/lang/String;
+	public final fun getRarities ()Ljava/util/EnumSet;
+	public fun getSize ()I
+	public fun hashCode ()I
+	public fun isEmpty ()Z
+	public final fun isMax (Ltech/thatgravyboat/skyblockapi/api/data/SkyBlockRarity;)Z
+	public fun iterator ()Ljava/util/Iterator;
+	public final fun nextAfter (Ltech/thatgravyboat/skyblockapi/api/data/SkyBlockRarity;)Ltech/thatgravyboat/skyblockapi/api/data/SkyBlockRarity;
+	public fun remove (Ljava/lang/Object;)Z
+	public fun removeAll (Ljava/util/Collection;)Z
+	public fun retainAll (Ljava/util/Collection;)Z
+	public final fun size ()I
+	public fun toArray ()[Ljava/lang/Object;
+	public fun toArray ([Ljava/lang/Object;)[Ljava/lang/Object;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class me/owdding/lib/repo/AccessoryRarityUpgraded$Companion {
+	public final fun getCODEC ()Lcom/mojang/serialization/Codec;
+}
+
+public final class me/owdding/lib/repo/AccessoryRepoData {
+	public static final field INSTANCE Lme/owdding/lib/repo/AccessoryRepoData;
+	public final fun getAccessoryPowerData ()Lme/owdding/lib/repo/AccessoryPowerRepoData;
+	public final fun getAp (Lnet/minecraft/world/item/ItemStack;)I
+	public final fun getDisallowedOriginFamilies ()Ljava/util/Set;
+	public final fun getFamilies ()Ljava/util/Map;
+	public final fun getFamily-Sg9Psy0 (Ljava/lang/String;)Lme/owdding/lib/repo/AccessoryFamily;
+	public final fun getIgnored ()Ljava/util/Set;
+	public final fun getRarityUpgraded ()Ljava/util/Map;
+	public final fun getRarityUpgraded-Sg9Psy0 (Ljava/lang/String;)Lme/owdding/lib/repo/AccessoryRarityUpgraded;
+	public final fun isDisallowed (Lme/owdding/lib/repo/AccessoryFamily;)Z
+	public final fun isDisallowedOrigin-Sg9Psy0 (Ljava/lang/String;)Z
+	public final fun isIgnored-Sg9Psy0 (Ljava/lang/String;)Z
+	public final fun isRiftPrism (Lme/owdding/lib/repo/AccessoryFamily;)Z
+	public final fun upgradesRarity-Sg9Psy0 (Ljava/lang/String;)Z
+}
+
+public final class me/owdding/lib/repo/AccessoryTier : java/lang/Comparable, java/util/Set, kotlin/jvm/internal/markers/KMappedMarker {
+	public static final field Companion Lme/owdding/lib/repo/AccessoryTier$Companion;
+	public fun <init> (Ljava/util/Set;)V
+	public synthetic fun add (Ljava/lang/Object;)Z
+	public fun add-Sg9Psy0 (Ljava/lang/String;)Z
+	public fun addAll (Ljava/util/Collection;)Z
+	public fun clear ()V
+	public synthetic fun compareTo (Ljava/lang/Object;)I
+	public fun compareTo (Lme/owdding/lib/repo/AccessoryTier;)I
+	public final fun contains (Ljava/lang/Object;)Z
+	public fun contains-Sg9Psy0 (Ljava/lang/String;)Z
+	public fun containsAll (Ljava/util/Collection;)Z
+	public final fun getItems ()Ljava/util/Set;
+	public fun getSize ()I
+	public final fun getTier ()I
+	public fun isEmpty ()Z
+	public fun iterator ()Ljava/util/Iterator;
+	public fun remove (Ljava/lang/Object;)Z
+	public fun removeAll (Ljava/util/Collection;)Z
+	public fun retainAll (Ljava/util/Collection;)Z
+	public final fun size ()I
+	public fun toArray ()[Ljava/lang/Object;
+	public fun toArray ([Ljava/lang/Object;)[Ljava/lang/Object;
+}
+
+public final class me/owdding/lib/repo/AccessoryTier$Companion {
+	public final fun getCODEC ()Lcom/mojang/serialization/Codec;
+}
+
 public final class me/owdding/lib/repo/Context {
 	public fun <init> ()V
 	public fun <init> (II)V
@@ -1711,6 +1875,40 @@ public final class me/owdding/lib/repo/LevelingTreeNode : me/owdding/lib/repo/Le
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class me/owdding/lib/repo/MultiplyOverride : me/owdding/lib/repo/Override {
+	public fun <init> (D)V
+	public fun apply (I)I
+	public final fun component1 ()D
+	public final fun copy (D)Lme/owdding/lib/repo/MultiplyOverride;
+	public static synthetic fun copy$default (Lme/owdding/lib/repo/MultiplyOverride;DILjava/lang/Object;)Lme/owdding/lib/repo/MultiplyOverride;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()D
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract class me/owdding/lib/repo/Override {
+	public fun <init> (Lme/owdding/lib/repo/OverrideTypes;)V
+	public abstract fun apply (I)I
+	public final fun getType ()Lme/owdding/lib/repo/OverrideTypes;
+}
+
+public final class me/owdding/lib/repo/OverrideTypes : java/lang/Enum, me/owdding/lib/generated/DispatchHelper {
+	public static final field Companion Lme/owdding/lib/repo/OverrideTypes$Companion;
+	public static final field MULTIPLY Lme/owdding/lib/repo/OverrideTypes;
+	public fun getCodec ()Lcom/mojang/serialization/MapCodec;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getId ()Ljava/lang/String;
+	public synthetic fun getName ()Ljava/lang/String;
+	public fun getType ()Lkotlin/reflect/KClass;
+	public static fun valueOf (Ljava/lang/String;)Lme/owdding/lib/repo/OverrideTypes;
+	public static fun values ()[Lme/owdding/lib/repo/OverrideTypes;
+}
+
+public final class me/owdding/lib/repo/OverrideTypes$Companion {
+	public final fun getType (Ljava/lang/String;)Lme/owdding/lib/repo/OverrideTypes;
+}
+
 public final class me/owdding/lib/repo/PowderCostType : me/owdding/lib/repo/CostType {
 	public fun <init> (Lme/owdding/lib/repo/PowderType;Ljava/lang/Integer;)V
 	public final fun component1 ()Lme/owdding/lib/repo/PowderType;
@@ -1884,6 +2082,21 @@ public final class me/owdding/lib/repo/WhisperType : java/lang/Enum, me/owdding/
 	public final fun getFormatting ()Lnet/minecraft/ChatFormatting;
 	public static fun valueOf (Ljava/lang/String;)Lme/owdding/lib/repo/WhisperType;
 	public static fun values ()[Lme/owdding/lib/repo/WhisperType;
+}
+
+public final class me/owdding/lib/utils/CachedValue {
+	public static final field Companion Lme/owdding/lib/utils/CachedValue$Companion;
+	public synthetic fun <init> (JLkotlin/jvm/functions/Function0;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JLkotlin/jvm/functions/Function0;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getLastUpdated ()Lkotlin/time/Instant;
+	public final fun getValue ()Ljava/lang/Object;
+	public final fun getValue (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public final fun hasValue ()Z
+	public final fun invalidate ()V
+}
+
+public final class me/owdding/lib/utils/CachedValue$Companion {
+	public final fun invalidateCache (Lkotlin/reflect/KProperty0;)V
 }
 
 public final class me/owdding/lib/utils/CodecHelpers {
@@ -2086,6 +2299,16 @@ public final class me/owdding/lib/utils/PackInfo {
 
 public final class me/owdding/lib/utils/PackInfoKt {
 	public static final field API_URL Ljava/lang/String;
+}
+
+public final class me/owdding/lib/utils/RemoteRepoDelegate {
+	public static final field Companion Lme/owdding/lib/utils/RemoteRepoDelegate$Companion;
+	public final fun getValue (Ljava/lang/Object;Lkotlin/reflect/KProperty;)Ljava/lang/Object;
+}
+
+public final class me/owdding/lib/utils/RemoteRepoDelegate$Companion {
+	public final fun load (Lme/owdding/lib/utils/MeowddingLogger;Ljava/lang/String;Lcom/mojang/serialization/Codec;)Lme/owdding/lib/utils/RemoteRepoDelegate;
+	public final fun load (Lme/owdding/lib/utils/MeowddingLogger;Ljava/lang/String;Ljava/lang/Object;Lcom/mojang/serialization/Codec;)Lme/owdding/lib/utils/RemoteRepoDelegate;
 }
 
 public final class me/owdding/lib/utils/RenderUtils {
@@ -2397,6 +2620,7 @@ public abstract class me/owdding/lib/utils/mod/MeowddingMod : me/owdding/lib/uti
 	public fun featureLogger (Ljava/lang/String;)Lme/owdding/lib/utils/MeowddingLogger;
 	public final fun folderStorage (Ljava/lang/String;ILkotlin/jvm/functions/Function1;)Lme/owdding/lib/utils/mod/data/MeowddingFolderStorageData;
 	public abstract fun getCodec (Ljava/lang/Class;)Lcom/mojang/serialization/Codec;
+	public fun getCodec (Lkotlin/reflect/KType;)Lcom/mojang/serialization/Codec;
 	public final fun getMOD_ID ()Ljava/lang/String;
 	public fun getRESOURCE_PATH ()Ljava/lang/String;
 	public final fun getSELF ()Lnet/fabricmc/loader/api/ModContainer;
@@ -2407,12 +2631,15 @@ public abstract class me/owdding/lib/utils/mod/MeowddingMod : me/owdding/lib/uti
 	public fun info (Ljava/lang/String;Ljava/lang/String;)V
 	public fun info (Ljava/lang/String;Ljava/lang/Throwable;)V
 	public fun info (Ljava/lang/String;Ljava/lang/Throwable;Ljava/lang/String;)V
+	public final fun loadRepo (Ljava/lang/String;Lcom/mojang/serialization/Codec;)Ljava/lang/Object;
 	public fun postInit ()V
 	public fun preInit ()V
 	public final fun profileStorage (Ljava/lang/String;Lkotlin/jvm/functions/Function0;ILkotlin/jvm/functions/Function1;)Lme/owdding/lib/utils/mod/data/MeowddingProfileStorageData;
 	public final fun profileStorage (Ljava/lang/String;Lkotlin/jvm/functions/Function0;ILkotlin/jvm/functions/Function1;Z)Lme/owdding/lib/utils/mod/data/MeowddingProfileStorageData;
 	public static synthetic fun profileStorage$default (Lme/owdding/lib/utils/mod/MeowddingMod;Ljava/lang/String;Lkotlin/jvm/functions/Function0;ILkotlin/jvm/functions/Function1;ZILjava/lang/Object;)Lme/owdding/lib/utils/mod/data/MeowddingProfileStorageData;
 	public final fun registerEvents (Ljava/lang/Iterable;)V
+	public final fun repoDelegate (Ljava/lang/String;Lcom/mojang/serialization/Codec;)Lme/owdding/lib/utils/RemoteRepoDelegate;
+	public final fun repoDelegate (Ljava/lang/String;Ljava/lang/Object;Lcom/mojang/serialization/Codec;)Lme/owdding/lib/utils/RemoteRepoDelegate;
 	public fun runCatching (Ljava/lang/String;Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
 	public final fun storage (Ljava/lang/String;Lkotlin/jvm/functions/Function0;ILkotlin/jvm/functions/Function1;)Lme/owdding/lib/utils/mod/data/MeowddingStorageData;
 	public final fun storage (Ljava/lang/String;Lkotlin/jvm/functions/Function0;ILkotlin/jvm/functions/Function1;Z)Lme/owdding/lib/utils/mod/data/MeowddingStorageData;
