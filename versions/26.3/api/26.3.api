@@ -1,5 +1,6 @@
 public final class me/owdding/lib/MeowddingLib : me/owdding/lib/utils/mod/MeowddingMod {
 	public static final field INSTANCE Lme/owdding/lib/MeowddingLib;
+	public static final field NAMESPACE Ljava/lang/String;
 	public fun getCodec (Ljava/lang/Class;)Lcom/mojang/serialization/Codec;
 	public fun getCodec (Lkotlin/reflect/KType;)Lcom/mojang/serialization/Codec;
 	public fun onInitializeClient ()V
@@ -497,8 +498,6 @@ public final class me/owdding/lib/dev/DisplayTest : net/minecraft/client/gui/scr
 
 public final class me/owdding/lib/dev/EnchantmentGuideParser {
 	public static final field INSTANCE Lme/owdding/lib/dev/EnchantmentGuideParser;
-	public final fun getEnabled ()Z
-	public final fun setEnabled (Z)V
 }
 
 public final class me/owdding/lib/dev/OverlayTest {
