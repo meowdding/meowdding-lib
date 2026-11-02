@@ -1,6 +1,5 @@
 public final class me/owdding/lib/MeowddingLib : me/owdding/lib/utils/mod/MeowddingMod {
 	public static final field INSTANCE Lme/owdding/lib/MeowddingLib;
-	public static final field NAMESPACE Ljava/lang/String;
 	public fun getCodec (Ljava/lang/Class;)Lcom/mojang/serialization/Codec;
 	public fun getCodec (Lkotlin/reflect/KType;)Lcom/mojang/serialization/Codec;
 	public fun onInitializeClient ()V
