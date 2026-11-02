@@ -20,7 +20,7 @@ object TestCommands {
 
     @Subscription
     internal fun onCommand(event: MeowddingLibRegisterCommandsEvent) {
-        event.register("test") {
+        event.register("dev test") {
             thenCallback("display") {
                 McClient.setScreenAsync { DisplayTest }
             }
