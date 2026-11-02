@@ -10,6 +10,8 @@ import me.owdding.ktcodecs.OptionalIfEmpty
 import me.owdding.ktcodecs.OptionalInt
 import me.owdding.ktmodules.Module
 import me.owdding.lib.MeowddingLib
+import tech.thatgravyboat.repolib.api.EnchantsAPI
+import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 
 @Module
@@ -19,6 +21,7 @@ object EnchantmentRepoData {
 
     @GenerateCodec
     data class ParsedEnchantmentData(
+        val id: String,
         val name: String,
         @FieldName("min_level") @OptionalInt(1) val minLevel: Int = 1,
         @FieldName("max_level") val maxLevel: Int,
@@ -28,7 +31,12 @@ object EnchantmentRepoData {
         @OptionalIfEmpty val conflicts: List<String> = emptyList(),
         @OptionalIfEmpty @FieldName("applicable_to") val applicableTo: List<String> = emptyList(),
         @NamedCodec("repo:enchantment:requirements") val requirements: List<Requirement> = emptyList(),
-    )
+    ) {
+        val enchant: EnchantsAPI.Enchant?
+            get() = if (RepoAPI.isInitialized()) {
+                RepoAPI.enchantments().getEnchantment(id)
+            } else null
+    }
 
     @GenerateCodec
     data class EnchantmentSource(

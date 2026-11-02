@@ -6,7 +6,12 @@ import me.owdding.lib.generated.CodecUtils
 import me.owdding.lib.generated.MeowddingLibCodecs
 import me.owdding.lib.repo.EnchantmentRepoData
 import me.owdding.lib.repo.EnchantmentRepoData.PassthroughRequirement
+import me.owdding.lib.utils.sendWithPrefix
 import net.minecraft.world.item.Items
+import tech.thatgravyboat.repolib.api.RepoAPI
+import tech.thatgravyboat.skyblockapi.api.datatype.DataType
+import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
+import tech.thatgravyboat.skyblockapi.api.datatype.getData
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
@@ -83,8 +88,14 @@ object EnchantmentGuideParser {
 
         val minLevel = sources.minOf { it.min }
 
+        val enchantId = RepoAPI.enchantments()?.enchantments()?.toList()?.find { it.second.name == name }?.first ?: run {
+            Text.of("Enchant without Id found: ${event.item.cleanName}").sendWithPrefix()
+            return
+        }
+
         enchantments.add(
             EnchantmentRepoData.ParsedEnchantmentData(
+                enchantId,
                 name,
                 minLevel,
                 maxLevelOverwrites[name] ?: maxLevel,
