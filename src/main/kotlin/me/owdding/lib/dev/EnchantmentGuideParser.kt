@@ -32,6 +32,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.onClick
 @Module
 object EnchantmentGuideParser {
 
+    private val enabled by debugToggle("enchantment_guide_parser", "Parses Enchantment Data from the Enchantment Guide")
+
     private val maxLevelOverwrites = mapOf<String, Int>()
 
     private val itemMaxLevelOverwrites = mapOf(
@@ -41,7 +43,6 @@ object EnchantmentGuideParser {
         ),
     )
 
-    var enabled = false
     private val enchantments = mutableSetOf<EnchantmentRepoData.ParsedEnchantmentData>()
 
     private data class LoreReader(val content: List<String>) {
@@ -127,14 +128,6 @@ object EnchantmentGuideParser {
         event.registerWithCallback("dev serialize_enchantments") {
             Text.of("Click to copy max enchantments!") {
                 onClick { McClient.clipboard = enchantments.toJson(CodecUtils.mutableSet(MeowddingLibCodecs.getCodec())).toPrettyString() }
-            }.send()
-        }
-        event.registerWithCallback("dev toggle enchantment_parser") {
-            enabled = !enabled
-            Text.of {
-                if (enabled) append("Enabled") { color = TextColor.GREEN }
-                else append("Disabled") { color = TextColor.RED }
-                append(" enchantment parser!")
             }.send()
         }
     }
