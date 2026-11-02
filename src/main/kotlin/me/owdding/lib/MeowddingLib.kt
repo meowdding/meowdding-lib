@@ -30,8 +30,6 @@ import kotlin.reflect.KType
 object MeowddingLib : MeowddingMod("meowdding-lib", loggerName = "MeowddingLib") {
     private var notifyAboutRepoLoad = false
 
-    const val NAMESPACE = "meowdding-lib"
-
     init {
         if (McClient.isDev) { // Ensures all mixins always apply while in dev
             MixinEnvironment.getCurrentEnvironment().audit()

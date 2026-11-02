@@ -58,7 +58,7 @@ internal data object MlibDevUtils : DevUtils() {
     override val path: Path = loadPath()
     val propertiesMap: Map<String, String> = loadFromProperties(path)
 
-    override val namespace: String = MeowddingLib.NAMESPACE
+    override val namespace: String = MeowddingLib.RESOURCE_PATH
 
     private fun loadPath(): Path {
         val specifiedPath = System.getenv("tech_thatgravyboat_sbapi_debug_property_path") ?: System.getProperty("sbapi.property_path")
