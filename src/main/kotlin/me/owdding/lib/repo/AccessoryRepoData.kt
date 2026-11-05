@@ -148,18 +148,20 @@ object AccessoryRepoData {
 
         allAccessories.removeAll(storedAccessories)
 
-        if (allAccessories.isEmpty()) {
-            Text.of("All accessories have families!").sendWithPrefix()
-        } else {
-            Text.of("Not all accessories have families! Click to copy missing ones") {
-                this.color = TextColor.RED
-                this.hover = Text.of("Click to copy missing ones!")
-                onClick {
-                    val codec = CodecUtils.set(SkyBlockId.CODEC)
-                    McClient.clipboard = allAccessories.toJsonOrThrow(codec).toPrettyString()
-                    Text.of("Copied missing accessories to clipboard!").sendWithPrefix()
-                }
-            }.sendWithPrefix()
+        McClient.runNextTick {
+            if (allAccessories.isEmpty()) {
+                Text.of("All accessories have families!").sendWithPrefix()
+            } else {
+                Text.of("Not all accessories have families! Click to copy missing ones") {
+                    this.color = TextColor.RED
+                    this.hover = Text.of("Click to copy missing ones!")
+                    onClick {
+                        val codec = CodecUtils.set(SkyBlockId.CODEC)
+                        McClient.clipboard = allAccessories.toJsonOrThrow(codec).toPrettyString()
+                        Text.of("Copied missing accessories to clipboard!").sendWithPrefix()
+                    }
+                }.sendWithPrefix()
+            }
         }
     }
 
@@ -175,18 +177,20 @@ object AccessoryRepoData {
             it.toItem().`is`(Items.BARRIER)
         }
 
-        if (unknownAccessories.isEmpty()) {
-            Text.of("No unknown accessories found!").sendWithPrefix()
-        } else {
-            Text.of("Found unknown accessories! Click to copy them") {
-                this.color = TextColor.RED
-                this.hover = Text.of("Click to copy unknown ones!")
-                onClick {
-                    val codec = CodecUtils.set(SkyBlockId.CODEC)
-                    McClient.clipboard = unknownAccessories.toJsonOrThrow(codec).toPrettyString()
-                    Text.of("Copied unknown accessories to clipboard!").sendWithPrefix()
-                }
-            }.sendWithPrefix()
+        McClient.runNextTick {
+            if (unknownAccessories.isEmpty()) {
+                Text.of("No unknown accessories found!").sendWithPrefix()
+            } else {
+                Text.of("Found unknown accessories! Click to copy them") {
+                    this.color = TextColor.RED
+                    this.hover = Text.of("Click to copy unknown ones!")
+                    onClick {
+                        val codec = CodecUtils.set(SkyBlockId.CODEC)
+                        McClient.clipboard = unknownAccessories.toJsonOrThrow(codec).toPrettyString()
+                        Text.of("Copied unknown accessories to clipboard!").sendWithPrefix()
+                    }
+                }.sendWithPrefix()
+            }
         }
     }
 }
