@@ -18,22 +18,31 @@ import me.owdding.lib.generated.DispatchHelper
 import me.owdding.lib.generated.MeowddingLibCodecs
 import me.owdding.lib.utils.sendWithPrefix
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import tech.thatgravyboat.skyblockapi.api.data.SkyBlockCategory
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.datatype.getData
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.misc.CommandBuilder
+import tech.thatgravyboat.skyblockapi.api.remote.api.SimpleItemAPI
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.ItemData
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.ItemOrigin.BINGO
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.ItemOrigin.RIFT
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.utils.Scheduling
 import tech.thatgravyboat.skyblockapi.utils.extentions.capitalize
 import tech.thatgravyboat.skyblockapi.utils.extentions.toSnakeCase
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toJson
+import tech.thatgravyboat.skyblockapi.utils.json.Json.toJsonOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.hover
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.onClick
 import java.util.EnumSet
 import kotlin.collections.get
 import kotlin.math.roundToInt
@@ -117,9 +126,69 @@ object AccessoryRepoData {
             thenCopy(::rarityUpgraded)
             thenCopy(::disallowedOriginFamilies)
             thenCopy(::ignored)
+            then("check") {
+                thenCallback("missing") { Scheduling.async(::checkMissingAccessories) }
+                thenCallback("unknown") { Scheduling.async(::checkUnknown) }
+            }
         }
     }
 
+    // Creates every single item in skyblock and gets the accessories that don't have a family or are ignored
+    private fun checkMissingAccessories() {
+        val allAccessories = SimpleItemAPI.getAllIds().filterTo(mutableSetOf()) {
+            val category = it.toItem().getData(DataTypes.CATEGORY) ?: return@filterTo false
+            category.equalsAny(SkyBlockCategory.ACCESSORY, SkyBlockCategory.HATCESSORY, ignoreModifiers = true)
+        }
+        val storedAccessories: Set<SkyBlockId> = buildSet {
+            families.values.forEach { family ->
+                family.tiers.forEach(::addAll)
+            }
+            addAll(ignored)
+        }
+
+        allAccessories.removeAll(storedAccessories)
+
+        if (allAccessories.isEmpty()) {
+            Text.of("All accessories have families!").sendWithPrefix()
+        } else {
+            Text.of("Not all accessories have families! Click to copy missing ones") {
+                this.color = TextColor.RED
+                this.hover = Text.of("Click to copy missing ones!")
+                onClick {
+                    val codec = CodecUtils.set(SkyBlockId.CODEC)
+                    McClient.clipboard = allAccessories.toJsonOrThrow(codec).toPrettyString()
+                    Text.of("Copied missing accessories to clipboard!").sendWithPrefix()
+                }
+            }.sendWithPrefix()
+        }
+    }
+
+    private fun checkUnknown() {
+        val knownAccessories: Set<SkyBlockId> = buildSet {
+            families.values.forEach { family ->
+                family.tiers.forEach(::addAll)
+            }
+            addAll(ignored)
+        }
+
+        val unknownAccessories = knownAccessories.filterTo(mutableSetOf()) {
+            it.toItem().`is`(Items.BARRIER)
+        }
+
+        if (unknownAccessories.isEmpty()) {
+            Text.of("No unknown accessories found!").sendWithPrefix()
+        } else {
+            Text.of("Found unknown accessories! Click to copy them") {
+                this.color = TextColor.RED
+                this.hover = Text.of("Click to copy unknown ones!")
+                onClick {
+                    val codec = CodecUtils.set(SkyBlockId.CODEC)
+                    McClient.clipboard = unknownAccessories.toJsonOrThrow(codec).toPrettyString()
+                    Text.of("Copied unknown accessories to clipboard!").sendWithPrefix()
+                }
+            }.sendWithPrefix()
+        }
+    }
 }
 
 
