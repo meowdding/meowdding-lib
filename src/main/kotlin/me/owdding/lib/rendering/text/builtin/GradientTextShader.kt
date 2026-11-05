@@ -1,5 +1,7 @@
 package me.owdding.lib.rendering.text.builtin
 
+import com.mojang.renderpearl.api.pipeline.BlendFunction
+import com.mojang.renderpearl.api.pipeline.ColorTargetState
 import com.mojang.renderpearl.api.pipeline.CompareOp
 import com.mojang.renderpearl.api.pipeline.DepthStencilState
 import com.mojang.renderpearl.api.pipeline.RenderPipeline
@@ -25,8 +27,10 @@ import com.mojang.renderpearl.api.pipeline.BindGroupLayout
 import net.minecraft.client.renderer.oit.OitPipelineSet
 
 //? >= 26.3 {
-private val pipelineCreator0: (GradientTextShader, Font.DisplayMode?, Boolean) -> Pair<RenderPipeline, OitPipelineSet?> = MemoizeUtil.memoize { shader, displayMode, grayscale ->
-    val builder = RenderPipeline.builder(
+private val pipelineCreator0: (GradientTextShader, Font.DisplayMode?, Boolean) -> Pair<RenderPipeline, OitPipelineSet?> =
+    MemoizeUtil.memoize { shader, displayMode, grayscale ->
+        val location = MeowddingLib.id("gradient_text/${displayMode?.name?.lowercase()}${if (grayscale) "_grayscale" else ""}")
+        val builder = RenderPipeline.builder(
             *buildList {
                 when (displayMode) {
                     Font.DisplayMode.NORMAL, Font.DisplayMode.POLYGON_OFFSET -> add(RenderPipelines.WORLD_TEXT_SNIPPET)
@@ -34,7 +38,7 @@ private val pipelineCreator0: (GradientTextShader, Font.DisplayMode?, Boolean) -
                     null -> add(RenderPipelines.GUI_TEXT_SNIPPET)
                 }
             }.toTypedArray(),
-        ).withLocation(MeowddingLib.id("gradient_text/${displayMode?.name?.lowercase()}${if (grayscale) "_grayscale" else ""}"))
+        ).withLocation(location)
             .withVertexShader(MeowddingLib.id("text/gradient"))
             .withFragmentShader(MeowddingLib.id("text/gradient"))
             .apply {
@@ -74,12 +78,16 @@ private val pipelineCreator0: (GradientTextShader, Font.DisplayMode?, Boolean) -
                 shader.speed,
             )
 
-    if (displayMode == null) {
-        return@memoize RenderPipelines.register(builder.build()) to null
-    }
+        if (displayMode == null) {
+            return@memoize RenderPipelines.register(builder.withColorTargetState(ColorTargetState(BlendFunction.TRANSLUCENT)).build()) to null
+        }
 
-    RenderPipelines.register(builder.build()) to RenderPipelines.register(OitPipelineSet.builder("meowdding/gradient_text_shader", builder).build())
-}
+        val snippet = builder.buildSnippet()
+
+        RenderPipelines.register(
+            RenderPipeline.builder(snippet).withColorTargetState(ColorTargetState(BlendFunction.TRANSLUCENT)).withLocation(location).build(),
+        ) to RenderPipelines.register(OitPipelineSet.builder("meowdding/gradient_text_shader", builder).build())
+    }
 //? } = 26.2 {
 /*private val layout = BindGroupLayout.builder()
     .build()
