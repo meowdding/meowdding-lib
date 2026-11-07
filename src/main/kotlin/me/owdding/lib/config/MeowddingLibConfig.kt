@@ -27,6 +27,8 @@ object MeowddingLibConfig : ConfigKt("meowdding-lib/config"), AutoTranslated {
         }
     }
 
+    val hypixelPackSharing by autoBoolean(true)
+
     init {
         autoSeparator("cosmetics")
     }

@@ -4,6 +4,7 @@ import me.owdding.ktcodecs.FieldName
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktmodules.Module
 import me.owdding.lib.MeowddingLib
+import me.owdding.lib.config.MeowddingLibConfig
 import me.owdding.lib.dev.debugToggle
 import me.owdding.lib.generated.MeowddingLibCodecs
 import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
@@ -30,8 +31,6 @@ object SkyblockPackInfo : MeowddingLogger by MeowddingLib.featureLogger() {
     private val codec = MeowddingLibCodecs.getCodec<PackInfo>()
     private val source = RandomSource.create()
 
-    private val toggle by debugToggle("disable_pack_sharing", "Force disables sharing the current Hypixel Pack Id.")
-
     var onDev = false
 
     @Subscription
@@ -48,7 +47,7 @@ object SkyblockPackInfo : MeowddingLogger by MeowddingLib.featureLogger() {
     private fun onPacketReceived(event: PacketReceivedEvent) {
         if (!LocationAPI.onHypixel) return
         if (onDev) return
-        if (toggle) return
+        if (!MeowddingLibConfig.hypixelPackSharing) return
         val packet = event.packet as? ClientboundResourcePackPushPacket ?: return
 
         if ((Mth.randomBetweenInclusive(source, 0, 100) >= 25) && McPlayer.self?.isMeowddingMaintainer() != true) return
@@ -56,7 +55,7 @@ object SkyblockPackInfo : MeowddingLogger by MeowddingLib.featureLogger() {
         val match = regex.matchEntire(packet.url) ?: return
         val uuid = match.groups["uuid"]?.value ?: return
 
-        val packInfo = PackInfo(uuid, LocationAPI.onAlpha,)
+        val packInfo = PackInfo(uuid, LocationAPI.onAlpha)
 
         val json = packInfo.toJson(codec) ?: return
 

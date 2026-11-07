@@ -1,56 +1,64 @@
 {
-  "@meowdding:metadata": {
-    "allowMultiline": true,
-    "allowReferences": true,
-    "allowTags": true,
-    "objectAsKeys": true,
-    "prefix": "mlib",
-    "@references": {}
-  },
-  "config": {
-    "@value": "Meowdding Lib Config",
-    "cosmetics": {
-      "@value": "Cosmetics",
-      "desc": "Cosmetics for specific players, loaded from: https://cosmetics.meowdd.ing/"
+    "@meowdding:metadata": {
+        "allowMultiline": true,
+        "allowReferences": true,
+        "allowTags": true,
+        "objectAsKeys": true,
+        "prefix": "mlib",
+        "@references": {}
     },
-    "suffix_cosmetic": {
-      "@value": "Name Suffix Cosmetic",
-      "desc": "Suffix after the player name in the Nametag & SkyCubed Tablist"
+    "config": {
+        "@value": "Meowdding Lib Config",
+        "hypixelPackSharing": {
+            "@value": "Share Hypixel Pack",
+            "desc": [
+                "Has a 25% change to share the current Hypixel Pack on Main/Alpha when joining the Mode.",
+                "Only shares the Pack Id & if on alpha, no other additional information.",
+                "Useful for us to track Pack changes that Hypixel doesn't disclose."
+            ]
+        },
+        "cosmetics": {
+            "@value": "Cosmetics",
+            "desc": "Cosmetics for specific players, loaded from: https://cosmetics.meowdd.ing/"
+        },
+        "suffix_cosmetic": {
+            "@value": "Name Suffix Cosmetic",
+            "desc": "Suffix after the player name in the Nametag & SkyCubed Tablist"
+        },
+        "cape_cosmetic": {
+            "@value": "Cape Cosmetic",
+            "desc": "Custom Capes"
+        },
+        "player_scale_cosmetic": {
+            "@value": "Player Scale Cosmetic",
+            "desc": "Changes the scale of players, limited to inside SkyBlock only"
+        },
+        "pv_cosmetic": {
+            "@value": "SkyBlockProfileViewer Cosmetics",
+            "desc": "All Cosmetics shown inside Pv, like custom text below name, pets, ..."
+        }
     },
-    "cape_cosmetic": {
-      "@value": "Cape Cosmetic",
-      "desc": "Custom Capes"
+    "overlay": {
+        "edit": {
+            "@value": "<gold>Click to edit overlay.</gold>",
+            "reset": "<red>Reset Location</red>",
+            "options": "<gold>Right Click to configure</gold>"
+        },
+        "mod": {
+            "meowdding-lib": "<blue>MLib</blue>",
+            "skyocean": "<blue>SkyOcean</blue>",
+            "skycubed": "<blue>SkyCubed</blue>"
+        }
     },
-    "player_scale_cosmetic": {
-      "@value": "Player Scale Cosmetic",
-      "desc": "Changes the scale of players, limited to inside SkyBlock only"
-    },
-    "pv_cosmetic": {
-      "@value": "SkyBlockProfileViewer Cosmetics",
-      "desc": "All Cosmetics shown inside Pv, like custom text below name, pets, ..."
+    "gradients": {
+        "default": "Default",
+        "rainbow": "Rainbow",
+        "bisexual": "Bisexual",
+        "gay": "Gay",
+        "lesbian": "Lesbian",
+        "pansexual": "Pansexual",
+        "asexual": "Asexual",
+        "non_binary": "Non Binary",
+        "trans": "Transgender"
     }
-  },
-  "overlay": {
-    "edit": {
-      "@value": "<gold>Click to edit overlay.</gold>",
-      "reset": "<red>Reset Location</red>",
-      "options": "<gold>Right Click to configure</gold>"
-    },
-    "mod": {
-      "meowdding-lib": "<blue>MLib</blue>",
-      "skyocean": "<blue>SkyOcean</blue>",
-      "skycubed": "<blue>SkyCubed</blue>"
-    }
-  },
-  "gradients": {
-    "default": "Default",
-    "rainbow": "Rainbow",
-    "bisexual": "Bisexual",
-    "gay": "Gay",
-    "lesbian": "Lesbian",
-    "pansexual": "Pansexual",
-    "asexual": "Asexual",
-    "non_binary": "Non Binary",
-    "trans": "Transgender"
-  }
 }
