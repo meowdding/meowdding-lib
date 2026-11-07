@@ -402,6 +402,7 @@ public final class me/owdding/lib/config/MeowddingLibConfig : com/teamresourcefu
 	public final fun getCapeCosmetic ()Z
 	public final fun getConfig ()Lcom/teamresourceful/resourcefulconfig/api/types/ResourcefulConfig;
 	public final fun getConfigurator ()Lcom/teamresourceful/resourcefulconfig/api/loader/Configurator;
+	public final fun getHypixelPackSharing ()Z
 	public fun getName ()Lcom/teamresourceful/resourcefulconfig/api/types/options/TranslatableValue;
 	public final fun getPlayerScaleCosmetic ()Z
 	public final fun getPvCosmetic ()Z
