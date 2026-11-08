@@ -2,15 +2,19 @@ package me.owdding.lib.layouts
 
 import earth.terrarium.olympus.client.components.base.BaseParentWidget
 import net.minecraft.client.gui.GuiGraphicsExtractor
+import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.LayoutElement
 
 class PaddedWidget(widget: LayoutElement, val paddingTop: Int, val paddingRight: Int, val paddingBottom: Int, val paddingLeft: Int) : BaseParentWidget() {
     constructor(widget: LayoutElement, padding: Int) : this(widget, padding, padding, padding, padding)
 
-    val widget = widget.asWidget()
+    val widget: AbstractWidget by lazy { widget.asWidget() }
+    val actualWidget = widget
 
     init {
-        this.addRenderableWidget(this.widget)
+        actualWidget.visitWidgets {
+            this.addRenderableWidget(it)
+        }
     }
 
     override fun getWidth() = widget.width + paddingLeft + paddingRight
@@ -18,7 +22,9 @@ class PaddedWidget(widget: LayoutElement, val paddingTop: Int, val paddingRight:
 
     override fun extractWidgetRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         widget.setPosition(this.x + paddingLeft, this.y + paddingTop)
-        widget.extractRenderState(graphics, mouseX, mouseY, partialTicks)
+        actualWidget.visitWidgets {
+            it.extractRenderState(graphics, mouseX, mouseY, partialTicks)
+        }
         super.extractWidgetRenderState(graphics, mouseX, mouseY, partialTicks)
     }
 }
