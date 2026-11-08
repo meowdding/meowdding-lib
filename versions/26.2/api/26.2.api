@@ -1052,6 +1052,7 @@ public final class me/owdding/lib/layouts/LayoutExtensionKt {
 public final class me/owdding/lib/layouts/PaddedWidget : me/owdding/lib/platform/screens/BaseParentWidget {
 	public fun <init> (Lnet/minecraft/client/gui/layouts/LayoutElement;I)V
 	public fun <init> (Lnet/minecraft/client/gui/layouts/LayoutElement;IIII)V
+	public final fun getActualWidget ()Lnet/minecraft/client/gui/layouts/LayoutElement;
 	public fun getHeight ()I
 	public final fun getPaddingBottom ()I
 	public final fun getPaddingLeft ()I
