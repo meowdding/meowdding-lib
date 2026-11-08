@@ -8,6 +8,7 @@ import me.owdding.lib.displays.Alignment
 import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.circle.roundedTextureDisplay
 import me.owdding.lib.displays.withOutline
+import me.owdding.lib.layouts.withPadding
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
 import me.owdding.lib.rendering.text.serialization.TagComponentSerialization
 import me.owdding.lib.rendering.text.textShader
@@ -27,12 +28,13 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.strikethrough
 object DisplayTest : Screen(CommonComponents.EMPTY) {
 
     val state = ListenableState("")
-    val mappedState = state.map({ Displays.text(TagComponentSerialization.deserialize(it))}, { "" })
+    val mappedState = state.map({ Displays.text(TagComponentSerialization.deserialize(it)) }, { "" })
 
     val entity = Displays.entity(RemotePlayer(McClient.self.level!!, McPlayer.self!!.gameProfile), 50, 100, 100 / 3)
 
     override fun init() {
         addRenderableWidget(Widgets.textInput(state).withPosition(200, 300).withSize(100, 10))
+        addRenderableWidget(Widgets.textInput(state).withSize(100, 10).withPadding(50).apply { setPosition(250, 300) })
         super.init()
     }
 
