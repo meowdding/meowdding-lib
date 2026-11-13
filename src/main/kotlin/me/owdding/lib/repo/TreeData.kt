@@ -60,11 +60,11 @@ object TreeRepoData {
 }
 
 data class Context(val treeLevel: Int = -1, val perkLevel: Int = -1) {
-    fun configure(kevalBuilder: KevalBuilder<Double>) = with(kevalBuilder) {
+    fun configure(kevalBuilder: KevalBuilder) = with(kevalBuilder) {
         function {
             name = "min"
             arity = 2
-            implementation = { args -> args.minOrNull()!! }
+            implementation = DoubleArray::min
         }
         constant {
             name = "level"
