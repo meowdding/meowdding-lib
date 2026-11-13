@@ -1,16 +1,16 @@
 [versions]
 
-fabric-loader = "0.19.2"
-fabric-language-kotlin = "1.13.10+kotlin.2.3.20"
+fabric-loader = "0.20.1"
+fabric-language-kotlin = "1.14.2+kotlin.2.4.21"
 
-kotlin-version = "2.4.0"
-kotlin-gradle-plugin = "2.4.0"
+kotlin-version = "2.4.21"
+kotlin-gradle-plugin = "2.4.21"
 kotlin-symbol-processor = "2.3.11"
-keval = "1.1.1"
+keval = "2.0.1"
 gson = "2.12.1"
 
 # Dependencies
-skyblockapi = "4.3.0"
+skyblockapi = "4.3.2"
 placeholders = "2.6.1+1.21.5"
 rei = "20.0.811"
 skyblock-item-list = "0.0.13+26.2"
