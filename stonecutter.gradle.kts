@@ -1,7 +1,6 @@
 import dev.kikugie.stonecutter.build.config.ReplacementContainer
 import org.gradle.api.publish.internal.component.DefaultAdhocSoftwareComponent
 import org.gradle.kotlin.dsl.support.serviceOf
-import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
 
 plugins {
     id("dev.kikugie.stonecutter")
@@ -17,6 +16,17 @@ stonecutter handlers {
     //configure("fsh", "vsh") {
     //    commenter = line("//")
     //}
+}
+
+fun Project.isDummy(): Boolean = buildscript.sourceFile?.name == "dummy.gradle.kts"
+
+stonecutter.versions.forEach {
+    val project = project(it.project)
+    if (!project.isDummy()) return@forEach
+    project.tasks.configureEach {
+        if (this.group == "stonecutter-impl") return@configureEach
+        enabled = false
+    }
 }
 
 stonecutter parameters {
@@ -129,6 +139,10 @@ stonecutter parameters {
 
             rename("PipelineRenderer", "PipelineSubmit", "earth.terrarium.olympus.client.pipelines.renderer")
         }
+        string(current.parsed > "26.3") {
+            move("me.owdding.lib.rendering.text.builtin.GradientProvider", "me.owdding.lib.utils.GradientProvider")
+            rename("me.owdding.lib.rendering.text.builtin.GradientTextShader.Direction", "me.owdding.lib.utils.GradientDirection")
+        }
     }
 }
 evaluationDependsOnChildren()
@@ -142,6 +156,9 @@ val remappedAttribute = Attribute.of("net.fabricmc.remapped", String::class.java
 stonecutter.versions.forEach { (project, version) ->
     val gradleFriendlyVersion = version.replace(".", "")
     val project = project(project)
+
+    // we don't want to publish the dummy version
+    if (project.isDummy()) return@forEach
 
     val java = project.components.getByName<DefaultAdhocSoftwareComponent>("java")
     java.usages.forEach { context ->
