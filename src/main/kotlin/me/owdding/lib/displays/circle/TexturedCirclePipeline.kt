@@ -15,7 +15,7 @@ import org.joml.Vector4f
 import java.nio.ByteBuffer
 import java.util.function.Supplier
 
-data class TexturedCircleUniform(val uvs: Vector4f) : RenderPipelineUniforms {
+internal data class TexturedCircleUniform(val uvs: Vector4f) : RenderPipelineUniforms {
 
     constructor(u0: Float, v0: Float, u1: Float, v1: Float) : this(Vector4f(u0, v0, u1, v1))
 
@@ -25,7 +25,7 @@ data class TexturedCircleUniform(val uvs: Vector4f) : RenderPipelineUniforms {
     }
 }
 
-object TexturedCirclePipeline {
+internal object TexturedCirclePipeline {
 
     const val UNIFORM_NAME = "MLibTexturedCircleUniform"
     val UNIFORM_STORAGE: Supplier<DynamicGpuDataStorage<TexturedCircleUniform>> =

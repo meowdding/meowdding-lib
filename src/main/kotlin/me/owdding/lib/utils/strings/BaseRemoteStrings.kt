@@ -25,14 +25,14 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import kotlin.jvm.optionals.getOrNull
 import kotlin.reflect.KProperty
 
-interface CompletedDelegate<Type> {
+internal interface CompletedDelegate<Type> {
     val key: String
     val default: Type
 
     fun update()
 }
 
-data class CompletedElementDelegate<Type>(
+internal data class CompletedElementDelegate<Type>(
     val registry: BaseRemoteStrings,
     override val key: String,
     val transform: (String) -> Type,
@@ -53,7 +53,7 @@ data class CompletedElementDelegate<Type>(
     operator fun <This> getValue(ref: This, property: KProperty<*>): Type = data
 }
 
-data class ElementDelegate<Type>(
+internal data class ElementDelegate<Type>(
     val registry: BaseRemoteStrings,
     val path: String?,
     val prefix: String?,
@@ -68,7 +68,7 @@ data class ElementDelegate<Type>(
     )
 }
 
-data class CompletedListElementDelegate<Type>(
+internal data class CompletedListElementDelegate<Type>(
     val registry: BaseRemoteStrings,
     override val key: String,
     val transform: (String) -> Type,
@@ -89,7 +89,7 @@ data class CompletedListElementDelegate<Type>(
     operator fun <This> getValue(ref: This, property: KProperty<*>): List<Type> = data
 }
 
-data class ListElementDelegate<Type>(
+internal data class ListElementDelegate<Type>(
     val registry: BaseRemoteStrings,
     val path: String?,
     val prefix: String?,
@@ -106,7 +106,7 @@ data class ListElementDelegate<Type>(
 
 private fun join(vararg parts: String?) = listOfNotNull(*parts).takeUnless { it.isEmpty() }?.joinToString(".")
 
-interface StringGroup {
+internal interface StringGroup {
     val registry: BaseRemoteStrings
 
     fun strings(
@@ -172,7 +172,7 @@ interface StringGroup {
     }
 }
 
-data class StringGroupImpl(val prefix: String, val parent: StringGroup) : StringGroup {
+internal data class StringGroupImpl(val prefix: String, val parent: StringGroup) : StringGroup {
     override val registry: BaseRemoteStrings get() = parent.registry
 
     override fun strings(vararg defaults: String, path: String?, prefix: String?): ListElementDelegate<String> = parent.strings(defaults = defaults, path, join(this.prefix, prefix))
@@ -188,7 +188,7 @@ data class StringGroupImpl(val prefix: String, val parent: StringGroup) : String
     override fun resolve(path: String): StringGroup = StringGroupImpl(join(prefix, path) ?: path, this)
 }
 
-abstract class BaseRemoteStrings(val repoFilePath: String) : StringGroup {
+internal abstract class BaseRemoteStrings(val repoFilePath: String) : StringGroup {
     override val registry: BaseRemoteStrings get() = this
 
     internal val list: MutableList<CompletedDelegate<*>> = mutableListOf()

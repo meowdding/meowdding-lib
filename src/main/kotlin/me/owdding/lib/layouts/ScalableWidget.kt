@@ -16,9 +16,9 @@ import java.util.Deque
 import java.util.LinkedList
 import kotlin.properties.Delegates.observable
 
-class ScalableWidget(val original: AbstractWidget) : BaseParentWidget(original.width, original.height), Scalable {
+public class ScalableWidget(internal val original: AbstractWidget) : BaseParentWidget(original.width, original.height), Scalable {
 
-    constructor(original: LayoutElement) : this(original.asWidget())
+    public constructor(original: LayoutElement) : this(original.asWidget())
 
     private var scale by observable(1.0) { _, _, scale ->
         super.width = (original.width * scale).floor()
@@ -92,39 +92,39 @@ class ScalableWidget(val original: AbstractWidget) : BaseParentWidget(original.w
         this.scale = scale
     }
 
-    fun <T> translated(originalMouseX: Double, originalMouseY: Double, consumer: (translatedMouseX: Double, translatedMouseY: Double) -> T): T {
+    public fun <T> translated(originalMouseX: Double, originalMouseY: Double, consumer: (translatedMouseX: Double, translatedMouseY: Double) -> T): T {
         return consumer(originalMouseX / scale, originalMouseY / scale)
     }
 
-    fun <T> translated(event: MouseButtonEvent, consumer: (event: MouseButtonEvent) -> T): T {
+    public fun <T> translated(event: MouseButtonEvent, consumer: (event: MouseButtonEvent) -> T): T {
         return consumer(MouseButtonEvent(event.x / scale, event.y / scale, event.buttonInfo))
     }
 
-    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean) = translated(event) {
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean = translated(event) {
         original.mouseClicked(it, doubleClick)
     }
 
-    override fun mouseReleased(event: MouseButtonEvent) = translated(event) { original.mouseReleased(it) }
+    override fun mouseReleased(event: MouseButtonEvent): Boolean = translated(event) { original.mouseReleased(it) }
 
-    override fun mouseDragged(event: MouseButtonEvent, deltaX: Double, deltaY: Double) = translated(event) {
+    override fun mouseDragged(event: MouseButtonEvent, deltaX: Double, deltaY: Double): Boolean = translated(event) {
         original.mouseDragged(it, deltaX / scale, deltaY / scale)
     }
 
-    override fun mouseScrolled(mouseX: Double, mouseY: Double, scrollX: Double, scrollY: Double) = translated(mouseX, mouseY) { x, y ->
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, scrollX: Double, scrollY: Double): Boolean = translated(mouseX, mouseY) { x, y ->
         original.mouseScrolled(x, y, scrollX * scale, scrollY * scale)
     }
 
-    override fun mouseMoved(mouseX: Double, mouseY: Double) = translated(mouseX, mouseY) { x, y ->
+    override fun mouseMoved(mouseX: Double, mouseY: Double): Unit = translated(mouseX, mouseY) { x, y ->
         original.mouseMoved(x, y)
     }
 
-    override fun isMouseOver(mouseX: Double, mouseY: Double) = translated(mouseX, mouseY) { x, y ->
+    override fun isMouseOver(mouseX: Double, mouseY: Double): Boolean = translated(mouseX, mouseY) { x, y ->
         original.isMouseOver(x, y)
     }
 
-    override fun keyPressed(event: KeyEvent) = original.keyPressed(event)
-    override fun keyReleased(event: KeyEvent) = original.keyReleased(event)
-    override fun charTyped(event: CharacterEvent) = original.charTyped(event)
+    override fun keyPressed(event: KeyEvent): Boolean = original.keyPressed(event)
+    override fun keyReleased(event: KeyEvent): Boolean = original.keyReleased(event)
+    override fun charTyped(event: CharacterEvent): Boolean = original.charTyped(event)
 
     override fun getRectangle(): ScreenRectangle? {
         val original = original.rectangle ?: return null
@@ -152,8 +152,8 @@ class ScalableWidget(val original: AbstractWidget) : BaseParentWidget(original.w
         original.updateNarration(narrationElementOutput)
     }
 
-    companion object {
+    public companion object {
         private val currentScale: Deque<Double> = LinkedList<Double>()
-        fun getCurrentScale(): Double = if (currentScale.isEmpty()) 1.0 else currentScale.reduce { first, second -> first * second }
+        public fun getCurrentScale(): Double = if (currentScale.isEmpty()) 1.0 else currentScale.reduce { first, second -> first * second }
     }
 }

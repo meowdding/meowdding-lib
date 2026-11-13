@@ -33,13 +33,13 @@ internal fun isMouseKeyDown(button: Int): Boolean {
     return McScreen.isMouseDown(button)
 }
 
-data class KeyboardInputs(
+public data class KeyboardInputs(
     val symbols: Set<String>,
     val keys: Set<Int>,
     val mouseButtons: Set<Int>,
 ) {
 
-    fun isDown(event: KeyEvent): Boolean {
+    public fun isDown(event: KeyEvent): Boolean {
         //~ if >= 26.3 'scancode' -> 'keycode()'
         return isDown(event.key, event.keycode())
     }
@@ -47,27 +47,27 @@ data class KeyboardInputs(
     //? if < 26.3
     //fun isDown(event: MeowddingKeyEvent): Boolean = isDown(event.key, event.scancode)
 
-    fun isDown(key: Int, scanCode: Int): Boolean {
+    public fun isDown(key: Int, scanCode: Int): Boolean {
         //~ if >= 26.3 'GLFW.glfwGetKeyName(key, scanCode)' -> '(SDLKeyboard.SDL_GetKeyName(key) ?: return false)'
         return key in keys || (SDLKeyboard.SDL_GetKeyName(key) ?: return false) in symbols
     }
 
-    fun isDown(): Boolean {
+    public fun isDown(): Boolean {
         return keys.any { isDown(it) } || mouseButtons.any { isMouseKeyDown(it) }
     }
 
-    class Builder internal constructor() {
+    public class Builder internal constructor() {
         internal val symbols = mutableSetOf<String>()
         internal val keys = mutableSetOf<Int>()
         internal val mouseButtons = mutableSetOf<Int>()
 
-        fun withSymbol(symbol: String) = symbols.add(symbol)
-        fun withKey(key: Int) = keys.add(key)
-        fun withButton(button: Int) = mouseButtons.add(button)
+        public fun withSymbol(symbol: String): Boolean = symbols.add(symbol)
+        public fun withKey(key: Int): Boolean = keys.add(key)
+        public fun withButton(button: Int): Boolean = mouseButtons.add(button)
     }
 }
 
-fun keys(action: KeyboardInputs.Builder.() -> Unit): KeyboardInputs {
+public fun keys(action: KeyboardInputs.Builder.() -> Unit): KeyboardInputs {
     val builder = KeyboardInputs.Builder().also(action)
     return KeyboardInputs(
         symbols = builder.symbols,
@@ -76,13 +76,13 @@ fun keys(action: KeyboardInputs.Builder.() -> Unit): KeyboardInputs {
     )
 }
 
-fun keysOf(vararg keys: Int) = KeyboardInputs(
+public fun keysOf(vararg keys: Int): KeyboardInputs = KeyboardInputs(
     keys = keys.toSet(),
     mouseButtons = emptySet(),
     symbols = emptySet(),
 )
 
-fun keysOf(vararg symbols: String) = KeyboardInputs(
+public fun keysOf(vararg symbols: String): KeyboardInputs = KeyboardInputs(
     keys = emptySet(),
     mouseButtons = emptySet(),
     symbols = symbols.toSet(),
@@ -102,7 +102,7 @@ internal fun keyMapping(translationKey: String, keyCode: Int, category: Identifi
 }
 *///? }
 
-open class MeowddingKeybind(
+public open class MeowddingKeybind(
     category: Identifier,
     translationKey: String,
     keyCode: Int,
@@ -115,26 +115,26 @@ open class MeowddingKeybind(
         }
     }
 
-    val key: KeyMapping = KeyMappingHelper.registerKeyMapping(keyMapping(translationKey, keyCode, category))
+    public val key: KeyMapping = KeyMappingHelper.registerKeyMapping(keyMapping(translationKey, keyCode, category))
 
-    val isDown get() = key.isDown
+    public val isDown: Boolean get() = key.isDown
 
     @JvmOverloads
-    //~ if >= 26.3 ', scancode: Int = 0) = ' -> ') = ', 'key, scancode' -> 'key, 0'
-    fun matches(key: Int) = this.key.matches(KeyEvent(key, 0, 0))
+    public//~ if >= 26.3 ', scancode: Int = 0) = ' -> ') = ', 'key, scancode' -> 'key, 0'
+    fun matches(key: Int): Boolean = this.key.matches(KeyEvent(key, 0, 0))
 
     //~ if >= 26.3 'key, event.scanCode)' -> 'key)'
-    fun matches(event: ScreenKeyReleasedEvent) = matches(event.key)
+    public fun matches(event: ScreenKeyReleasedEvent): Boolean = matches(event.key)
 
     //~ if >= 26.3 'key, event.scanCode)' -> 'key)'
-    fun matches(event: ScreenKeyPressedEvent) = matches(event.key)
-    fun matches(event: KeyEvent) = key.matches(event)
+    public fun matches(event: ScreenKeyPressedEvent): Boolean = matches(event.key)
+    public fun matches(event: KeyEvent): Boolean = key.matches(event)
 
     //? if < 26.3
     //fun matches(event: MeowddingKeyEvent) = key.matches(event)
 
     @Module
-    companion object {
+    public companion object {
         private val knownKeybinds = mutableListOf<MeowddingKeybind>()
 
         @Subscription(event = [TickEvent::class])

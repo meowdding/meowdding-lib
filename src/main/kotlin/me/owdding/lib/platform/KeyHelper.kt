@@ -17,4 +17,4 @@ internal object KeyHelper {
     fun isPressed(button: Int) = states.contains(button)
 }
 
-fun McScreen.isMouseDown(button: Int): Boolean = KeyHelper.isPressed(button)
+public fun McScreen.isMouseDown(button: Int): Boolean = KeyHelper.isPressed(button)

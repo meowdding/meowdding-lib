@@ -7,7 +7,7 @@ import net.minecraft.world.item.ItemStack
 import java.util.function.BiConsumer
 
 
-data object IconographicCompat : MeowddingLogger by MeowddingLib.featureLogger() {
+internal data object IconographicCompat : MeowddingLogger by MeowddingLib.featureLogger() {
 
     var withItemCallback: ((item: ItemStack, runnable: () -> Unit) -> Unit) = { _, runnable -> runnable() }
 

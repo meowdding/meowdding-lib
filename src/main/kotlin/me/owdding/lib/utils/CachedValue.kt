@@ -11,14 +11,14 @@ import kotlin.time.Instant
 @Suppress("ClassName")
 private object UNINITIALIZED_VALUE
 
-class CachedValue<Type>(private val timeToLive: Duration = Duration.INFINITE, private val supplier: () -> Type) {
+public class CachedValue<Type>(private val timeToLive: Duration = Duration.INFINITE, private val supplier: () -> Type) {
     private var value: Any? = UNINITIALIZED_VALUE
-    var lastUpdated: Instant = Instant.DISTANT_PAST
+    public var lastUpdated: Instant = Instant.DISTANT_PAST
         private set
 
-    operator fun getValue(thisRef: Any?, property: Any?) = getValue()
+    public operator fun getValue(thisRef: Any?, property: Any?): Type = getValue()
 
-    fun getValue(): Type {
+    public fun getValue(): Type {
         if (!hasValue()) {
             this.value = supplier()
             lastUpdated = currentInstant()
@@ -27,14 +27,14 @@ class CachedValue<Type>(private val timeToLive: Duration = Duration.INFINITE, pr
         return value.unsafeCast()
     }
 
-    fun hasValue() = value !== UNINITIALIZED_VALUE && lastUpdated.since() < timeToLive
+    public fun hasValue(): Boolean = value !== UNINITIALIZED_VALUE && lastUpdated.since() < timeToLive
 
-    fun invalidate() {
+    public fun invalidate() {
         value = UNINITIALIZED_VALUE
     }
 
-    companion object {
-        fun KProperty0<*>.invalidateCache() {
+    public companion object {
+        public fun KProperty0<*>.invalidateCache() {
             this.isAccessible = true
             val delegate = this.getDelegate() as? CachedValue<*>
             if (delegate != null) McClient.throwInDev("Delegate for ${this.name} isn't a CachedValue")

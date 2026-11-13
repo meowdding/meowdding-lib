@@ -27,7 +27,7 @@ import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KType
 
 @Module
-object MeowddingLib : MeowddingMod("meowdding-lib", loggerName = "MeowddingLib") {
+internal object MeowddingLib : MeowddingMod("meowdding-lib", loggerName = "MeowddingLib") {
     private var notifyAboutRepoLoad = false
 
     init {

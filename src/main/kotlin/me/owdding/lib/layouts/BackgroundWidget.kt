@@ -9,12 +9,12 @@ import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.resources.Identifier
 
-class BackgroundWidget(backgroundWidget: LayoutElement, widget: LayoutElement, val padding: Int = 0) : BaseParentWidget(), ContainerBypass {
-    val body = widget.asWidget()
-    val background = backgroundWidget.asWidget()
+public class BackgroundWidget(backgroundWidget: LayoutElement, widget: LayoutElement, internal val padding: Int = 0) : BaseParentWidget(), ContainerBypass {
+    internal val body = widget.asWidget()
+    internal val background = backgroundWidget.asWidget()
 
-    constructor(background: Display, widget: LayoutElement, padding: Int = 0) : this(background.asWidget(), widget, padding)
-    constructor(resourceLocation: Identifier, widget: LayoutElement, padding: Int = 0) : this(
+    public constructor(background: Display, widget: LayoutElement, padding: Int = 0) : this(background.asWidget(), widget, padding)
+    public constructor(resourceLocation: Identifier, widget: LayoutElement, padding: Int = 0) : this(
         Displays.sprite(
             resourceLocation,
             widget.width + padding * 2,
@@ -23,7 +23,7 @@ class BackgroundWidget(backgroundWidget: LayoutElement, widget: LayoutElement, v
         widget, padding,
     )
 
-    constructor(vararg resourceLocation: Identifier, widget: LayoutElement, padding: Int = 0) : this(
+    public constructor(vararg resourceLocation: Identifier, widget: LayoutElement, padding: Int = 0) : this(
         resourceLocation.map {
             Displays.sprite(
                 it,
@@ -40,8 +40,8 @@ class BackgroundWidget(backgroundWidget: LayoutElement, widget: LayoutElement, v
         this.addRenderableWidget(this.body)
     }
 
-    override fun getWidth() = body.width + padding * 2
-    override fun getHeight() = body.height + padding * 2
+    override fun getWidth(): Int = body.width + padding * 2
+    override fun getHeight(): Int = body.height + padding * 2
 
     override fun extractWidgetRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         background.setPosition(this.x, this.y)

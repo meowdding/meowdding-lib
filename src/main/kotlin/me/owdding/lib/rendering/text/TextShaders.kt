@@ -17,15 +17,15 @@ import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
 @PreInitModule
-object TextShaders {
+public object TextShaders {
 
-    var activeShader: TextShader? = null
+    public var activeShader: TextShader? = null
         @JvmStatic get
         @JvmStatic @ApiStatus.Internal set
 
-    fun GuiGraphicsExtractor.withTextShader(shader: TextShader?, action: () -> Unit) = pushPop(shader, action)
+    public fun GuiGraphicsExtractor.withTextShader(shader: TextShader?, action: () -> Unit): Unit = pushPop(shader, action)
 
-    fun pushPop(shader: TextShader?, action: () -> Unit) {
+    public fun pushPop(shader: TextShader?, action: () -> Unit) {
         activeShader = shader
         action()
         activeShader = null

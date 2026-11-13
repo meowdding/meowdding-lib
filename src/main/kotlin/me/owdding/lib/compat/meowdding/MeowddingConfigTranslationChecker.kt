@@ -36,7 +36,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.underlined
 import java.util.concurrent.CompletableFuture
 
 @Module
-object MeowddingConfigTranslationChecker {
+internal object MeowddingConfigTranslationChecker {
 
     private val modsToWarn = mutableSetOf<String>()
     private var hasSent = false

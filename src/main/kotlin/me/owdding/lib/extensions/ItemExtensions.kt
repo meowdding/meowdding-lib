@@ -13,9 +13,9 @@ import tech.thatgravyboat.skyblockapi.platform.toResolvableProfile
 import tech.thatgravyboat.skyblockapi.utils.builders.TooltipBuilder
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
 
-fun ItemStack.withoutTooltip() = withTooltip()
+public fun ItemStack.withoutTooltip(): ItemStack = withTooltip()
 
-fun ItemStack.withTooltip(init: TooltipBuilder.() -> Unit = {}): ItemStack {
+public fun ItemStack.withTooltip(init: TooltipBuilder.() -> Unit = {}): ItemStack {
     val builder = TooltipBuilder().apply(init).lines()
     when {
         builder.isEmpty() -> this.set(DataComponents.TOOLTIP_DISPLAY, TooltipDisplay(true, ObjectSortedSets.emptySet()))
@@ -40,9 +40,9 @@ fun ItemStack.withTooltip(init: TooltipBuilder.() -> Unit = {}): ItemStack {
     return this
 }
 
-object ItemUtils {
+public object ItemUtils {
 
-    fun createSkull(textureBase64: String): ItemStack {
+    public fun createSkull(textureBase64: String): ItemStack {
         return createSkull(
             GameProfile {
                 put("textures", Property("textures", textureBase64))
@@ -50,7 +50,7 @@ object ItemUtils {
         )
     }
 
-    fun createSkull(profile: GameProfile): ItemStack {
+    public fun createSkull(profile: GameProfile): ItemStack {
         val stack = ItemStack(Items.PLAYER_HEAD)
         stack.set(DataComponents.PROFILE, profile.toResolvableProfile())
         return stack

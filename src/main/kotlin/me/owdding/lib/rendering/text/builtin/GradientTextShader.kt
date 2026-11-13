@@ -151,41 +151,42 @@ private val pipelineCreator0: (GradientTextShader, Font.DisplayMode?, Boolean) -
 }
 *///? }
 
-class GradientTextShader(val gradient: NewGradientProvider, val gradientDirection: GradientDirection, val speed: Float) : TextShader {
-
+public class GradientTextShader(
+    internal val gradient: NewGradientProvider,
+    internal val gradientDirection: GradientDirection,
+    internal val speed: Float
+) : TextShader {
 
     //? if < 26.4 {
     @Deprecated("Use GradientDirection instead", level = DeprecationLevel.HIDDEN)
-    constructor(gradientProvider: GradientProvider, direction: Direction, speed: Float) : this(gradientProvider.asNew(), direction.asNewDirection(), speed)
+    public constructor(gradientProvider: GradientProvider, direction: Direction, speed: Float) : this(gradientProvider.asNew(), direction.asNewDirection(), speed)
     @Deprecated("Use GradientDirection instead", level = DeprecationLevel.HIDDEN)
-    constructor(colors: List<Int>, direction: Direction = Direction.RIGHT, speed: Float = 1f) : this({ colors }, direction.asNewDirection(), speed)
+    public constructor(colors: List<Int>, direction: Direction = Direction.RIGHT, speed: Float = 1f) : this({ colors }, direction.asNewDirection(), speed)
     @Deprecated("Use GradientDirection instead", level = DeprecationLevel.HIDDEN)
-    constructor(vararg colors: TextColor, direction: Direction = Direction.RIGHT, speed: Float = 1f) : this(colors.map { it.value }, direction.asNewDirection(), speed)
+    public constructor(vararg colors: TextColor, direction: Direction = Direction.RIGHT, speed: Float = 1f) : this(colors.map { it.value }, direction.asNewDirection(), speed)
     @Deprecated("Use GradientDirection instead", level = DeprecationLevel.HIDDEN)
-    constructor(gradientProvider: GradientProvider) : this(gradientProvider.asNew())
+    public constructor(gradientProvider: GradientProvider) : this(gradientProvider.asNew())
 
     //? }
 
-    constructor(gradientProvider: NewGradientProvider) : this(gradientProvider, GradientDirection.RIGHT, 1f)
-    constructor(colors: List<Int>) : this({ colors })
-    constructor(colors: List<Int>, direction: GradientDirection = GradientDirection.RIGHT, speed: Float = 1f) : this({ colors }, direction, speed)
-    constructor(vararg colors: TextColor) : this(colors.map { it.value })
-    constructor(vararg colors: TextColor, direction: GradientDirection = GradientDirection.RIGHT, speed: Float = 1f) : this(colors.map { it.value }, direction, speed)
+    public constructor(gradientProvider: NewGradientProvider) : this(gradientProvider, GradientDirection.RIGHT, 1f)
+    public constructor(colors: List<Int>) : this({ colors })
+    public constructor(colors: List<Int>, direction: GradientDirection = GradientDirection.RIGHT, speed: Float = 1f) : this({ colors }, direction, speed)
+    public constructor(vararg colors: TextColor) : this(colors.map { it.value })
+    public constructor(vararg colors: TextColor, direction: GradientDirection = GradientDirection.RIGHT, speed: Float = 1f) : this(colors.map { it.value }, direction, speed)
 
     override val id: Identifier = ID
 
     override val useWhite: Boolean get() = true
     override val hasShadow: Boolean get() = true
 
-
-
     // moved to src/main/kotlin/me/owdding/lib/utils/GradientUtils.kt
     //? < 26.4 {
-    val gradientProvider: GradientProvider = { gradient.getColors() }
-    val direction: Direction = gradientDirection.toOld() ?: Direction.RIGHT
+    public val gradientProvider: GradientProvider = { gradient.getColors() }
+    public val direction: Direction = gradientDirection.toOld() ?: Direction.RIGHT
 
     @Deprecated("Use GradientDirection instead")
-    enum class Direction(val vec: Vector2f, val direction: GradientDirection) {
+    public enum class Direction(public val vec: Vector2f, public val direction: GradientDirection) {
         LEFT(GradientDirection.LEFT),
         RIGHT(GradientDirection.RIGHT),
         UP(GradientDirection.UP),
@@ -199,7 +200,7 @@ class GradientTextShader(val gradient: NewGradientProvider, val gradientDirectio
 
         constructor(direction: GradientDirection) : this(direction.vec, direction)
 
-        fun asNewDirection(): GradientDirection = direction
+        public fun asNewDirection(): GradientDirection = direction
     }
     //? }
 
@@ -208,9 +209,9 @@ class GradientTextShader(val gradient: NewGradientProvider, val gradientDirectio
 
     override val pipeline: (Font.DisplayMode?, Boolean) -> PipelineResult = { first, second -> pipelineCreator0(this, first, second) }
 
-    companion object {
-        val ID = MeowddingLib.id("gradient")
-        val CODEC: MapCodec<GradientTextShader> = RecordCodecBuilder.mapCodec {
+    public companion object {
+        internal val ID = MeowddingLib.id("gradient")
+        public val CODEC: MapCodec<GradientTextShader> = RecordCodecBuilder.mapCodec {
             it.group(
                 NewGradientProvider.CODEC.fieldOf("colors").forGetter { it.gradient },
                 EnumCodec.forKCodec(GradientDirection.entries.toTypedArray()).optionalFieldOf("direction", GradientDirection.RIGHT).forGetter { it.gradientDirection },
@@ -218,7 +219,7 @@ class GradientTextShader(val gradient: NewGradientProvider, val gradientDirectio
             ).apply(it, ::GradientTextShader)
         }
 
-        val pipelineCreator: (GradientTextShader, Font.DisplayMode?, Boolean) -> PipelineResult = pipelineCreator0
+        public val pipelineCreator: (GradientTextShader, Font.DisplayMode?, Boolean) -> PipelineResult = pipelineCreator0
     }
 
     override fun equals(other: Any?): Boolean {
@@ -243,15 +244,15 @@ class GradientTextShader(val gradient: NewGradientProvider, val gradientDirectio
 
 //? if < 26.4 {
 @Deprecated("Use the other gradient provider", replaceWith = ReplaceWith("me.owdding.lib.utils.GradientProvider"))
-fun interface GradientProvider {
-    companion object {
-        val CODEC: Codec<GradientProvider> = Codec.INT.listOf(1, Int.MAX_VALUE).xmap(
+public fun interface GradientProvider {
+    public companion object {
+        public val CODEC: Codec<GradientProvider> = Codec.INT.listOf(1, Int.MAX_VALUE).xmap(
             { GradientProvider { it } },
             { it.getColors() },
         )
     }
 
-    fun getColors(): List<Int>
-    fun asNew() = NewGradientProvider { getColors() }
+    public fun getColors(): List<Int>
+    public fun asNew(): NewGradientProvider = NewGradientProvider { getColors() }
 }
 //? }

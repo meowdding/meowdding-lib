@@ -30,7 +30,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.strikethrough
 
-object DisplayTest : Screen(CommonComponents.EMPTY) {
+internal object DisplayTest : Screen(CommonComponents.EMPTY) {
 
     val state = ListenableState("")
     val mappedState = state.map({ Displays.text(TagComponentSerialization.deserialize(it)) }, { "" })

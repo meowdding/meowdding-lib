@@ -5,11 +5,17 @@ import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.LayoutElement
 
-class PaddedWidget(widget: LayoutElement, val paddingTop: Int, val paddingRight: Int, val paddingBottom: Int, val paddingLeft: Int) : BaseParentWidget() {
-    constructor(widget: LayoutElement, padding: Int) : this(widget, padding, padding, padding, padding)
+public class PaddedWidget(
+    widget: LayoutElement,
+    internal val paddingTop: Int,
+    internal val paddingRight: Int,
+    internal val paddingBottom: Int,
+    internal val paddingLeft: Int,
+) : BaseParentWidget() {
+    public constructor(widget: LayoutElement, padding: Int) : this(widget, padding, padding, padding, padding)
 
-    val widget: AbstractWidget by lazy { widget.asWidget() }
-    val actualWidget = widget
+    internal val widget: AbstractWidget by lazy { widget.asWidget() }
+    internal val actualWidget = widget
 
     init {
         actualWidget.visitWidgets {
@@ -17,8 +23,8 @@ class PaddedWidget(widget: LayoutElement, val paddingTop: Int, val paddingRight:
         }
     }
 
-    override fun getWidth() = widget.width + paddingLeft + paddingRight
-    override fun getHeight() = widget.height + paddingTop + paddingBottom
+    override fun getWidth(): Int = widget.width + paddingLeft + paddingRight
+    override fun getHeight(): Int = widget.height + paddingTop + paddingBottom
 
     override fun extractWidgetRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         widget.setPosition(this.x + paddingLeft, this.y + paddingTop)

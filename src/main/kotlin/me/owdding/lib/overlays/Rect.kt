@@ -3,14 +3,14 @@ package me.owdding.lib.overlays
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 
-data class Rect(
+public data class Rect(
     var x: Int,
     var y: Int,
     var width: Int,
     var height: Int,
 ) {
 
-    constructor(pos: Position, width: Int, height: Int) : this(pos.component1(), pos.component2(), width, height)
+    public constructor(pos: Position, width: Int, height: Int) : this(pos.component1(), pos.component2(), width, height)
 
     val right: Int
         get() = x + width
@@ -18,17 +18,17 @@ data class Rect(
     val bottom: Int
         get() = y + height
 
-    fun contains(x: Number, y: Number): Boolean {
+    public fun contains(x: Number, y: Number): Boolean {
         return x.toInt() in this.x until right && y.toInt() in this.y until bottom
     }
 
-    operator fun times(scale: Float): Rect {
+    public operator fun times(scale: Float): Rect {
         return Rect(x, y, (width * scale).toInt(), (height * scale).toInt())
     }
 
-    companion object {
+    public companion object {
 
-        val CODEC: Codec<Rect> = RecordCodecBuilder.create {
+        public val CODEC: Codec<Rect> = RecordCodecBuilder.create {
             it.group(
                 Codec.INT.fieldOf("x").forGetter(Rect::x),
                 Codec.INT.fieldOf("y").forGetter(Rect::y),
@@ -37,7 +37,7 @@ data class Rect(
             ).apply(it, ::Rect)
         }
 
-        fun codec(width: Int, height: Int): Codec<Rect> = RecordCodecBuilder.create {
+        public fun codec(width: Int, height: Int): Codec<Rect> = RecordCodecBuilder.create {
             it.group(
                 Codec.INT.fieldOf("x").forGetter(Rect::x),
                 Codec.INT.fieldOf("y").forGetter(Rect::y),

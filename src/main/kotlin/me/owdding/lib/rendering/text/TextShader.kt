@@ -12,9 +12,9 @@ import net.minecraft.util.Util
 //? >= 26.3
 import net.minecraft.client.renderer.oit.OitPipelineSet
 
-data class TextShaderInfo(val pipeline: PipelineResult, val texture: Identifier, val displayMode: Font.DisplayMode, val grayScale: Boolean)
+public data class TextShaderInfo(val pipeline: PipelineResult, val texture: Identifier, val displayMode: Font.DisplayMode, val grayScale: Boolean)
 
-val TEXT_RENDER_TYPE_CACHE: (TextShaderInfo) -> RenderType = Util.memoize<TextShaderInfo, RenderType> {
+internal val TEXT_RENDER_TYPE_CACHE: (TextShaderInfo) -> RenderType = Util.memoize<TextShaderInfo, RenderType> {
     RenderType.create(
         "meowddinglib/font_shader",
         //~ if >= 26.3 'pipeline' -> 'pipeline.first'
@@ -31,7 +31,7 @@ val TEXT_RENDER_TYPE_CACHE: (TextShaderInfo) -> RenderType = Util.memoize<TextSh
     )
 }::apply
 
-fun createTextRenderType(
+public fun createTextRenderType(
     shader: TextShader,
     location: Identifier,
     mode: Font.DisplayMode,
@@ -51,15 +51,15 @@ fun createTextRenderType(
 }
 *///? }
 
-fun Style.textShader(): TextShader? {
+public fun Style.textShader(): TextShader? {
     return this.`meowddinglib$getTextShader`()
 }
 
-fun Style.withTextShader(shader: TextShader?): Style {
+public fun Style.withTextShader(shader: TextShader?): Style {
     return this.`meowddinglib$withTextShader`(shader) ?: this
 }
 
-var MutableComponent.textShader: TextShader?
+public var MutableComponent.textShader: TextShader?
     get() = this.style.textShader()
     set(value) {
         this.withStyle(style.withTextShader(value))
@@ -68,28 +68,27 @@ var MutableComponent.textShader: TextShader?
 //? < 26.3
 //typealias PipelineResult = RenderPipeline
 //? >= 26.3
-typealias PipelineResult = Pair<RenderPipeline, OitPipelineSet?>
+public typealias PipelineResult = Pair<RenderPipeline, OitPipelineSet?>
 
+public interface TextShader {
 
-interface TextShader {
+    public val id: Identifier
 
-    val id: Identifier
+    public val pipeline: (Font.DisplayMode?, Boolean) -> PipelineResult
 
-    val pipeline: (Font.DisplayMode?, Boolean) -> PipelineResult
-
-    val useWhite: Boolean get() = true
-    val hasShadow: Boolean? get() = null
+    public val useWhite: Boolean get() = true
+    public val hasShadow: Boolean? get() = null
 
     //? < 26.3 {
-    //fun getPipeline(mode: Font.DisplayMode?, grayScale: Boolean): RenderPipeline = getPipelines(mode, grayScale)
+    //public fun getPipeline(mode: Font.DisplayMode?, grayScale: Boolean): RenderPipeline = getPipelines(mode, grayScale)
     //?}
-    fun getPipelines(mode: Font.DisplayMode?, grayScale: Boolean): PipelineResult = pipeline(mode, grayScale)
+    public fun getPipelines(mode: Font.DisplayMode?, grayScale: Boolean): PipelineResult = pipeline(mode, grayScale)
 
-    fun getRenderType(
+    public fun getRenderType(
         location: Identifier,
     ): RenderType = getRenderType(location, Font.DisplayMode.NORMAL, false)
 
-    fun getRenderType(
+    public fun getRenderType(
         location: Identifier,
         mode: Font.DisplayMode,
         grayScale: Boolean,

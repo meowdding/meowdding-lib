@@ -3,7 +3,7 @@ package me.owdding.lib.platform
 import earth.terrarium.olympus.client.pipelines.RoundedRectangle
 import net.minecraft.client.gui.GuiGraphicsExtractor
 
-fun GuiGraphicsExtractor.drawRoundedRectangle(
+public fun GuiGraphicsExtractor.drawRoundedRectangle(
     x: Int,
     y: Int,
     width: Int,

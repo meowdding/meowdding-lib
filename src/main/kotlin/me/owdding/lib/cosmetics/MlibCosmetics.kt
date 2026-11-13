@@ -24,11 +24,10 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 @PreInitModule
-object MlibCosmetics {
-    private val _mlibCosmetics = ConcurrentHashMap<UUID, MlibCosmeticData>()
-
+internal object MlibCosmetics {
     @get:JvmStatic
-    val mlibCosmetics: Map<UUID, MlibCosmeticData> get() = _mlibCosmetics
+    val mlibCosmetics: Map<UUID, MlibCosmeticData>
+        field = ConcurrentHashMap<UUID, MlibCosmeticData>()
 
     @GenerateCodec
     data class MlibCosmeticData(
@@ -38,13 +37,13 @@ object MlibCosmetics {
     )
 
     @IncludedCodec(named = "cosmetic_scale")
-    val cosmeticScaleCodec = Codec.either(Codec.BOOL, Codec.FLOAT).xmap({Either.unwrap(it.mapLeft { 0.5f })}, Either<*, Double>::right)
+    val cosmeticScaleCodec: Codec<Float> = Codec.either(Codec.BOOL, Codec.FLOAT).xmap({Either.unwrap(it.mapLeft { 0.5f })}, Either<*, Double>::right)
 
     private val emptyCosmetic = MlibCosmeticData(null, null, null)
 
     @Subscription
     private fun onCosmeticLoad(event: CosmeticLoadEvent) {
-        this._mlibCosmetics.putAll(
+        mlibCosmetics.putAll(
             CosmeticManager.playerList.associateNotNull(
                 keySelector = { it.uuid },
                 valueSelector = {

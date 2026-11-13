@@ -38,7 +38,7 @@ private val RIGHT_KEY = keysOf(InputConstants.KEY_RIGHT)
 private val A_KEY = keysOf(InputConstants.KEY_A)
 
 //~ if >= 26.3 ': MeowddingScreen(' -> ': Screen('
-class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) : Screen(CommonText.EMPTY) {
+internal class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) : Screen(CommonText.EMPTY) {
 
     private var dragging = false
     private var relativeX = 0

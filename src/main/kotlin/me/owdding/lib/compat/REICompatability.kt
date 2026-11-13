@@ -23,7 +23,7 @@ import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyPressedEvent
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import kotlin.jvm.optionals.getOrNull
 
-object REICompatability : REIClientPlugin {
+internal object REICompatability : REIClientPlugin {
 
     init {
         SkyBlockAPI.eventBus.register<ScreenKeyPressedEvent.Post> { event -> REIRuntimeCompatability.keyPressed(event) }
@@ -43,7 +43,7 @@ object REICompatability : REIClientPlugin {
     }
 }
 
-object REIRuntimeCompatability {
+internal object REIRuntimeCompatability {
     val installed get() = KnownMods.REI.installed
 
     @Deprecated("Use ItemListRegisterExclusionZonesEvent for more compatability", ReplaceWith("me.owdding.lib.events.ItemListHoveredItemKeyPressEvent"))

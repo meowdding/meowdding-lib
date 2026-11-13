@@ -11,7 +11,7 @@ import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 
 @Module
-object MeowddingLibConfig : ConfigKt("meowdding-lib/config"), AutoTranslated {
+internal object MeowddingLibConfig : ConfigKt("meowdding-lib/config"), AutoTranslated {
     override val translationBase: String = "mlib.config"
     override val name = Translated("mlib.config")
 

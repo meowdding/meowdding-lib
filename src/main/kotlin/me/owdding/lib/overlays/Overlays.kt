@@ -19,7 +19,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.CommonText
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
 @Module
-object Overlays {
+internal object Overlays {
 
     private val overlays = mutableListOf<Overlay>()
 

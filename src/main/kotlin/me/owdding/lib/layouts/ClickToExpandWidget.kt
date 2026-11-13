@@ -13,10 +13,10 @@ import net.minecraft.client.input.*
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import kotlin.math.max
 
-class ClickToExpandWidget(title: LayoutElement, body: LayoutElement, val onClick: () -> Unit, val bodyOffset: Int = 7) : BaseParentWidget() {
-    var allowBodyClick = true
+public class ClickToExpandWidget(title: LayoutElement, body: LayoutElement, internal val onClick: () -> Unit, internal val bodyOffset: Int = 7) : BaseParentWidget() {
+    internal var allowBodyClick = true
 
-    val title = LayoutFactory.horizontal(alignment = MIDDLE) {
+    internal val title = LayoutFactory.horizontal(alignment = MIDDLE) {
         display(
             Displays.supplied {
                 val chevron = if (expanded) UIIcons.CHEVRON_DOWN else MeowddingLib.id("chevron_right")
@@ -26,16 +26,16 @@ class ClickToExpandWidget(title: LayoutElement, body: LayoutElement, val onClick
         spacer(2)
         widget(title)
     }.asWidget()
-    val body = body.asWidget()
-    var expanded = false
+    internal val body = body.asWidget()
+    internal var expanded = false
 
     init {
         this.addRenderableWidget(this.title)
         this.addRenderableWidget(this.body)
     }
 
-    override fun getWidth() = if (expanded) max(body.width + bodyOffset, title.width) else title.width
-    override fun getHeight() = title.height + if (expanded) body.height else 0
+    override fun getWidth(): Int = if (expanded) max(body.width + bodyOffset, title.width) else title.width
+    override fun getHeight(): Int = title.height + if (expanded) body.height else 0
 
     override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
         if ((title.isMouseOver(event.x, event.y) || (allowBodyClick && body.isMouseOver(event.x, event.y))) && event.isLeft) {

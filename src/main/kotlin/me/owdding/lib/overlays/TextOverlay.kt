@@ -5,7 +5,7 @@ import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.platform.drawString
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.width
 
-open class TextOverlay(
+public open class TextOverlay(
     override val modId: String,
     override val name: Component,
     override val position: Position,

@@ -35,7 +35,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.net.URI
 import kotlin.jvm.optionals.getOrNull
 
-class MeowddingModsScreen : Screen(Text.of("Meowdding Mods")) {
+internal class MeowddingModsScreen : Screen(Text.of("Meowdding Mods")) {
 
     val background = MeowddingLib.id("background")
     val maxFeatureWidth by lazy { (MeowddingFeatures.features.flatMap { it.value }.maxOfOrNull { McFont.width(it) } ?: 0) + 5 }
