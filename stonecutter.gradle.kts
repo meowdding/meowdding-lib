@@ -4,8 +4,8 @@ import org.gradle.kotlin.dsl.support.serviceOf
 
 plugins {
     id("dev.kikugie.stonecutter")
-    id("net.fabricmc.fabric-loom-remap") version "1.19.3" apply false
-    id("net.fabricmc.fabric-loom") version "1.19.3" apply false
+    id("net.fabricmc.fabric-loom-remap") version "1.19-SNAPSHOT" apply false
+    id("net.fabricmc.fabric-loom") version "1.19-SNAPSHOT" apply false
     kotlin("jvm") apply false
     `maven-publish`
 }
