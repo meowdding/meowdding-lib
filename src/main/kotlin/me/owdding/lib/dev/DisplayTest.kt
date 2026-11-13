@@ -1,5 +1,6 @@
 package me.owdding.lib.dev
 
+import com.teamresourceful.resourcefulconfig.client.components.ModSprites
 import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.utils.ListenableState
 import me.owdding.lib.MeowddingLib
@@ -8,13 +9,17 @@ import me.owdding.lib.displays.Alignment
 import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.circle.roundedTextureDisplay
 import me.owdding.lib.displays.withOutline
+import me.owdding.lib.rendering.GuiRenderTypes
+import me.owdding.lib.rendering.text.PrideShader
 import me.owdding.lib.layouts.withPadding
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
+import me.owdding.lib.rendering.text.builtin.GradientTextShader.Direction as GradientDirection
 import me.owdding.lib.rendering.text.serialization.TagComponentSerialization
 import me.owdding.lib.rendering.text.textShader
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.player.RemotePlayer
+import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.network.chat.CommonComponents
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
@@ -43,7 +48,7 @@ object DisplayTest : Screen(CommonComponents.EMPTY) {
 
         entity.extract(graphics, 300, 100)
 
-        GradientTextShader.Direction.entries.map {
+        GradientDirection.entries.map {
             GradientTextShader(
                 listOf(
                     0xFF55CDFC.toInt(),
@@ -83,6 +88,16 @@ object DisplayTest : Screen(CommonComponents.EMPTY) {
             display(Displays.wrappedText(meow, width, textAlignment = Alignment.CENTER).withOutline())
             display(Displays.wrappedText(meow, width, textAlignment = Alignment.END).withOutline())
         }.extract(graphics, 200, 200)
+
+        graphics.blitSprite(
+            GuiRenderTypes.guiTexturedGradient(colors = PrideShader.TRANS, grayscale = false),
+            ModSprites.EYE_DROPPER,
+            width / 2,
+            10,
+            16,
+            16,
+            -1
+        )
 
         DisplayFactory.vertical {
             display(

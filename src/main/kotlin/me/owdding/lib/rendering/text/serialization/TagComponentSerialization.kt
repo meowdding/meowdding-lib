@@ -8,6 +8,7 @@ import me.owdding.lib.MeowddingLib
 import me.owdding.lib.generated.EnumCodec
 import me.owdding.lib.rendering.text.PrideShader
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
+import me.owdding.lib.rendering.text.builtin.GradientTextShader.Direction as GradientDirection
 import me.owdding.lib.rendering.text.serialization.nodes.GradientNode
 import me.owdding.lib.rendering.text.serialization.nodes.PrideGradientNode
 import me.owdding.lib.rendering.text.textShader
@@ -56,8 +57,8 @@ object TagComponentSerialization : MeowddingLogger by MeowddingLib.featureLogger
                     val colors = mutableListOf<TextColor>()
                     val direction = data.get(
                         "dir",
-                        EnumCodec.forKCodec(GradientTextShader.Direction.entries.toTypedArray()),
-                    ).resultOrPartial().getOrNull() ?: GradientTextShader.Direction.RIGHT
+                        EnumCodec.forKCodec(GradientDirection.entries.toTypedArray()),
+                    ).resultOrPartial().getOrNull() ?: GradientDirection.RIGHT
                     val speed = data.get("speed", "1").toFloatOrNull() ?: 1f
 
                     while (true) {
@@ -76,8 +77,8 @@ object TagComponentSerialization : MeowddingLogger by MeowddingLib.featureLogger
                     TextTag.enclosing(it.name.lowercase(), "gradient") { node, data, _ ->
                         val direction = data.get(
                             "dir",
-                            EnumCodec.forKCodec(GradientTextShader.Direction.entries.toTypedArray()),
-                        ).resultOrPartial().getOrNull() ?: GradientTextShader.Direction.RIGHT
+                            EnumCodec.forKCodec(GradientDirection.entries.toTypedArray()),
+                        ).resultOrPartial().getOrNull() ?: GradientDirection.RIGHT
                         val speed = data.get("speed", "1").toFloatOrNull() ?: 1f
                         PrideGradientNode(node, it, direction, speed)
                     },
@@ -145,9 +146,9 @@ object TagComponentSerialization : MeowddingLogger by MeowddingLib.featureLogger
         if (this.textShader() != null) {
             when (val shader = this.textShader()) {
                 is GradientTextShader if PrideShader.entries.any {
-                    it.colors.toIntArray().contentEquals(shader.gradientProvider.getColors().toIntArray())
+                    it.getColors().toIntArray().contentEquals(shader.gradientProvider.getColors().toIntArray())
                 } -> {
-                    val gradient = PrideShader.entries.first { it.colors.toIntArray().contentEquals(shader.gradientProvider.getColors().toIntArray()) }
+                    val gradient = PrideShader.entries.first { it.getColors().toIntArray().contentEquals(shader.gradientProvider.getColors().toIntArray()) }
                     list.add(
                         buildString {
                             append(gradient.name.lowercase())
@@ -182,7 +183,7 @@ object TagComponentSerialization : MeowddingLogger by MeowddingLib.featureLogger
     }
 
     fun GradientTextShader.serializeProperties() = buildString {
-        if (direction != GradientTextShader.Direction.RIGHT) {
+        if (direction != GradientDirection.RIGHT) {
             append(" dir:").append(direction.name.lowercase())
         }
         if (speed != 1f) {
