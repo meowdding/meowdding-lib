@@ -139,10 +139,6 @@ stonecutter parameters {
 
             rename("PipelineRenderer", "PipelineSubmit", "earth.terrarium.olympus.client.pipelines.renderer")
         }
-        string(current.parsed > "26.3") {
-            move("me.owdding.lib.rendering.text.builtin.GradientProvider", "me.owdding.lib.utils.GradientProvider")
-            rename("me.owdding.lib.rendering.text.builtin.GradientTextShader.Direction", "me.owdding.lib.utils.GradientDirection")
-        }
     }
 }
 evaluationDependsOnChildren()

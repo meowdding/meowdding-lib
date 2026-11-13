@@ -8,6 +8,7 @@ import me.owdding.lib.PreInitModule
 import me.owdding.lib.events.RegisterTextShaderEvent
 import me.owdding.lib.generated.MeowddingLibCodecs
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
+import me.owdding.lib.utils.GradientProvider
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.resources.Identifier
 import org.jetbrains.annotations.ApiStatus
@@ -48,7 +49,7 @@ object TextShaders {
     }
 }
 
-enum class PrideShader(val colors: List<Int>, private val shader: GradientTextShader = GradientTextShader(colors)) : TextShader by shader, Translatable {
+enum class PrideShader(colors: List<Int>, private val shader: GradientTextShader = GradientTextShader(colors)) : TextShader by shader, GradientProvider by shader.gradient, Translatable {
     RAINBOW(0xFF0000, 0xFF7F00, 0xFFFF00, 0x00FF00, 0x0000FF, 0x4B0082, 0x8B00FF),
     BISEXUAL(0xD60270, 0x9B4F96, 0x0038A8),
     GAY(0xFF0000, 0xFF9900, 0xFFFF00, 0x33CC33, 0x3399FF, 0x9900CC),
