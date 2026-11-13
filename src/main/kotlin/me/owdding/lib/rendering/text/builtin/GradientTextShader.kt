@@ -1,5 +1,3 @@
-
-
 package me.owdding.lib.rendering.text.builtin
 
 import com.mojang.renderpearl.api.pipeline.BlendFunction
