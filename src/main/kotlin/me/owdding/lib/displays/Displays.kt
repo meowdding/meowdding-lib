@@ -304,7 +304,7 @@ object Displays {
                 val maxHeight = getHeight()
                 var currentX = 0
 
-                displays.forEachIndexed { index, display ->
+                displays.forEach { display ->
                     val yOffset = when (alignment) {
                         Alignment.START -> 0
                         Alignment.CENTER -> (maxHeight - display.getHeight()) / 2

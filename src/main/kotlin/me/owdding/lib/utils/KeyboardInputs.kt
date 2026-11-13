@@ -119,6 +119,7 @@ open class MeowddingKeybind(
 
     val isDown get() = key.isDown
 
+    @Suppress("OVERLOADS_WITHOUT_DEFAULT_ARGUMENTS")
     @JvmOverloads
     //~ if >= 26.3 ', scancode: Int = 0) = ' -> ') = ', 'key, scancode' -> 'key, 0'
     fun matches(key: Int) = this.key.matches(KeyEvent(key, 0, 0))

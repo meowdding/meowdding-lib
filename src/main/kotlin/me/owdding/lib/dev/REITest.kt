@@ -46,11 +46,10 @@ object REITest {
     @TimePassed("1s")
     private fun onTick() {
         if (!hoveredToggle || !KnownMods.REI.installed) return
+        @Suppress("DEPRECATION")
         val stack = REIRuntimeCompatability.getReiHoveredItemStack()
         val message = if (stack == null) Text.of("Not hovering any REI itemstack!")
         else Text.of("Hovering over: ").append(stack.hoverName)
         message.send("MLIB_REI_HOVER_TEST")
     }
-
-
 }

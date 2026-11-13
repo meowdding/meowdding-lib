@@ -140,7 +140,7 @@ object TagComponentSerialization : MeowddingLogger by MeowddingLib.featureLogger
             if (color.startsWith("#")) {
                 list.add("color $color")
             } else {
-                list.add("$color")
+                list.add(color)
             }
         }
         if (this.textShader() != null) {

@@ -98,18 +98,22 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 tasks.withType<KotlinCompile>().configureEach {
-    compilerOptions.optIn.addAll(
-        "kotlin.time.ExperimentalTime",
-        "kotlin.ExperimentalVersionOverloading",
-        "kotlin.contracts.ExperimentalContracts",
-    )
-    compilerOptions.freeCompilerArgs.addAll(
-        "-Xcontext-parameters",
-        "-Xcontext-sensitive-resolution",
-        "-Xnullability-annotations=@org.jspecify.annotations:warn"
-    )
+    compilerOptions {
+        optIn.addAll(
+            "kotlin.time.ExperimentalTime",
+            "kotlin.ExperimentalVersionOverloading",
+            "kotlin.contracts.ExperimentalContracts",
+        )
+        freeCompilerArgs.addAll(
+            "-Xcontext-sensitive-resolution",
+            "-Xnullability-annotations=@org.jspecify.annotations:ignore",
+            "-Xwarning-level=DEPRECATION:disabled",
+            "-Xwarning-level=REDUNDANT_VISIBILITY_MODIFIER:disabled",
+        )
+        allWarningsAsErrors = true
+        extraWarnings = true
+    }
 }
-
 
 tasks.withType<ProcessResources>().configureEach {
     filteringCharset = "UTF-8"
@@ -278,7 +282,7 @@ idea {
 
 loom {
     runConfigs["client"].apply {
-        ideConfigGenerated(true)
+        generateRunConfig = true
         runDir = "../../run"
         vmArg("-Dfabric.modsFolder=\"${mcVersion}Mods\"")
     }
