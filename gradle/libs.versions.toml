@@ -6,7 +6,7 @@ fabric-language-kotlin = "1.14.2+kotlin.2.4.21"
 kotlin-version = "2.4.21"
 kotlin-gradle-plugin = "2.4.21"
 kotlin-symbol-processor = "2.3.11"
-keval = "2.0.1"
+keval = "1.1.1"
 gson = "2.12.1"
 
 # Dependencies
