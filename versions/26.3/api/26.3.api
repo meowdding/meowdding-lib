@@ -1269,6 +1269,12 @@ public final class me/owdding/lib/platform/RoundedRectKt {
 	public static final fun drawRoundedRectangle-jFQtcf8 (Lnet/minecraft/client/gui/GuiGraphicsExtractor;IIIIIIFI)V
 }
 
+public final class me/owdding/lib/rendering/GuiRenderTypes {
+	public static final field INSTANCE Lme/owdding/lib/rendering/GuiRenderTypes;
+	public final fun guiTexturedGradient (FLme/owdding/lib/utils/GradientDirection;ZLme/owdding/lib/utils/GradientProvider;)Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;
+	public static synthetic fun guiTexturedGradient$default (Lme/owdding/lib/rendering/GuiRenderTypes;FLme/owdding/lib/utils/GradientDirection;ZLme/owdding/lib/utils/GradientProvider;ILjava/lang/Object;)Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;
+}
+
 public abstract class me/owdding/lib/rendering/MeowddingPipState : earth/terrarium/olympus/client/pipelines/pips/OlympusPictureInPictureRenderState {
 	public fun <init> ()V
 	public fun bounds ()Lnet/minecraft/client/gui/navigation/ScreenRectangle;
@@ -1291,7 +1297,7 @@ public abstract class me/owdding/lib/rendering/MeowddingPipState : earth/terrari
 	public fun y1 ()I
 }
 
-public final class me/owdding/lib/rendering/text/PrideShader : java/lang/Enum, com/teamresourceful/resourcefulconfig/api/types/info/Translatable, me/owdding/lib/rendering/text/TextShader {
+public final class me/owdding/lib/rendering/text/PrideShader : java/lang/Enum, com/teamresourceful/resourcefulconfig/api/types/info/Translatable, me/owdding/lib/rendering/text/TextShader, me/owdding/lib/utils/GradientProvider {
 	public static final field ASEXUAL Lme/owdding/lib/rendering/text/PrideShader;
 	public static final field BISEXUAL Lme/owdding/lib/rendering/text/PrideShader;
 	public static final field Companion Lme/owdding/lib/rendering/text/PrideShader$Companion;
@@ -1302,7 +1308,7 @@ public final class me/owdding/lib/rendering/text/PrideShader : java/lang/Enum, c
 	public static final field PANSEXUAL Lme/owdding/lib/rendering/text/PrideShader;
 	public static final field RAINBOW Lme/owdding/lib/rendering/text/PrideShader;
 	public static final field TRANS Lme/owdding/lib/rendering/text/PrideShader;
-	public final fun getColors ()Ljava/util/List;
+	public fun getColors ()Ljava/util/List;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public fun getHasShadow ()Ljava/lang/Boolean;
 	public fun getId ()Lnet/minecraft/resources/Identifier;
@@ -1376,6 +1382,7 @@ public final class me/owdding/lib/rendering/text/TextShaders {
 
 public abstract interface class me/owdding/lib/rendering/text/builtin/GradientProvider {
 	public static final field Companion Lme/owdding/lib/rendering/text/builtin/GradientProvider$Companion;
+	public fun asNew ()Lme/owdding/lib/utils/GradientProvider;
 	public abstract fun getColors ()Ljava/util/List;
 }
 
@@ -1383,18 +1390,30 @@ public final class me/owdding/lib/rendering/text/builtin/GradientProvider$Compan
 	public final fun getCODEC ()Lcom/mojang/serialization/Codec;
 }
 
+public final class me/owdding/lib/rendering/text/builtin/GradientProvider$DefaultImpls {
+	public static fun asNew (Lme/owdding/lib/rendering/text/builtin/GradientProvider;)Lme/owdding/lib/utils/GradientProvider;
+}
+
 public final class me/owdding/lib/rendering/text/builtin/GradientTextShader : me/owdding/lib/rendering/text/TextShader {
 	public static final field Companion Lme/owdding/lib/rendering/text/builtin/GradientTextShader$Companion;
 	public fun <init> (Ljava/util/List;)V
-	public fun <init> (Ljava/util/List;Lme/owdding/lib/rendering/text/builtin/GradientTextShader$Direction;F)V
+	public synthetic fun <init> (Ljava/util/List;Lme/owdding/lib/rendering/text/builtin/GradientTextShader$Direction;F)V
 	public synthetic fun <init> (Ljava/util/List;Lme/owdding/lib/rendering/text/builtin/GradientTextShader$Direction;FILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public fun <init> (Lme/owdding/lib/rendering/text/builtin/GradientProvider;)V
-	public fun <init> (Lme/owdding/lib/rendering/text/builtin/GradientProvider;Lme/owdding/lib/rendering/text/builtin/GradientTextShader$Direction;F)V
+	public fun <init> (Ljava/util/List;Lme/owdding/lib/utils/GradientDirection;F)V
+	public synthetic fun <init> (Ljava/util/List;Lme/owdding/lib/utils/GradientDirection;FILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Lme/owdding/lib/rendering/text/builtin/GradientProvider;)V
+	public synthetic fun <init> (Lme/owdding/lib/rendering/text/builtin/GradientProvider;Lme/owdding/lib/rendering/text/builtin/GradientTextShader$Direction;F)V
+	public fun <init> (Lme/owdding/lib/utils/GradientProvider;)V
+	public fun <init> (Lme/owdding/lib/utils/GradientProvider;Lme/owdding/lib/utils/GradientDirection;F)V
 	public fun <init> ([Lnet/minecraft/network/chat/TextColor;)V
-	public fun <init> ([Lnet/minecraft/network/chat/TextColor;Lme/owdding/lib/rendering/text/builtin/GradientTextShader$Direction;F)V
+	public synthetic fun <init> ([Lnet/minecraft/network/chat/TextColor;Lme/owdding/lib/rendering/text/builtin/GradientTextShader$Direction;F)V
 	public synthetic fun <init> ([Lnet/minecraft/network/chat/TextColor;Lme/owdding/lib/rendering/text/builtin/GradientTextShader$Direction;FILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> ([Lnet/minecraft/network/chat/TextColor;Lme/owdding/lib/utils/GradientDirection;F)V
+	public synthetic fun <init> ([Lnet/minecraft/network/chat/TextColor;Lme/owdding/lib/utils/GradientDirection;FILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getDirection ()Lme/owdding/lib/rendering/text/builtin/GradientTextShader$Direction;
+	public final fun getGradient ()Lme/owdding/lib/utils/GradientProvider;
+	public final fun getGradientDirection ()Lme/owdding/lib/utils/GradientDirection;
 	public final fun getGradientProvider ()Lme/owdding/lib/rendering/text/builtin/GradientProvider;
 	public fun getHasShadow ()Ljava/lang/Boolean;
 	public fun getId ()Lnet/minecraft/resources/Identifier;
@@ -1422,6 +1441,8 @@ public final class me/owdding/lib/rendering/text/builtin/GradientTextShader$Dire
 	public static final field UP Lme/owdding/lib/rendering/text/builtin/GradientTextShader$Direction;
 	public static final field UP_LEFT Lme/owdding/lib/rendering/text/builtin/GradientTextShader$Direction;
 	public static final field UP_RIGHT Lme/owdding/lib/rendering/text/builtin/GradientTextShader$Direction;
+	public final fun asNewDirection ()Lme/owdding/lib/utils/GradientDirection;
+	public final fun getDirection ()Lme/owdding/lib/utils/GradientDirection;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getVec ()Lorg/joml/Vector2f;
 	public static fun valueOf (Ljava/lang/String;)Lme/owdding/lib/rendering/text/builtin/GradientTextShader$Direction;
@@ -1467,6 +1488,7 @@ public final class me/owdding/lib/rendering/text/serialization/TextCodecs {
 
 public final class me/owdding/lib/rendering/text/serialization/nodes/GradientNode : eu/pb4/placeholders/api/node/parent/ParentNode {
 	public fun <init> ([Leu/pb4/placeholders/api/node/TextNode;Lme/owdding/lib/rendering/text/builtin/GradientTextShader$Direction;FLme/owdding/lib/rendering/text/builtin/GradientProvider;)V
+	public fun <init> ([Leu/pb4/placeholders/api/node/TextNode;Lme/owdding/lib/utils/GradientDirection;FLme/owdding/lib/utils/GradientProvider;)V
 	public final fun getDirection ()Lme/owdding/lib/rendering/text/builtin/GradientTextShader$Direction;
 	public final fun getProvider ()Lme/owdding/lib/rendering/text/builtin/GradientProvider;
 	public final fun getSpeed ()F
@@ -1474,6 +1496,7 @@ public final class me/owdding/lib/rendering/text/serialization/nodes/GradientNod
 
 public final class me/owdding/lib/rendering/text/serialization/nodes/PrideGradientNode : eu/pb4/placeholders/api/node/parent/ParentNode {
 	public fun <init> ([Leu/pb4/placeholders/api/node/TextNode;Lme/owdding/lib/rendering/text/PrideShader;Lme/owdding/lib/rendering/text/builtin/GradientTextShader$Direction;F)V
+	public fun <init> ([Leu/pb4/placeholders/api/node/TextNode;Lme/owdding/lib/rendering/text/PrideShader;Lme/owdding/lib/utils/GradientDirection;F)V
 	public final fun getDirection ()Lme/owdding/lib/rendering/text/builtin/GradientTextShader$Direction;
 	public final fun getGradient ()Lme/owdding/lib/rendering/text/PrideShader;
 	public final fun getSpeed ()F
@@ -2117,6 +2140,31 @@ public final class me/owdding/lib/utils/DataPatcher {
 
 public abstract interface annotation class me/owdding/lib/utils/FeatureName : java/lang/annotation/Annotation {
 	public abstract fun name ()Ljava/lang/String;
+}
+
+public final class me/owdding/lib/utils/GradientDirection : java/lang/Enum {
+	public static final field DOWN Lme/owdding/lib/utils/GradientDirection;
+	public static final field DOWN_LEFT Lme/owdding/lib/utils/GradientDirection;
+	public static final field DOWN_RIGHT Lme/owdding/lib/utils/GradientDirection;
+	public static final field LEFT Lme/owdding/lib/utils/GradientDirection;
+	public static final field RIGHT Lme/owdding/lib/utils/GradientDirection;
+	public static final field UP Lme/owdding/lib/utils/GradientDirection;
+	public static final field UP_LEFT Lme/owdding/lib/utils/GradientDirection;
+	public static final field UP_RIGHT Lme/owdding/lib/utils/GradientDirection;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getVec ()Lorg/joml/Vector2f;
+	public final fun toOld ()Lme/owdding/lib/rendering/text/builtin/GradientTextShader$Direction;
+	public static fun valueOf (Ljava/lang/String;)Lme/owdding/lib/utils/GradientDirection;
+	public static fun values ()[Lme/owdding/lib/utils/GradientDirection;
+}
+
+public abstract interface class me/owdding/lib/utils/GradientProvider {
+	public static final field Companion Lme/owdding/lib/utils/GradientProvider$Companion;
+	public abstract fun getColors ()Ljava/util/List;
+}
+
+public final class me/owdding/lib/utils/GradientProvider$Companion {
+	public final fun getCODEC ()Lcom/mojang/serialization/Codec;
 }
 
 public final class me/owdding/lib/utils/KeyboardInputs {
