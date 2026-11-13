@@ -155,12 +155,15 @@ class GradientTextShader(val gradient: NewGradientProvider, val gradientDirectio
 
 
     //? if < 26.4 {
-    @Deprecated("Use GradientDirection instead")
+    @Deprecated("Use GradientDirection instead", level = DeprecationLevel.HIDDEN)
     constructor(gradientProvider: GradientProvider, direction: Direction, speed: Float) : this(gradientProvider.asNew(), direction.asNewDirection(), speed)
-    @Deprecated("Use GradientDirection instead")
-    constructor(colors: List<Int>, direction: Direction = Direction.RIGHT, speed: Float = 1f) : this({ colors }, direction, speed)
-    @Deprecated("Use GradientDirection instead")
-    constructor(vararg colors: TextColor, direction: Direction = Direction.RIGHT, speed: Float = 1f) : this(colors.map { it.value }, direction, speed)
+    @Deprecated("Use GradientDirection instead", level = DeprecationLevel.HIDDEN)
+    constructor(colors: List<Int>, direction: Direction = Direction.RIGHT, speed: Float = 1f) : this({ colors }, direction.asNewDirection(), speed)
+    @Deprecated("Use GradientDirection instead", level = DeprecationLevel.HIDDEN)
+    constructor(vararg colors: TextColor, direction: Direction = Direction.RIGHT, speed: Float = 1f) : this(colors.map { it.value }, direction.asNewDirection(), speed)
+    @Deprecated("Use GradientDirection instead", level = DeprecationLevel.HIDDEN)
+    constructor(gradientProvider: GradientProvider) : this(gradientProvider.asNew())
+
     //? }
 
     constructor(gradientProvider: NewGradientProvider) : this(gradientProvider, GradientDirection.RIGHT, 1f)
@@ -241,8 +244,10 @@ class GradientTextShader(val gradient: NewGradientProvider, val gradientDirectio
 //? if < 26.4 {
 @Deprecated("Use the other gradient provider", replaceWith = ReplaceWith("me.owdding.lib.utils.GradientProvider"))
 fun interface GradientProvider {
-    fun getColors(): List<Int>
+    //? if < 26.4
+    companion object {}
 
+    fun getColors(): List<Int>
     fun asNew() = NewGradientProvider { getColors() }
 }
 //? }
