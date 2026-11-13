@@ -1,8 +1,7 @@
-@file:Suppress("PackageDirectoryMismatch")
-//~ if >= 26.4 'rendering.text.builtin' -> 'utils'
-package me.owdding.lib.rendering.text.builtin
+package me.owdding.lib.utils
 
 import com.mojang.serialization.Codec
+import me.owdding.lib.rendering.text.builtin.GradientTextShader
 import org.joml.Vector2f
 
 fun interface GradientProvider {
@@ -16,8 +15,7 @@ fun interface GradientProvider {
     }
 }
 
-//? if >= 26.4 {
-/*enum class GradientDirection(val vec: Vector2f) {
+enum class GradientDirection(val vec: Vector2f) {
     LEFT(Vector2f(1f, 0f)),
     RIGHT(Vector2f(-1f, 0f)),
     UP(Vector2f(0f, -1f)),
@@ -27,5 +25,7 @@ fun interface GradientProvider {
     UP_LEFT(Vector2f(1f, -1f)),
     UP_RIGHT(Vector2f(-1f, -1f)),
     ;
+
+    //? if < 26.4
+    @Suppress("DEPRECATION") fun toOld() = GradientTextShader.Direction.entries.find { it.direction == this }
 }
-*///? }

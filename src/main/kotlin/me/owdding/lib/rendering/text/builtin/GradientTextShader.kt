@@ -1,3 +1,5 @@
+
+
 package me.owdding.lib.rendering.text.builtin
 
 import com.mojang.renderpearl.api.pipeline.BlendFunction
@@ -9,6 +11,8 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.owdding.lib.MeowddingLib
+import me.owdding.lib.utils.GradientDirection
+import me.owdding.lib.utils.GradientProvider as NewGradientProvider
 import me.owdding.lib.extensions.withShaderDefine
 import me.owdding.lib.generated.EnumCodec
 import me.owdding.lib.rendering.text.PipelineResult
@@ -22,8 +26,6 @@ import net.minecraft.util.ARGB
 import org.joml.Vector2f
 import org.joml.Vector4f
 import com.mojang.renderpearl.api.pipeline.BindGroupLayout
-
-import me.owdding.lib.rendering.text.builtin.GradientTextShader.Direction as GradientDirection
 
 //? if >= 26.4
 //import me.owdding.lib.utils.GradientProvider
@@ -68,14 +70,14 @@ private val pipelineCreator0: (GradientTextShader, Font.DisplayMode?, Boolean) -
             }
             .withShaderDefine(
                 "COLORS",
-                shader.gradientProvider
+                shader.gradient
                     .getColors()
                     .map { color -> Vector4f(ARGB.redFloat(color), ARGB.greenFloat(color), ARGB.blueFloat(color), ARGB.alphaFloat(color)) }
                     .toTypedArray(),
             )
             .withShaderDefine(
                 "DIRECTION",
-                shader.direction.vec,
+                shader.gradientDirection.vec,
             )
             .withShaderDefine(
                 "SPEED",
@@ -151,8 +153,19 @@ private val pipelineCreator0: (GradientTextShader, Font.DisplayMode?, Boolean) -
 }
 *///? }
 
-class GradientTextShader(val gradientProvider: GradientProvider, val direction: GradientDirection, val speed: Float) : TextShader {
-    constructor(gradientProvider: GradientProvider) : this(gradientProvider, Direction.RIGHT, 1f)
+class GradientTextShader(val gradient: NewGradientProvider, val gradientDirection: GradientDirection, val speed: Float) : TextShader {
+
+
+    //? if < 26.4 {
+    @Deprecated("Use GradientDirection instead")
+    constructor(gradientProvider: GradientProvider, direction: Direction, speed: Float) : this(gradientProvider.asNew(), direction.asNewDirection(), speed)
+    @Deprecated("Use GradientDirection instead")
+    constructor(colors: List<Int>, direction: Direction = Direction.RIGHT, speed: Float = 1f) : this({ colors }, direction, speed)
+    @Deprecated("Use GradientDirection instead")
+    constructor(vararg colors: TextColor, direction: Direction = Direction.RIGHT, speed: Float = 1f) : this(colors.map { it.value }, direction, speed)
+    //? }
+
+    constructor(gradientProvider: NewGradientProvider) : this(gradientProvider, GradientDirection.RIGHT, 1f)
     constructor(colors: List<Int>) : this({ colors })
     constructor(colors: List<Int>, direction: GradientDirection = GradientDirection.RIGHT, speed: Float = 1f) : this({ colors }, direction, speed)
     constructor(vararg colors: TextColor) : this(colors.map { it.value })
@@ -163,18 +176,29 @@ class GradientTextShader(val gradientProvider: GradientProvider, val direction: 
     override val useWhite: Boolean get() = true
     override val hasShadow: Boolean get() = true
 
+
+
     // moved to src/main/kotlin/me/owdding/lib/utils/GradientUtils.kt
     //? < 26.4 {
-    enum class Direction(val vec: Vector2f) {
-        LEFT(Vector2f(1f, 0f)),
-        RIGHT(Vector2f(-1f, 0f)),
-        UP(Vector2f(0f, -1f)),
-        DOWN(Vector2f(0f, 1f)),
-        DOWN_LEFT(Vector2f(1f, 1f)),
-        DOWN_RIGHT(Vector2f(-1f, 1f)),
-        UP_LEFT(Vector2f(1f, -1f)),
-        UP_RIGHT(Vector2f(-1f, -1f)),
+    val gradientProvider: GradientProvider = { gradient.getColors() }
+    val direction: Direction = gradientDirection.toOld() ?: Direction.RIGHT
+
+    @Deprecated("Use GradientDirection instead")
+    enum class Direction(val vec: Vector2f, val direction: GradientDirection) {
+        LEFT(GradientDirection.LEFT),
+        RIGHT(GradientDirection.RIGHT),
+        UP(GradientDirection.UP),
+        DOWN(GradientDirection.DOWN),
+        DOWN_LEFT(GradientDirection.DOWN_LEFT),
+        DOWN_RIGHT(GradientDirection.DOWN_RIGHT),
+        UP_LEFT(GradientDirection.UP_LEFT),
+        UP_RIGHT(GradientDirection.UP_RIGHT),
         ;
+
+
+        constructor(direction: GradientDirection) : this(direction.vec, direction)
+
+        fun asNewDirection(): GradientDirection = direction
     }
     //? }
 
@@ -187,8 +211,8 @@ class GradientTextShader(val gradientProvider: GradientProvider, val direction: 
         val ID = MeowddingLib.id("gradient")
         val CODEC: MapCodec<GradientTextShader> = RecordCodecBuilder.mapCodec {
             it.group(
-                GradientProvider.CODEC.fieldOf("colors").forGetter { it.gradientProvider },
-                EnumCodec.forKCodec(GradientDirection.entries.toTypedArray()).optionalFieldOf("direction", GradientDirection.RIGHT).forGetter { it.direction },
+                NewGradientProvider.CODEC.fieldOf("colors").forGetter { it.gradient },
+                EnumCodec.forKCodec(GradientDirection.entries.toTypedArray()).optionalFieldOf("direction", GradientDirection.RIGHT).forGetter { it.gradientDirection },
                 Codec.FLOAT.optionalFieldOf("speed", 1f).forGetter { it.speed },
             ).apply(it, ::GradientTextShader)
         }
@@ -201,19 +225,26 @@ class GradientTextShader(val gradientProvider: GradientProvider, val direction: 
         if (other !is GradientTextShader) return false
 
         if (speed != other.speed) return false
-        if (gradientProvider.getColors() != other.gradientProvider.getColors()) return false
-        if (direction != other.direction) return false
+        if (gradient.getColors() != other.gradient.getColors()) return false
+        if (gradientDirection != other.gradientDirection) return false
 
         return true
     }
 
     override fun hashCode(): Int {
         var result = speed.hashCode()
-        result = 31 * result + gradientProvider.getColors().hashCode()
-        result = 31 * result + direction.hashCode()
+        result = 31 * result + gradient.getColors().hashCode()
+        result = 31 * result + gradientDirection.hashCode()
         return result
     }
 
-
 }
 
+//? if < 26.4 {
+@Deprecated("Use the other gradient provider", replaceWith = ReplaceWith("me.owdding.lib.utils.GradientProvider"))
+fun interface GradientProvider {
+    fun getColors(): List<Int>
+
+    fun asNew() = NewGradientProvider { getColors() }
+}
+//? }
