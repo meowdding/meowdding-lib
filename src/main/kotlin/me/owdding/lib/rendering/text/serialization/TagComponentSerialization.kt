@@ -146,9 +146,9 @@ object TagComponentSerialization : MeowddingLogger by MeowddingLib.featureLogger
         if (this.textShader() != null) {
             when (val shader = this.textShader()) {
                 is GradientTextShader if PrideShader.entries.any {
-                    it.getColors().toIntArray().contentEquals(shader.gradientProvider.getColors().toIntArray())
+                    it.getColors().toIntArray().contentEquals(shader.gradient.getColors().toIntArray())
                 } -> {
-                    val gradient = PrideShader.entries.first { it.getColors().toIntArray().contentEquals(shader.gradientProvider.getColors().toIntArray()) }
+                    val gradient = PrideShader.entries.first { it.getColors().toIntArray().contentEquals(shader.gradient.getColors().toIntArray()) }
                     list.add(
                         buildString {
                             append(gradient.name.lowercase())
@@ -163,7 +163,7 @@ object TagComponentSerialization : MeowddingLogger by MeowddingLib.featureLogger
 
                         shader.serializeProperties().takeUnless { it.isEmpty() }?.let(::append)
 
-                        for (i in shader.gradientProvider.getColors()) {
+                        for (i in shader.gradient.getColors()) {
                             append(" #").append(i.toHexString().dropWhile { char -> char == '0' }.takeUnless { it.isEmpty() } ?: "0")
                         }
                     },
@@ -183,8 +183,8 @@ object TagComponentSerialization : MeowddingLogger by MeowddingLib.featureLogger
     }
 
     fun GradientTextShader.serializeProperties() = buildString {
-        if (direction != GradientDirection.RIGHT) {
-            append(" dir:").append(direction.name.lowercase())
+        if (gradientDirection != GradientDirection.RIGHT) {
+            append(" dir:").append(gradientDirection.name.lowercase())
         }
         if (speed != 1f) {
             append(" speed:").append(speed.toString().removeSuffix(".0"))
