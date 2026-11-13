@@ -244,8 +244,12 @@ class GradientTextShader(val gradient: NewGradientProvider, val gradientDirectio
 //? if < 26.4 {
 @Deprecated("Use the other gradient provider", replaceWith = ReplaceWith("me.owdding.lib.utils.GradientProvider"))
 fun interface GradientProvider {
-    //? if < 26.4
-    companion object {}
+    companion object {
+        val CODEC: Codec<GradientProvider> = Codec.INT.listOf(1, Int.MAX_VALUE).xmap(
+            { GradientProvider { it } },
+            { it.getColors() },
+        )
+    }
 
     fun getColors(): List<Int>
     fun asNew() = NewGradientProvider { getColors() }

@@ -10,9 +10,10 @@ import me.owdding.lib.rendering.text.withTextShader
 import me.owdding.lib.utils.GradientDirection
 import net.minecraft.network.chat.Style
 
-class PrideGradientNode(children: Array<out TextNode>, val gradient: PrideShader, val direction: GradientDirection, val speed: Float) : ParentNode(*children) {
+class PrideGradientNode(children: Array<out TextNode>, val gradient: PrideShader, private val direction: GradientDirection, val speed: Float) : ParentNode(*children) {
     //? if < 26.4
     constructor(children: Array<out TextNode>, gradient: PrideShader, direction: OldGradientDirection, speed: Float) : this(children, gradient, direction.asNewDirection(), speed)
+    fun getDirection() = direction.toOld() ?: OldGradientDirection.RIGHT
 
     override fun applyFormatting(style: Style, context: ParserContext): Style {
         if (direction == GradientDirection.RIGHT && speed == 1f) {
