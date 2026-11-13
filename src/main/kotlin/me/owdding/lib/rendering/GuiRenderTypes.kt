@@ -3,12 +3,12 @@ package me.owdding.lib.rendering
 import com.mojang.renderpearl.api.pipeline.RenderPipeline
 import me.owdding.lib.MeowddingLib.id
 import me.owdding.lib.extensions.withShaderDefine
-import me.owdding.lib.rendering.text.builtin.GradientProvider
+import me.owdding.lib.utils.GradientDirection
+import me.owdding.lib.utils.GradientProvider
 import me.owdding.lib.utils.MemoizeUtil
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.util.ARGB
 import org.joml.Vector4f
-import me.owdding.lib.rendering.text.builtin.GradientTextShader.Direction as GradientDirection
 
 object GuiRenderTypes {
 

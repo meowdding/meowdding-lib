@@ -13,9 +13,9 @@ import me.owdding.lib.rendering.GuiRenderTypes
 import me.owdding.lib.rendering.text.PrideShader
 import me.owdding.lib.layouts.withPadding
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
-import me.owdding.lib.rendering.text.builtin.GradientTextShader.Direction as GradientDirection
 import me.owdding.lib.rendering.text.serialization.TagComponentSerialization
 import me.owdding.lib.rendering.text.textShader
+import me.owdding.lib.utils.GradientDirection
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.player.RemotePlayer

@@ -8,10 +8,10 @@ import me.owdding.lib.MeowddingLib
 import me.owdding.lib.generated.EnumCodec
 import me.owdding.lib.rendering.text.PrideShader
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
-import me.owdding.lib.rendering.text.builtin.GradientTextShader.Direction as GradientDirection
 import me.owdding.lib.rendering.text.serialization.nodes.GradientNode
 import me.owdding.lib.rendering.text.serialization.nodes.PrideGradientNode
 import me.owdding.lib.rendering.text.textShader
+import me.owdding.lib.utils.GradientDirection
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import net.minecraft.ChatFormatting
