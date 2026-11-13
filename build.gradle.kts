@@ -282,7 +282,7 @@ idea {
 
 loom {
     runConfigs["client"].apply {
-        generateRunConfig = true
+        ideConfigGenerated(true)
         runDir = "../../run"
         vmArg("-Dfabric.modsFolder=\"${mcVersion}Mods\"")
     }
