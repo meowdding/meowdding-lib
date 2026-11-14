@@ -22,58 +22,58 @@ import java.awt.Color
 import java.util.UUID
 import kotlin.random.Random
 
-class MeowddingWaypoint(internal val position: Vec3) {
-    constructor(block: BlockPos) : this(Vec3.atBottomCenterOf(block))
-    constructor(block: BlockPos, addToHandler: Boolean = true, builder: MeowddingWaypoint.() -> Unit) : this(
+public class MeowddingWaypoint(internal val position: Vec3) {
+    public constructor(block: BlockPos) : this(Vec3.atBottomCenterOf(block))
+    public constructor(block: BlockPos, addToHandler: Boolean = true, builder: MeowddingWaypoint.() -> Unit) : this(
         Vec3.atBottomCenterOf(block),
         addToHandler,
         builder,
     )
-    constructor(position: Vec3, addToHandler: Boolean = true, builder: MeowddingWaypoint.() -> Unit) : this(position) {
+    public constructor(position: Vec3, addToHandler: Boolean = true, builder: MeowddingWaypoint.() -> Unit) : this(position) {
         this.builder()
         if (addToHandler) addToHandler()
     }
 
-    var uuid: UUID = UUID.randomUUID()
-    var name: Component = Text.of("Waypoint $uuid")
-    var color: Int = 0xFFFFFFFF.toInt()
-    var renderTypes: Set<WaypointRenderType> = emptySet()
+    public var uuid: UUID = UUID.randomUUID()
+    public var name: Component = Text.of("Waypoint $uuid")
+    public var color: Int = 0xFFFFFFFF.toInt()
+    public var renderTypes: Set<WaypointRenderType> = emptySet()
         set(value) {
             field = value.toSortedSet()
         }
-    var tags: Set<MeowddingWaypointTag> = emptySet()
-    var inLocatorBar = false
-    var renderCondition: (RenderWorldEvent) -> Boolean = { true }
-    var removalDistance: Float? = null
-    var ignoreY = false
+    public var tags: Set<MeowddingWaypointTag> = emptySet()
+    public var inLocatorBar: Boolean = false
+    public var renderCondition: (RenderWorldEvent) -> Boolean = { true }
+    public var removalDistance: Float? = null
+    public var ignoreY: Boolean = false
 
-    var minecraftWaypoint: MinecraftWaypoint? = null
+    public var minecraftWaypoint: MinecraftWaypoint? = null
         internal set
 
-    fun withName(name: String) = withName(Text.of(name))
-    fun withName(name: Component) = this.apply { this.name = name }
+    public fun withName(name: String): MeowddingWaypoint = withName(Text.of(name))
+    public fun withName(name: Component): MeowddingWaypoint = this.apply { this.name = name }
 
-    fun withRandomColor() = withColor(ARGB.opaque(Random.nextInt(0xFFFFFF)))
-    fun withColor(color: Color) = withColor(color.rgb)
-    fun withColor(color: Int) = this.apply { this.color = color }
+    public  fun withRandomColor(): MeowddingWaypoint = withColor(ARGB.opaque(Random.nextInt(0xFFFFFF)))
+    public fun withColor(color: Color): MeowddingWaypoint = withColor(color.rgb)
+    public fun withColor(color: Int): MeowddingWaypoint = this.apply { this.color = color }
 
-    fun withRenderCondition(condition: (RenderWorldEvent) -> Boolean) = this.apply { this.renderCondition = condition }
+    public fun withRenderCondition(condition: (RenderWorldEvent) -> Boolean): MeowddingWaypoint = this.apply { this.renderCondition = condition }
 
-    fun withRemovalDistance(range: Float? = 5f) = this.apply { this.removalDistance = range }
+    public fun withRemovalDistance(range: Float? = 5f): MeowddingWaypoint = this.apply { this.removalDistance = range }
 
-    fun withNormalRenderTypes() = withRenderTypes(WaypointRenderType.TEXT, WaypointRenderType.BOX, WaypointRenderType.BEAM, WaypointRenderType.DISTANCE)
-    fun withAllRenderTypes() = withRenderTypes(*WaypointRenderType.entries.toTypedArray())
-    fun withRenderTypes(vararg types: WaypointRenderType) = this.apply { this.renderTypes = types.toSet() }
+    public fun withNormalRenderTypes(): MeowddingWaypoint = withRenderTypes(WaypointRenderType.TEXT, WaypointRenderType.BOX, WaypointRenderType.BEAM, WaypointRenderType.DISTANCE)
+    public fun withAllRenderTypes(): MeowddingWaypoint = withRenderTypes(*WaypointRenderType.entries.toTypedArray())
+    public fun withRenderTypes(vararg types: WaypointRenderType): MeowddingWaypoint = this.apply { this.renderTypes = types.toSet() }
 
-    fun withTags(vararg tags: MeowddingWaypointTag) = this.apply { this.tags = tags.toSet() }
+    public fun withTags(vararg tags: MeowddingWaypointTag): MeowddingWaypoint = this.apply { this.tags = tags.toSet() }
 
-    fun inLocatorBar(boolean: Boolean = true) = this.apply { this.inLocatorBar = boolean }
+    public fun inLocatorBar(boolean: Boolean = true): MeowddingWaypoint = this.apply { this.inLocatorBar = boolean }
 
-    fun withIgnoreY(boolean: Boolean = true) = this.apply { this.ignoreY = boolean }
+    public fun withIgnoreY(boolean: Boolean = true): MeowddingWaypoint = this.apply { this.ignoreY = boolean }
 
-    fun addToHandler() = MeowddingWaypointHandler.addWaypoint(this)
+    public fun addToHandler(): Unit = MeowddingWaypointHandler.addWaypoint(this)
 
-    fun distanceToSqr(other: Vec3): Double {
+    public fun distanceToSqr(other: Vec3): Double {
         return if (this.ignoreY) {
             other.let { it.distanceToSqr(this.position.x, it.y, this.position.z) }
         } else {
@@ -82,13 +82,13 @@ class MeowddingWaypoint(internal val position: Vec3) {
     }
 
     private fun lerpedY(partialTicks: Float) = Mth.lerp(partialTicks.toDouble(), McPlayer.self!!.oldPosition().y, McPlayer.position!!.y)
-    fun getPosition(partialTicks: Float = 1f): Vec3 = if (ignoreY) {
+    public fun getPosition(partialTicks: Float = 1f): Vec3 = if (ignoreY) {
         Vec3(position.x(), lerpedY(partialTicks), position.z())
     } else {
         position
     }
 
-    fun getBlockPos(partialTicks: Float = 1f): BlockPos = if (ignoreY) {
+    public fun getBlockPos(partialTicks: Float = 1f): BlockPos = if (ignoreY) {
         BlockPos.containing(position.x(), lerpedY(partialTicks), position.z())
     } else {
         BlockPos.containing(position)
@@ -124,11 +124,11 @@ class MeowddingWaypoint(internal val position: Vec3) {
     }
 
     override fun hashCode(): Int = uuid.hashCode()
-    override fun equals(other: Any?) = this === other || uuid == (other as? MeowddingWaypoint)?.uuid
-    override fun toString() = "Waypoint(position=$position, uuid=$uuid, name=$name)"
+    override fun equals(other: Any?): Boolean = this === other || uuid == (other as? MeowddingWaypoint)?.uuid
+    override fun toString(): String = "Waypoint(position=$position, uuid=$uuid, name=$name)"
 }
 
-enum class WaypointRenderType(val translucent: Boolean = true) {
+public enum class WaypointRenderType(internal val translucent: Boolean = true) {
     BEAM(false),
     BOX,
     TEXT,

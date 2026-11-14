@@ -19,11 +19,11 @@ import tech.thatgravyboat.skyblockapi.utils.text.CommonText
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
 @Module
-object Overlays {
+public object Overlays {
 
     private val overlays = mutableListOf<Overlay>()
 
-    fun register(overlay: Overlay) {
+    public fun register(overlay: Overlay) {
         overlays.add(overlay)
     }
 

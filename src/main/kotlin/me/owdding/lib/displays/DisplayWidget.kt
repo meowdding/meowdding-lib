@@ -8,7 +8,7 @@ import net.minecraft.client.gui.components.AbstractWidget
 import tech.thatgravyboat.skyblockapi.platform.scale
 import tech.thatgravyboat.skyblockapi.utils.extentions.translated
 
-class DisplayWidget(private val display: Display): BaseWidget() {
+public class DisplayWidget(private val display: Display): BaseWidget() {
     private var renderer: WidgetRenderer<DisplayWidget?> = WidgetRenderer.empty()
 
     init {
@@ -22,15 +22,15 @@ class DisplayWidget(private val display: Display): BaseWidget() {
         renderer.render(graphics, WidgetRendererContext<DisplayWidget?>(this, mouseX, mouseY), partialTicks)
     }
 
-    fun withRenderer(renderer: WidgetRenderer<DisplayWidget?>): DisplayWidget {
+    public fun withRenderer(renderer: WidgetRenderer<DisplayWidget?>): DisplayWidget {
         this.renderer = renderer
         return this
     }
 
     override fun withSize(width: Int, height: Int): DisplayWidget = super.withSize(width, height) as DisplayWidget
 
-    companion object {
-        fun <T : AbstractWidget> displayRenderer(display: Display) = WidgetRenderer<T> { graphics, context, _ ->
+    public companion object {
+        public fun <T : AbstractWidget> displayRenderer(display: Display): WidgetRenderer<T> = WidgetRenderer<T> { graphics, context, _ ->
             graphics.translated(context.x, context.y) {
                 graphics.scale(context.width.toFloat() / display.getWidth().toFloat(), context.height.toFloat() / display.getHeight().toFloat())
                 display.extract(graphics, 0, 0)

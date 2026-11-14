@@ -15,12 +15,12 @@ import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 
 @Module
-object EnchantmentRepoData {
+public object EnchantmentRepoData {
 
-    val data: List<ParsedEnchantmentData> by MeowddingLib.repoDelegate("enchantments", emptyList())
+    public val data: List<ParsedEnchantmentData> by MeowddingLib.repoDelegate("enchantments", emptyList())
 
     @GenerateCodec
-    data class ParsedEnchantmentData(
+    public data class ParsedEnchantmentData(
         val id: String,
         val name: String,
         @FieldName("min_level") @OptionalInt(1) val minLevel: Int = 1,
@@ -39,21 +39,21 @@ object EnchantmentRepoData {
     }
 
     @GenerateCodec
-    data class EnchantmentSource(
+    public data class EnchantmentSource(
         val name: String,
         val min: Int,
         val max: Int,
     )
 
-    interface Requirement {
-        fun canUse(): Boolean
-        val formatted: String
+    public interface Requirement {
+        public fun canUse(): Boolean
+        public val formatted: String
     }
 
-    data class EnchantingLevel(
+    public data class EnchantingLevel(
         val level: Int,
     ) : Requirement {
-        override fun canUse() = true // todo add checks once skill api is a thing
+        override fun canUse(): Boolean = true // todo add checks once skill api is a thing
         override val formatted: String = "Enchanting Level $level"
     }
 
@@ -62,15 +62,15 @@ object EnchantmentRepoData {
     }
 
     @IncludedCodec(named = "repo:enchantment:requirements")
-    val REQUIREMENT_CODEC: Codec<List<Requirement>> = Codec.STRING.listOf().xmap(
-        {
-            it.mapNotNull {
+    public val REQUIREMENT_CODEC: Codec<List<Requirement>> = Codec.STRING.listOf().xmap(
+        { requirements ->
+            requirements.mapNotNull { it ->
                 when {
                     it.startsWith("Enchanting Level") -> EnchantingLevel(it.substringAfterLast(" ").toIntOrNull() ?: return@mapNotNull null)
                     else -> null
                 }
             }
         },
-        { it.map { it.formatted } },
+        { it.map { requirement -> requirement.formatted } },
     )
 }

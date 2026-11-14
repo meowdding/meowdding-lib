@@ -20,7 +20,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text
 import kotlin.reflect.KClass
 
 @GenerateDispatchCodec(TreeNode::class)
-enum class TreeNodes(override val type: KClass<out TreeNode>) : DispatchHelper<TreeNode> {
+public enum class TreeNodes(override val type: KClass<out TreeNode>) : DispatchHelper<TreeNode> {
     PERK(LevelingTreeNode::class),
     UNLEVELABLE(UnlevelableTreeNode::class),
     ABILITY(AbilityTreeNode::class),
@@ -30,15 +30,15 @@ enum class TreeNodes(override val type: KClass<out TreeNode>) : DispatchHelper<T
     ;
 
     @Module
-    companion object {
+    public companion object {
         @IncludedCodec(named = "vec_2i")
-        val VECTOR_2I: Codec<Vector2i> = Codec.INT.listOf(2, 2).xmap(
+        public val VECTOR_2I: Codec<Vector2i> = Codec.INT.listOf(2, 2).xmap(
             { Vector2i(it[0], it[1]) },
             { listOf(it.x, it.y) },
         )
 
         @IncludedCodec(named = "reward_formula")
-        val rewardFormulaCodec: Codec<Map<String, String>> = Codec.either(
+        public val rewardFormulaCodec: Codec<Map<String, String>> = Codec.either(
             Codec.STRING.xmap({ mapOf("reward" to it) }, { it["reward"] }),
             Codec.unboundedMap(Codec.STRING, Codec.STRING) as Codec<Map<String, String>>,
         ).xmap(
@@ -46,21 +46,21 @@ enum class TreeNodes(override val type: KClass<out TreeNode>) : DispatchHelper<T
             { if (it.size == 1) Either.left(it) else Either.right(it) },
         )
 
-        fun getType(id: String) = valueOf(id.uppercase())
+        public fun getType(id: String): TreeNodes = valueOf(id.uppercase())
     }
 }
 
 @PreInitModule
-object TreeRepoData {
-    val hotm: List<TreeNode> by MeowddingLib.repoDelegate("mining/hotm", emptyList())
-    val hotf: List<TreeNode> by MeowddingLib.repoDelegate("foraging/hotf", emptyList())
+public object TreeRepoData {
+    public val hotm: List<TreeNode> by MeowddingLib.repoDelegate("mining/hotm", emptyList())
+    public val hotf: List<TreeNode> by MeowddingLib.repoDelegate("foraging/hotf", emptyList())
 
-    fun hotmByName(name: String) = hotm.find { it.name == name }
-    fun hotfByName(name: String) = hotf.find { it.name == name }
+    public fun hotmByName(name: String): TreeNode? = hotm.find { it.name == name }
+    public fun hotfByName(name: String): TreeNode? = hotf.find { it.name == name }
 }
 
-data class Context(val treeLevel: Int = -1, val perkLevel: Int = -1) {
-    fun configure(kevalBuilder: KevalBuilder) = with(kevalBuilder) {
+public data class Context(val treeLevel: Int = -1, val perkLevel: Int = -1) {
+    public fun configure(kevalBuilder: KevalBuilder): KevalBuilder = with(kevalBuilder) {
         function {
             name = "min"
             arity = 2
@@ -85,20 +85,20 @@ data class Context(val treeLevel: Int = -1, val perkLevel: Int = -1) {
     }
 }
 
-abstract class TreeNode(val type: TreeNodes) {
-    abstract val name: String
-    abstract val id: String
-    abstract val location: Vector2i
+public abstract class TreeNode(public val type: TreeNodes) {
+    public abstract val name: String
+    public abstract val id: String
+    public abstract val location: Vector2i
 
-    abstract fun tooltip(context: Context): List<Component>
-    abstract fun isMaxed(level: Int): Boolean
+    public abstract fun tooltip(context: Context): List<Component>
+    public abstract fun isMaxed(level: Int): Boolean
 }
 
-abstract class LevelableTooltipNode(type: TreeNodes) : TreeNode(type) {
-    abstract val rewards: Map<String, String>
-    abstract val tooltip: List<String>
+public abstract class LevelableTooltipNode(type: TreeNodes) : TreeNode(type) {
+    public abstract val rewards: Map<String, String>
+    public abstract val tooltip: List<String>
 
-    fun evaluate(context: Context): Map<String, String> {
+    public fun evaluate(context: Context): Map<String, String> {
         return rewards.mapValues {
             it.value.keval {
                 includeDefault()
@@ -126,15 +126,15 @@ abstract class LevelableTooltipNode(type: TreeNodes) : TreeNode(type) {
 }
 
 
-abstract class LevelableTreeNode(type: TreeNodes) : LevelableTooltipNode(type) {
-    abstract val maxLevel: Int
+public abstract class LevelableTreeNode(type: TreeNodes) : LevelableTooltipNode(type) {
+    public abstract val maxLevel: Int
 
-    abstract fun costForLevel(level: Int): Pair<CostType, Int>
-    abstract fun getPowderType(level: Int): CostType
+    public abstract fun costForLevel(level: Int): Pair<CostType, Int>
+    public abstract fun getPowderType(level: Int): CostType
 }
 
 @GenerateCodec
-data class UnlevelableTreeNode(
+public data class UnlevelableTreeNode(
     override val id: String,
     override val name: String,
     @NamedCodec("vec_2i") override val location: Vector2i,
@@ -158,11 +158,11 @@ data class UnlevelableTreeNode(
         }
     }
 
-    override fun isMaxed(level: Int) = level > 0
+    override fun isMaxed(level: Int): Boolean = level > 0
 }
 
 @GenerateCodec
-data class LevelingTreeNode(
+public data class LevelingTreeNode(
     override val id: String,
     override val name: String,
     @NamedCodec("vec_2i") override val location: Vector2i,
@@ -188,22 +188,22 @@ data class LevelingTreeNode(
 
     override fun getPowderType(level: Int): CostType = powderType
 
-    override fun isMaxed(level: Int) = level >= maxLevel
+    override fun isMaxed(level: Int): Boolean = level >= maxLevel
 }
 
 @GenerateCodec
-data class AbilityTreeNode(
+public data class AbilityTreeNode(
     override val id: String,
     override val name: String,
     @NamedCodec("vec_2i") override val location: Vector2i,
     @NamedCodec("reward_formula") @FieldName("reward_formula") override val rewards: Map<String, String>,
     override val tooltip: List<String>,
 ) : LevelableTooltipNode(TreeNodes.ABILITY) {
-    override fun isMaxed(level: Int) = level == 3
+    override fun isMaxed(level: Int): Boolean = level == 3
 }
 
 @GenerateCodec
-data class CoreTreeNode(
+public data class CoreTreeNode(
     override val id: String,
     override val name: String,
     @NamedCodec("vec_2i") override val location: Vector2i,
@@ -211,12 +211,12 @@ data class CoreTreeNode(
 ) : LevelableTreeNode(TreeNodes.CORE) {
 
     @GenerateCodec
-    data class CotmLevel(
+    public data class CotmLevel(
         val cost: CostType = FreeCostType,
         val include: List<Int> = emptyList(),
         @Compact val reward: List<String>,
     ) {
-        fun tooltip(treeNode: CoreTreeNode): List<String> {
+        public fun tooltip(treeNode: CoreTreeNode): List<String> {
             val tooltip = mutableListOf<String>()
 
             include.map { treeNode.getLevel(it) }.flatMap { it.reward }.forEach { tooltip.add(it) }
@@ -226,7 +226,7 @@ data class CoreTreeNode(
         }
     }
 
-    fun getLevel(level: Int): CotmLevel {
+    public fun getLevel(level: Int): CotmLevel {
         return this.level[(level - 1).coerceAtLeast(0)]
     }
 
@@ -241,66 +241,66 @@ data class CoreTreeNode(
         }
     }
 
-    override fun isMaxed(level: Int) = level == maxLevel
+    override fun isMaxed(level: Int): Boolean = level == maxLevel
     override val maxLevel: Int = level.size
     override fun costForLevel(level: Int): Pair<CostType, Int> = this.level[level - 1].cost.let { it to it.amount!! }
     override fun getPowderType(level: Int): CostType = this.level[level - 1].cost
 }
 
 @GenerateCodec
-data class TierNode(
+public data class TierNode(
     override val name: String,
     @NamedCodec("vec_2i") override val location: Vector2i,
     val rewards: List<String>,
 ) : TreeNode(TreeNodes.TIER) {
     override val id: String = ""
-    override fun tooltip(context: Context) = rewards.map {
+    override fun tooltip(context: Context): List<Component> = rewards.map {
         TagParser.QUICK_TEXT_SAFE.parseComponent(it, ParserContext.of())
     }
 
-    override fun isMaxed(level: Int) = level >= (location.y + 1)
+    override fun isMaxed(level: Int): Boolean = level >= (location.y + 1)
 }
 
 @GenerateCodec
-data class SpacerNode(
+public data class SpacerNode(
     @NamedCodec("vec_2i") override val location: Vector2i,
     @NamedCodec("vec_2i") val size: Vector2i,
 ) : TreeNode(TreeNodes.SPACER) {
     override val name: String = ""
     override val id: String = ""
 
-    override fun tooltip(context: Context) = emptyList<Component>()
-    override fun isMaxed(level: Int) = false
+    override fun tooltip(context: Context): List<Component> = emptyList()
+    override fun isMaxed(level: Int): Boolean = false
 }
 
 @GenerateDispatchCodec(CostType::class)
-enum class CostTypes(override val type: KClass<out CostType>) : DispatchHelper<CostType> {
+public enum class CostTypes(override val type: KClass<out CostType>) : DispatchHelper<CostType> {
     POWDER(PowderCostType::class),
     WHISPER(WhisperCostType::class),
     FREE(FreeCostType::class),
     ;
 
-    companion object {
-        fun getType(id: String) = CostTypes.valueOf(id.uppercase())
+    public companion object {
+        public fun getType(id: String): CostTypes = CostTypes.valueOf(id.uppercase())
     }
 }
 
-object FreeCostType : CostType(CostTypes.FREE) {
+public object FreeCostType : CostType(CostTypes.FREE) {
     override val amount: Int? = null
     override val displayName: Component? = null
     override val formatting: ChatFormatting? = null
     override val currency: SkillTreeCurrency? = null
 }
 
-sealed class CostType(val type: CostTypes) {
-    abstract val amount: Int?
-    abstract val displayName: Component?
-    abstract val formatting: ChatFormatting?
-    abstract val currency: SkillTreeCurrency?
+public sealed class CostType(public val type: CostTypes) {
+    public abstract val amount: Int?
+    public abstract val displayName: Component?
+    public abstract val formatting: ChatFormatting?
+    public abstract val currency: SkillTreeCurrency?
 }
 
 @GenerateCodec
-data class PowderCostType(
+public data class PowderCostType(
     @FieldName("kind") val powderType: PowderType,
     override val amount: Int?,
 ) : CostType(CostTypes.POWDER) {
@@ -310,7 +310,7 @@ data class PowderCostType(
 }
 
 @GenerateCodec
-data class WhisperCostType(
+public data class WhisperCostType(
     @FieldName("kind") val whisperType: WhisperType,
     override val amount: Int?,
 ) : CostType(CostTypes.WHISPER) {
@@ -319,28 +319,28 @@ data class WhisperCostType(
     override val currency: SkillTreeCurrency = whisperType
 }
 
-interface SkillTreeCurrency {
-    val displayName: Component
+public interface SkillTreeCurrency {
+    public val displayName: Component
 }
 
-enum class PowderType(val formatting: ChatFormatting) : SkillTreeCurrency {
+public enum class PowderType(internal val formatting: ChatFormatting) : SkillTreeCurrency {
     MITHRIL(ChatFormatting.DARK_GREEN),
     GEMSTONE(ChatFormatting.LIGHT_PURPLE),
     GLACITE(ChatFormatting.AQUA),
     ;
 
-    override val displayName = Text.of(name.toTitleCase()) {
+    override val displayName: Component = Text.of(name.toTitleCase()) {
         append(" Powder")
         withStyle(formatting)
     }
 }
 
-enum class WhisperType(val formatting: ChatFormatting) : SkillTreeCurrency {
+public enum class WhisperType(internal val formatting: ChatFormatting) : SkillTreeCurrency {
     FOREST(ChatFormatting.DARK_AQUA),
     DESERT(ChatFormatting.GOLD),
     ;
 
-    override val displayName = Text.of(name.toTitleCase()) {
+    override val displayName: Component = Text.of(name.toTitleCase()) {
         append(" Whispers")
         withStyle(formatting)
     }

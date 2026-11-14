@@ -9,15 +9,15 @@ import me.owdding.ktmodules.Module
 import tech.thatgravyboat.skyblockapi.utils.extentions.filterValuesNotNull
 
 @Module
-object MeowddingFeatures {
-    val configurators: Map<MeowddingMod, ResourcefulConfig> by lazy {
+internal object MeowddingFeatures {
+    public val configurators: Map<MeowddingMod, ResourcefulConfig> by lazy {
         @Suppress("UnstableApiUsage")
         MeowddingModsParser.mods.associateWith { mod ->
             Configurations.INSTANCE.modToConfigs()[mod.modId]?.firstOrNull()?.let { Configurations.INSTANCE.configs()[it] }
         }.filterValuesNotNull()
     }
 
-    val features by lazy {
+    public val features: Map<MeowddingMod, Set<String>> by lazy {
         configurators.entries.associate { (key, value) -> key to value.getConfig() }
     }
 

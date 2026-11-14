@@ -202,6 +202,7 @@ extensions.getByType<IdeaModel>().apply {
 
 kotlin {
     jvmToolchain(25)
+    explicitApi()
 }
 
 java {

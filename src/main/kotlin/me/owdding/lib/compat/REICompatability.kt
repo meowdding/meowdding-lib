@@ -23,7 +23,7 @@ import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyPressedEvent
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import kotlin.jvm.optionals.getOrNull
 
-object REICompatability : REIClientPlugin {
+internal object REICompatability : REIClientPlugin {
 
     init {
         SkyBlockAPI.eventBus.register<ScreenKeyPressedEvent.Post> { event -> REIRuntimeCompatability.keyPressed(event) }
@@ -43,23 +43,23 @@ object REICompatability : REIClientPlugin {
     }
 }
 
-object REIRuntimeCompatability {
-    val installed get() = KnownMods.REI.installed
+public object REIRuntimeCompatability {
+    public val installed: Boolean get() = KnownMods.REI.installed
 
     @Deprecated("Use ItemListRegisterExclusionZonesEvent for more compatability", ReplaceWith("me.owdding.lib.events.ItemListHoveredItemKeyPressEvent"))
-    fun getReiHoveredItemStack(): ItemStack? {
+    public fun getReiHoveredItemStack(): ItemStack? {
         if (!installed) return null
         return getHoveredItemStack()
     }
 
-    fun getCurrentSearchBar(): String? {
+    public fun getCurrentSearchBar(): String? {
         if (!installed) return null
         return runCatching {
             REIRuntime.getInstance().searchTextField?.text
         }.getOrNull()
     }
 
-    fun isSearchBarHighlighting(): Boolean {
+    public fun isSearchBarHighlighting(): Boolean {
         if (!installed) return false
         return runCatching {
             val textField = REIRuntime.getInstance().searchTextField ?: return@runCatching false

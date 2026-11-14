@@ -13,7 +13,7 @@ import tech.thatgravyboat.repolib.api.recipes.Recipe
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import java.util.Optional
 
-object SBILCompatability : Plugin {
+internal object SBILCompatability : Plugin {
 
     override fun registerExclusionZones(exclusionZoneManager: ExclusionZoneManager) {
         exclusionZoneManager.addProvider(Screen::class.java) { screen ->

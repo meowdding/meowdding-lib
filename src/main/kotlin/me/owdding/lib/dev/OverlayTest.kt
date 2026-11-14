@@ -7,7 +7,7 @@ import me.owdding.lib.overlays.TextOverlay
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
 @Module
-object OverlayTest {
+internal object OverlayTest {
 
     init {
         registerTestOverlay()

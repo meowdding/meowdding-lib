@@ -17,7 +17,7 @@ import java.util.function.Supplier
 import com.mojang.blaze3d.vertex.BufferBuilder
 import com.mojang.blaze3d.vertex.ByteBufferBuilder
 
-class TexturedCircleRenderer : PictureInPictureRenderer<TexturedCircleState>() {
+internal class TexturedCircleRenderer : PictureInPictureRenderer<TexturedCircleState>() {
 
     override fun getRenderStateClass(): Class<TexturedCircleState> = TexturedCircleState::class.java
 
@@ -68,8 +68,7 @@ class TexturedCircleRenderer : PictureInPictureRenderer<TexturedCircleState>() {
 
 }
 
-
-data class TexturedCircleState(
+internal data class TexturedCircleState(
     override val bounds: ScreenRectangle,
     override val scissorArea: ScreenRectangle?,
     override val pose: Matrix3x2f,

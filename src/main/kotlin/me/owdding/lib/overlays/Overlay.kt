@@ -9,20 +9,20 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
-interface Overlay {
+public interface Overlay {
 
-    val ignoreChatScreenEdits: Boolean get() = false
+    public val ignoreChatScreenEdits: Boolean get() = false
 
-    val modId: String
-    val name: Component
+    public val modId: String
+    public val name: Component
 
-    val properties: Collection<EditableProperty> get() = EditableProperty.entries
-    val enabled: Boolean get() = true
+    public val properties: Collection<EditableProperty> get() = EditableProperty.entries
+    public val enabled: Boolean get() = true
 
-    val position: Position
-    val bounds: Pair<Int, Int>
+    public val position: Position
+    public val bounds: Pair<Int, Int>
 
-    val alignedX: Float
+    public val alignedX: Float
         get() {
             val (x, _) = position
             val width = bounds.first * position.scale
@@ -33,23 +33,23 @@ interface Overlay {
             }
         }
 
-    val editBounds: Rect
+    public val editBounds: Rect
         get() {
             val (_, y) = position
             return Rect(alignedX.toInt(), y, bounds.first, bounds.second)
         }
 
-    fun extract(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {}
+    public fun extract(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {}
 
-    fun extract(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) = extract(graphics, mouseX, mouseY)
+    public fun extract(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float): Unit = extract(graphics, mouseX, mouseY)
 
-    fun onRightClick() = ContextMenu.open {
+    public fun onRightClick(): Unit = ContextMenu.open {
         it.dangerButton(Text.translatable("mlib.overlay.edit.reset")) {
             position.resetPosition()
         }
     }
 
-    fun setX(x: Int) {
+    public fun setX(x: Int) {
         val screenWidth = McClient.window.guiScaledWidth
         val scaledWidth = bounds.first * position.scale
         if (bounds.first == 0 || scaledWidth >= screenWidth) return
@@ -80,21 +80,21 @@ interface Overlay {
         }
     }
 
-    fun setY(y: Int) {
+    public fun setY(y: Int) {
         val height = McClient.window.guiScaledHeight
         if (bounds.second == 0 || bounds.second * position.scale >= height) return
         position.y = if (y < height / 2) y.coerceAtLeast(0) else (y - height).coerceAtMost((-bounds.second * position.scale).toInt())
     }
 
-    fun setScale(scale: Float) {
+    public fun setScale(scale: Float) {
         position.scale = ((scale * 10f).toInt() / 10f).coerceAtLeast(0.1f)
     }
 
-    fun nextAlignment() {
+    public fun nextAlignment() {
         position.alignment = position.alignment.next()
     }
 
-    fun isEditing(): Boolean {
+    public fun isEditing(): Boolean {
         var effectiveScreen = McScreen.self
         if (effectiveScreen is OverlayAccessor) {
             effectiveScreen = effectiveScreen.`mlib$getBackgroundScreen`()
@@ -102,10 +102,10 @@ interface Overlay {
         return (effectiveScreen is EditOverlaysScreen && effectiveScreen.modId in arrayOf(null, modId)) || effectiveScreen is OverlayScreen
     }
 
-    fun isEditingOverlay(): Boolean = (McScreen.self as? EditOverlaysScreen)?.modId !in arrayOf(null, modId)
+    public fun isEditingOverlay(): Boolean = (McScreen.self as? EditOverlaysScreen)?.modId !in arrayOf(null, modId)
 }
 
-enum class EditableProperty {
+public enum class EditableProperty {
     X,
     Y,
     SCALE,

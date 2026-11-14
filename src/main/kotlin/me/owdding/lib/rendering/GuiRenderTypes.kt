@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.util.ARGB
 import org.joml.Vector4f
 
-object GuiRenderTypes {
+public object GuiRenderTypes {
 
     private val GUI_TEXTURED_GRADIENT = MemoizeUtil.memoize { colors: GradientProvider, speed: Float, direction: GradientDirection, grayscale: Boolean ->
         RenderPipelines.register(
@@ -33,6 +33,10 @@ object GuiRenderTypes {
         )
     }
 
-    fun guiTexturedGradient(speed: Float = 1f, direction: GradientDirection = GradientDirection.LEFT, grayscale: Boolean = true, colors: GradientProvider): RenderPipeline = GUI_TEXTURED_GRADIENT(colors, speed, direction, grayscale)
-
+    public fun guiTexturedGradient(
+        speed: Float = 1f,
+        direction: GradientDirection = GradientDirection.LEFT,
+        grayscale: Boolean = true,
+        colors: GradientProvider,
+    ): RenderPipeline = GUI_TEXTURED_GRADIENT(colors, speed, direction, grayscale)
 }

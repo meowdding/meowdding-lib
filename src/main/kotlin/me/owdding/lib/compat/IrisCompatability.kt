@@ -9,15 +9,15 @@ import net.irisshaders.iris.api.v0.IrisApi
 import net.irisshaders.iris.api.v0.IrisProgram
 import net.minecraft.client.renderer.rendertype.RenderType
 
-interface IrisCompatability {
-    fun registerPipeline(renderPipeline: RenderPipeline, shaderType: IrisShaderType) {}
+public interface IrisCompatability {
+    public fun registerPipeline(renderPipeline: RenderPipeline, shaderType: IrisShaderType) {}
 
-    fun registerRenderType(renderPipeline: RenderType, shaderType: IrisShaderType) {
+    public fun registerRenderType(renderPipeline: RenderType, shaderType: IrisShaderType) {
         registerPipeline(renderPipeline.pipeline(), shaderType)
     }
 
     @Module
-    companion object : IrisCompatability by resolve() {
+    public companion object : IrisCompatability by resolve() {
         init {
             registerRenderType(RenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS, IrisShaderType.BASIC)
             registerRenderType(RenderTypes.BLOCK_FILL_QUAD, IrisShaderType.BASIC)
@@ -26,7 +26,7 @@ interface IrisCompatability {
     }
 }
 
-enum class IrisShaderType {
+public enum class IrisShaderType {
     LINES,
     BASIC,
     TEXTURED,
@@ -36,7 +36,6 @@ enum class IrisShaderType {
     BLOCK_TRANSLUCENT,
     BEACON_BEAM,
 }
-
 
 internal object IrisCompatNoOp : IrisCompatability
 

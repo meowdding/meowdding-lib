@@ -23,7 +23,7 @@ import java.util.function.Supplier
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.renderpearl.api.textures.GpuTextureView
 
-class ItemStateRenderer : PictureInPictureRenderer<ItemStateRenderer.State>() {
+internal class ItemStateRenderer : PictureInPictureRenderer<ItemStateRenderer.State>() {
 
     //? < 26.3
     //private var textureView: GpuTextureView? = null

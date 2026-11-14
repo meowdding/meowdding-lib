@@ -4,15 +4,15 @@ import net.fabricmc.loader.api.FabricLoader
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-interface MeowddingLogger {
-    companion object {
+public interface MeowddingLogger {
+    public companion object {
         internal val logAll: Boolean = java.lang.Boolean.getBoolean("meowdding.debug.log")
 
         internal val STACK_WALKER = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE)
-        fun named(name: String): MeowddingLogger = MeowddingLoggerImpl(LoggerFactory.getLogger(name))
-        fun autoResolve(): MeowddingLogger = MeowddingLoggerImpl(LoggerFactory.getLogger(STACK_WALKER.callerClass.simpleName))
+        public fun named(name: String): MeowddingLogger = MeowddingLoggerImpl(LoggerFactory.getLogger(name))
+        public fun autoResolve(): MeowddingLogger = MeowddingLoggerImpl(LoggerFactory.getLogger(STACK_WALKER.callerClass.simpleName))
 
-        fun MeowddingLogger.featureLogger(): MeowddingLogger {
+        public fun MeowddingLogger.featureLogger(): MeowddingLogger {
             val name = STACK_WALKER.callerClass.let { it.annotations.filterIsInstance<FeatureName>().firstOrNull()?.name ?: it.simpleName }
 
             return featureLogger(name)
@@ -20,79 +20,79 @@ interface MeowddingLogger {
     }
 
 
-    fun featureLogger(name: String): MeowddingLogger
+    public fun featureLogger(name: String): MeowddingLogger
 
-    fun trace(message: String) {
+    public fun trace(message: String) {
         trace(message, null, null)
     }
 
-    fun trace(message: String, throwable: Throwable) {
+    public fun trace(message: String, throwable: Throwable) {
         trace(message, throwable, null)
     }
 
-    fun trace(message: String, prefix: String) {
+    public fun trace(message: String, prefix: String) {
         trace(message, null, prefix)
     }
 
-    fun trace(message: String, throwable: Throwable? = null, prefix: String? = null)
+    public fun trace(message: String, throwable: Throwable? = null, prefix: String? = null)
 
-    fun debug(message: String) {
+    public fun debug(message: String) {
         debug(message, null, null)
     }
 
-    fun debug(message: String, throwable: Throwable) {
+    public fun debug(message: String, throwable: Throwable) {
         debug(message, throwable, null)
     }
 
-    fun debug(message: String, prefix: String) {
+    public fun debug(message: String, prefix: String) {
         debug(message, null, prefix)
     }
 
-    fun debug(message: String, throwable: Throwable? = null, prefix: String? = null)
+    public fun debug(message: String, throwable: Throwable? = null, prefix: String? = null)
 
-    fun info(message: String) {
+    public fun info(message: String) {
         info(message, null, null)
     }
 
-    fun info(message: String, throwable: Throwable) {
+    public fun info(message: String, throwable: Throwable) {
         info(message, throwable, null)
     }
 
-    fun info(message: String, prefix: String) {
+    public fun info(message: String, prefix: String) {
         info(message, null, prefix)
     }
 
-    fun info(message: String, throwable: Throwable? = null, prefix: String? = null)
+    public fun info(message: String, throwable: Throwable? = null, prefix: String? = null)
 
-    fun warn(message: String) {
+    public fun warn(message: String) {
         warn(message, null, null)
     }
 
-    fun warn(message: String, throwable: Throwable) {
+    public fun warn(message: String, throwable: Throwable) {
         warn(message, throwable, null)
     }
 
-    fun warn(message: String, prefix: String) {
+    public fun warn(message: String, prefix: String) {
         warn(message, null, prefix)
     }
 
-    fun warn(message: String, throwable: Throwable? = null, prefix: String? = null)
+    public fun warn(message: String, throwable: Throwable? = null, prefix: String? = null)
 
-    fun error(message: String) {
+    public fun error(message: String) {
         error(message, null, null)
     }
 
-    fun error(message: String, throwable: Throwable) {
+    public fun error(message: String, throwable: Throwable) {
         error(message, throwable, null)
     }
 
-    fun error(message: String, prefix: String) {
+    public fun error(message: String, prefix: String) {
         error(message, null, prefix)
     }
 
-    fun error(message: String, throwable: Throwable? = null, prefix: String? = null)
+    public fun error(message: String, throwable: Throwable? = null, prefix: String? = null)
 
-    fun <Return> runCatching(message: String, block: () -> Return) : Return? = runCatching {
+    public fun <Return> runCatching(message: String, block: () -> Return) : Return? = runCatching {
         block()
     }.getOrElse {
         error("An error occurred during task: $message", it)
@@ -101,7 +101,7 @@ interface MeowddingLogger {
 
 }
 
-annotation class FeatureName(val name: String)
+public annotation class FeatureName(val name: String)
 
 internal data class MeowddingLoggerImpl(val logger: Logger, val defaultPrefix: String? = null) : MeowddingLogger {
     enum class LogLevel(val noError: Logger.(String) -> Unit, val error: Logger.(String, Throwable) -> Unit) {
@@ -112,7 +112,7 @@ internal data class MeowddingLoggerImpl(val logger: Logger, val defaultPrefix: S
         ERROR(Logger::error, Logger::error),
     }
 
-    fun mergedPrefix(prefix: String?) = listOfNotNull(defaultPrefix, prefix).joinToString("/")
+    public fun mergedPrefix(prefix: String?) = listOfNotNull(defaultPrefix, prefix).joinToString("/")
 
     private fun wrapMessage(message: String, prefix: String?): String {
         val prefix = mergedPrefix(prefix).takeUnless { it.isBlank() }

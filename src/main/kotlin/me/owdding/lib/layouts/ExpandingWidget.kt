@@ -4,7 +4,7 @@ import earth.terrarium.olympus.client.components.base.BaseParentWidget
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 
-class ExpandingWidget(val widget: AbstractWidget, val margin: Int) : BaseParentWidget(widget.width + margin * 2, widget.height + margin * 2) {
+public class ExpandingWidget(internal val widget: AbstractWidget, internal val margin: Int) : BaseParentWidget(widget.width + margin * 2, widget.height + margin * 2) {
 
     init {
         this.addRenderableWidget(widget)

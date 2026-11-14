@@ -50,28 +50,28 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KProperty0
 
 @Module
-object AccessoryRepoData {
+public object AccessoryRepoData {
 
-    var families: Map<String, AccessoryFamily> = emptyMap()
+    public var families: Map<String, AccessoryFamily> = emptyMap()
         private set
-    var rarityUpgraded: Map<SkyBlockId, AccessoryRarityUpgraded> = emptyMap()
+    public  var rarityUpgraded: Map<SkyBlockId, AccessoryRarityUpgraded> = emptyMap()
         private set
-    var disallowedOriginFamilies: Set<String> = emptySet()
+    public var disallowedOriginFamilies: Set<String> = emptySet()
         private set
 
-    val ignored: Set<SkyBlockId> by MeowddingLib.repoDelegate("accessories/unobtainable_accessories", emptySet())
-    val accessoryPowerData: AccessoryPowerRepoData? by MeowddingLib.repoDelegate("accessories/magical_power")
+    public val ignored: Set<SkyBlockId> by MeowddingLib.repoDelegate("accessories/unobtainable_accessories", emptySet())
+    public val accessoryPowerData: AccessoryPowerRepoData? by MeowddingLib.repoDelegate("accessories/magical_power")
 
-    fun getFamily(id: SkyBlockId): AccessoryFamily? = families.values.find { it.contains(id) }
-    fun getRarityUpgraded(id: SkyBlockId): AccessoryRarityUpgraded? = rarityUpgraded[id]
-    fun isIgnored(id: SkyBlockId): Boolean = id in ignored
-    fun upgradesRarity(id: SkyBlockId): Boolean = id in rarityUpgraded
+    public fun getFamily(id: SkyBlockId): AccessoryFamily? = families.values.find { it.contains(id) }
+    public fun getRarityUpgraded(id: SkyBlockId): AccessoryRarityUpgraded? = rarityUpgraded[id]
+    public fun isIgnored(id: SkyBlockId): Boolean = id in ignored
+    public fun upgradesRarity(id: SkyBlockId): Boolean = id in rarityUpgraded
 
-    fun isDisallowed(family: AccessoryFamily): Boolean = family.family in disallowedOriginFamilies
+    public fun isDisallowed(family: AccessoryFamily): Boolean = family.family in disallowedOriginFamilies
 
-    fun isDisallowedOrigin(id: SkyBlockId): Boolean = getFamily(id)?.let(::isDisallowed) == true
-    fun getAp(item: ItemStack): Int = accessoryPowerData?.getAccessoryPower(item) ?: 0
-    fun AccessoryFamily.isRiftPrism(): Boolean = family == "rift_prism"
+    public fun isDisallowedOrigin(id: SkyBlockId): Boolean = getFamily(id)?.let(::isDisallowed) == true
+    public fun getAp(item: ItemStack): Int = accessoryPowerData?.getAccessoryPower(item) ?: 0
+    public fun AccessoryFamily.isRiftPrism(): Boolean = family == "rift_prism"
 
     private fun calculateIsDisallowedOrigin(family: AccessoryFamily): Boolean {
         return family.flatMapItems().any { id ->
@@ -195,60 +195,59 @@ object AccessoryRepoData {
     }
 }
 
-
 @GenerateCodec
-data class AccessoryFamily(
+public data class AccessoryFamily(
     val family: String,
     @Compact val tiers: List<AccessoryTier>,
     @FieldName("ignore_duplicates") val ignoreDuplicates: Boolean = false,
 ) : List<AccessoryTier> by tiers {
     //region Functions
     inline val maxTier: Int get() = lastIndex
-    fun flatMapItems(): Sequence<SkyBlockId> = asSequence().flatMap(AccessoryTier::items)
-    operator fun get(id: SkyBlockId): AccessoryTier? = find { id in it }
-    fun contains(id: SkyBlockId): Boolean = any { id in it }
+    public fun flatMapItems(): Sequence<SkyBlockId> = asSequence().flatMap(AccessoryTier::items)
+    public operator fun get(id: SkyBlockId): AccessoryTier? = find { id in it }
+    public fun contains(id: SkyBlockId): Boolean = any { id in it }
     //endregion
 
-    companion object {
-        val CODEC: Codec<AccessoryFamily> = MeowddingLibCodecs.getCodec()
+    public companion object {
+        public val CODEC: Codec<AccessoryFamily> = MeowddingLibCodecs.getCodec()
     }
 }
 
 // Not a data class so that equality checks aren't done with its contents
-class AccessoryTier(
-    val items: Set<SkyBlockId>,
+public class AccessoryTier(
+    public val items: Set<SkyBlockId>,
 ) : Set<SkyBlockId> by items, Comparable<AccessoryTier> {
     /** Index of the [AccessoryTier] in its family, gets initialized when family is created */
-    var tier: Int = -1
+    public var tier: Int = -1
         internal set
 
     override fun compareTo(other: AccessoryTier): Int = tier.compareTo(other.tier)
 
-    companion object {
+    public companion object {
         @IncludedCodec
-        val CODEC: Codec<AccessoryTier> = CodecUtils.compactSet(SkyBlockId.CODEC).xmap(::AccessoryTier, AccessoryTier::items)
+        public val CODEC: Codec<AccessoryTier> = CodecUtils.compactSet(SkyBlockId.CODEC).xmap(::AccessoryTier, AccessoryTier::items)
     }
 }
 
 @GenerateCodec
-data class AccessoryRarityUpgraded(
+public data class AccessoryRarityUpgraded(
     val item: SkyBlockId,
     val rarities: EnumSet<SkyBlockRarity>,
 ) : Set<SkyBlockRarity> by rarities {
-    fun isMax(rarity: SkyBlockRarity): Boolean = rarities.maxOrNull() == rarity
-    fun nextAfter(rarity: SkyBlockRarity): SkyBlockRarity? = firstOrNull { it > rarity }
+    public fun isMax(rarity: SkyBlockRarity): Boolean = rarities.maxOrNull() == rarity
+    public fun nextAfter(rarity: SkyBlockRarity): SkyBlockRarity? = firstOrNull { it > rarity }
 
-    companion object {
-        val CODEC: Codec<AccessoryRarityUpgraded> = MeowddingLibCodecs.getCodec()
+    public companion object {
+        public val CODEC: Codec<AccessoryRarityUpgraded> = MeowddingLibCodecs.getCodec()
     }
 }
 
 @GenerateCodec
-data class AccessoryPowerRepoData(
+public data class AccessoryPowerRepoData(
     val rarity: Map<SkyBlockRarity, Int>,
     val overrides: Map<SkyBlockId, Override>,
 ) {
-    fun getAccessoryPower(item: ItemStack): Int {
+    public fun getAccessoryPower(item: ItemStack): Int {
         val override = overrides[item.getSkyBlockId()]
         val ap = rarity[item.getData(DataTypes.RARITY)] ?: 0
 
@@ -256,21 +255,21 @@ data class AccessoryPowerRepoData(
     }
 }
 
-abstract class Override(val type: OverrideTypes) {
-    abstract fun apply(num: Int): Int
+public abstract class Override(public val type: OverrideTypes) {
+    public abstract fun apply(num: Int): Int
 }
 
 @GenerateCodec
-data class MultiplyOverride(val value: Double) : Override(OverrideTypes.MULTIPLY) {
-    override fun apply(num: Int) = (num * value).roundToInt()
+public data class MultiplyOverride(val value: Double) : Override(OverrideTypes.MULTIPLY) {
+    override fun apply(num: Int): Int = (num * value).roundToInt()
 }
 
 @GenerateDispatchCodec(Override::class)
-enum class OverrideTypes(override val type: KClass<out Override>) : DispatchHelper<Override> {
+public enum class OverrideTypes(override val type: KClass<out Override>) : DispatchHelper<Override> {
     MULTIPLY(MultiplyOverride::class),
     ;
 
-    companion object {
-        fun getType(id: String) = valueOf(id.uppercase())
+    public companion object {
+        public fun getType(id: String): OverrideTypes = valueOf(id.uppercase())
     }
 }

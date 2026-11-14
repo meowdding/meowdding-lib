@@ -1,7 +1,7 @@
 package me.owdding.lib.layouts
 
-interface Scalable {
+public interface Scalable {
 
-    fun scale(scale: Double)
+    public fun scale(scale: Double)
 
 }

@@ -6,7 +6,7 @@ import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.navigation.ScreenRectangle
 import net.minecraft.resources.Identifier
 
-class TexturedCircleDisplay(@JvmField val width: Int, @JvmField val height: Int, private val texture: Identifier) : Display {
+internal class TexturedCircleDisplay(@JvmField val width: Int, @JvmField val height: Int, private val texture: Identifier) : Display {
     override fun getHeight(): Int = height
     override fun getWidth(): Int = width
 

@@ -23,9 +23,7 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.platform.getTranslation
 import java.util.function.Supplier
 
-class EntityStateRenderer() : PictureInPictureRenderer<EntityStateRenderer.State>() {
-
-    private var lastState: State? = null
+internal class EntityStateRenderer(var lastState: State? = null) : PictureInPictureRenderer<EntityStateRenderer.State>() {
 
     override fun getRenderStateClass(): Class<State> = State::class.java
 
