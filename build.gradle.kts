@@ -96,20 +96,25 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 tasks.withType<KotlinCompile>().configureEach {
-    compilerOptions.optIn.addAll(
-        "kotlin.time.ExperimentalTime",
-        "kotlin.ExperimentalVersionOverloading",
-        "kotlin.contracts.ExperimentalContracts",
-    )
-    compilerOptions.freeCompilerArgs.addAll(
-        // 0 (all cores) triggers a race condition in JvmIrCodegenFactory's parallel codegen on Kotlin 2.4.x,
-        // leaving corrupt .class files that break subsequent incremental builds.
-        // see: https://youtrack.jetbrains.com/issue/KT-85498/
-        "-Xbackend-threads=1",
-        "-Xcontext-parameters",
-        "-Xcontext-sensitive-resolution",
-        "-Xnullability-annotations=@org.jspecify.annotations:warn"
-    )
+    compilerOptions {
+        optIn.addAll(
+            "kotlin.time.ExperimentalTime",
+            "kotlin.ExperimentalVersionOverloading",
+            "kotlin.contracts.ExperimentalContracts",
+        )
+        freeCompilerArgs.addAll(
+            // 0 (all cores) triggers a race condition in JvmIrCodegenFactory's parallel codegen on Kotlin 2.4.x,
+            // leaving corrupt .class files that break subsequent incremental builds.
+            // see: https://youtrack.jetbrains.com/issue/KT-85498/
+            "-Xbackend-threads=1",
+            "-Xcontext-sensitive-resolution",
+            "-Xnullability-annotations=@org.jspecify.annotations:ignore",
+            "-Xwarning-level=DEPRECATION:disabled",
+            "-Xwarning-level=REDUNDANT_VISIBILITY_MODIFIER:disabled",
+        )
+        allWarningsAsErrors = true
+        extraWarnings = true
+    }
 }
 
 tasks.withType<ProcessResources>().configureEach {
