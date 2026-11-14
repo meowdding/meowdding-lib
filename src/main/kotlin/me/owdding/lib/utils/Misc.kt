@@ -27,11 +27,11 @@ private val DEVS = setOf(
 )
 
 //? < 26.3
-//fun Player.isMeowddingDev(): Boolean = this.stringUUID in DEVS
+//public fun Player.isMeowddingDev(): Boolean = this.stringUUID in DEVS
 public fun Player.isMeowddingMaintainer(): Boolean = this.stringUUID in DEVS
 
 //? < 26.3
-//fun UUID.isMeowddingDev(): Boolean = this.toString() in DEVS
+//public fun UUID.isMeowddingDev(): Boolean = this.toString() in DEVS
 public fun UUID.isMeowddingMaintainer(): Boolean = this.toString() in DEVS
 
 @Suppress("UNCHECKED_CAST", "NOTHING_TO_INLINE")

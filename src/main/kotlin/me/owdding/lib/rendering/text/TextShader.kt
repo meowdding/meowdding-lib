@@ -41,7 +41,7 @@ public fun createTextRenderType(
 }
 
 //? < 26.3 {
-/*fun createTextRenderType(
+/*public fun createTextRenderType(
     pipeline: RenderPipeline,
     location: Identifier,
     mode: Font.DisplayMode,
@@ -66,7 +66,7 @@ public var MutableComponent.textShader: TextShader?
     }
 
 //? < 26.3
-//typealias PipelineResult = RenderPipeline
+//public typealias PipelineResult = RenderPipeline
 //? >= 26.3
 public typealias PipelineResult = Pair<RenderPipeline, OitPipelineSet?>
 

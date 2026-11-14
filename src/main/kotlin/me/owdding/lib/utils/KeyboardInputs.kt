@@ -45,7 +45,7 @@ public data class KeyboardInputs(
     }
 
     //? if < 26.3
-    //fun isDown(event: MeowddingKeyEvent): Boolean = isDown(event.key, event.scancode)
+    //public fun isDown(event: MeowddingKeyEvent): Boolean = isDown(event.key, event.scancode)
 
     public fun isDown(key: Int, scanCode: Int): Boolean {
         //~ if >= 26.3 'GLFW.glfwGetKeyName(key, scanCode)' -> '(SDLKeyboard.SDL_GetKeyName(key) ?: return false)'
@@ -97,7 +97,7 @@ internal fun keyMapping(translationKey: String, keyCode: Int, category: Identifi
 }
 
 //? < 26.3 {
-/*fun KeyMapping.matches(event: MeowddingKeyEvent): Boolean {
+/*public fun KeyMapping.matches(event: MeowddingKeyEvent): Boolean {
     return this.matches(event.into())
 }
 *///? }
@@ -119,9 +119,12 @@ public open class MeowddingKeybind(
 
     public val isDown: Boolean get() = key.isDown
 
-    @JvmOverloads
-    public//~ if >= 26.3 ', scancode: Int = 0) = ' -> ') = ', 'key, scancode' -> 'key, 0'
-    fun matches(key: Int): Boolean = this.key.matches(KeyEvent(key, 0, 0))
+    //? if >= 26.3
+    public fun matches(key: Int): Boolean = this.key.matches(KeyEvent(key, 0, 0))
+    //? else {
+    /*@JvmOverloads
+    public fun matches(key: Int, scancode: Int = 0): Boolean = this.key.matches(KeyEvent(key, scancode, 0))
+    *///?}
 
     //~ if >= 26.3 'key, event.scanCode)' -> 'key)'
     public fun matches(event: ScreenKeyReleasedEvent): Boolean = matches(event.key)
@@ -131,7 +134,7 @@ public open class MeowddingKeybind(
     public fun matches(event: KeyEvent): Boolean = key.matches(event)
 
     //? if < 26.3
-    //fun matches(event: MeowddingKeyEvent) = key.matches(event)
+    //public fun matches(event: MeowddingKeyEvent): Boolean = key.matches(event)
 
     @Module
     public companion object {
