@@ -24,20 +24,20 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 @PreInitModule
-internal object MlibCosmetics {
+public object MlibCosmetics {
     @get:JvmStatic
-    val mlibCosmetics: Map<UUID, MlibCosmeticData>
+    public val mlibCosmetics: Map<UUID, MlibCosmeticData>
         field = ConcurrentHashMap<UUID, MlibCosmeticData>()
 
     @GenerateCodec
-    data class MlibCosmeticData(
+    public data class MlibCosmeticData(
         @Lenient val suffix: Component?,
         @NamedCodec("cosmetic_url_type") @Lenient @FieldName("cape_texture") val capeTexture: URI?,
         @NamedCodec("cosmetic_scale") @Lenient val small: Float?,
     )
 
     @IncludedCodec(named = "cosmetic_scale")
-    val cosmeticScaleCodec: Codec<Float> = Codec.either(Codec.BOOL, Codec.FLOAT).xmap({Either.unwrap(it.mapLeft { 0.5f })}, Either<*, Double>::right)
+    internal val cosmeticScaleCodec: Codec<Float> = Codec.either(Codec.BOOL, Codec.FLOAT).xmap({ Either.unwrap(it.mapLeft { 0.5f }) }, Either<*, Double>::right)
 
     private val emptyCosmetic = MlibCosmeticData(null, null, null)
 
@@ -54,7 +54,7 @@ internal object MlibCosmetics {
     }
 
     @JvmStatic
-    fun <AvatarlikeEntity> tryModify(
+    public fun <AvatarlikeEntity> tryModify(
         entity: AvatarlikeEntity,
         state: AvatarRenderState,
         delta: Float,
@@ -65,7 +65,7 @@ internal object MlibCosmetics {
         if (MeowddingLibConfig.playerScaleCosmetic) tryApplySmallModifier(cosmetic, state)
     }
 
-    fun tryModifyCape(cosmetic: MlibCosmeticData, state: AvatarRenderState) {
+    public fun tryModifyCape(cosmetic: MlibCosmeticData, state: AvatarRenderState) {
         val texture = cosmetic.capeTexture ?: return
 
         val image = CosmeticManager.imageProvider.get(texture)
@@ -81,7 +81,7 @@ internal object MlibCosmetics {
         )
     }
 
-    fun tryApplySmallModifier(cosmetic: MlibCosmeticData, state: AvatarRenderState) {
+    public fun tryApplySmallModifier(cosmetic: MlibCosmeticData, state: AvatarRenderState) {
         if (!LocationAPI.isOnSkyBlock) return
         if (cosmetic.small != null) {
             state.setData(BABY_MODIFIER_DATA_KEY, cosmetic.small)
@@ -89,5 +89,5 @@ internal object MlibCosmetics {
     }
 
     @JvmField
-    val BABY_MODIFIER_DATA_KEY: RenderStateDataKey<Float> = RenderStateDataKey.create { "meowdding_lib:baby_modifier" }
+    public val BABY_MODIFIER_DATA_KEY: RenderStateDataKey<Float> = RenderStateDataKey.create { "meowdding_lib:baby_modifier" }
 }

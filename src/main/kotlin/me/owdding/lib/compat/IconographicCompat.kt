@@ -7,15 +7,15 @@ import net.minecraft.world.item.ItemStack
 import java.util.function.BiConsumer
 
 
-internal data object IconographicCompat : MeowddingLogger by MeowddingLib.featureLogger() {
+public data object IconographicCompat : MeowddingLogger by MeowddingLib.featureLogger() {
 
-    var withItemCallback: ((item: ItemStack, runnable: () -> Unit) -> Unit) = { _, runnable -> runnable() }
+    private var withItemCallback: ((item: ItemStack, runnable: () -> Unit) -> Unit) = { _, runnable -> runnable() }
 
-    fun withItem(item: ItemStack, runnable: () -> Unit) {
+    public fun withItem(item: ItemStack, runnable: () -> Unit) {
         withItemCallback(item, runnable)
     }
 
-    fun setupItemCompat(consumer: BiConsumer<ItemStack, Runnable>) {
+    internal fun setupItemCompat(consumer: BiConsumer<ItemStack, Runnable>) {
         info("Setting up iconographic compat!")
         this.withItemCallback = { item, runnable -> consumer.accept(item) { runnable() } }
     }

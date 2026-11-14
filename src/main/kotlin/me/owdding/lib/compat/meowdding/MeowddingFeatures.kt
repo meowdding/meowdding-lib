@@ -9,7 +9,7 @@ import me.owdding.ktmodules.Module
 import tech.thatgravyboat.skyblockapi.utils.extentions.filterValuesNotNull
 
 @Module
-public object MeowddingFeatures {
+internal object MeowddingFeatures {
     public val configurators: Map<MeowddingMod, ResourcefulConfig> by lazy {
         @Suppress("UnstableApiUsage")
         MeowddingModsParser.mods.associateWith { mod ->

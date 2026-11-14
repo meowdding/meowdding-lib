@@ -36,12 +36,12 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.underlined
 import java.util.concurrent.CompletableFuture
 
 @Module
-internal object MeowddingConfigTranslationChecker {
+public object MeowddingConfigTranslationChecker {
 
     private val modsToWarn = mutableSetOf<String>()
     private var hasSent = false
 
-    fun addModToWarn(modId: String) = modsToWarn.add(modId)
+    public fun addModToWarn(modId: String): Boolean = modsToWarn.add(modId)
 
     @Subscription(ServerChangeEvent::class)
     private fun onServerChange() {
@@ -94,14 +94,14 @@ internal object MeowddingConfigTranslationChecker {
     }
 
     /** Gets all the translation keys used in [config] that don't have a value set */
-    fun getMissingTranslations(config: ResourcefulConfig): Set<String> {
+    public fun getMissingTranslations(config: ResourcefulConfig): Set<String> {
         return getAllTranslationKeys(config).filterTo(mutableSetOf()) {
             !Language.getInstance().has(it)
         }
     }
 
     /** Gets all the translation keys used in [config] */
-    fun getAllTranslationKeys(config: ResourcefulConfig): Set<String> {
+    public fun getAllTranslationKeys(config: ResourcefulConfig): Set<String> {
         val allTranslationKeys = buildSet { addConfigTranslations(config) }
         return allTranslationKeys.filterTo(mutableSetOf()) { it.isNotBlank() }
     }
