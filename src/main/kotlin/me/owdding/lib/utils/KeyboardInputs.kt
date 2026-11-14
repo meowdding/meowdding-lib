@@ -119,10 +119,12 @@ open class MeowddingKeybind(
 
     val isDown get() = key.isDown
 
-    @Suppress("OVERLOADS_WITHOUT_DEFAULT_ARGUMENTS")
-    @JvmOverloads
-    //~ if >= 26.3 ', scancode: Int = 0) = ' -> ') = ', 'key, scancode' -> 'key, 0'
-    fun matches(key: Int) = this.key.matches(KeyEvent(key, 0, 0))
+    //? if >= 26.3
+    public fun matches(key: Int): Boolean = this.key.matches(KeyEvent(key, 0, 0))
+    //? else {
+    /*@JvmOverloads
+    public fun matches(key: Int, scancode: Int = 0): Boolean = this.key.matches(KeyEvent(key, scancode, 0))
+    *///?}
 
     //~ if >= 26.3 'key, event.scanCode)' -> 'key)'
     fun matches(event: ScreenKeyReleasedEvent) = matches(event.key)
