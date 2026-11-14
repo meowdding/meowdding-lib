@@ -38,7 +38,7 @@ public interface AutoTranslated {
             .replace("-", ".")
 
     context(entryBuilder: EntriesBuilder)
-    public fun TypeBuilder.makeTranslations(): Unit {
+    public fun TypeBuilder.makeTranslations() {
         this.translation = makeTranslation(id)
     }
 
