@@ -33,6 +33,6 @@ object GuiRenderTypes {
         )
     }
 
-    fun guiTexturedGradient(speed: Float = 1f, direction: GradientDirection = GradientDirection.LEFT, grayscale: Boolean = true, colors: GradientProvider): RenderPipeline = GUI_TEXTURED_GRADIENT(colors, speed, direction, grayscale)
+    fun guiTexturedGradient(speed: Float = 1f, direction: GradientDirection = GradientDirection.RIGHT, grayscale: Boolean = true, colors: GradientProvider): RenderPipeline = GUI_TEXTURED_GRADIENT(colors, speed, direction, grayscale)
 
 }
