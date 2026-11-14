@@ -574,9 +574,9 @@ public final class me/owdding/lib/displays/DisplayWidget$Companion {
 
 public final class me/owdding/lib/displays/Displays {
 	public static final field INSTANCE Lme/owdding/lib/displays/Displays;
-	public final synthetic fun background (Lnet/minecraft/resources/Identifier;II)Lme/owdding/lib/displays/Display;
+	public final fun background (Lnet/minecraft/resources/Identifier;II)Lme/owdding/lib/displays/Display;
 	public final fun background (Lnet/minecraft/resources/Identifier;IIIZ)Lme/owdding/lib/displays/Display;
-	public final synthetic fun background (Lnet/minecraft/resources/Identifier;Lme/owdding/lib/displays/Display;I)Lme/owdding/lib/displays/Display;
+	public final fun background (Lnet/minecraft/resources/Identifier;Lme/owdding/lib/displays/Display;I)Lme/owdding/lib/displays/Display;
 	public final fun background (Lnet/minecraft/resources/Identifier;Lme/owdding/lib/displays/Display;IZ)Lme/owdding/lib/displays/Display;
 	public static synthetic fun background$default (Lme/owdding/lib/displays/Displays;Lnet/minecraft/resources/Identifier;IIIZILjava/lang/Object;)Lme/owdding/lib/displays/Display;
 	public static synthetic fun background$default (Lme/owdding/lib/displays/Displays;Lnet/minecraft/resources/Identifier;Lme/owdding/lib/displays/Display;IILjava/lang/Object;)Lme/owdding/lib/displays/Display;
