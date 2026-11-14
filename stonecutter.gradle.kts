@@ -4,19 +4,13 @@ import org.gradle.kotlin.dsl.support.serviceOf
 
 plugins {
     id("dev.kikugie.stonecutter")
-    id("net.fabricmc.fabric-loom-remap") version "1.17-SNAPSHOT" apply false
-    id("net.fabricmc.fabric-loom") version "1.17-SNAPSHOT" apply false
+    id("net.fabricmc.fabric-loom-remap") version "1.19-SNAPSHOT" apply false
+    id("net.fabricmc.fabric-loom") version "1.19-SNAPSHOT" apply false
     kotlin("jvm") apply false
     `maven-publish`
 }
 
 stonecutter active "26.3"
-
-stonecutter handlers {
-    //configure("fsh", "vsh") {
-    //    commenter = line("//")
-    //}
-}
 
 fun Project.isDummy(): Boolean = buildscript.sourceFile?.name == "dummy.gradle.kts"
 
