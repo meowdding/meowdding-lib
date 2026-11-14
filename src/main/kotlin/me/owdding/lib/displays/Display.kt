@@ -8,8 +8,7 @@ interface Display {
     fun getWidth(): Int
     fun getHeight(): Int
 
-
-    fun extract(graphics: GuiGraphicsExtractor): Unit
+    fun extract(graphics: GuiGraphicsExtractor)
 
     fun extract(graphics: GuiGraphicsExtractor, x: Int, y: Int, alignmentX: Float = 0f, alignmentY: Float = 0f) {
         graphics.translated((x - getWidth() * alignmentX).toInt(), (y - getHeight() * alignmentY).toInt()) {

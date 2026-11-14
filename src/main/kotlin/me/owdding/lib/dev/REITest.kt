@@ -51,6 +51,4 @@ object REITest {
         else Text.of("Hovering over: ").append(stack.hoverName)
         message.send("MLIB_REI_HOVER_TEST")
     }
-
-
 }
