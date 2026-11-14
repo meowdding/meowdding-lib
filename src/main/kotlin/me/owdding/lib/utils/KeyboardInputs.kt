@@ -13,7 +13,7 @@ import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyReleasedEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 
-//? < 26.3 {
+//? if < 26.3 {
 /*import me.owdding.lib.platform.screens.into
 import me.owdding.lib.platform.screens.KeyEvent as MeowddingKeyEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -23,7 +23,7 @@ import org.lwjgl.sdl.SDLKeyboard
 
 internal fun isDown(key: Int): Boolean {
     return InputConstants.isKeyDown(
-        //? < 26.3
+        //? if < 26.3
         //McClient.window,
         key,
     )
@@ -96,7 +96,7 @@ internal fun keyMapping(translationKey: String, keyCode: Int, category: Identifi
     return KeyMapping(translationKey, keyCode, category)
 }
 
-//? < 26.3 {
+//? if < 26.3 {
 /*fun KeyMapping.matches(event: MeowddingKeyEvent): Boolean {
     return this.matches(event.into())
 }
