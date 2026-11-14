@@ -33,12 +33,10 @@ void main() {
 
     vec4 color = texColor * vertexColor * ColorModulator;
 
-    vec4 finalColor = color;
-
-    if (length(finalColor.rgb) != 0.0) {
+    if (length(color.rgb) != 0.0) {
         vec2 coords = gl_FragCoord.xy;
-        finalColor = vec4(SMOOTHY(float(int(length(coords + (direction * GameTime * 24000 * speed) * 2)) % 500) / 500.0).rgb, 1) * vertexColor;
+        color = vec4(SMOOTHY(float(int(length(coords + (direction * GameTime * 24000 * speed) * 2)) % 500) / 500.0).rgb, 1) * color;
     }
 
-    fragColor = finalColor;
+    fragColor = color;
 }
