@@ -40,8 +40,6 @@ kotlin {
 val mcVersion = stonecutter.current.version.replace(".", "")
 val accessWidenerFile = rootProject.file("src/mlib.accesswidener")
 
-
-
 repositories {
     fun scopedMaven(url: String, vararg paths: String) = maven(url) { content { paths.forEach(::includeGroupAndSubgroups) } }
 
@@ -104,12 +102,15 @@ tasks.withType<KotlinCompile>().configureEach {
         "kotlin.contracts.ExperimentalContracts",
     )
     compilerOptions.freeCompilerArgs.addAll(
+        // 0 (all cores) triggers a race condition in JvmIrCodegenFactory's parallel codegen on Kotlin 2.4.x,
+        // leaving corrupt .class files that break subsequent incremental builds.
+        // see: https://youtrack.jetbrains.com/issue/KT-85498/
+        "-Xbackend-threads=1",
         "-Xcontext-parameters",
         "-Xcontext-sensitive-resolution",
         "-Xnullability-annotations=@org.jspecify.annotations:warn"
     )
 }
-
 
 tasks.withType<ProcessResources>().configureEach {
     filteringCharset = "UTF-8"
@@ -279,9 +280,9 @@ idea {
 
 loom {
     runConfigs["client"].apply {
-        ideConfigGenerated(true)
-        runDir = "../../run"
-        vmArg("-Dfabric.modsFolder=\"${mcVersion}Mods\"")
+        generateRunConfig = true
+        runDirectory = project.file("../../run")
+        jvmArguments.add("-Dfabric.modsFolder=${mcVersion}Mods")
     }
 
     if (accessWidenerFile.exists()) {
@@ -294,6 +295,11 @@ tasks.withType<ValidateAccessWidenerTask> { enabled = false }
 kotlin {
     compilerOptions {
         freeCompilerArgs.add("-Xrender-internal-diagnostic-names")
+    }
+    sourceSets.all {
+        languageSettings {
+            languageVersion = "2.4"
+        }
     }
 }
 
