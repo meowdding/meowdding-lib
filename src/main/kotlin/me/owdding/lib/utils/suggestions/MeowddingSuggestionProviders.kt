@@ -1,9 +1,8 @@
 package me.owdding.lib.utils.suggestions
 
-object MeowddingSuggestionProviders {
+public object MeowddingSuggestionProviders {
 
-    fun <T> iterable(providers: Iterable<T>, transformer: (T) -> String = { it.toString() }): MeowddingSuggestionProvider {
+    public fun <T> iterable(providers: Iterable<T>, transformer: (T) -> String = { it.toString() }): MeowddingSuggestionProvider {
         return IterableSuggestionProvider(providers, transformer)
     }
-
 }

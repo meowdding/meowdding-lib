@@ -9,7 +9,7 @@ import kotlin.io.path.listDirectoryEntries
 import kotlin.io.path.nameWithoutExtension
 import kotlin.io.path.relativeTo
 
-class MeowddingFolderStorageData<T : Any> internal constructor(
+public class MeowddingFolderStorageData<T : Any> internal constructor(
     private val version: Int = 0,
     private val mod: MeowddingMod,
     private val folderName: String,
@@ -23,7 +23,7 @@ class MeowddingFolderStorageData<T : Any> internal constructor(
         load()
     }
 
-    fun load() {
+    internal fun load() {
         this.storages.putAll(
             files().mapNotNull {
                 val id = it.nameWithoutExtension
@@ -44,9 +44,9 @@ class MeowddingFolderStorageData<T : Any> internal constructor(
         )
     }
 
-    fun add(value: T) = set(value.hashCode().toString(), value)
+    public fun add(value: T): Unit = set(value.hashCode().toString(), value)
 
-    fun set(id: String, value: T) {
+    public fun set(id: String, value: T) {
         storages.getOrPut(id) {
             MeowddingStorageData(
                 version = version,
@@ -59,9 +59,9 @@ class MeowddingFolderStorageData<T : Any> internal constructor(
         }.set(value)
     }
 
-    fun get(id: String): T? = storages[id]?.get()
+    public fun get(id: String): T? = storages[id]?.get()
 
-    fun remove(id: String) {
+    public fun remove(id: String) {
         val storage = storages.remove(id) ?: return
         storage.delete()
         MeowddingStorageData.allStorageDatas.remove(storage)
@@ -71,12 +71,11 @@ class MeowddingFolderStorageData<T : Any> internal constructor(
         defaultPath.apply { createDirectories() }.listDirectoryEntries("*.json").toList().filter { it.isRegularFile() && it.extension == "json" }
 
     internal fun getStorages() = storages
-    fun getAll(): Map<String, T> = storages.mapValues { it.value.get() }
+    public fun getAll(): Map<String, T> = storages.mapValues { it.value.get() }
 
-    fun refresh() {
+    public fun refresh() {
         MeowddingStorageData.allStorageDatas.removeAll(storages.values)
         storages.clear()
         load()
     }
-
 }

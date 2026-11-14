@@ -11,7 +11,7 @@ import java.util.concurrent.CopyOnWriteArraySet
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.reflect.KProperty
 
-class RemoteRepoDelegate<T : Any, R : T?> private constructor(
+public class RemoteRepoDelegate<T : Any, R : T?> private constructor(
     private val path: String,
     private val logger: MeowddingLogger,
     private val default: R?,
@@ -27,7 +27,7 @@ class RemoteRepoDelegate<T : Any, R : T?> private constructor(
     }
 
     @Suppress("UNCHECKED_CAST")
-    operator fun getValue(thisRef: Any?, property: KProperty<*>): R = (cachedValue.get() ?: default) as R
+    public operator fun getValue(thisRef: Any?, property: KProperty<*>): R = (cachedValue.get() ?: default) as R
 
     private fun update() = logger.runCatching("Loading $path from remote repo!") {
         cachedValue.set(RemoteRepo.getFileContentAsJson("$path.json").toDataOrThrow(codec))
@@ -36,17 +36,17 @@ class RemoteRepoDelegate<T : Any, R : T?> private constructor(
     private fun unset() = cachedValue.setRelease(null)
 
     @Module
-    companion object {
+    public companion object {
         private val instances: MutableSet<RemoteRepoDelegate<*, *>> = CopyOnWriteArraySet()
 
         context(logger: MeowddingLogger)
-        fun <T : Any> load(
+        public fun <T : Any> load(
             path: String,
             codec: Codec<T>,
         ): RemoteRepoDelegate<T, T?> = RemoteRepoDelegate(path, logger, null, codec)
 
         context(logger: MeowddingLogger)
-        fun <T : Any> load(
+        public fun <T : Any> load(
             path: String,
             default: T,
             codec: Codec<T>,

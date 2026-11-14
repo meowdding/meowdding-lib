@@ -23,7 +23,7 @@ import tech.thatgravyboat.skyblockapi.utils.json.Json.toJson
 import java.util.concurrent.CompletableFuture
 import kotlinx.coroutines.runBlocking
 
-const val API_URL = "https://skyblock-pack.meowdd.ing/v2"
+internal const val API_URL = "https://skyblock-pack.meowdd.ing/v2"
 
 @Module
 internal object SkyblockPackInfo : MeowddingLogger by MeowddingLib.featureLogger() {
@@ -72,9 +72,8 @@ internal object SkyblockPackInfo : MeowddingLogger by MeowddingLib.featureLogger
     }
 }
 
-
 @GenerateCodec
-data class PackInfo(
+internal data class PackInfo(
     @FieldName("uuid") val packId: String,
     val alpha: Boolean,
 )

@@ -28,16 +28,16 @@ private val DEVS = setOf(
 
 //? < 26.3
 //fun Player.isMeowddingDev(): Boolean = this.stringUUID in DEVS
-fun Player.isMeowddingMaintainer(): Boolean = this.stringUUID in DEVS
+public fun Player.isMeowddingMaintainer(): Boolean = this.stringUUID in DEVS
 
 //? < 26.3
 //fun UUID.isMeowddingDev(): Boolean = this.toString() in DEVS
-fun UUID.isMeowddingMaintainer(): Boolean = this.toString() in DEVS
+public fun UUID.isMeowddingMaintainer(): Boolean = this.toString() in DEVS
 
 @Suppress("UNCHECKED_CAST", "NOTHING_TO_INLINE")
-inline fun <T> Any?.unsafeCast(): T = this as T
+public inline fun <T> Any?.unsafeCast(): T = this as T
 
-fun FabricClientCommandSource.toCommandSourceStack(): CommandSourceStack {
+public fun FabricClientCommandSource.toCommandSourceStack(): CommandSourceStack {
     return CommandSourceStack(
         object : CommandSource {
             override fun sendSystemMessage(component: Component) {
@@ -71,7 +71,7 @@ fun FabricClientCommandSource.toCommandSourceStack(): CommandSourceStack {
 
 internal fun <T : Any> JsonElement.toDataOrThrow(codec: MapCodec<T>) = this.toDataOrThrow(codec.codec())
 
-fun <T : Enum<T>> T.next(): T {
+public fun <T : Enum<T>> T.next(): T {
     val constants = if (this.javaClass.isEnum) this.javaClass.enumConstants else this.javaClass.superclass.enumConstants
     return constants[(this.ordinal + 1) % constants.size].unsafeCast()
 }

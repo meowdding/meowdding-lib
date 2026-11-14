@@ -210,7 +210,7 @@ public class GradientTextShader(
     override val pipeline: (Font.DisplayMode?, Boolean) -> PipelineResult = { first, second -> pipelineCreator0(this, first, second) }
 
     public companion object {
-        internal val ID = MeowddingLib.id("gradient")
+        public val ID: Identifier = MeowddingLib.id("gradient")
         public val CODEC: MapCodec<GradientTextShader> = RecordCodecBuilder.mapCodec {
             it.group(
                 NewGradientProvider.CODEC.fieldOf("colors").forGetter { it.gradient },

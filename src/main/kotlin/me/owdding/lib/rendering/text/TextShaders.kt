@@ -37,7 +37,7 @@ public object TextShaders {
         registry
     }
 
-    val CODEC: Codec<TextShader> = Identifier.CODEC.dispatch({ it.id }, { codecRegistry[it]!! })
+    public val CODEC: Codec<TextShader> = Identifier.CODEC.dispatch({ it.id }, { codecRegistry[it]!! })
 
     @Subscription
     private fun register(event: RegisterTextShaderEvent) {
@@ -49,7 +49,7 @@ public object TextShaders {
     }
 }
 
-enum class PrideShader(colors: List<Int>, private val shader: GradientTextShader = GradientTextShader(colors)) : TextShader by shader, GradientProvider by shader.gradient, Translatable {
+public enum class PrideShader(colors: List<Int>, private val shader: GradientTextShader = GradientTextShader(colors)) : TextShader by shader, GradientProvider by shader.gradient, Translatable {
     RAINBOW(0xFF0000, 0xFF7F00, 0xFFFF00, 0x00FF00, 0x0000FF, 0x4B0082, 0x8B00FF),
     BISEXUAL(0xD60270, 0x9B4F96, 0x0038A8),
     GAY(0xFF0000, 0xFF9900, 0xFFFF00, 0x33CC33, 0x3399FF, 0x9900CC),
@@ -67,12 +67,12 @@ enum class PrideShader(colors: List<Int>, private val shader: GradientTextShader
         colors.toMutableList().apply { if (size > 1) addLast(first()) }
     )
 
-    override fun getTranslationKey() = "mlib.gradients.${name.lowercase()}"
+    override fun getTranslationKey(): String = "mlib.gradients.${name.lowercase()}"
 
     @PreInitModule
-    companion object {
-        val ID = MeowddingLib.id("named_gradient")
-        val CODEC: MapCodec<PrideShader> = MeowddingLibCodecs.getCodec<PrideShader>().fieldOf("name")
+    public companion object {
+        public val ID: Identifier = MeowddingLib.id("named_gradient")
+        public val CODEC: MapCodec<PrideShader> = MeowddingLibCodecs.getCodec<PrideShader>().fieldOf("name")
 
         @Subscription
         private fun registerShaders(event: RegisterTextShaderEvent) {
