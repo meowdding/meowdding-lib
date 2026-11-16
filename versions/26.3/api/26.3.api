@@ -1271,6 +1271,8 @@ public final class me/owdding/lib/platform/RoundedRectKt {
 
 public final class me/owdding/lib/rendering/GuiRenderTypes {
 	public static final field INSTANCE Lme/owdding/lib/rendering/GuiRenderTypes;
+	public final fun animatedGradient (Lnet/minecraft/client/gui/GuiGraphicsExtractor;IIIIFLme/owdding/lib/utils/GradientDirection;Lme/owdding/lib/utils/GradientProvider;)V
+	public static synthetic fun animatedGradient$default (Lme/owdding/lib/rendering/GuiRenderTypes;Lnet/minecraft/client/gui/GuiGraphicsExtractor;IIIIFLme/owdding/lib/utils/GradientDirection;Lme/owdding/lib/utils/GradientProvider;ILjava/lang/Object;)V
 	public final fun guiTexturedGradient (FLme/owdding/lib/utils/GradientDirection;ZLme/owdding/lib/utils/GradientProvider;)Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;
 	public static synthetic fun guiTexturedGradient$default (Lme/owdding/lib/rendering/GuiRenderTypes;FLme/owdding/lib/utils/GradientDirection;ZLme/owdding/lib/utils/GradientProvider;ILjava/lang/Object;)Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;
 }
