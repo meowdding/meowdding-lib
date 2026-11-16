@@ -2449,6 +2449,7 @@ public final class me/owdding/lib/utils/GradientDirection : java/lang/Enum {
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getVec ()Lorg/joml/Vector2f;
 	public final fun toOld ()Lme/owdding/lib/rendering/text/builtin/GradientTextShader$Direction;
+	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Lme/owdding/lib/utils/GradientDirection;
 	public static fun values ()[Lme/owdding/lib/utils/GradientDirection;
 }
