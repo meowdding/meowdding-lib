@@ -12,6 +12,7 @@ import me.owdding.lib.displays.withOutline
 import me.owdding.lib.rendering.GuiRenderTypes
 import me.owdding.lib.rendering.text.PrideShader
 import me.owdding.lib.layouts.withPadding
+import me.owdding.lib.rendering.GuiRenderTypes.animatedGradient
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
 import me.owdding.lib.rendering.text.serialization.TagComponentSerialization
 import me.owdding.lib.rendering.text.textShader
@@ -88,6 +89,8 @@ object DisplayTest : Screen(CommonComponents.EMPTY) {
             display(Displays.wrappedText(meow, width, textAlignment = Alignment.CENTER).withOutline())
             display(Displays.wrappedText(meow, width, textAlignment = Alignment.END).withOutline())
         }.extract(graphics, 200, 200)
+
+        graphics.animatedGradient(width / 2 + 30, 10, 20, 20, colors = PrideShader.TRANS)
 
         graphics.blitSprite(
             GuiRenderTypes.guiTexturedGradient(colors = PrideShader.TRANS, grayscale = false),
