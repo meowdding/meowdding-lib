@@ -3,6 +3,7 @@ package me.owdding.lib.utils
 import com.mojang.serialization.Codec
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
 import org.joml.Vector2f
+import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedName
 
 fun interface GradientProvider {
     fun getColors(): List<Int>
@@ -25,6 +26,9 @@ enum class GradientDirection(val vec: Vector2f) {
     UP_LEFT(Vector2f(1f, -1f)),
     UP_RIGHT(Vector2f(-1f, -1f)),
     ;
+
+    private val formattedName = toFormattedName()
+    override fun toString() = formattedName
 
     //? if < 26.4
     @Suppress("DEPRECATION") fun toOld() = GradientTextShader.Direction.entries.find { it.direction == this }
