@@ -9,7 +9,7 @@
     },
     "config": {
         "@value": "Meowdding Lib Config",
-        "hypixelPackSharing": {
+        "hypixel_pack_sharing": {
             "@value": "Share Hypixel Pack",
             "desc": [
                 "Has a 25% change to share the current Hypixel Pack on Main/Alpha when joining the Mode.",
