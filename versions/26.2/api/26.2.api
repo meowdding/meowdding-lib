@@ -430,8 +430,6 @@ public final class me/owdding/lib/config/MeowddingLibConfig : com/teamresourcefu
 	public fun autoStrings (Lcom/teamresourceful/resourcefulconfigkt/api/builders/EntriesBuilder;Ljava/lang/String;[Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lcom/teamresourceful/resourcefulconfigkt/api/Entry;
 	public fun autoStrings (Lcom/teamresourceful/resourcefulconfigkt/api/builders/EntriesBuilder;[Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lcom/teamresourceful/resourcefulconfigkt/api/Entry;
 	public final fun getCapeCosmetic ()Z
-	public final fun getConfig ()Lcom/teamresourceful/resourcefulconfig/api/types/ResourcefulConfig;
-	public final fun getConfigurator ()Lcom/teamresourceful/resourcefulconfig/api/loader/Configurator;
 	public final fun getHypixelPackSharing ()Z
 	public fun getName ()Lcom/teamresourceful/resourcefulconfig/api/types/options/TranslatableValue;
 	public final fun getPlayerScaleCosmetic ()Z
