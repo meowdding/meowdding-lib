@@ -1,14 +1,22 @@
 package me.owdding.lib
 
 import com.mojang.serialization.Codec
+import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
+import com.teamresourceful.resourcefulconfig.api.loader.Configurator
+import com.teamresourceful.resourcefulconfig.api.types.ResourcefulConfig
 import me.owdding.ktmodules.AutoCollect
 import me.owdding.ktmodules.Module
 import me.owdding.lib.compat.HiddenElementRenderer
 import me.owdding.lib.compat.meowdding.MeowddingConfigTranslationChecker
+import me.owdding.lib.config.MeowddingLibConfig
 import me.owdding.lib.events.FinishRepoLoadingEvent
 import me.owdding.lib.events.MeowddingLibRegisterCommandsEvent
 import me.owdding.lib.events.StartRepoLoadingEvent
-import me.owdding.lib.generated.*
+import me.owdding.lib.generated.MeowddingLibCodecs
+import me.owdding.lib.generated.MeowddingLibDevModules
+import me.owdding.lib.generated.MeowddingLibModules
+import me.owdding.lib.generated.MeowddingLibPostInitModules
+import me.owdding.lib.generated.MeowddingLibPreInitModules
 import me.owdding.lib.utils.mod.MeowddingMod
 import me.owdding.lib.utils.sendWithPrefix
 import me.owdding.lib.utils.unsafeCast
@@ -19,7 +27,6 @@ import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.text.Text
-import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
@@ -30,6 +37,9 @@ import kotlin.reflect.KType
 object MeowddingLib : MeowddingMod("meowdding-lib", loggerName = "MeowddingLib") {
     private var notifyAboutRepoLoad = false
 
+    private val configurator = Configurator(MOD_ID)
+    internal lateinit var config: ResourcefulConfig
+
     init {
         if (McClient.isDev) { // Ensures all mixins always apply while in dev
             MixinEnvironment.getCurrentEnvironment().audit()
@@ -39,6 +49,7 @@ object MeowddingLib : MeowddingMod("meowdding-lib", loggerName = "MeowddingLib")
 
     override fun onInitializeClient() {
         HiddenElementRenderer.register()
+        config = MeowddingLibConfig.register(configurator)
 
         registerEvents(MeowddingLibModules.collected)
         if (McClient.isDev) registerEvents(MeowddingLibDevModules.collected)
@@ -81,6 +92,9 @@ object MeowddingLib : MeowddingMod("meowdding-lib", loggerName = "MeowddingLib")
 
     @Subscription
     internal fun command(event: MeowddingLibRegisterCommandsEvent) {
+        event.registerWithCallback("config") {
+            McClient.setScreenAsync { ResourcefulConfigScreen.getFactory(MeowddingLib.MOD_ID).apply(null) }
+        }
         event.register("dev repo") {
             then("reload") {
                 callback {
