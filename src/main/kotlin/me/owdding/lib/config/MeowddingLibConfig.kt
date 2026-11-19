@@ -10,18 +10,18 @@ object MeowddingLibConfig : ConfigKt("meowdding-lib/config"), AutoTranslated {
 
     fun save() = MeowddingLib.config.save()
 
-    val hypixelPackSharing by autoBoolean(true)
+    var hypixelPackSharing by autoBoolean(true)
 
     init {
         autoSeparator("cosmetics")
     }
 
-    val suffixCosmetic by autoBoolean(true)
+    var suffixCosmetic by autoBoolean(true)
 
-    val capeCosmetic by autoBoolean(true)
+    var capeCosmetic by autoBoolean(true)
 
-    val playerScaleCosmetic by autoBoolean(true)
+    var playerScaleCosmetic by autoBoolean(true)
 
-    val pvCosmetic by autoBoolean(true)
+    var pvCosmetic by autoBoolean(true)
 
 }
