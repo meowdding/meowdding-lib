@@ -71,6 +71,8 @@ public object AccessoryRepoData {
 
     public fun isDisallowedOrigin(id: SkyBlockId): Boolean = getFamily(id)?.let(::isDisallowed) == true
     public fun getAp(item: ItemStack): Int = accessoryPowerData?.getAccessoryPower(item) ?: 0
+
+    @Deprecated("Rift Prism is now like any other talis")
     public fun AccessoryFamily.isRiftPrism(): Boolean = family == "rift_prism"
 
     private fun calculateIsDisallowedOrigin(family: AccessoryFamily): Boolean {
@@ -199,6 +201,7 @@ public object AccessoryRepoData {
 public data class AccessoryFamily(
     val family: String,
     @Compact val tiers: List<AccessoryTier>,
+    @Deprecated("ignoreDuplicates is useless now that only one goes into the bag")
     @FieldName("ignore_duplicates") val ignoreDuplicates: Boolean = false,
 ) : List<AccessoryTier> by tiers {
     //region Functions
