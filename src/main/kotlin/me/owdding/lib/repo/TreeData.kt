@@ -323,24 +323,24 @@ public interface SkillTreeCurrency {
     public val displayName: Component
 }
 
-public enum class PowderType(internal val formatting: ChatFormatting) : SkillTreeCurrency {
+public enum class PowderType(public val formatting: ChatFormatting) : SkillTreeCurrency {
     MITHRIL(ChatFormatting.DARK_GREEN),
     GEMSTONE(ChatFormatting.LIGHT_PURPLE),
     GLACITE(ChatFormatting.AQUA),
     ;
 
-    override val displayName: Component = Text.of(name.toTitleCase()) {
+    public override val displayName: Component = Text.of(name.toTitleCase()) {
         append(" Powder")
         withStyle(formatting)
     }
 }
 
-public enum class WhisperType(internal val formatting: ChatFormatting) : SkillTreeCurrency {
+public enum class WhisperType(public val formatting: ChatFormatting) : SkillTreeCurrency {
     FOREST(ChatFormatting.DARK_AQUA),
     DESERT(ChatFormatting.GOLD),
     ;
 
-    override val displayName: Component = Text.of(name.toTitleCase()) {
+    public override val displayName: Component = Text.of(name.toTitleCase()) {
         append(" Whispers")
         withStyle(formatting)
     }

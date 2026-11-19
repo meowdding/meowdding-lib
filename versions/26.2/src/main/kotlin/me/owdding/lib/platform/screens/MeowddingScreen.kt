@@ -12,9 +12,9 @@ import net.minecraft.client.input.MouseButtonEvent as McMouseButtonEvent
 
 @ApiStatus.Internal
 public open class ParameterLessScreen : Screen {
-    protected constructor() : super(CommonComponents.EMPTY)
-    protected constructor(name: Component) : this()
-    protected constructor(name: String) : this()
+    public constructor() : super(CommonComponents.EMPTY)
+    public constructor(name: Component) : this()
+    public constructor(name: String) : this()
 }
 
 public abstract class MeowddingScreen : ParameterLessScreen {

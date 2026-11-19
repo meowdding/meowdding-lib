@@ -7,15 +7,15 @@ import net.minecraft.client.gui.layouts.LayoutElement
 
 public class PaddedWidget(
     widget: LayoutElement,
-    internal val paddingTop: Int,
-    internal val paddingRight: Int,
-    internal val paddingBottom: Int,
-    internal val paddingLeft: Int,
+    private val paddingTop: Int,
+    private val paddingRight: Int,
+    private val paddingBottom: Int,
+    private val paddingLeft: Int,
 ) : BaseParentWidget() {
     public constructor(widget: LayoutElement, padding: Int) : this(widget, padding, padding, padding, padding)
 
-    internal val widget: AbstractWidget by lazy { widget.asWidget() }
-    internal val actualWidget = widget
+    private val widget: AbstractWidget by lazy { widget.asWidget() }
+    private val actualWidget = widget
 
     init {
         actualWidget.visitWidgets {

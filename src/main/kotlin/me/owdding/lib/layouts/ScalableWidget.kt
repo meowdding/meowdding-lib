@@ -16,7 +16,7 @@ import java.util.Deque
 import java.util.LinkedList
 import kotlin.properties.Delegates.observable
 
-public class ScalableWidget(internal val original: AbstractWidget) : BaseParentWidget(original.width, original.height), Scalable {
+public class ScalableWidget(private val original: AbstractWidget) : BaseParentWidget(original.width, original.height), Scalable {
 
     public constructor(original: LayoutElement) : this(original.asWidget())
 
