@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulconfigkt.api.ConfigKt
 import me.owdding.lib.MeowddingLib
 import me.owdding.lib.utils.config.AutoTranslated
 
-object MeowddingLibConfig : ConfigKt("meowdding-lib/config"), AutoTranslated {
+public object MeowddingLibConfig : ConfigKt("meowdding-lib/config"), AutoTranslated {
     override val translationBase: String = "mlib.config"
     public override val name: TranslatableValue = Translated("mlib.config")
 

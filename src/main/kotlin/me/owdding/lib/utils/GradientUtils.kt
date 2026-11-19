@@ -28,7 +28,7 @@ public enum class GradientDirection(public val vec: Vector2f) {
     ;
 
     private val formattedName = toFormattedName()
-    override fun toString() = formattedName
+    override fun toString(): String = formattedName
 
     //? if < 26.4
     @Suppress("DEPRECATION")
