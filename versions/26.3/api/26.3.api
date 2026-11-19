@@ -410,6 +410,11 @@ public final class me/owdding/lib/config/MeowddingLibConfig : com/teamresourcefu
 	public fun makeTranslation (Ljava/lang/String;)Ljava/lang/String;
 	public fun makeTranslations (Lcom/teamresourceful/resourcefulconfigkt/api/builders/EntriesBuilder;Lcom/teamresourceful/resourcefulconfigkt/api/builders/TypeBuilder;)V
 	public final fun save ()V
+	public final fun setCapeCosmetic (Z)V
+	public final fun setHypixelPackSharing (Z)V
+	public final fun setPlayerScaleCosmetic (Z)V
+	public final fun setPvCosmetic (Z)V
+	public final fun setSuffixCosmetic (Z)V
 	public fun wrap (Lcom/teamresourceful/resourcefulconfigkt/api/builders/EntriesBuilder;Lkotlin/jvm/functions/Function1;)Lkotlin/jvm/functions/Function1;
 }
 
