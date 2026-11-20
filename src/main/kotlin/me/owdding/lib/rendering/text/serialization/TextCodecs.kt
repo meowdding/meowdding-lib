@@ -24,7 +24,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text
 import java.util.function.Function
 import kotlin.jvm.optionals.getOrNull
 
-object TextCodecs {
+public object TextCodecs {
 
     internal fun createContentCodec(): MapCodec<ComponentContents> {
         val idMapper = ExtraCodecs.LateBoundIdMapper<String, MapCodec<out ComponentContents>>()
@@ -39,7 +39,7 @@ object TextCodecs {
         return ComponentSerialization.createLegacyComponentMatcher(idMapper, ComponentContents::codec, "type")
     }
 
-    val STYLE_WITH_SHADER_CODEC: MapCodec<Style> = RecordCodecBuilder.mapCodec {
+    public val STYLE_WITH_SHADER_CODEC: MapCodec<Style> = RecordCodecBuilder.mapCodec {
         it.group(
             Style.Serializer.MAP_CODEC.forGetter(Function.identity()),
             TextShaders.CODEC.optionalFieldOf("text_shader").forNullGetter { style -> style.`meowddinglib$getTextShader`() },
@@ -50,7 +50,7 @@ object TextCodecs {
 
 
     @IncludedCodec(named = "customComponentCodec")
-    val CUSTOM_COMPONENT_CODEC: Codec<Component> = Codec.recursive("SkyOceanComponentCodec") { self ->
+    public val CUSTOM_COMPONENT_CODEC: Codec<Component> = Codec.recursive("SkyOceanComponentCodec") { self ->
         val componentMatcher = createContentCodec()
 
         val codec: Codec<Component> = RecordCodecBuilder.create {

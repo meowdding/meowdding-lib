@@ -33,15 +33,15 @@ import kotlin.io.path.readText
 import kotlin.io.path.relativeTo
 import kotlin.io.path.useDirectoryEntries
 
-class MeowddingProfileStorageData<T : Any> internal constructor(
+public class MeowddingProfileStorageData<T : Any> internal constructor(
     private val version: Int = 0,
     private val mod: MeowddingMod,
     private val defaultData: () -> T,
     fileName: String,
-    val codec: (Int) -> Codec<T>,
+    public val codec: (Int) -> Codec<T>,
     private val differentAlphaData: Boolean,
 ) {
-    fun get(): T? {
+    public fun get(): T? {
         if (!isCurrentlyActive()) {
             saveActiveToSystem()
             load()
@@ -51,7 +51,7 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
         else data
     }
 
-    fun set(new: T) {
+    public fun set(new: T) {
         if (!isCurrentlyActive()) {
             saveActiveToSystem()
             load()
@@ -62,7 +62,7 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
         save()
     }
 
-    fun save() {
+    public fun save() {
         if (shouldUseAlphaData()) requiresAlphaSave.add(this)
         else requiresSave.add(this)
     }
@@ -70,7 +70,7 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
     @JvmName("editBoolean")
     @OptIn(ExperimentalTypeInference::class)
     @OverloadResolutionByLambdaReturnType
-    inline fun edit(edit: T.() -> Boolean) {
+    public inline fun edit(edit: T.() -> Boolean) {
         contract {
             callsInPlace(edit, InvocationKind.AT_MOST_ONCE)
         }
@@ -80,7 +80,7 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
 
     @OptIn(ExperimentalTypeInference::class)
     @OverloadResolutionByLambdaReturnType
-    inline fun edit(edit: T.() -> Unit?) {
+    public inline fun edit(edit: T.() -> Unit?) {
         contract {
             callsInPlace(edit, InvocationKind.AT_MOST_ONCE)
         }
@@ -139,7 +139,7 @@ class MeowddingProfileStorageData<T : Any> internal constructor(
             .resolve(profileName)
             .resolve(this@MeowddingProfileStorageData.fileName)
 
-    fun load() {
+    public fun load() {
         if (!hasProfile()) {
             return
         }

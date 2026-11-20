@@ -7,9 +7,9 @@ import net.minecraft.commands.SharedSuggestionProvider
 import tech.thatgravyboat.skyblockapi.utils.extentions.sanitizeForCommandInput
 
 
-interface MeowddingSuggestionProvider : SuggestionProvider<FabricClientCommandSource> {
+public interface MeowddingSuggestionProvider : SuggestionProvider<FabricClientCommandSource> {
 
-    fun suggest(builder: SuggestionsBuilder, name: String) {
+    public fun suggest(builder: SuggestionsBuilder, name: String) {
         val filtered = name.sanitizeForCommandInput()
         if (SharedSuggestionProvider.matchesSubStr(builder.remaining.lowercase(), filtered.lowercase())) {
             builder.suggest(filtered)

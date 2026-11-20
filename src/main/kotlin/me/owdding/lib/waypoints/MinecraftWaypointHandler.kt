@@ -6,11 +6,11 @@ import net.minecraft.world.waypoints.WaypointStyleAssets
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import java.util.Optional
 
-typealias MinecraftWaypoint = Waypoint
+public typealias MinecraftWaypoint = Waypoint
 
-object MinecraftWaypointHandler {
+public object MinecraftWaypointHandler {
 
-    fun addWaypoint(meowddingWaypoint: MeowddingWaypoint): MinecraftWaypoint {
+    public fun addWaypoint(meowddingWaypoint: MeowddingWaypoint): MinecraftWaypoint {
         val trackedWaypoint = TrackedWaypoint.setPosition(
             meowddingWaypoint.uuid,
             Waypoint.Icon(WaypointStyleAssets.DEFAULT, Optional.of(meowddingWaypoint.color)),
@@ -21,9 +21,9 @@ object MinecraftWaypointHandler {
 
         return trackedWaypoint
     }
-    fun removeWaypoint(waypoint: MeowddingWaypoint): Boolean {
+
+    public fun removeWaypoint(waypoint: MeowddingWaypoint): Boolean {
         return waypoint.minecraftWaypoint?.let { McClient.connection?.waypointManager?.untrackWaypoint(it as TrackedWaypoint) } != null
     }
-
 }
 

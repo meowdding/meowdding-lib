@@ -22,38 +22,38 @@ import kotlin.reflect.KType
 import kotlin.reflect.typeOf
 
 @Suppress("PropertyName")
-abstract class MeowddingMod(
+public abstract class MeowddingMod(
     id: String,
     loggerName: String? = null,
 ) : ClientModInitializer, MeowddingLogger by MeowddingLogger.named(loggerName ?: FabricLoader.getInstance().getModContainer(id).get().metadata.name) {
 
-    val SELF: ModContainer = FabricLoader.getInstance().getModContainer(id).get()
-    val MOD_ID: String = SELF.metadata.id
-    val VERSION: String = SELF.metadata.version.friendlyString
-    open val RESOURCE_PATH: String = MOD_ID
+    public val SELF: ModContainer = FabricLoader.getInstance().getModContainer(id).get()
+    public val MOD_ID: String = SELF.metadata.id
+    public val VERSION: String = SELF.metadata.version.friendlyString
+    public open val RESOURCE_PATH: String = MOD_ID
 
-    fun id(path: String): Identifier = Identifier.fromNamespaceAndPath(RESOURCE_PATH, path)
+    public fun id(path: String): Identifier = Identifier.fromNamespaceAndPath(RESOURCE_PATH, path)
 
-    open val storagePath: Path = McClient.config.resolve("$MOD_ID/data")
+    public open val storagePath: Path = McClient.config.resolve("$MOD_ID/data")
 
-    inline fun <reified T : Any> getCodec(): Codec<T> = getCodec(typeOf<T>())
+    public inline fun <reified T : Any> getCodec(): Codec<T> = getCodec(typeOf<T>())
 
     @Suppress("UNCHECKED_CAST", "DEPRECATION")
     //~ if >= 26.4 'open' -> 'abstract'
-    open fun <T : Any> getCodec(type: KType): Codec<T>
+    public open fun <T : Any> getCodec(type: KType): Codec<T>
         //? if <= 26.4
         = getCodec((type.classifier as KClass<T>).java)
 
     //? if < 26.4 {
     @Deprecated("Use getCodec(KType) instead. This will be removed on 26.4")
-    abstract fun <T : Any> getCodec(clazz: Class<T>): Codec<T>
+    public abstract fun <T : Any> getCodec(clazz: Class<T>): Codec<T>
     //?}
 
-    fun <T : Any> registerEvents(list: Iterable<T>) = list.forEach(SkyBlockAPI.eventBus::register)
+    public fun <T : Any> registerEvents(list: Iterable<T>): Unit = list.forEach(SkyBlockAPI.eventBus::register)
 
-    open fun preInit() {}
+    public open fun preInit() {}
 
-    open fun postInit() {
+    public open fun postInit() {
     }
 
     init {
@@ -64,7 +64,7 @@ abstract class MeowddingMod(
     }
 
     //region Storage Data
-    inline fun <reified T : Any> storage(
+    public inline fun <reified T : Any> storage(
         fileName: String,
         differentAlphaData: Boolean = true,
         codec: Codec<T> = getCodec<T>(),
@@ -74,7 +74,7 @@ abstract class MeowddingMod(
         return storage(fileName, { constructor.callBy(emptyMap()) }, 0, { codec }, differentAlphaData)
     }
 
-    inline fun <reified T : Any> storage(
+    public inline fun <reified T : Any> storage(
         fileName: String,
         noinline defaultData: () -> T,
         differentAlphaData: Boolean = true,
@@ -82,7 +82,7 @@ abstract class MeowddingMod(
     ): MeowddingStorageData<T> = storage(fileName, defaultData, 0, { codec }, differentAlphaData)
 
     @JvmOverloads
-    fun <T : Any> storage(
+    public fun <T : Any> storage(
         fileName: String,
         defaultData: () -> T,
         version: Int,
@@ -93,7 +93,7 @@ abstract class MeowddingMod(
     //endregion
 
     //region Profile Storage Data
-    inline fun <reified T : Any> profileStorage(
+    public inline fun <reified T : Any> profileStorage(
         fileName: String,
         differentAlphaData: Boolean = true,
         codec: Codec<T> = getCodec<T>(),
@@ -103,7 +103,7 @@ abstract class MeowddingMod(
         return profileStorage(fileName, { constructor.callBy(emptyMap()) }, 0, { codec }, differentAlphaData)
     }
 
-    inline fun <reified T : Any> profileStorage(
+    public inline fun <reified T : Any> profileStorage(
         fileName: String,
         noinline defaultData: () -> T,
         differentAlphaData: Boolean = true,
@@ -111,7 +111,7 @@ abstract class MeowddingMod(
     ): MeowddingProfileStorageData<T> = profileStorage(fileName, defaultData, 0, { codec }, differentAlphaData)
 
     @JvmOverloads
-    fun <T : Any> profileStorage(
+    public fun <T : Any> profileStorage(
         fileName: String,
         defaultData: () -> T,
         version: Int,
@@ -121,12 +121,12 @@ abstract class MeowddingMod(
     //endregion
 
     //region Folder Storage Data
-    inline fun <reified T : Any> folderStorage(
+    public inline fun <reified T : Any> folderStorage(
         folderName: String,
         codec: Codec<T> = getCodec<T>(),
     ): MeowddingFolderStorageData<T> = folderStorage(folderName, 0) { codec }
 
-    fun <T : Any> folderStorage(
+    public fun <T : Any> folderStorage(
         folderName: String,
         version: Int,
         codec: (Int) -> Codec<T>,
@@ -135,34 +135,32 @@ abstract class MeowddingMod(
 
     private val repoLogger: MeowddingLogger = this.featureLogger("RemoteRepo")
 
-    inline fun <reified T : Any> loadRepo(path: String): T? = loadRepo(path, getCodec<T>())
+    public inline fun <reified T : Any> loadRepo(path: String): T? = loadRepo(path, getCodec<T>())
 
-    fun <T : Any> loadRepo(path: String, codec: Codec<T>): T? = repoLogger.runCatching("Loading $path from remote repo!") {
+    public fun <T : Any> loadRepo(path: String, codec: Codec<T>): T? = repoLogger.runCatching("Loading $path from remote repo!") {
         RemoteRepo.getFileContentAsJson("$path.json").toDataOrThrow(codec)
     }
 
-    inline fun <reified T : Any> repoDelegate(path: String): RemoteRepoDelegate<T, T?> {
+    public inline fun <reified T : Any> repoDelegate(path: String): RemoteRepoDelegate<T, T?> {
         return repoDelegate(path, getCodec<T>())
     }
 
-    inline fun <reified T : Any> repoDelegate(path: String, default: T): RemoteRepoDelegate<T, T> {
+    public inline fun <reified T : Any> repoDelegate(path: String, default: T): RemoteRepoDelegate<T, T> {
         return repoDelegate(path, default, getCodec<T>())
     }
 
-    fun <T : Any> repoDelegate(
+    public fun <T : Any> repoDelegate(
         path: String,
         codec: Codec<T>,
     ): RemoteRepoDelegate<T, T?> = context(repoLogger) {
         RemoteRepoDelegate.load(path, codec)
     }
 
-    fun <T : Any> repoDelegate(
+    public fun <T : Any> repoDelegate(
         path: String,
         default: T,
         codec: Codec<T>,
     ): RemoteRepoDelegate<T, T> = context(repoLogger) {
         RemoteRepoDelegate.load(path, default, codec)
     }
-
-
 }

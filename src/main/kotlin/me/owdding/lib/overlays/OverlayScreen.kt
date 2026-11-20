@@ -38,7 +38,7 @@ private val RIGHT_KEY = keysOf(InputConstants.KEY_RIGHT)
 private val A_KEY = keysOf(InputConstants.KEY_A)
 
 //~ if >= 26.3 ': MeowddingScreen(' -> ': Screen('
-class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) : Screen(CommonText.EMPTY) {
+public class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) : Screen(CommonText.EMPTY) {
 
     private var dragging = false
     private var relativeX = 0
@@ -181,9 +181,9 @@ class OverlayScreen(private val overlay: Overlay, private val parent: Screen?) :
         }
     }
 
-    fun save() = FinishOverlayEditingEvent(overlay.modId).post(SkyBlockAPI.eventBus)
+    public fun save(): Boolean = FinishOverlayEditingEvent(overlay.modId).post(SkyBlockAPI.eventBus)
 
-    fun isMouseOverOverlay(mouseX: Double, mouseY: Double): Boolean {
+    public fun isMouseOverOverlay(mouseX: Double, mouseY: Double): Boolean {
         val (_, y) = overlay.position
         val x = overlay.alignedX.toInt()
         val (width, height) = overlay.bounds * overlay.position.scale

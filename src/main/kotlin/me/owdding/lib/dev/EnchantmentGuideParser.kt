@@ -30,7 +30,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.onClick
 
 @Module
-object EnchantmentGuideParser {
+internal object EnchantmentGuideParser {
 
     private val enabled by debugToggle("enchantment_guide_parser", "Parses Enchantment Data from the Enchantment Guide")
 

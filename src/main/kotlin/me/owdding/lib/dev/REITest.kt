@@ -13,7 +13,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 
 @Module
-object REITest {
+internal object REITest {
 
     private var hoveredToggle = false
 

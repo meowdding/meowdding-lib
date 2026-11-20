@@ -9,37 +9,43 @@ import com.teamresourceful.resourcefulconfigkt.api.TransformedEntry
 import com.teamresourceful.resourcefulconfigkt.api.builders.CategoryBuilder
 import com.teamresourceful.resourcefulconfigkt.api.builders.SeparatorBuilder
 import me.owdding.lib.rendering.text.serialization.TagComponentSerialization
+import net.minecraft.network.chat.Component
 
-var SeparatorBuilder.translation: String
+public var SeparatorBuilder.translation: String
     get() = ""
     set(value) {
         this.title = value
         this.description = "$value.desc"
     }
 
-fun CategoryBuilder.category(category: CategoryKt, init: CategoryKt.() -> Unit) {
+public fun CategoryBuilder.category(category: CategoryKt, init: CategoryKt.() -> Unit) {
     category(category)
     category.init()
 }
 
-fun CategoryBuilder.categories(vararg categories: CategoryKt) { categories.forEach { this@categories.category(it) } }
+public fun CategoryBuilder.categories(vararg categories: CategoryKt) { categories.forEach { this@categories.category(it) } }
 
-fun CategoryBuilder.separator(translation: String) = this.separator { this.translation = translation }
+public fun CategoryBuilder.separator(translation: String): Unit = this.separator { this.translation = translation }
 
-fun <T, R> ConfigDelegateProvider<RConfigKtEntry<T>>.cachedTransform(from: (R) -> T, to: (T) -> R) = CachedTransformedEntry(this, from, to)
+public fun <T, R> ConfigDelegateProvider<RConfigKtEntry<T>>.cachedTransform(from: (R) -> T, to: (T) -> R): CachedTransformedEntry<T, R> =
+    CachedTransformedEntry(this, from, to)
 
-fun <T, R> ConfigDelegateProvider<RConfigKtEntry<T>>.transform(from: (R) -> T, to: (T) -> R) = TransformedEntry(this, from, to)
+public fun <T, R> ConfigDelegateProvider<RConfigKtEntry<T>>.transform(from: (R) -> T, to: (T) -> R): TransformedEntry<T, R> =
+    TransformedEntry(this, from, to)
 
-fun <T> ConfigDelegateProvider<RConfigKtEntry<T>>.observable(onChange: (T, T) -> Unit) = ObservableEntry(this, onChange)
+public fun <T> ConfigDelegateProvider<RConfigKtEntry<T>>.observable(onChange: (T, T) -> Unit): ObservableEntry<T> =
+    ObservableEntry(this, onChange)
 
-fun ConfigDelegateProvider<RConfigKtEntry<String>>.cachedTransformPlaceholderComponent() = CachedTransformedEntry(
-    this,
-    { TagComponentSerialization.serialize(it) },
-    { TagComponentSerialization.deserialize(it) },
-)
+public fun ConfigDelegateProvider<RConfigKtEntry<String>>.cachedTransformPlaceholderComponent(): CachedTransformedEntry<String, Component> =
+    CachedTransformedEntry(
+        this,
+        { TagComponentSerialization.serialize(it) },
+        { TagComponentSerialization.deserialize(it) },
+    )
 
-fun ConfigDelegateProvider<RConfigKtEntry<Array<out String>>>.cachedTransformPlaceholderComponents() = CachedTransformedEntry(
-    this,
-    { list -> list.map { TagComponentSerialization.serialize(it) }.toTypedArray() },
-    { list -> list.map { TagComponentSerialization.deserialize(it) } },
-)
+public fun ConfigDelegateProvider<RConfigKtEntry<Array<out String>>>.cachedTransformPlaceholderComponents(): CachedTransformedEntry<Array<out String>, List<Component>> =
+    CachedTransformedEntry(
+        this,
+        { list -> list.map { TagComponentSerialization.serialize(it) }.toTypedArray() },
+        { list -> list.map { TagComponentSerialization.deserialize(it) } },
+    )

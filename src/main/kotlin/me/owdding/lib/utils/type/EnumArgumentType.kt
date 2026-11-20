@@ -14,7 +14,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass
 
-data class EnumArgumentType<T : Enum<T>>(val enum: KClass<T>, val string: (T) -> String = { it.name }) : ArgumentType<T> {
+public data class EnumArgumentType<T : Enum<T>>(val enum: KClass<T>, val string: (T) -> String = { it.name }) : ArgumentType<T> {
 
     val identifierNotFound: DynamicCommandExceptionType = DynamicCommandExceptionType { id: Any? ->
         Text.of("Entry ") {
@@ -22,7 +22,7 @@ data class EnumArgumentType<T : Enum<T>>(val enum: KClass<T>, val string: (T) ->
             append(" not found")
         }
     }
-    val entries = enum.java.enumConstants.toList().associateBy { string(it) }
+    internal val entries = enum.java.enumConstants.toList().associateBy { string(it) }
 
     override fun parse(reader: StringReader): T {
         val name = reader.readString()

@@ -27,7 +27,7 @@ private fun String.applyAllReplacements(): String {
     return result
 }
 
-fun Throwable.getStackTraceString(elements: @Range(from = 1, to = 0xFFFFFFFF) Int): String = with(StringBuilder()) {
+public fun Throwable.getStackTraceString(elements: @Range(from = 1, to = 0xFFFFFFFF) Int): String = with(StringBuilder()) {
     val throwable = this@getStackTraceString
     throwable.stackTrace.take(elements).joinTo(this, "\n") {
         it.toString().applyAllReplacements()

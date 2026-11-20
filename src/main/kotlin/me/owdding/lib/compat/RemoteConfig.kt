@@ -26,8 +26,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.util.function.Predicate
 import kotlinx.coroutines.runBlocking
 
-object RemoteConfig {
-    fun lockConfig(config: ResourcefulConfig, url: String, mod: ModContainer) {
+public object RemoteConfig {
+    public fun lockConfig(config: ResourcefulConfig, url: String, mod: ModContainer) {
         val result = runCatching {
             runBlocking {
                 val data = Http.getResult<JsonObject>(url).getOrThrow()

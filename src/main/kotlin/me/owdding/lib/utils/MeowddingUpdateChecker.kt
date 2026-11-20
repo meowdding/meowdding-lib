@@ -13,7 +13,11 @@ import kotlinx.coroutines.runBlocking
 
 private const val URL = "https://api.modrinth.com/v2/project/%project%/version"
 
-class MeowddingUpdateChecker(val projectSlug: String, val modContainer: ModContainer, val callback: UpdateCallback) {
+public class MeowddingUpdateChecker(
+    internal val projectSlug: String,
+    internal val modContainer: ModContainer,
+    internal val callback: UpdateCallback,
+) {
 
     init {
         SkyBlockAPI.eventBus.register(this)
@@ -61,7 +65,7 @@ class MeowddingUpdateChecker(val projectSlug: String, val modContainer: ModConta
     }
 }
 
-fun interface UpdateCallback {
-    fun accept(link: String, current: String, new: String)
-    operator fun invoke(link: String, current: String, new: String) = accept(link, current, new)
+public fun interface UpdateCallback {
+    public fun accept(link: String, current: String, new: String)
+    public operator fun invoke(link: String, current: String, new: String): Unit = accept(link, current, new)
 }

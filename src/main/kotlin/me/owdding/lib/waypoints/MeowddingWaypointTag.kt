@@ -1,13 +1,13 @@
 package me.owdding.lib.waypoints
 
-fun interface MeowddingWaypointTag {
-    val name get() = toString()
+public fun interface MeowddingWaypointTag {
+    public val name: String get() = toString()
 
     override fun toString(): String
 
-    companion object {
+    public companion object {
         /** Usable in other mods like SkyCubed Minimap, the same mods will be able to edit/remove the waypoints though */
-        val SHARABLE: MeowddingWaypointTag = MeowddingWaypointTag { "SHARABLE" }
+        public val SHARABLE: MeowddingWaypointTag = MeowddingWaypointTag { "SHARABLE" }
     }
 }
 

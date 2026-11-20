@@ -29,7 +29,7 @@ import kotlin.io.path.exists
 import kotlin.io.path.readText
 import kotlin.io.path.relativeTo
 
-class MeowddingStorageData<T : Any> internal constructor(
+public class MeowddingStorageData<T : Any> internal constructor(
     private val version: Int = 0,
     private val mod: MeowddingMod,
     private val defaultData: () -> T,
@@ -38,20 +38,20 @@ class MeowddingStorageData<T : Any> internal constructor(
     private val differentAlphaData: Boolean,
 ) {
 
-    fun get(): T = if (shouldUseAlphaData()) getOrCreateAlphaData() else getNormalData()
+    public fun get(): T = if (shouldUseAlphaData()) getOrCreateAlphaData() else getNormalData()
 
-    fun set(value: T) {
+    public fun set(value: T) {
         if (shouldUseAlphaData()) this.alphaData = value
         else this.data = value
         save()
     }
 
-    fun save() {
+    public fun save() {
         if (shouldUseAlphaData()) requiresAlphaSave.add(this)
         else requiresSave.add(this)
     }
 
-    fun delete() {
+    public fun delete() {
         deletePath(path)
         this.data = defaultData()
         deletePath(alphaPath)
@@ -61,7 +61,7 @@ class MeowddingStorageData<T : Any> internal constructor(
     @JvmName("editBoolean")
     @OptIn(ExperimentalTypeInference::class)
     @OverloadResolutionByLambdaReturnType
-    inline fun edit(edit: T.() -> Boolean) {
+    public inline fun edit(edit: T.() -> Boolean) {
         contract {
             callsInPlace(edit, InvocationKind.EXACTLY_ONCE)
         }
@@ -71,7 +71,7 @@ class MeowddingStorageData<T : Any> internal constructor(
 
     @OptIn(ExperimentalTypeInference::class)
     @OverloadResolutionByLambdaReturnType
-    inline fun edit(edit: T.() -> Unit?) {
+    public inline fun edit(edit: T.() -> Unit?) {
         contract {
             callsInPlace(edit, InvocationKind.EXACTLY_ONCE)
         }

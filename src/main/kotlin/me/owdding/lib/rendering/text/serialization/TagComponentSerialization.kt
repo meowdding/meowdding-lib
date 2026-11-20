@@ -21,10 +21,10 @@ import net.minecraft.network.chat.TextColor
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
-object TagComponentSerialization : MeowddingLogger by MeowddingLib.featureLogger() {
+public object TagComponentSerialization : MeowddingLogger by MeowddingLib.featureLogger() {
 
-    val context: ParserContext = ParserContext.of()
-    val tagParser: TagParser by lazy {
+    internal val context: ParserContext = ParserContext.of()
+    internal val tagParser: TagParser by lazy {
         val default = TagRegistry.DEFAULT
         val copies = listOf(
             listOf(
@@ -88,7 +88,7 @@ object TagComponentSerialization : MeowddingLogger by MeowddingLib.featureLogger
         TagParser.createQuickText(tagRegistry)
     }
 
-    fun serialize(component: Component): String {
+    public fun serialize(component: Component): String {
         val builder = StringBuilder()
         val styleStack = LinkedList<Style>()
         val openTags = LinkedList<Array<String>>()
@@ -182,7 +182,7 @@ object TagComponentSerialization : MeowddingLogger by MeowddingLib.featureLogger
         return list
     }
 
-    fun GradientTextShader.serializeProperties() = buildString {
+    public fun GradientTextShader.serializeProperties(): String = buildString {
         if (gradientDirection != GradientDirection.RIGHT) {
             append(" dir:").append(gradientDirection.name.lowercase())
         }
@@ -191,6 +191,6 @@ object TagComponentSerialization : MeowddingLogger by MeowddingLib.featureLogger
         }
     }
 
-    fun deserialize(text: String): Component = tagParser.parseComponent(text, context)
+    public fun deserialize(text: String): Component = tagParser.parseComponent(text, context)
 
 }

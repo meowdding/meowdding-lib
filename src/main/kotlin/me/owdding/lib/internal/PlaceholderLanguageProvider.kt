@@ -14,7 +14,7 @@ import net.minecraft.network.chat.TextColor
 import org.apache.commons.lang3.StringUtils
 import java.util.function.Function
 
-object PlaceholderLanguageProvider : TagLikeParser.Provider {
+internal object PlaceholderLanguageProvider : TagLikeParser.Provider {
 
     private val KEY = ParserContext.Key.of<Function<String, Component>>("meowdding:translation_args")
     private val SAFEISH_TAGS = setOf(

@@ -5,7 +5,7 @@ package me.owdding.lib.utils
 import net.fabricmc.loader.api.FabricLoader
 import kotlin.jvm.optionals.getOrNull
 
-enum class KnownMods(val modId: String) {
+public enum class KnownMods(public val modId: String) {
     // Meowdding
     CUSTOM_SCOREBOARD("customscoreboard"),
     SKYCUBED("skycubed"),
@@ -31,10 +31,10 @@ enum class KnownMods(val modId: String) {
     REI("roughlyenoughitems"),
     ;
 
-    val installed: Boolean by lazy { FabricLoader.getInstance().isModLoaded(modId) }
-    val version: String? by lazy { FabricLoader.getInstance().getModContainer(modId).getOrNull()?.metadata?.version?.friendlyString }
+    public val installed: Boolean by lazy { FabricLoader.getInstance().isModLoaded(modId) }
+    public val version: String? by lazy { FabricLoader.getInstance().getModContainer(modId).getOrNull()?.metadata?.version?.friendlyString }
 
-    fun installed(action: (version: String?) -> Unit) {
+    public fun installed(action: (version: String?) -> Unit) {
         if (installed) action(version)
     }
 }

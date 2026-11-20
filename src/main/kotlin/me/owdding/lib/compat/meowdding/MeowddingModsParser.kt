@@ -15,9 +15,9 @@ import kotlinx.coroutines.runBlocking
 private const val URL = "https://meowdd.ing/mod/info.json"
 
 @Module
-object MeowddingModsParser {
+public object MeowddingModsParser {
 
-    var mods: List<MeowddingMod> = emptyList()
+    public var mods: List<MeowddingMod> = emptyList()
         private set
 
     private val CODEC = MeowddingLibCodecs.getCodec<MeowddingMod>().listOf()
@@ -32,7 +32,7 @@ object MeowddingModsParser {
 }
 
 @GenerateCodec
-data class MeowddingMod(
+public data class MeowddingMod(
     val name: String,
     @FieldName("mod_id") val modId: String,
     @FieldName("config_id") val configId: String?,
@@ -40,6 +40,6 @@ data class MeowddingMod(
     @FieldName("github_repo") val githubRepo: String,
     val icon: String,
 ) {
-    val isInstalled by lazy { FabricLoader.getInstance().isModLoaded(modId) }
+    public val isInstalled: Boolean by lazy { FabricLoader.getInstance().isModLoaded(modId) }
     val uri: URI = URI.create(icon)
 }

@@ -5,27 +5,25 @@ import net.fabricmc.loader.api.Version
 import net.fabricmc.loader.api.metadata.version.VersionComparisonOperator
 import net.fabricmc.loader.api.metadata.version.VersionPredicate
 
+public class VersionInterval(internal val predicates: List<VersionPredicate>) {
+    public constructor(vararg predicates: VersionPredicate) : this(listOf(*predicates))
 
-class VersionInterval(val predicates: List<VersionPredicate>) {
-    constructor(vararg predicates: VersionPredicate) : this(listOf(*predicates))
-
-    fun test(version: Version): Boolean {
+    public fun test(version: Version): Boolean {
         if (predicates.isEmpty()) return true
         return predicates.all { it.test(version) }
     }
 }
 
-object VersionIntervalParser {
-    const val INCLUSIVE_BEGIN = '['
-    const val INCLUSIVE_END = ']'
-    const val EXCLUSIVE_BEGIN = '('
-    const val EXCLUSIVE_END = ')'
-    const val DELIMITER = ';'
+public object VersionIntervalParser {
+    private const val INCLUSIVE_BEGIN = '['
+    private const val INCLUSIVE_END = ']'
+    private const val EXCLUSIVE_BEGIN = '('
+    private const val EXCLUSIVE_END = ')'
+    private const val DELIMITER = ';'
 
-    var first: VersionPredicate? = null
-    var second: VersionPredicate? = null
-
-    fun parse(string: String): VersionInterval {
+    public fun parse(string: String): VersionInterval {
+        var first: VersionPredicate? = null
+        var second: VersionPredicate? = null
         with(StringReader(string)) {
             val hasDelimiter = string.contains(DELIMITER)
             val hasBounds = string.contains(Regex("[()\\[\\]]"))
@@ -33,18 +31,18 @@ object VersionIntervalParser {
             if (string == "*") return@with
 
             if (!hasBounds) {
-                parseFirst(VersionComparisonOperator.EQUAL, string)
+                first = parseAny(VersionComparisonOperator.EQUAL, string)
                 return@with
             }
 
             when (read()) {
                 INCLUSIVE_END -> {}
-                INCLUSIVE_BEGIN -> parseFirst(
+                INCLUSIVE_BEGIN -> first = parseAny(
                     VersionComparisonOperator.GREATER_EQUAL,
                     readStringUntil(if (hasDelimiter) DELIMITER else INCLUSIVE_BEGIN),
                 )
 
-                EXCLUSIVE_BEGIN -> parseFirst(
+                EXCLUSIVE_BEGIN -> first = parseAny(
                     VersionComparisonOperator.GREATER,
                     readStringUntil(if (hasDelimiter) DELIMITER else INCLUSIVE_BEGIN),
                 )
@@ -58,8 +56,8 @@ object VersionIntervalParser {
                 INCLUSIVE_BEGIN -> {}
                 else -> {
                     when (remaining.last()) {
-                        INCLUSIVE_END -> parseSecond(VersionComparisonOperator.LESS_EQUAL, readStringUntil(INCLUSIVE_END))
-                        EXCLUSIVE_END -> parseSecond(VersionComparisonOperator.LESS, readStringUntil(EXCLUSIVE_END))
+                        INCLUSIVE_END -> second = parseAny(VersionComparisonOperator.LESS_EQUAL, readStringUntil(INCLUSIVE_END))
+                        EXCLUSIVE_END -> second = parseAny(VersionComparisonOperator.LESS, readStringUntil(EXCLUSIVE_END))
                     }
                 }
             }
@@ -67,19 +65,11 @@ object VersionIntervalParser {
 
         return when {
             first == null && second == null -> VersionInterval()
-            first != null && second != null -> VersionInterval(first!!, second!!)
-            first != null && second == null -> VersionInterval(first!!)
-            first == null && second != null -> VersionInterval(second!!)
+            first != null && second != null -> VersionInterval(first, second)
+            first != null && second == null -> VersionInterval(first)
+            first == null && second != null -> VersionInterval(second)
             else -> throw UnsupportedOperationException("Can't happen!")
         }
-    }
-
-    private fun parseFirst(operator: VersionComparisonOperator, string: String) {
-        first = parseAny(operator, string)
-    }
-
-    private fun parseSecond(operator: VersionComparisonOperator, string: String) {
-        second = parseAny(operator, string)
     }
 
     private fun parseAny(operator: VersionComparisonOperator, string: String): VersionPredicate {

@@ -16,7 +16,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 
 @Module
-object TestCommands {
+internal object TestCommands {
 
     @Subscription
     internal fun onCommand(event: MeowddingLibRegisterCommandsEvent) {

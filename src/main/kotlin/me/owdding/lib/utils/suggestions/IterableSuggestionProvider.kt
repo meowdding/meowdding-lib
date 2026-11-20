@@ -6,7 +6,7 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import java.util.concurrent.CompletableFuture
 
-data class IterableSuggestionProvider<T>(val providers: Iterable<T>, val transformer: (T) -> String = { it.toString() }) : MeowddingSuggestionProvider {
+public data class IterableSuggestionProvider<T>(val providers: Iterable<T>, val transformer: (T) -> String = { it.toString() }) : MeowddingSuggestionProvider {
     override fun getSuggestions(context: CommandContext<FabricClientCommandSource>, builder: SuggestionsBuilder): CompletableFuture<Suggestions> =
         CompletableFuture.supplyAsync {
             providers.forEach { suggest(builder, transformer(it)) }

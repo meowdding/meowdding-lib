@@ -20,7 +20,7 @@ import org.joml.Matrix3x2f
 import org.joml.Vector4f
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 
-object GuiRenderTypes {
+public object GuiRenderTypes {
 
     private val GUI_TEXTURED_GRADIENT = MemoizeUtil.memoize { colors: GradientProvider, speed: Float, direction: GradientDirection, grayscale: Boolean ->
         RenderPipelines.register(
@@ -61,7 +61,7 @@ object GuiRenderTypes {
         )
     }
 
-    fun GuiGraphicsExtractor.animatedGradient(
+    public fun GuiGraphicsExtractor.animatedGradient(
         x: Int, y: Int,
         width: Int, height: Int,
         speed: Float = 1f, direction: GradientDirection = GradientDirection.RIGHT, colors: GradientProvider
@@ -87,6 +87,11 @@ object GuiRenderTypes {
         })
     }
 
-    fun guiTexturedGradient(speed: Float = 1f, direction: GradientDirection = GradientDirection.RIGHT, grayscale: Boolean = true, colors: GradientProvider): RenderPipeline = GUI_TEXTURED_GRADIENT(colors, speed, direction, grayscale)
+    public fun guiTexturedGradient(
+        speed: Float = 1f,
+        direction: GradientDirection = GradientDirection.RIGHT,
+        grayscale: Boolean = true,
+        colors: GradientProvider
+    ): RenderPipeline = GUI_TEXTURED_GRADIENT(colors, speed, direction, grayscale)
 
 }

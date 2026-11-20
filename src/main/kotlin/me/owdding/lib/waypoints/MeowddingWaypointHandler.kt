@@ -20,17 +20,17 @@ import java.util.UUID
 import kotlin.math.pow
 
 @Module
-object MeowddingWaypointHandler {
+public object MeowddingWaypointHandler {
 
     private val _waypoints = mutableListOf<MeowddingWaypoint>()
-    val waypoints: List<MeowddingWaypoint> get() = _waypoints.toList()
+    public val waypoints: List<MeowddingWaypoint> get() = _waypoints.toList()
 
-    fun getWaypointsWithAnyTags(vararg tags: MeowddingWaypointTag): List<MeowddingWaypoint> = getWaypointsWithAnyTags(tags.toList())
-    fun getWaypointsWithAnyTags(tags: Collection<MeowddingWaypointTag>): List<MeowddingWaypoint> = _waypoints.filter { it.tags.any { t -> tags.contains(t) } }
-    fun getWaypointsWithAllTags(vararg tags: MeowddingWaypointTag): List<MeowddingWaypoint> = getWaypointsWithAllTags(tags.toList())
-    fun getWaypointsWithAllTags(tags: Collection<MeowddingWaypointTag>): List<MeowddingWaypoint> = _waypoints.filter { it.tags.containsAll(tags) }
+    public fun getWaypointsWithAnyTags(vararg tags: MeowddingWaypointTag): List<MeowddingWaypoint> = getWaypointsWithAnyTags(tags.toList())
+    public fun getWaypointsWithAnyTags(tags: Collection<MeowddingWaypointTag>): List<MeowddingWaypoint> = _waypoints.filter { it.tags.any { t -> tags.contains(t) } }
+    public fun getWaypointsWithAllTags(vararg tags: MeowddingWaypointTag): List<MeowddingWaypoint> = getWaypointsWithAllTags(tags.toList())
+    public fun getWaypointsWithAllTags(tags: Collection<MeowddingWaypointTag>): List<MeowddingWaypoint> = _waypoints.filter { it.tags.containsAll(tags) }
 
-    fun addWaypoint(waypoint: MeowddingWaypoint) = onMain {
+    public fun addWaypoint(waypoint: MeowddingWaypoint): Unit = onMain {
         _waypoints.removeIf {
             if (it.uuid != waypoint.uuid && it.position != waypoint.position) return@removeIf false
             removeLocatorBar(it)
@@ -45,11 +45,11 @@ object MeowddingWaypointHandler {
 
     private inline fun onMain(crossinline run: () -> Unit) = McClient.self.executeIfPossible { run() }
 
-    fun removeWaypoint(uuid: UUID) = onMain {
+    public fun removeWaypoint(uuid: UUID): Unit = onMain {
         _waypoints.find { it.uuid == uuid }?.let(::removeWaypoint)
     }
 
-    fun removeWaypoint(waypoint: MeowddingWaypoint) = onMain {
+    public fun removeWaypoint(waypoint: MeowddingWaypoint): Unit = onMain {
         _waypoints.remove(waypoint)
         removeLocatorBar(waypoint)
     }

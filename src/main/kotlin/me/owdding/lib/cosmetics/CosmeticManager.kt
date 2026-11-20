@@ -4,6 +4,7 @@ import com.google.gson.JsonObject
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import earth.terrarium.olympus.client.images.ImageProvider
 import me.owdding.ktcodecs.FieldName
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.IncludedCodec
@@ -27,22 +28,21 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toJavaDuration
 
-const val COSMETIC_VERSION = 1
+public const val COSMETIC_VERSION: Int = 1
 
 @PostInitModule
-object CosmeticManager {
+public object CosmeticManager {
 
-    private val _cosmetics: MutableMap<String, Cosmetic> = ConcurrentHashMap()
-    val cosmetics: Map<String, Cosmetic> get() = _cosmetics
-    val cosmeticList: Collection<Cosmetic> get() = _cosmetics.values
+    public val cosmetics: Map<String, Cosmetic>
+        field: MutableMap<String, Cosmetic> = ConcurrentHashMap()
+    public val cosmeticList: Collection<Cosmetic> get() = cosmetics.values
 
-    private val _players = ConcurrentHashMap<UUID, PlayerData>()
-    val players: Map<UUID, PlayerData> get() = _players
-    val playerList: Collection<PlayerData> get() = _players.values
-
+    public val players: Map<UUID, PlayerData>
+        field = ConcurrentHashMap<UUID, PlayerData>()
+    public val playerList: Collection<PlayerData> get() = players.values
 
     @JvmStatic
-    val imageProvider get() = CosmeticImageProvider
+    internal val imageProvider: ImageProvider<URI> get() = CosmeticImageProvider
 
     private var client: HttpClient = HttpClient.newBuilder()
         .connectTimeout(10.seconds.toJavaDuration())
@@ -53,7 +53,7 @@ object CosmeticManager {
         updateCosmetics()
     }
 
-    fun updateCosmetics() {
+    public fun updateCosmetics() {
         CompletableFuture.runAsync {
             runCatching {
                 loadData()
@@ -64,8 +64,8 @@ object CosmeticManager {
     }
 
     private fun loadData() {
-        _cosmetics.clear()
-        _players.clear()
+        cosmetics.clear()
+        players.clear()
         val response = client.send(
             HttpRequest.newBuilder(URI("https://cosmetics.meowdd.ing")).GET().build(),
             HttpResponse.BodyHandlers.ofString(Charsets.UTF_8),
@@ -84,8 +84,8 @@ object CosmeticManager {
                         MeowddingLibCodecs.CosmeticCodec.codec().listOf().fieldOf("cosmetics").forGetter { emptyList() },
                     ).apply(it) { players, cosmetics ->
                         val cosmetics = cosmetics.filter { (_, version) -> version >= COSMETIC_VERSION }
-                        this._cosmetics.putAll(cosmetics.associateBy(Cosmetic::id))
-                        this._players.putAll(players.map(CompletablePlayerData::complete).associateBy(PlayerData::uuid))
+                        this.cosmetics.putAll(cosmetics.associateBy(Cosmetic::id))
+                        this.players.putAll(players.map(CompletablePlayerData::complete).associateBy(PlayerData::uuid))
                     }
                 },
             )
@@ -98,7 +98,7 @@ object CosmeticManager {
     }
 
     @IncludedCodec(named = "cosmetic_url_type")
-    val COSMETIC_URL: Codec<URI> = Codec.STRING.flatXmap(
+    internal val COSMETIC_URL: Codec<URI> = Codec.STRING.flatXmap(
         { string ->
             runCatching {
                 URI.create(string).takeUnless { it.host != "files.meowdd.ing" }
@@ -131,14 +131,13 @@ object CosmeticManager {
         )
     }
 
-    data class PlayerData(
+    public data class PlayerData(
         val uuid: UUID,
         val data: JsonObject,
     )
 
-
     @GenerateCodec
-    data class Cosmetic(
+    public data class Cosmetic(
         val id: String,
         val version: Int,
         @Inline val data: JsonObject,

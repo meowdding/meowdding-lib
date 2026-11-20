@@ -22,9 +22,9 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import kotlin.math.max
 
-object RenderUtils {
+public object RenderUtils {
 
-    fun RenderWorldEvent.renderTextInWorld(
+    public fun RenderWorldEvent.renderTextInWorld(
         position: Vec3,
         text: String,
         color: Int = 0xFFFFFFFF.toInt(),
@@ -33,7 +33,7 @@ object RenderUtils {
         renderTextInWorld(position, Text.of(text), color, center)
     }
 
-    fun RenderWorldEvent.renderTextInWorld(
+    public fun RenderWorldEvent.renderTextInWorld(
         position: Vec3,
         text: Component,
         color: Int = 0xFFFFFFFF.toInt(),
@@ -67,21 +67,21 @@ object RenderUtils {
         }
     }
 
-    fun RenderWorldEvent.renderBox(
+    public fun RenderWorldEvent.renderBox(
         position: Vec3,
         color: Int,
     ) {
         renderBox(AABB.unitCubeFromLowerCorner(position), color)
     }
 
-    fun RenderWorldEvent.renderBox(
+    public fun RenderWorldEvent.renderBox(
         position: BlockPos,
         color: Int,
     ) {
         renderBox(AABB(position), color)
     }
 
-    fun RenderWorldEvent.renderBox(
+    public fun RenderWorldEvent.renderBox(
         position: AABB,
         color: Int,
     ) {
@@ -102,7 +102,7 @@ object RenderUtils {
         }
     }
 
-    fun RenderWorldEvent.renderLineFromCursor(pos: Vec3, color: Int, width: Float = 5f) {
+    public fun RenderWorldEvent.renderLineFromCursor(pos: Vec3, color: Int, width: Float = 5f) {
         val cameraEntity = McClient.self.cameraEntity ?: return
         val vec = Vec3.directionFromRotation(cameraEntity.xRot, cameraEntity.yRot).let {
             if (McClient.options.cameraType == CameraType.THIRD_PERSON_FRONT) it.reverse() else it
@@ -110,11 +110,11 @@ object RenderUtils {
         render3dLine(cameraPosition.add(vec), pos, color, width)
     }
 
-    fun RenderWorldEvent.render3dLine(start: Vec3, end: Vec3, color: Int, width: Float = 5f) {
+    public fun RenderWorldEvent.render3dLine(start: Vec3, end: Vec3, color: Int, width: Float = 5f) {
         Gizmos.line(start, end, color, width)
     }
 
-    fun RenderWorldEvent.renderBeaconBeam(position: Vec3, color: Int) {
+    public fun RenderWorldEvent.renderBeaconBeam(position: Vec3, color: Int) {
         renderBeaconBeam(
             poseStack, position, BeaconRenderer.BEAM_LOCATION,
             0f, Mth.PI, McLevel.selfOrNull?.gameTime ?: 0, 0, (McLevel.selfOrNull?.maxY ?: 255) * 2,

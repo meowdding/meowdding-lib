@@ -45,11 +45,11 @@ import kotlin.math.sin
 
 private const val NO_SPLIT = -1
 
-object Displays {
+public object Displays {
 
     private var showTooltips = true
 
-    fun empty(width: Int = 0, height: Int = 0): Display {
+    public fun empty(width: Int = 0, height: Int = 0): Display {
         return object : Display {
             override fun getWidth() = width
             override fun getHeight() = height
@@ -57,7 +57,7 @@ object Displays {
         }
     }
 
-    fun supplied(display: () -> Display): Display {
+    public fun supplied(display: () -> Display): Display {
         return object : Display {
             override fun getWidth() = display().getWidth()
             override fun getHeight() = display().getHeight()
@@ -67,7 +67,7 @@ object Displays {
         }
     }
 
-    fun fixed(width: Int, height: Int, display: Display): Display {
+    public fun fixed(width: Int, height: Int, display: Display): Display {
         return object : Display {
             override fun getWidth() = width
             override fun getHeight() = height
@@ -79,7 +79,7 @@ object Displays {
         }
     }
 
-    fun background(color: UInt, display: Display): Display {
+    public fun background(color: UInt, display: Display): Display {
         return object : Display {
             override fun getWidth() = display.getWidth()
             override fun getHeight() = display.getHeight()
@@ -94,7 +94,7 @@ object Displays {
         }
     }
 
-    fun background(
+    public fun background(
         sprite: Identifier,
         display: Display,
         color: Int = -1,
@@ -118,7 +118,7 @@ object Displays {
         }
     }
 
-    fun image(uri: URI, display: Display): Display {
+    public fun image(uri: URI, display: Display): Display {
         return object : Display {
             override fun getWidth() = display.getWidth()
             override fun getHeight() = display.getHeight()
@@ -129,7 +129,7 @@ object Displays {
         }
     }
 
-    fun background(
+    public fun background(
         sprite: Identifier,
         width: Int,
         height: Int,
@@ -139,15 +139,15 @@ object Displays {
         return background(sprite, empty(width, height), color, allowAlpha)
     }
 
-    fun padding(padding: Int, display: Display): Display {
+    public fun padding(padding: Int, display: Display): Display {
         return padding(padding, padding, display)
     }
 
-    fun padding(padX: Int, padY: Int, display: Display): Display {
+    public fun padding(padX: Int, padY: Int, display: Display): Display {
         return padding(padX, padX, padY, padY, display)
     }
 
-    fun padding(left: Int, right: Int, top: Int, bottom: Int, display: Display): Display {
+    public fun padding(left: Int, right: Int, top: Int, bottom: Int, display: Display): Display {
         return object : Display {
             override fun getWidth() = left + display.getWidth() + right
             override fun getHeight() = top + display.getHeight() + bottom
@@ -157,7 +157,7 @@ object Displays {
         }
     }
 
-    fun center(width: Int = -1, height: Int = -1, display: Display): Display {
+    public fun center(width: Int = -1, height: Int = -1, display: Display): Display {
         return object : Display {
             override fun getWidth() = if (width == -1) display.getWidth() else width
             override fun getHeight() = if (height == -1) display.getHeight() else height
@@ -167,7 +167,7 @@ object Displays {
         }
     }
 
-    fun outline(color: () -> UInt, display: Display): Display {
+    public fun outline(color: () -> UInt, display: Display): Display {
         return object : Display {
             override fun getWidth() = display.getWidth() + 2
             override fun getHeight() = display.getHeight() + 2
@@ -178,7 +178,7 @@ object Displays {
         }
     }
 
-    fun face(texture: () -> Identifier, size: Int = 8): Display {
+    public fun face(texture: () -> Identifier, size: Int = 8): Display {
         return object : Display {
             override fun getWidth(): Int = size
             override fun getHeight(): Int = size
@@ -189,7 +189,7 @@ object Displays {
         }
     }
 
-    fun sprite(sprite: Identifier, width: Int, height: Int): Display {
+    public fun sprite(sprite: Identifier, width: Int, height: Int): Display {
         return object : Display {
             override fun getWidth() = width
             override fun getHeight() = height
@@ -199,11 +199,11 @@ object Displays {
         }
     }
 
-    fun text(text: String, color: () -> UInt = { 0xFFFFFFFFu }, shadow: Boolean = true): Display {
+    public fun text(text: String, color: () -> UInt = { 0xFFFFFFFFu }, shadow: Boolean = true): Display {
         return text({ text }, color, shadow)
     }
 
-    fun text(text: () -> String, color: () -> UInt = { 0xFFFFFFFFu }, shadow: Boolean = true): Display {
+    public fun text(text: () -> String, color: () -> UInt = { 0xFFFFFFFFu }, shadow: Boolean = true): Display {
         return object : Display {
 
             val component: MutableComponent
@@ -217,7 +217,7 @@ object Displays {
         }
     }
 
-    fun component(component: () -> Component, color: () -> UInt = { 0xFFFFFFFFu }, shadow: Boolean = true): Display {
+    public fun component(component: () -> Component, color: () -> UInt = { 0xFFFFFFFFu }, shadow: Boolean = true): Display {
         return object : Display {
             override fun getWidth() = component().width
             override fun getHeight() = McFont.height
@@ -227,7 +227,7 @@ object Displays {
         }
     }
 
-    fun component(
+    public fun component(
         component: Component,
         maxWidth: Int = NO_SPLIT,
         color: () -> UInt = { 0xFFFFFFFFu },
@@ -248,7 +248,7 @@ object Displays {
         }
     }
 
-    fun text(
+    public fun text(
         sequence: FormattedCharSequence,
         color: () -> UInt = { 0xFFFFFFFFu },
         shadow: Boolean = true,
@@ -262,13 +262,13 @@ object Displays {
         }
     }
 
-    fun text(
+    public fun text(
         text: FormattedText,
         color: () -> UInt = { 0xFFFFFFFFu },
         shadow: Boolean = true,
-    ) = text(Language.getInstance().getVisualOrder(text), color, shadow)
+    ): Display = text(Language.getInstance().getVisualOrder(text), color, shadow)
 
-    fun wrappedText(
+    public fun wrappedText(
         text: FormattedText,
         maxWidth: Int,
         color: () -> UInt = { 0xFFFFFFFFu },
@@ -292,7 +292,7 @@ object Displays {
         }
     }
 
-    fun row(
+    public fun row(
         vararg displays: Display,
         spacing: Int = 0,
         alignment: Alignment = Alignment.START,
@@ -320,7 +320,7 @@ object Displays {
         }
     }
 
-    fun column(
+    public fun column(
         vararg displays: Display,
         spacing: Int = 0,
         alignment: Alignment = Alignment.START,
@@ -348,7 +348,7 @@ object Displays {
         }
     }
 
-    fun item(
+    public fun item(
         item: ItemLike,
         width: Int = 16,
         height: Int = 16,
@@ -359,7 +359,7 @@ object Displays {
         return item(item.asItem().defaultInstance, width, height, showTooltip, showStackSize, customStackText)
     }
 
-    fun item(
+    public fun item(
         item: ItemStack,
         width: Int = 16,
         height: Int = 16,
@@ -370,7 +370,7 @@ object Displays {
         return PlatformDisplays.item(item, width, height, showTooltip, showStackSize, customStackText)
     }
 
-    fun <T> renderable(renderable: T, width: Int = -1, height: Int = -1): Display
+    public fun <T> renderable(renderable: T, width: Int = -1, height: Int = -1): Display
         where T : Renderable, T : LayoutElement {
         return object : Display {
             override fun getWidth(): Int = if (width == -1) renderable.width else width
@@ -381,7 +381,7 @@ object Displays {
         }
     }
 
-    fun layered(vararg displays: Display): Display {
+    public fun layered(vararg displays: Display): Display {
         return object : Display {
             override fun getWidth() = displays.maxOfOrNull { it.getWidth() } ?: 0
             override fun getHeight() = displays.maxOfOrNull { it.getHeight() } ?: 0
@@ -391,12 +391,12 @@ object Displays {
         }
     }
 
-    @Deprecated("Use of pushPop no longer works when using multi version")
-    fun pushPop(display: Display, operations: PoseStack.() -> Unit): Display {
+    @Deprecated("Use of pushPop no longer works when using multi version", ReplaceWith("pushPop(display, operations)"))
+    public fun pushPop(display: Display, operations: PoseStack.() -> Unit): Display {
         return PlatformDisplays.pushPop(display, operations)
     }
 
-    fun entity(
+    public fun entity(
         entity: LivingEntity,
         width: Int,
         height: Int,
@@ -408,7 +408,7 @@ object Displays {
         return PlatformDisplays.entity(entity, width, height, scale, mouseX, mouseY, spinning)
     }
 
-    fun table(
+    public fun table(
         table: List<List<Display>>,
         spacing: Int = 0,
     ): Display {
@@ -417,7 +417,7 @@ object Displays {
                 table.maxOfOrNull { row -> row.getOrNull(col)?.getWidth() ?: 0 } ?: 0
             }
 
-            override fun getHeight(): Int = table.sumOf { it.maxOf { it.getHeight() } } + (table.size - 1) * spacing
+            override fun getHeight(): Int = table.sumOf { displays -> displays.maxOf { it.getHeight() } } + (table.size - 1) * spacing
             override fun getWidth(): Int = columnWidths.sum() + (columnWidths.size - 1) * spacing
 
             override fun extract(graphics: GuiGraphicsExtractor) {
@@ -441,7 +441,7 @@ object Displays {
         }
     }
 
-    fun tooltip(display: Display, component: Component): Display {
+    public fun tooltip(display: Display, component: Component): Display {
         return object : Display {
             override fun getWidth() = display.getWidth()
             override fun getHeight() = display.getHeight()
@@ -455,7 +455,7 @@ object Displays {
         }
     }
 
-    fun fixedWidth(original: Display, maxWidth: Int? = null): Display {
+    public fun fixedWidth(original: Display, maxWidth: Int? = null): Display {
         return object : Display {
             override fun getWidth() = maxWidth ?: original.getWidth()
             override fun getHeight() = original.getHeight()
@@ -478,13 +478,13 @@ object Displays {
         }
     }
 
-    fun disableTooltips(action: () -> Unit) {
+    public fun disableTooltips(action: () -> Unit) {
         showTooltips = false
         action()
         showTooltips = true
     }
 
-    fun isMouseOver(display: Display, graphics: GuiGraphicsExtractor): Boolean {
+    public fun isMouseOver(display: Display, graphics: GuiGraphicsExtractor): Boolean {
         val translation = graphics.getTranslation()
         val (mouseX, mouseY) = McClient.mouse
         val xRange = translation.x..(translation.x + (display.getWidth() * ScalableWidget.getCurrentScale()).floor())
@@ -495,11 +495,11 @@ object Displays {
         ) && showTooltips
     }
 
-    fun iconographicCompat(display: Display, item: ItemStack): Display = object : Display by display {
+    public fun iconographicCompat(display: Display, item: ItemStack): Display = object : Display by display {
         override fun extract(graphics: GuiGraphicsExtractor) = IconographicCompat.withItem(item) {
             display.extract(graphics)
         }
     }
 
-    fun circleTexture(width: Int, height: Int, resourceLocation: Identifier) = roundedTextureDisplay(width, height, resourceLocation)
+    public fun circleTexture(width: Int, height: Int, resourceLocation: Identifier): Display = roundedTextureDisplay(width, height, resourceLocation)
 }

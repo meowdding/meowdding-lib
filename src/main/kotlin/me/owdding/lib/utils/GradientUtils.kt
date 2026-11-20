@@ -5,18 +5,18 @@ import me.owdding.lib.rendering.text.builtin.GradientTextShader
 import org.joml.Vector2f
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedName
 
-fun interface GradientProvider {
-    fun getColors(): List<Int>
+public fun interface GradientProvider {
+    public fun getColors(): List<Int>
 
-    companion object {
-        val CODEC: Codec<GradientProvider> = Codec.INT.listOf(1, MAX_VALUE).xmap(
+    public companion object {
+        public val CODEC: Codec<GradientProvider> = Codec.INT.listOf(1, MAX_VALUE).xmap(
             { GradientProvider { it } },
             { it.getColors() },
         )
     }
 }
 
-enum class GradientDirection(val vec: Vector2f) {
+public enum class GradientDirection(public val vec: Vector2f) {
     LEFT(Vector2f(1f, 0f)),
     RIGHT(Vector2f(-1f, 0f)),
     UP(Vector2f(0f, -1f)),
@@ -28,8 +28,9 @@ enum class GradientDirection(val vec: Vector2f) {
     ;
 
     private val formattedName = toFormattedName()
-    override fun toString() = formattedName
+    override fun toString(): String = formattedName
 
     //? if < 26.4
-    @Suppress("DEPRECATION") fun toOld() = GradientTextShader.Direction.entries.find { it.direction == this }
+    @Suppress("DEPRECATION")
+    public fun toOld(): GradientTextShader.Direction? = GradientTextShader.Direction.entries.find { it.direction == this }
 }

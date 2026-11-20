@@ -25,14 +25,14 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import kotlin.jvm.optionals.getOrNull
 import kotlin.reflect.KProperty
 
-interface CompletedDelegate<Type> {
-    val key: String
-    val default: Type
+public interface CompletedDelegate<Type> {
+    public val key: String
+    public val default: Type
 
-    fun update()
+    public fun update()
 }
 
-data class CompletedElementDelegate<Type>(
+public data class CompletedElementDelegate<Type>(
     val registry: BaseRemoteStrings,
     override val key: String,
     val transform: (String) -> Type,
@@ -42,25 +42,25 @@ data class CompletedElementDelegate<Type>(
         registry.register(this)
     }
 
-    var data = get()
+    public var data: Type = get()
 
-    fun get() = registry.stringOverwrites[key]?.let { transform(it.left().getOrNull() ?: return@let null) } ?: default
+    public fun get(): Type = registry.stringOverwrites[key]?.let { transform(it.left().getOrNull() ?: return@let null) } ?: default
 
     override fun update() {
         data = get()
     }
 
-    operator fun <This> getValue(ref: This, property: KProperty<*>): Type = data
+    public operator fun <This> getValue(ref: This, property: KProperty<*>): Type = data
 }
 
-data class ElementDelegate<Type>(
+public data class ElementDelegate<Type>(
     val registry: BaseRemoteStrings,
     val path: String?,
     val prefix: String?,
     val transformer: (String) -> Type,
     val default: Type,
 ) {
-    operator fun <This> provideDelegate(ref: This, property: KProperty<*>) = CompletedElementDelegate(
+    public operator fun <This> provideDelegate(ref: This, property: KProperty<*>): CompletedElementDelegate<Type> = CompletedElementDelegate(
         registry,
         join(prefix, path ?: property.name) ?: property.name,
         transformer,
@@ -68,7 +68,7 @@ data class ElementDelegate<Type>(
     )
 }
 
-data class CompletedListElementDelegate<Type>(
+public data class CompletedListElementDelegate<Type>(
     val registry: BaseRemoteStrings,
     override val key: String,
     val transform: (String) -> Type,
@@ -78,25 +78,25 @@ data class CompletedListElementDelegate<Type>(
         registry.register(this)
     }
 
-    var data = get()
+    public var data: List<Type> = get()
 
-    fun get() = registry.stringOverwrites[key]?.let { it.right().getOrNull()?.map(transform) ?: return@let null } ?: default
+    public fun get(): List<Type> = registry.stringOverwrites[key]?.let { it.right().getOrNull()?.map(transform) ?: return@let null } ?: default
 
     override fun update() {
         data = get()
     }
 
-    operator fun <This> getValue(ref: This, property: KProperty<*>): List<Type> = data
+    public operator fun <This> getValue(ref: This, property: KProperty<*>): List<Type> = data
 }
 
-data class ListElementDelegate<Type>(
+public data class ListElementDelegate<Type>(
     val registry: BaseRemoteStrings,
     val path: String?,
     val prefix: String?,
     val transformer: (String) -> Type,
     val default: List<Type>,
 ) {
-    operator fun <This> provideDelegate(ref: This, property: KProperty<*>) = CompletedListElementDelegate(
+    public operator fun <This> provideDelegate(ref: This, property: KProperty<*>): CompletedListElementDelegate<Type> = CompletedListElementDelegate(
         registry,
         join(prefix, path ?: property.name) ?: property.name,
         transformer,
@@ -106,73 +106,73 @@ data class ListElementDelegate<Type>(
 
 private fun join(vararg parts: String?) = listOfNotNull(*parts).takeUnless { it.isEmpty() }?.joinToString(".")
 
-interface StringGroup {
-    val registry: BaseRemoteStrings
+public interface StringGroup {
+    public val registry: BaseRemoteStrings
 
-    fun strings(
+    public fun strings(
         vararg defaults: String,
         path: String? = null,
         prefix: String? = null,
     ): ListElementDelegate<String>
 
-    fun componentRegexes(
+    public fun componentRegexes(
         @Language("RegExp") vararg regex: String,
         path: String? = null,
         prefix: String? = null,
     ): ListElementDelegate<ComponentRegex>
 
-    fun regexes(
+    public fun regexes(
         @Language("RegExp") vararg regex: String,
         path: String? = null,
         prefix: String? = null,
     ): ListElementDelegate<Regex>
 
 
-    fun string(
+    public fun string(
         default: String,
         path: String? = null,
         prefix: String? = null,
     ): ElementDelegate<String>
 
 
-    fun componentRegex(
+    public fun componentRegex(
         @Language("RegExp") regex: String,
         path: String? = null,
         prefix: String? = null,
     ): ElementDelegate<ComponentRegex> = componentRegex(regex.toRegex(), path, prefix)
 
-    fun componentRegex(
+    public fun componentRegex(
         regex: Regex,
         path: String? = null,
         prefix: String? = null,
     ): ElementDelegate<ComponentRegex>
 
 
-    fun regex(
+    public fun regex(
         @Language("RegExp") regex: String,
         path: String? = null,
         prefix: String? = null,
     ): ElementDelegate<Regex> = regex(regex.toRegex(), path, prefix)
 
-    fun regex(
+    public fun regex(
         regex: Regex,
         path: String? = null,
         prefix: String? = null,
     ): ElementDelegate<Regex>
 
 
-    fun resolve(path: String): StringGroup
+    public fun resolve(path: String): StringGroup
 
-    companion object {
+    public companion object {
         internal val STACK_WALKER = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE)
-        fun StringGroup.resolve(): StringGroup {
+        public fun StringGroup.resolve(): StringGroup {
             val name = STACK_WALKER.callerClass.let { it.annotations.filterIsInstance<FeatureName>().firstOrNull()?.name ?: it.simpleName }
             return resolve(name)
         }
     }
 }
 
-data class StringGroupImpl(val prefix: String, val parent: StringGroup) : StringGroup {
+public data class StringGroupImpl(val prefix: String, val parent: StringGroup) : StringGroup {
     override val registry: BaseRemoteStrings get() = parent.registry
 
     override fun strings(vararg defaults: String, path: String?, prefix: String?): ListElementDelegate<String> = parent.strings(defaults = defaults, path, join(this.prefix, prefix))
@@ -188,24 +188,24 @@ data class StringGroupImpl(val prefix: String, val parent: StringGroup) : String
     override fun resolve(path: String): StringGroup = StringGroupImpl(join(prefix, path) ?: path, this)
 }
 
-abstract class BaseRemoteStrings(val repoFilePath: String) : StringGroup {
+public abstract class BaseRemoteStrings(private val repoFilePath: String) : StringGroup {
     override val registry: BaseRemoteStrings get() = this
 
     internal val list: MutableList<CompletedDelegate<*>> = mutableListOf()
-    val stringOverwrites: MutableMap<String, Either<String, List<String>>> = mutableMapOf()
+    public val stringOverwrites: MutableMap<String, Either<String, List<String>>> = mutableMapOf()
 
     init {
         instances.add(this)
     }
 
     @Subscription(StartRepoLoadingEvent::class, inherited = true)
-    fun repoStartLoading() {
+    private fun repoStartLoading() {
         stringOverwrites.clear()
         list.forEach(CompletedDelegate<*>::update)
     }
 
     @Subscription(FinishRepoLoadingEvent::class, inherited = true)
-    fun repoLoaded() {
+    private fun repoLoaded() {
         val data = RemoteRepo.getFileContentAsJson(repoFilePath) as? JsonObject ?: return
 
         val map = HashMap<String, Either<String, List<String>>>()
@@ -254,7 +254,7 @@ abstract class BaseRemoteStrings(val repoFilePath: String) : StringGroup {
 
     override fun resolve(path: String): StringGroup = StringGroupImpl(path, this)
 
-    fun register(delegate: CompletedDelegate<*>) {
+    internal fun register(delegate: CompletedDelegate<*>) {
         validateKey(delegate.key)
         onRegister(delegate)
         list.add(delegate)
@@ -275,7 +275,7 @@ abstract class BaseRemoteStrings(val repoFilePath: String) : StringGroup {
     }
 
     @Module
-    companion object {
+    internal companion object {
         private val instances = mutableListOf<BaseRemoteStrings>()
 
         @Subscription

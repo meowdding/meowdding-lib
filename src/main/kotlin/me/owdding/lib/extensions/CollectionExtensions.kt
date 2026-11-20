@@ -5,16 +5,20 @@ import net.minecraft.network.chat.MutableComponent
 import tech.thatgravyboat.skyblockapi.utils.builders.TooltipBuilder
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
-fun MutableList<in MutableComponent>.add(number: Number, init: MutableComponent.() -> Unit = {}) = this.add(Text.of(number.toString(), init))
-fun MutableList<in MutableComponent>.add(boolean: Boolean, init: MutableComponent.() -> Unit = {}) = this.add(Text.of(boolean.toString(), init))
-fun MutableList<in MutableComponent>.add(text: String, init: MutableComponent.() -> Unit = {}) = this.add(Text.of(text, init))
-fun MutableList<in MutableComponent>.add(init: MutableComponent.() -> Unit) = this.add(Text.of("", init))
+public fun MutableList<in MutableComponent>.add(number: Number, init: MutableComponent.() -> Unit = {}): Boolean =
+    this.add(Text.of(number.toString(), init))
+public fun MutableList<in MutableComponent>.add(boolean: Boolean, init: MutableComponent.() -> Unit = {}): Boolean =
+    this.add(Text.of(boolean.toString(), init))
+public fun MutableList<in MutableComponent>.add(text: String, init: MutableComponent.() -> Unit = {}): Boolean =
+    this.add(Text.of(text, init))
+public fun MutableList<in MutableComponent>.add(init: MutableComponent.() -> Unit): Boolean =
+    this.add(Text.of("", init))
 
 @Deprecated("Use .sortedByKeys() instead", ReplaceWith("sortedByKeys()"))
-fun <T> Map<out Number, T>.sortByKey(): Map<Number, T> = toList().sortedBy { it.first.toLong() }.toMap()
-fun <K : Number, V> Map<out K, V>.sortedByKeys(): Map<K, V> = toList().sortedBy { it.first.toLong() }.toMap()
+public fun <T> Map<out Number, T>.sortByKey(): Map<Number, T> = toList().sortedBy { it.first.toLong() }.toMap()
+public fun <K : Number, V> Map<out K, V>.sortedByKeys(): Map<K, V> = toList().sortedBy { it.first.toLong() }.toMap()
 
-fun <T> List<T>.rightPad(size: Int, element: T): MutableList<T> {
+public fun <T> List<T>.rightPad(size: Int, element: T): MutableList<T> {
     if (this !is MutableList<T>) {
         return this.toMutableList().rightPad(size, element)
     }
@@ -25,7 +29,7 @@ fun <T> List<T>.rightPad(size: Int, element: T): MutableList<T> {
     return this
 }
 
-fun <T> List<List<T>>.transpose(): List<List<T>> {
+public fun <T> List<List<T>>.transpose(): List<List<T>> {
     val list = mutableListOf<MutableList<T>>()
     for (x in indices) {
         for (y in this[x].indices) {
@@ -38,46 +42,46 @@ fun <T> List<List<T>>.transpose(): List<List<T>> {
     return list
 }
 
-fun ListMerger<out Component>.applyToTooltip(builder: TooltipBuilder) {
+public fun ListMerger<out Component>.applyToTooltip(builder: TooltipBuilder) {
     destination.forEach { builder.add(it) }
 }
 
-class ListMerger<T>(val original: List<T>, var index: Int = 0) {
-    val destination: MutableList<T> = mutableListOf()
+public class ListMerger<T>(public val original: List<T>, public var index: Int = 0) {
+    public val destination: MutableList<T> = mutableListOf()
 
-    fun peek() = original[index]
-    fun read() = original[index++]
-    fun copy() = destination.add(read())
-    fun add(item: T) = destination.add(item)
+    public fun peek(): T = original[index]
+    public fun read(): T = original[index++]
+    public fun copy(): Boolean = destination.add(read())
+    public fun add(item: T): Boolean = destination.add(item)
 
 
-    fun addAfterNext(predicate: (T) -> Boolean, provider: MutableList<T>.() -> Unit) {
+    public fun addAfterNext(predicate: (T) -> Boolean, provider: MutableList<T>.() -> Unit) {
         addUntil(predicate)
         copy()
         destination.provider()
     }
 
-    fun addUntil(predicate: (T) -> Boolean) {
+    public fun addUntil(predicate: (T) -> Boolean) {
         while (index + 1 < original.size && !predicate(peek())) copy()
     }
 
-    fun addBeforeNext(predicate: (T) -> Boolean, provider: MutableList<T>.() -> Unit) {
+    public fun addBeforeNext(predicate: (T) -> Boolean, provider: MutableList<T>.() -> Unit) {
         addUntil(predicate)
         destination.provider()
         copy()
     }
 
-    fun addRemaining() {
+    public fun addRemaining() {
         if (index >= original.size) return
         destination.addAll(original.subList(index, original.size))
         index = original.size
     }
 
-    fun hasNext(predicate: (T) -> Boolean): Boolean = this.original.subList(index, original.size).any(predicate)
-    fun canRead(): Boolean = index < original.size
-    fun readSafe(): T? = if (canRead()) read() else null
+    public fun hasNext(predicate: (T) -> Boolean): Boolean = this.original.subList(index, original.size).any(predicate)
+    public fun canRead(): Boolean = index < original.size
+    public fun readSafe(): T? = if (canRead()) read() else null
 
     // Added for binary compatibility
-    operator fun component0(): List<T> = original
-    operator fun component1(): Int = index
+    public operator fun component0(): List<T> = original
+    public operator fun component1(): Int = index
 }

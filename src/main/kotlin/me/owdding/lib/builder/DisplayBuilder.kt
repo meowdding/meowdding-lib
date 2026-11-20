@@ -12,52 +12,52 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.ItemLike
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
-object DisplayFactory {
-    fun vertical(spacing: Int = 0, alignment: Alignment = Alignment.START, builder: DisplayBuilder.() -> Unit): Display {
+public object DisplayFactory {
+    public fun vertical(spacing: Int = 0, alignment: Alignment = Alignment.START, builder: DisplayBuilder.() -> Unit): Display {
         val builder = VerticalDisplayBuilder()
         builder.builder()
         return builder.build(spacing, alignment)
     }
 
-    fun horizontal(spacing: Int = 0, alignment: Alignment = Alignment.START, builder: DisplayBuilder.() -> Unit): Display {
+    public fun horizontal(spacing: Int = 0, alignment: Alignment = Alignment.START, builder: DisplayBuilder.() -> Unit): Display {
         val builder = HorizontalDisplayBuilder()
         builder.builder()
         return builder.build(spacing, alignment)
     }
 }
 
-abstract class DisplayBuilder {
-    protected val displays = mutableListOf<Display>()
+public abstract class DisplayBuilder {
+    protected val displays: MutableList<Display> = mutableListOf()
 
-    fun string(text: String) {
+    public fun string(text: String) {
         displays.add(Displays.text(text))
     }
 
-    fun string(component: Component) {
+    public fun string(component: Component) {
         displays.add(Displays.component(component, maxWidth = Int.MAX_VALUE))
     }
 
-    fun string(text: String, init: MutableComponent.() -> Unit) {
+    public fun string(text: String, init: MutableComponent.() -> Unit) {
         string(Text.of(text, init))
     }
 
-    fun singularComponent(builder: ComponentBuilder.() -> Unit) {
+    public fun singularComponent(builder: ComponentBuilder.() -> Unit) {
         val builder = SingularLineComponentBuilder()
         builder.builder()
         string(builder.component)
     }
 
-    fun multilineComponent(builder: MultilineComponentBuilder.() -> Unit) {
+    public fun multilineComponent(builder: MultilineComponentBuilder.() -> Unit) {
         val builder = MultilineComponentBuilder()
         builder.builder()
         string(builder.component)
     }
 
-    fun display(display: Display) {
+    public fun display(display: Display) {
         displays.add(display)
     }
 
-    open fun item(
+    public open fun item(
         item: ItemStack,
         width: Int = 16,
         height: Int = 16,
@@ -68,7 +68,7 @@ abstract class DisplayBuilder {
         display(Displays.item(item, width, height, showTooltip, showStackSize, customStackText))
     }
 
-    open fun item(
+    public open fun item(
         item: ItemLike,
         width: Int = 16,
         height: Int = 16,
@@ -78,15 +78,15 @@ abstract class DisplayBuilder {
     }
 
 
-    fun spacer(width: Int = 0, height: Int = 0) {
+    public fun spacer(width: Int = 0, height: Int = 0) {
         displays.add(Displays.empty(width, height))
     }
 
-    fun supplied(supplier: () -> Display) {
+    public fun supplied(supplier: () -> Display) {
         displays.add(Displays.supplied(supplier))
     }
 
-    fun textDisplay(
+    public fun textDisplay(
         text: String = "",
         color: UInt = 0x555555u,
         shadow: Boolean = false,
@@ -96,52 +96,52 @@ abstract class DisplayBuilder {
         Displays.text(Text.of(text, init), { color }, shadow = shadow).displayModifier().let { display(it) }
     }
 
-    fun textDisplay(text: String = "", color: UInt = 0x555555u, shadow: Boolean = false, init: MutableComponent.() -> Unit) {
+    public fun textDisplay(text: String = "", color: UInt = 0x555555u, shadow: Boolean = false, init: MutableComponent.() -> Unit) {
         textDisplay(text, color, shadow, { this }, init)
     }
 
-    fun wrappedText(text: String, width: Int, color: UInt = 0x555555u, shadow: Boolean = false) {
+    public fun wrappedText(text: String, width: Int, color: UInt = 0x555555u, shadow: Boolean = false) {
         displays.add(Displays.wrappedText(Text.of(text), width, { color }, shadow))
     }
 
-    fun vertical(spacing: Int = 0, alignment: Alignment = Alignment.START, builder: VerticalDisplayBuilder.() -> Unit) {
+    public fun vertical(spacing: Int = 0, alignment: Alignment = Alignment.START, builder: VerticalDisplayBuilder.() -> Unit) {
         val builder = VerticalDisplayBuilder()
         builder.builder()
         displays.add(builder.build(spacing, alignment))
     }
 
-    fun horizontal(spacing: Int = 0, alignment: Alignment = Alignment.START, builder: HorizontalDisplayBuilder.() -> Unit) {
+    public fun horizontal(spacing: Int = 0, alignment: Alignment = Alignment.START, builder: HorizontalDisplayBuilder.() -> Unit) {
         val builder = HorizontalDisplayBuilder()
         builder.builder()
         displays.add(builder.build(spacing, alignment))
     }
 
-    fun layered(builder: LayeredDisplayBuilder.() -> Unit) {
+    public fun layered(builder: LayeredDisplayBuilder.() -> Unit) {
         val builder = LayeredDisplayBuilder()
         builder.builder()
         displays.add(builder.build())
     }
 
-    abstract fun build(spacing: Int = 0, alignment: Alignment = Alignment.START): Display
+    public abstract fun build(spacing: Int = 0, alignment: Alignment = Alignment.START): Display
 }
 
-class VerticalDisplayBuilder : DisplayBuilder() {
-    override fun build(spacing: Int, alignment: Alignment): Display {
+public class VerticalDisplayBuilder : DisplayBuilder() {
+    public override fun build(spacing: Int, alignment: Alignment): Display {
         return displays.toColumn(spacing, alignment)
     }
 }
 
-class HorizontalDisplayBuilder : DisplayBuilder() {
-    override fun build(spacing: Int, alignment: Alignment): Display {
+public class HorizontalDisplayBuilder : DisplayBuilder() {
+    public override fun build(spacing: Int, alignment: Alignment): Display {
         return displays.toRow(spacing, alignment)
     }
 }
 
-class LayeredDisplayBuilder : DisplayBuilder() {
+public class LayeredDisplayBuilder : DisplayBuilder() {
     /**
      * Doesn't use spacing or alignment.
      */
-    override fun build(spacing: Int, alignment: Alignment): Display {
+    public override fun build(spacing: Int, alignment: Alignment): Display {
         return displays.asLayer()
     }
 }

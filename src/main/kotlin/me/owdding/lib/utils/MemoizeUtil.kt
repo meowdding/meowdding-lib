@@ -2,10 +2,10 @@ package me.owdding.lib.utils
 
 import java.util.concurrent.ConcurrentHashMap
 
-object MemoizeUtil {
-    data class Holder<Type>(val value: Type)
+public object MemoizeUtil {
+    public data class Holder<Type>(val value: Type)
 
-    fun <Arg, Result> memoize(function: (Arg) -> Result): (Arg) -> Result =
+    public fun <Arg, Result> memoize(function: (Arg) -> Result): (Arg) -> Result =
         object : Function1<Arg, Result> {
             private val cache = ConcurrentHashMap<Holder<Arg>, Holder<Result>>()
 
@@ -20,7 +20,7 @@ object MemoizeUtil {
             }
         }
 
-    fun <First, Second, Result> memoize(function: (First, Second) -> Result): (First, Second) -> Result =
+    public fun <First, Second, Result> memoize(function: (First, Second) -> Result): (First, Second) -> Result =
         object : Function2<First, Second, Result> {
             private val cache = ConcurrentHashMap<Pair<First, Second>, Holder<Result>>()
 
@@ -35,7 +35,7 @@ object MemoizeUtil {
             }
         }
 
-    fun <First, Second, Third, Result> memoize(function: (First, Second, Third) -> Result): (First, Second, Third) -> Result =
+    public fun <First, Second, Third, Result> memoize(function: (First, Second, Third) -> Result): (First, Second, Third) -> Result =
         object : Function3<First, Second, Third, Result> {
             private val cache = ConcurrentHashMap<Triple<First, Second, Third>, Holder<Result>>()
 
@@ -57,7 +57,7 @@ object MemoizeUtil {
         val p4: Fourth,
     )
 
-    fun <First, Second, Third, Fourth, Result> memoize(function: (First, Second, Third, Fourth) -> Result): (First, Second, Third, Fourth) -> Result =
+    public fun <First, Second, Third, Fourth, Result> memoize(function: (First, Second, Third, Fourth) -> Result): (First, Second, Third, Fourth) -> Result =
         object : Function4<First, Second, Third, Fourth, Result> {
             private val cache = ConcurrentHashMap<Quadruple<First, Second, Third, Fourth>, Holder<Result>>()
 
@@ -80,7 +80,7 @@ object MemoizeUtil {
         val p5: Fifth,
     )
 
-    fun <First, Second, Third, Fourth, Fifth, Result> memoize(function: (First, Second, Third, Fourth, Fifth) -> Result): (First, Second, Third, Fourth, Fifth) -> Result =
+    public fun <First, Second, Third, Fourth, Fifth, Result> memoize(function: (First, Second, Third, Fourth, Fifth) -> Result): (First, Second, Third, Fourth, Fifth) -> Result =
         object : Function5<First, Second, Third, Fourth, Fifth, Result> {
             private val cache = ConcurrentHashMap<Quintuple<First, Second, Third, Fourth, Fifth>, Holder<Result>>()
 
@@ -104,7 +104,7 @@ object MemoizeUtil {
         val p6: Sixth,
     )
 
-    fun <First, Second, Third, Fourth, Fifth, Sixth, Result> memoize(function: (First, Second, Third, Fourth, Fifth, Sixth) -> Result): (First, Second, Third, Fourth, Fifth, Sixth) -> Result =
+    public fun <First, Second, Third, Fourth, Fifth, Sixth, Result> memoize(function: (First, Second, Third, Fourth, Fifth, Sixth) -> Result): (First, Second, Third, Fourth, Fifth, Sixth) -> Result =
         object : Function6<First, Second, Third, Fourth, Fifth, Sixth, Result> {
             private val cache = ConcurrentHashMap<Sextuple<First, Second, Third, Fourth, Fifth, Sixth>, Holder<Result>>()
 
